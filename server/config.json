@@ -1,0 +1,19 @@
+    {
+        "db_test": {
+            "host": "localhost",
+            "port": "27017",
+            "username": "tester",
+            "password": "123456",
+            "db_name": "test_sonlamcomputer"
+        },
+        "db_development": {
+            "host": "localhost",
+            "port": "27017",
+            "username": "admin",
+            "password": "123456",
+            "db_name": "sonlamcomputer"
+        },
+        "db_production": {
+            
+        }
+    }

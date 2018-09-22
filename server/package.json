@@ -1,0 +1,36 @@
+{
+  "name": "splendideatery",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./bin/www",
+    "test": "mocha --timeout 20000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://gitlab.com/hungtran1196/splendidEatery.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/hungtran1196/splendidEatery/issues"
+  },
+  "homepage": "https://gitlab.com/hungtran1196/splendidEatery#README",
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "chai": "^4.1.2",
+    "chai-http": "^4.2.0",
+    "cookie-parser": "^1.4.3",
+    "cors": "^2.8.4",
+    "dotenv": "^6.0.0",
+    "express": "^4.16.3",
+    "express-jwt": "^5.3.1",
+    "jsonwebtoken": "^8.3.0",
+    "mocha": "^5.2.0",
+    "mongoose": "^5.2.17",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "static-favicon": "^2.0.0-alpha"
+  }
+}
