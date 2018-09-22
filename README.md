@@ -1,5 +1,30 @@
 # SonLamComputer
 
+## How to get started
+1. Clone the git
+
+2. Checkout to a new branch
+```
+git checkout -b ${new_branch}
+```
+3. Merge that branch to master (update newest code)
+```
+git merge master
+```
+4. Push that branch back to git
+
+## How to work with
+1. Before working, please *pull and update the newest code*
+```
+git checkout master
+git pull
+git checkout ${WORKING_BRANCH}
+git merge master
+```
+2. After working, please *push code to remote branch on git* and *create merge request to master*
+
+
+
 ## Prerequisites for server
 1. Install node js and npm
 * https://nodejs.org/en/
