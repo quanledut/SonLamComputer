@@ -65,4 +65,6 @@ app.use(function(err, req, res, next) {
     });
 });
 
+require('./app_api/model/create_defalut_value');
+
 module.exports = app;

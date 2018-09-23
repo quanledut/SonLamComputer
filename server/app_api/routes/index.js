@@ -1,11 +1,15 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport')
-var jwt = require('express-jwt');
-var auth = jwt({
+const jwt = require('express-jwt');
+const auth = jwt({
 	secret: process.env.JWT_SECRET,
 	userProperty: 'payload'
 });
+
+const ensurePolicy = (collectionName) => (req, res, next) => {
+	next();
+}
 
 const ctrlUser = require('../controller/users');
 

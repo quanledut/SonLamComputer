@@ -24,7 +24,6 @@ let gracefulShutdown = (msg, cb)=> {
 	})
 }
 
-
 mongoose.connection.on('connected', ()=> {
 	console.log("Mongoose is connected to " + dbURI);
 })
@@ -56,4 +55,16 @@ process.on("SIGTERM", ()=> {
 	})
 })
 
-require("./user");
+require("./user/users")
+require("./user/roles")
+require("./user/policy")
+
+require("./device/computerTypes")
+require("./device/computerNames")
+require("./device/deviceTypes")
+require("./device/devices")
+require("./device/storageHistories")
+
+require("./service/serviceTypes")
+require("./service/services")
+require("./service/serviceHistories")
