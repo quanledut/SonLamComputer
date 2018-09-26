@@ -1,5 +1,7 @@
 const config = require('../../config.json');
-const mongoose = require( 'mongoose' );
+let mongoose;
+if (process.env.NODE_ENV === 'test') mongoose = require( 'mongoose').set('debug', true);
+else mongoose = require( 'mongoose');
 let dbURI
 let db_info;
 if (process.env.NODE_ENV === 'test') {

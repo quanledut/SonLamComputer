@@ -10,46 +10,64 @@ const create_data = async () => {
         admin = await User.findOne({
             'username': 'thanhson'
         })
-    } catch (err) {
-
+    } catch(err) {
+        console.log(err);
     }
 
     if (!admin) {
-        console.log("creating data");
+        console.log("Crreating data");
+        try {
+            const roleAdmin = await create_role_admin();
+            const roleUser = await create_role_user();
 
-        const roleId = await create_role_admin();
-
-        if (!roleId) {
-
-            console.log("Cannot create role")
-
-        } else {
-
-            await create_policies(roleId)
-
-            const adminId = await create_admin(roleId)
-            if (!adminId) {
-                console.log("Cannot create admin")
+            try {
+                admin = await create_admin(roleAdmin.id);
+                user = await create_user(roleUser.id);  
+                
+                await create_policies(roleAdmin.id, true);
+                await create_policies(roleUser.id, false);
+            } catch(err) {
+                console.log("Error in creating admin");
             }
+        } catch(err) {
+            console.log("Error in create roles");
+            console.log(err);
         }
-    } else {
-        console.log(admin)
     }
 }
+
 
 const create_role_admin = async () => {
     let role = new Role()
     let result
     role.name = 'root_admin'
-    try {
-        result = await role.save();
-    } catch(err) {
-        console.log(err);
-    }
+    result = await role.save();
 
-    return result ? result._id : ""
+    return result;
 }
 
+const create_role_user = async () => {
+    let role = new Role()
+    let result
+    role.name = 'user'
+    result = await role.save();
+
+    return result;
+}
+
+const create_user = async (roleId) => {
+    let user = new User();
+    let result;
+
+	user.username = 'user';
+	user.email = 'user@user.com';
+    user.fullname = 'user';
+    user.roles = [roleId];
+    password = user.setPassword('user');
+    result = await user.save();
+
+    return result
+}
 const create_admin = async (roleId) => {
     let user = new User();
     let result;
@@ -58,38 +76,32 @@ const create_admin = async (roleId) => {
 	user.email = 'son@gmail.com';
     user.fullname = 'Lê Phước Thành Sơn';
     user.roles = [roleId];
-    user.setPassword('thanhson');
+    password = user.setPassword('thanhson');
+    result = await user.save();
 
-    try {
-        result = await user.save();
-    } catch(err) {
-        console.log(err);
-    }
-
-    return result ? result : null
-
-    
-
+    return result
 }
 
-const create_policies = async (roleId) => {
+const create_policies = async (roleId, isRoot) => {
     Object.keys(mongoose.connection.models).forEach(async (collection) => {
-        await create_policy(roleId, collection)
+        try {
+            await create_policy(roleId, collection, isRoot)
+        } catch(err) {
+            console.log("Error in creating policy for table", collection);
+            console.log(err)
+        }
     })    
 }
 
-const create_policy = async (roleId, collectionName) => {
+const create_policy = async (roleId, collectionName, isRoot) => {
+    if (!isRoot) return;
     if (!collectionName) return null;
-    console.log(collectionName)
     let policy = new Policy();
     policy.roleId = roleId;
     policy.collectionName = collectionName;
     policy.permission = policy.generatePermission(1, 1, 1, 1);
-    try {
-        await policy.save()
-    } catch(err) {
-        console.log(err);
-    }
+    await policy.save();
+
 }
 
 create_data();
