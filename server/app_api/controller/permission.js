@@ -4,10 +4,10 @@ const ObjectId = mongoose.Types.ObjectId;
 const Policy = mongoose.model('Policy');
 const Role = mongoose.model('Role');
 
-const CREATE = 'create';
-const READ = 'read';
-const UPDATE = 'update';
-const DELETE = 'delete';
+const CREATE = 8;
+const READ = 4;
+const UPDATE = 2;
+const DELETE = 1;
 
 const decimalToBinary = (dec) => {
     binary = [];
@@ -18,34 +18,38 @@ const decimalToBinary = (dec) => {
     return binary.reverse();
 }
 
-const checkPolicyForPermission = (policy, action) => {
-    permissionArray = decimalToBinary(policy.permission);
+const checkPolicyForPermission = (policies, action) => {
+    console.log(policies);
+    for (let id in policies) {
+        let policy = policies[id];
+        if (policy.permission & action) return true 
+        // permissionArray = decimalToBinary(policy.permission);
 
-    switch (action) {
-        case CREATE:
-            return permissionArray[3] == 1;
-        case READ:
-            return permissionArray[2] == 1;
-        case UPDATE:
-            return permissionArray[1] == 1;
-        case DELETE:
-            return permissionArray[0] == 1;
-        default:
-            return false
+        // switch (action) {
+        //     case CREATE:
+        //         return permissionArray[3] == 1;
+        //     case READ:
+        //         return permissionArray[2] == 1;
+        //     case UPDATE:
+        //         return permissionArray[1] == 1;
+        //     case DELETE:
+        //         return permissionArray[0] == 1;
+        // }
     }
+    return false;
 }
 
 const checkPermission = async (roles, collectionName, action) => {
     try {
-        let policy = await Policy.findOne({
+        let policies = await Policy.find({
             collectionName: collectionName,
             roleId: {
                 $in: roles
             }
         }).exec();
-        if (!policy) return false;
+        if (!policies) return false;
 
-        return checkPolicyForPermission(policy, action);
+        return checkPolicyForPermission(policies, action);
         // return true
     } catch(err) {
         console.log("Error in finding policy");
@@ -55,7 +59,7 @@ const checkPermission = async (roles, collectionName, action) => {
 
 }
 
-const checkPermissionMiddleWare = (collectionName, action) => async (req, res, next) => {
+const checkPermissionForCollection = (collectionName) => (action) => async (req, res, next) => {
     const roles = req.payload.roles.map((r) => new ObjectId(r._id));
     const allowed = await checkPermission(roles, collectionName, action);
     if (allowed) {
@@ -67,7 +71,7 @@ const checkPermissionMiddleWare = (collectionName, action) => async (req, res, n
 }
 
 module.exports = {
-    checkPermissionMiddleWare,
+    checkPermissionForCollection,
     type: {
         CREATE,
         READ,

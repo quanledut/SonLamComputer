@@ -5,28 +5,12 @@ const chaiHttp = require('chai-http');
 const should = chai.should();
 const expect = chai.expect;
 const assert = chai.assert;
-const mongoose = require('mongoose');
-const User = mongoose.model('User');
 
 const variables = require('../shared/variables.json');
 
 chai.use(chaiHttp);
 
-
 describe('[Login] api', () => {
-	before((done)=> {
-		let unames = [];
-		for (var u in variables.usernamePassword) {
-			if (variables.usernamePassword.hasOwnProperty(u)) {
-				unames.push(variables.usernamePassword[u].username);
-			}
-		}
-        User.deleteMany({username: { $nin: unames }}, (err, res) => {
-            if (err) console.log(err);
-            done();
-        })
-	})
-
 	describe('[Login] Api', ()=> {
 		it ('When_HasInvalidUsername_And_HasInvalidPassword_Expect_LoginFail', (done)=> {
 			let form = {
@@ -35,7 +19,7 @@ describe('[Login] api', () => {
 			};
 
 			chai.request(server)
-				.post(variables.api.login)
+				.post(variables.api.post.login)
 				.type('form')
 				.send(form)
 				.end((err, res)=> {
@@ -51,7 +35,7 @@ describe('[Login] api', () => {
 			}
 
 			chai.request(server)
-				.post(variables.api.login)
+				.post(variables.api.post.login)
 				.type('form')
 				.send(form)
 				.end((err, res)=> {

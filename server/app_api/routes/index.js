@@ -6,15 +6,59 @@ const auth = jwt({
 	secret: process.env.JWT_SECRET,
 	userProperty: 'payload'
 });
-const checkPermission = require('../controller/permission');
+const permission = require('../controller/permission');
 
-const ctrlUser = require('../controller/users');
-const ctrlRole = require('../controller/roles');
-/* GET home page. */
+const ctrlUser = require('../controller/user/users');
+const ctrlRole = require('../controller/user/roles');
+const ctrlServiceType = require('../controller/service/serviceType');
+
+const checkPermissionForCollection = permission.checkPermissionForCollection;
+
+/* User Api */
 router.post('/users', ctrlUser.register);
 router.post('/users/login', ctrlUser.login);
 
-/* GET Roles */
-router.get('/roles', auth, checkPermission.checkPermissionMiddleWare('Role', checkPermission.type.READ), ctrlRole.find);
+/* Role Api */
+const checkPermissionForRole = checkPermissionForCollection('Role');
+router.get('/roles', auth, checkPermissionForRole(permission.type.READ), ctrlRole.find);
+
+/* ServiceType Api */
+const checkPermissionForServiceType = checkPermissionForCollection('ServiceType');
+
+router.get(
+	'/serviceTypes', 
+	auth,
+	checkPermissionForServiceType(permission.type.READ),
+	ctrlServiceType.find
+);
+
+router.get(
+	'/serviceTypes/:serviceTypeId',
+	auth,
+	checkPermissionForServiceType(permission.type.READ),
+	ctrlServiceType.findById
+)
+
+router.post(
+	'/serviceTypes',
+	auth,
+	checkPermissionForServiceType(permission.type.CREATE),
+	ctrlServiceType.create
+)
+
+router.put(
+	'/serviceTypes/:serviceTypeId',
+	auth,
+	checkPermissionForServiceType(permission.type.UPDATE),
+	ctrlServiceType.updateById
+)
+
+router.delete(
+	'/serviceTypes/:serviceTypeId',
+	auth,
+	checkPermissionForServiceType(permission.type.DELETE),
+	ctrlServiceType.deleteById
+);
+
 
 module.exports = router;
