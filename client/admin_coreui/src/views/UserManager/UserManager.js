@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Badge, Card, CardBody, CardHeader, Col, Pagination, PaginationItem, PaginationLink, Row, Table } from 'reactstrap';
+import PopUpDelete from './../Extend/PopUpDelete';
 
 class UserManager extends Component {
     render() {
@@ -12,20 +13,20 @@ class UserManager extends Component {
                                 <i className="fa fa-align-justify"></i> Danh sách người dùng
                             </CardHeader>
                             <CardBody>
-                                <div className="btn btn-primary">
-                                    <i className="fa fa-plus"> Add new User </i>
+                                <div className="btn" style={{ backgroundColor: '#17a2b8' }}>
+                                    <a href="#/newuser"><i className="fa fa-plus text-white"> Add new User </i></a>
                                 </div>
-                                <hr/>
-                                
-                                <div className="input-group col-xs-6 col-sm-6 col-md-6 col-lg-6" style={{paddingLeft: 0}}>
-                                    <input type="text" className="form-control" id="exampleInputAmount" placeholder="Search"/>
+                                <hr />
+
+                                <div className="input-group col-xs-6 col-sm-6 col-md-6 col-lg-6" style={{ paddingLeft: 0 }}>
+                                    <input type="text" className="form-control" id="exampleInputAmount" placeholder="Search" />
                                     <span className="input-group-btn">
-                                        <button type="button" className="btn btn-info">
-                                            <i className="fa fa-search"> Search</i>
+                                        <button type="button" className="btn" style={{ backgroundColor: '#17a2b8' }}>
+                                            <i className="fa fa-search text-white"> Search</i>
                                         </button>
                                     </span>
                                 </div>
-                                <hr/>
+                                <hr />
 
                                 <Table hover bordered striped responsive size="sm">
                                     <thead>
@@ -34,7 +35,7 @@ class UserManager extends Component {
                                             <th>Date registered</th>
                                             <th>Role</th>
                                             <th>Status</th>
-                                            <th style={{width: '10%'}}>Actions</th>
+                                            <th style={{ width: '10%' }}>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -53,93 +54,10 @@ class UserManager extends Component {
                                                     <div className="btn btn-primary">
                                                         <i className="fa fa-edit"> Edit </i>
                                                     </div>
-                                                    <div className="btn btn-danger">
+                                                    {/* <div className="btn btn-danger">
                                                         <i className="fa fa-trash"> Delete </i>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Zbyněk Phoibos</td>
-                                            <td>2012/02/01</td>
-                                            <td>Staff</td>
-                                            <td>
-                                                <Badge color="danger">Banned</Badge>
-                                            </td>
-                                            <td>
-                                                <div className="btn-group">
-                                                    <div className="btn btn-success">
-                                                        <i className="fa fa-eye"> View Details </i>
-                                                    </div>
-                                                    <div className="btn btn-primary">
-                                                        <i className="fa fa-edit"> Edit </i>
-                                                    </div>
-                                                    <div className="btn btn-danger">
-                                                        <i className="fa fa-trash"> Delete </i>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Einar Randall</td>
-                                            <td>2012/02/01</td>
-                                            <td>Admin</td>
-                                            <td>
-                                                <Badge color="secondary">Inactive</Badge>
-                                            </td>
-                                            <td>
-                                                <div className="btn-group">
-                                                    <div className="btn btn-success">
-                                                        <i className="fa fa-eye"> View Details </i>
-                                                    </div>
-                                                    <div className="btn btn-primary">
-                                                        <i className="fa fa-edit"> Edit </i>
-                                                    </div>
-                                                    <div className="btn btn-danger">
-                                                        <i className="fa fa-trash"> Delete </i>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Félix Troels</td>
-                                            <td>2012/03/01</td>
-                                            <td>Member</td>
-                                            <td>
-                                                <Badge color="warning">Pending</Badge>
-                                            </td>
-                                            <td>
-                                                <div className="btn-group">
-                                                    <div className="btn btn-success">
-                                                        <i className="fa fa-eye"> View Details </i>
-                                                    </div>
-                                                    <div className="btn btn-primary">
-                                                        <i className="fa fa-edit"> Edit </i>
-                                                    </div>
-                                                    <div className="btn btn-danger">
-                                                        <i className="fa fa-trash"> Delete </i>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>Aulus Agmundr</td>
-                                            <td>2012/01/21</td>
-                                            <td>Staff</td>
-                                            <td>
-                                                <Badge color="success">Active</Badge>
-                                            </td>
-                                            <td>
-                                                <div className="btn-group">
-                                                    <div className="btn btn-success">
-                                                        <i className="fa fa-eye"> View Details </i>
-                                                    </div>
-                                                    <div className="btn btn-primary">
-                                                        <i className="fa fa-edit"> Edit </i>
-                                                    </div>
-                                                    <div className="btn btn-danger">
-                                                        <i className="fa fa-trash"> Delete </i>
-                                                    </div>
+                                                    </div> */}
+                                                    <PopUpDelete/>
                                                 </div>
                                             </td>
                                         </tr>

@@ -187,7 +187,10 @@ const UserManager = Loadable({
   loading: Loading,
 });
 
-
+const NewUser = Loadable({
+  loader: () => import('./views/UserManager/AddNewUser/NewUser'),
+  loading: Loading,
+});
 
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
@@ -232,7 +235,8 @@ const routes = [
   { path: '/charts', name: 'Charts', component: Charts },
   { path: '/users', exact: true,  name: 'Users', component: Users },
   { path: '/users/:id', exact: true, name: 'User Details', component: User },
-  { path: '/usermanager/', exact: true, name: 'User Manager', component: UserManager }
+  { path: '/usermanager/', exact: true, name: 'User Manager', component: UserManager },
+  { path: '/newuser/', exact: true, name: 'Add New User', component: NewUser }
 ];
 
 export default routes;
