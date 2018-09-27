@@ -8,7 +8,8 @@ let policySchema = new mongoose.Schema({
 
 policySchema.index({ roleId: 1, collectionName: 1 }, { unique: true })
 
-policySchema.methods.generatePermission = (c, r, u, d) => {
+
+policySchema.methods.generatePermission = (c=0, r=0, u=0, d=0) => {
     return c * 8 + r * 4 + u * 2 + d * 1;
 }
 

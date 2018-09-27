@@ -9,26 +9,26 @@ let userSchema = new mongoose.Schema({
   fullname: String,
   address: String,
   phone: String,
-  roles: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Role '}],
+  roles: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Role' }],
   created_time: {type: Date, default: Date.now},
 	hash: String,
 	salt: String
 });
 
-userSchema.methods.setPassword = (password) => {
+userSchema.methods.setPassword = function (password) {
   this.salt = crypto.randomBytes(16).toString('hex');
   this.hash = crypto.pbkdf2Sync(password, this.salt, 1000, 64, algorithm).toString('hex');
 };
 
-userSchema.methods.validPassword = (password) => {
-  var hash = crypto.pbkdf2Sync(password, this.salt, 1000, 64, algorithm).toString('hex');
+userSchema.methods.validPassword = function (password) {
+  const hash = crypto.pbkdf2Sync(password, this.salt, 1000, 64, algorithm).toString('hex');
   return this.hash === hash;
 };
 
-userSchema.methods.generateJwt = () => {
+userSchema.methods.generateJwt = function() {
   var expiry = new Date();
   expiry.setDate(expiry.getDate() + 7);
-
+  console.log(this);
   return jwt.sign({
     _id: this._id,
     username: this.username,
