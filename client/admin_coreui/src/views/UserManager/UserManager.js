@@ -1,9 +1,67 @@
 import React, { Component } from 'react';
 import { Badge, Card, CardBody, CardHeader, Col, Pagination, PaginationItem, PaginationLink, Row, Table } from 'reactstrap';
 import PopUpDelete from './../Extend/PopUpDelete';
+import { connect } from 'react-redux';
+import * as actions from './../../actions/index';
+import {Redirect} from 'react-router-dom';
 
 class UserManager extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            isRedirect: false
+        };
+    }
+
+    EditActionUser = (user) =>{
+        this.props.editUser(user);
+        this.setState({
+            isRedirect: true
+        });
+        this.props.isEditUser();
+    }
+
+    onClear = () =>
+    {
+        this.props.isAddUser();
+    }
+
     render() {
+        if(this.state.isRedirect)
+        {
+            return(
+                <Redirect to="/edituser"/>
+            )
+        }
+        var userList = this.props.todos;
+        var userItem = userList.map((user, index) => {
+            return (
+                <tr key = {index}>
+                    <td>{user.nf_username}</td>
+                    <td>{user.date_input}</td>
+                    <td>{user.select}</td>
+                    <td>
+                        <Badge color="success">Alive</Badge>
+                    </td>
+                    <td>
+                        <div className="btn-group">
+                            <div className="btn btn-success">
+                                <i className="fa fa-eye"> View Details </i>
+                            </div>
+                            <div className="btn btn-primary" onClick = {() => this.EditActionUser(user)}>
+                                <i className="fa fa-edit"> Edit </i>
+                            </div>
+                            {/* <div className="btn btn-danger">
+                                                        <i className="fa fa-trash"> Delete </i>
+                                                    </div> */}
+                            <PopUpDelete />
+                        </div>
+                    </td>
+                </tr>
+            )
+        });
+
         return (
             <div className="animated fadeIn">
                 <Row>
@@ -13,7 +71,7 @@ class UserManager extends Component {
                                 <i className="fa fa-align-justify"></i> Danh sách người dùng
                             </CardHeader>
                             <CardBody>
-                                <div className="btn" style={{ backgroundColor: '#17a2b8' }}>
+                                <div className="btn" style={{ backgroundColor: '#17a2b8' }} onClick={this.onClear}>
                                     <a href="#/newuser"><i className="fa fa-plus text-white"> Add new User </i></a>
                                 </div>
                                 <hr />
@@ -39,28 +97,7 @@ class UserManager extends Component {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>Vishnu Serghei</td>
-                                            <td>2012/01/01</td>
-                                            <td>Member</td>
-                                            <td>
-                                                <Badge color="success">Active</Badge>
-                                            </td>
-                                            <td>
-                                                <div className="btn-group">
-                                                    <div className="btn btn-success">
-                                                        <i className="fa fa-eye"> View Details </i>
-                                                    </div>
-                                                    <div className="btn btn-primary">
-                                                        <i className="fa fa-edit"> Edit </i>
-                                                    </div>
-                                                    {/* <div className="btn btn-danger">
-                                                        <i className="fa fa-trash"> Delete </i>
-                                                    </div> */}
-                                                    <PopUpDelete/>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                        {userItem}
                                     </tbody>
                                 </Table>
                                 <nav>
@@ -85,4 +122,27 @@ class UserManager extends Component {
     }
 }
 
-export default UserManager;
+const mapStateToProps = (state) => {
+    return {
+        todos: state.usermanager
+    }
+}
+
+const mapDispatchToProps = (dispatch, props) =>
+{
+    return {
+        editUser: (user) =>
+        {
+            dispatch(actions.edit_user(user));
+        },
+        isAddUser: () =>
+        {
+            dispatch(actions.is_add_user());
+        },
+        isEditUser :() =>
+        {
+            dispatch(actions.is_edit_user());
+        }
+    }
+}
+export default connect(mapStateToProps,mapDispatchToProps)(UserManager);

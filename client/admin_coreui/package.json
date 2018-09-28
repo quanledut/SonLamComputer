@@ -29,11 +29,13 @@
     "react-chartjs-2": "^2.7.2",
     "react-dom": "^16.4.2",
     "react-loadable": "^5.5.0",
+    "react-redux": "^5.0.7",
     "react-router-config": "^1.0.0-beta.4",
     "react-router-dom": "^4.3.1",
     "react-test-renderer": "^16.4.2",
     "reactjs-popup": "^1.2.0",
     "reactstrap": "^6.4.0",
+    "redux": "^4.0.0",
     "simple-line-icons": "^2.4.1"
   },
   "devDependencies": {

@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import {connect} from 'react-redux';
+import * as actions from './../../../actions/index';
+import {Redirect} from 'react-router-dom';
 import {
     Badge,
     Button,
@@ -29,24 +32,92 @@ class NewUser extends Component {
     constructor(props) {
         super(props);
 
-        this.toggle = this.toggle.bind(this);
-        this.toggleFade = this.toggleFade.bind(this);
         this.state = {
-            collapse: true,
-            fadeIn: true,
-            timeout: 300
+            nf_id :'',
+            nf_email :'',
+            nf_password: '',
+            nf_username :'',
+            inline_radios : '',
+            date_input: '',
+            textarea_input :'',
+            select:'',
+            timeout: 300,           
+            isRedirect: false
         };
     }
 
-    toggle() {
-        this.setState({ collapse: !this.state.collapse });
+    componentWillMount(){
+        if(!this.props.isNewUser &&this.props.editItem && this.props.editItem.nf_id !== null)
+        {
+            this.setState({
+                nf_id :this.props.editItem.nf_id,
+                nf_email :this.props.editItem.nf_email,
+                nf_password: this.props.editItem.nf_password,
+                nf_username :this.props.editItem.nf_username,
+                inline_radios : this.props.editItem.inline_radios,
+                date_input: this.props.editItem.date_input,
+                textarea_input :this.props.editItem.textarea_input,
+                select:this.props.editItem.select,
+            })
+        }else{
+            this.onClear();
+        }
     }
 
-    toggleFade() {
-        this.setState((prevState) => { return { fadeIn: !prevState } });
+    onClear = () =>{
+        if(!this.props.isNewUser)
+        {
+            this.setState({
+                nf_email :'',
+                nf_password: '',
+                nf_username :'',
+                inline_radios : '',
+                date_input: '',
+                textarea_input :'',
+                select:'',
+            });
+        }
+        else
+        {
+            this.setState({
+                nf_id : '',
+                nf_email :'',
+                nf_password: '',
+                nf_username :'',
+                inline_radios : '',
+                date_input: '',
+                textarea_input :'',
+                select:'',
+            });
+        }
+    }
+
+    onSubmitForm =(event) =>
+    {
+        event.preventDefault();
+        this.setState({
+            isRedirect: true
+        });
+        this.props.saveUser(this.state);
+        this.onClear();
+    }
+
+    isChange = (event) =>
+    {
+        const name = event.target.name;
+        const value = event.target.value;
+        this.setState({
+            [name] : value
+        })
     }
 
     render() {
+        if(this.state.isRedirect)
+        {
+            return(
+                <Redirect to="/usermanager"/>
+            )
+        }
         return (
             <div className="animated fadeIn">
                 <Row>
@@ -59,47 +130,64 @@ class NewUser extends Component {
                                 <Form action="" method="post">
                                     <FormGroup>
                                         <Label htmlFor="nf-email">Email</Label>
-                                        <Input type="email" id="nf-email" name="nf-email" placeholder="Enter Email.." autoComplete="email" />
+                                        <Input 
+                                            onChange = {(event) => (this.isChange(event))} 
+                                            value = {this.state.nf_email}
+                                            type="email" id="nf-email" name="nf_email" placeholder="Enter Email.." autoComplete="email" />
                                         <FormText className="help-block">Please enter your email</FormText>
                                     </FormGroup>
                                     <FormGroup>
                                         <Label htmlFor="nf-password">Password</Label>
-                                        <Input type="password" id="nf-password" name="nf-password" placeholder="Enter Password.." autoComplete="current-password" />
+                                        <Input 
+                                            onChange = {(event) => (this.isChange(event))} 
+                                            value = {this.state.nf_password}
+                                            type="password" id="nf-password" name="nf_password" placeholder="Enter Password.." autoComplete="current-password" />
                                         <FormText className="help-block">Please enter your password</FormText>
                                     </FormGroup>
                                     <FormGroup>
-                                        <Label htmlFor="nf-password">Username</Label>
-                                        <Input type="password" id="nf-password" name="nf-password" placeholder="Enter Password.." autoComplete="current-password" />
+                                        <Label htmlFor="nf-username">Username</Label>
+                                        <Input onChange = {(event) => (this.isChange(event))} 
+                                            value = {this.state.nf_username}
+                                            type="username" id="nf-username" name="nf_username" placeholder="Enter UserName.." autoComplete="current-password" />
                                         <FormText className="help-block">Please enter your username</FormText>
                                     </FormGroup>
                                     <FormGroup>
                                         <Label>Giới tính</Label>
                                         &nbsp;
                                         <FormGroup check inline>
-                                            <Input className="form-check-input" type="radio" id="inline-radio1" name="inline-radios" value="option1" />
+                                            <Input className="form-check-input" type="radio" id="inline-radio1" name="inline_radios" value="option1" />
                                             <Label className="form-check-label" check htmlFor="inline-radio1">Nam</Label>
                                         </FormGroup>
                                         <FormGroup check inline>
-                                            <Input className="form-check-input" type="radio" id="inline-radio2" name="inline-radios" value="option2" />
+                                            <Input className="form-check-input" type="radio" id="inline-radio2" name="inline_radios" value="option2" />
                                             <Label className="form-check-label" check htmlFor="inline-radio2">Nữ</Label>
                                         </FormGroup>
                                         <FormGroup check inline>
-                                            <Input className="form-check-input" type="radio" id="inline-radio3" name="inline-radios" value="option3" />
+                                            <Input className="form-check-input" type="radio" id="inline-radio3" name="inline_radios" value="option3" />
                                             <Label className="form-check-label" check htmlFor="inline-radio3">Khác</Label>
                                         </FormGroup>
                                     </FormGroup>
                                     <FormGroup>
                                         <Label htmlFor="date-input">Ngày sinh <Badge>NEW</Badge></Label>
-                                        <Input type="date" id="date-input" name="date-input" placeholder="date" />
+                                        <Input 
+                                            onChange = {(event) => (this.isChange(event))} 
+                                            value = {this.state.date_input}
+                                            type="date" id="date-input" name="date_input" placeholder="date" />
                                     </FormGroup>
                                     <FormGroup>
                                         <Label htmlFor="textarea-input">Giới thiệu</Label>
-                                        <Input type="textarea" name="textarea-input" id="textarea-input" rows="9"
+                                        <Input 
+                                            onChange = {(event) => (this.isChange(event))} 
+                                            value = {this.state.textarea_input}
+                                            type="textarea" name="textarea_input" id="textarea-input" rows="9"
                                             placeholder="Content..." />
                                     </FormGroup>
                                     <FormGroup>
                                         <Label htmlFor="select">Select</Label>
-                                        <Input type="select" name="select" id="select">
+                                        <Input 
+                                            onChange = {(event) => (this.isChange(event))} 
+                                            value = {this.state.select}
+                                            type="select" name="select" id="select">
                                             <option value="0">Please select</option>
                                             <option value="1">Option #1</option>
                                             <option value="2">Option #2</option>
@@ -109,8 +197,8 @@ class NewUser extends Component {
                                 </Form>
                             </CardBody>
                             <CardFooter>
-                                <Button type="submit" size="sm" color="primary"><i className="fa fa-dot-circle-o"></i> Submit</Button>
-                                <Button type="reset" size="sm" color="danger"><i className="fa fa-ban"></i> Reset</Button>
+                                <Button type="submit" size="sm" color="primary" onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button>
+                                <Button type="reset" size="sm" color="danger" onClick = {this.onClear}><i className="fa fa-ban"></i> Reset</Button>
                             </CardFooter>
                         </Card>
                     </Col>
@@ -120,4 +208,20 @@ class NewUser extends Component {
     }
 }
 
-export default NewUser;
+const mapStateToProps = (state) =>
+{
+    return{
+        editItem : state.ItemEditing,
+        isNewUser : state.isNewUser
+    }
+};
+
+const mapDispatchToProps =(dispatch, props) =>{
+    return {
+        saveUser : (user) => {
+            dispatch(actions.save_user(user));
+        }
+    }
+};
+
+export default connect(mapStateToProps,mapDispatchToProps)(NewUser);

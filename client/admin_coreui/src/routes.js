@@ -236,7 +236,8 @@ const routes = [
   { path: '/users', exact: true,  name: 'Users', component: Users },
   { path: '/users/:id', exact: true, name: 'User Details', component: User },
   { path: '/usermanager/', exact: true, name: 'User Manager', component: UserManager },
-  { path: '/newuser/', exact: true, name: 'Add New User', component: NewUser }
+  { path: '/newuser/', exact: true, name: 'Add New User', component: NewUser },
+  { path: '/edituser/', exact: true, name: 'Edit User', component: NewUser }
 ];
 
 export default routes;
