@@ -13,9 +13,23 @@
             "password": "user"
         }    
     },
+    "roles": ["root_admin", "user"],
     "api": {
-        "login": "/api/users/login",
-        "register": "/api/users",
-        "roles": "/api/roles"
+        "get": {
+            "roles": "/api/roles",
+            "serviceTypes": "/api/serviceTypes",
+            "serviceTypeById": "/api/serviceTypes/:serviceTypeId"    
+        },
+        "post": {
+            "login": "/api/users/login",
+            "register": "/api/users",
+            "serviceTypes": "/api/serviceTypes"       
+        },
+        "put": {
+            "serviceTypeById": "/api/serviceTypes/:serviceTypeId" 
+        },
+        "delete": {
+            "serviceTypeById": "/api/serviceTypes/:serviceTypeId" 
+        }
     }
 }
