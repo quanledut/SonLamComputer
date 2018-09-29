@@ -31,3 +31,17 @@ export const is_edit_user = () =>{
         type: type.IS_EDIT_USER     
     }
 }
+
+export const delete_user = (nf_id) =>{
+    return {
+        type: type.DELETE_USER,
+        nf_id
+    }
+}
+
+export const search_user = (keyword) =>{
+    return {
+        type: type.SEARCH_USER,
+        keyword
+    }
+}

@@ -4,6 +4,9 @@ import PopUpDelete from './../Extend/PopUpDelete';
 import { connect } from 'react-redux';
 import * as actions from './../../actions/index';
 import {Redirect} from 'react-router-dom';
+import SearchUser from './Search';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 class UserManager extends Component {
     constructor(props) {
@@ -34,7 +37,11 @@ class UserManager extends Component {
                 <Redirect to="/edituser"/>
             )
         }
+        var {keyword} = this.props;
         var userList = this.props.todos;
+        userList = userList.filter((user) => {
+            return user.nf_username.toLowerCase().indexOf(keyword.toLowerCase()) !== -1;
+        });
         var userItem = userList.map((user, index) => {
             return (
                 <tr key = {index}>
@@ -55,7 +62,7 @@ class UserManager extends Component {
                             {/* <div className="btn btn-danger">
                                                         <i className="fa fa-trash"> Delete </i>
                                                     </div> */}
-                            <PopUpDelete />
+                            <PopUpDelete user={user}/>
                         </div>
                     </td>
                 </tr>
@@ -76,14 +83,7 @@ class UserManager extends Component {
                                 </div>
                                 <hr />
 
-                                <div className="input-group col-xs-6 col-sm-6 col-md-6 col-lg-6" style={{ paddingLeft: 0 }}>
-                                    <input type="text" className="form-control" id="exampleInputAmount" placeholder="Search" />
-                                    <span className="input-group-btn">
-                                        <button type="button" className="btn" style={{ backgroundColor: '#17a2b8' }}>
-                                            <i className="fa fa-search text-white"> Search</i>
-                                        </button>
-                                    </span>
-                                </div>
+                                <SearchUser/>
                                 <hr />
 
                                 <Table hover bordered striped responsive size="sm">
@@ -116,15 +116,16 @@ class UserManager extends Component {
                         </Card>
                     </Col>
                 </Row>
+                <ToastContainer autoClose={3000} position={"bottom-right"} />
             </div>
-
         );
     }
 }
 
 const mapStateToProps = (state) => {
     return {
-        todos: state.usermanager
+        todos: state.usermanager,
+        keyword : state.SearchUser
     }
 }
 

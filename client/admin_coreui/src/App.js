@@ -17,7 +17,6 @@ import './scss/style.css'
 import { DefaultLayout } from './containers';
 // Pages
 import { Login, Page404, Page500, Register } from './views/Pages';
-
 // import { renderRoutes } from 'react-router-config';
 
 class App extends Component {

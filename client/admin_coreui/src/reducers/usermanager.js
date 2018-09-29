@@ -1,4 +1,6 @@
 import * as types from './../constants/ActionType';
+import { toast } from "react-toastify";
+import * as notifications from '../constants/Notifications';
 
 var data = JSON.parse(localStorage.getItem('users'));
 var initialState = data ? data : [];
@@ -42,12 +44,26 @@ var myReducer = (state = initialState, action) => {
             {
                 newuser.nf_id = randomID();
                 state.push(newuser);
+                toast.success(notifications.SUCCESS_NEW);
             }else
             {
                 var indexx = findIndex(state, newuser.nf_id);
                 state[indexx] = newuser;
+                toast.success(notifications.SUCCESS_EDIT);
             }
             localStorage.setItem('users',JSON.stringify(state));
+            
+            return [...state];
+        
+        case types.DELETE_USER:
+            var id = action.nf_id;
+            if(id)
+            {
+                var indexx = findIndex(state, id);
+                state.splice(indexx,1);
+                localStorage.setItem('users',JSON.stringify(state));
+            }
+            toast.success(notifications.SUCCESS_DELETE);
             return [...state];
 
         default: return state;
