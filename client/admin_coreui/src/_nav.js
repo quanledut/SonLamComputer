@@ -298,10 +298,10 @@ export default {
       // ],
     },
     //-----------------------------------------------------
-    //Quản lý khách hàng
+    //Quản lý phân quyền
     {
-      name: 'Quản lý khách hàng',
-      url: '/pages',
+      name: 'Quản lý quyền',
+      url: '/roles',
       icon: 'fa fa-address-card',
     },
     //-----------------------------------------------------

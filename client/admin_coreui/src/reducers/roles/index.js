@@ -1,8 +1,8 @@
-import * as types from './../constants/ActionType';
+import * as types from './../../constants/ActionType';
 import { toast } from "react-toastify";
-import * as notifications from '../constants/Notifications';
+import * as notifications from '../../constants/Notifications';
 
-var data = JSON.parse(localStorage.getItem('users'));
+var data = JSON.parse(localStorage.getItem('roles'));
 var initialState = data ? data : [];
 
 var randomID = () =>
@@ -26,40 +26,37 @@ var findIndex = (users, id) =>
 var myReducer = (state = initialState, action) => {
     switch(action.type)
     {
-        case types.GET_ALL_USER:
+        case types.GET_ALL_ROLE:
         return state;
 
-        case types.SAVE_USER:
-            var newuser = {
-                nf_id : action.user.nf_id,
-                nf_email :action.user.nf_email,
-                nf_password: action.user.nf_password,
-                nf_username :action.user.nf_username,
-                inline_radios : action.user.inline_radios,
-                date_input: action.user.date_input,
-                textarea_input :action.user.textarea_input,
-                select: action.user.select,
+        case types.SAVE_ROLE:
+            var newrole = {
+                nf_id : action.role.nf_id,
+                nf_grouprole :action.role.nf_grouprole,
+                date_input: action.role.date_input,
+                textarea_input :action.role.textarea_input,
+                select: action.role.select,
             };
-            if(!newuser.nf_id)
+            if(!newrole.nf_id)
             {
-                newuser.nf_id = randomID();
-                state.push(newuser);
+                newrole.nf_id = randomID();
+                state.push(newrole);
                 toast.success(notifications.SUCCESS_NEW);
             }else
             {
-                var indexx = findIndex(state, newuser.nf_id);
-                state[indexx] = newuser;
+                var indexx = findIndex(state, newrole.nf_id);
+                state[indexx] = newrole;
                 toast.success(notifications.SUCCESS_EDIT);
             }
-            localStorage.setItem('users',JSON.stringify(state));
+            localStorage.setItem('roles',JSON.stringify(state));
             
             return [...state];
         
-        case types.DELETE_USER:
+        case types.DELETE_ROLE:
             var id = action.nf_id;
             if(id)
             {
-                var indexx = findIndex(state, id);
+                indexx = findIndex(state, id);
                 state.splice(indexx,1);
                 localStorage.setItem('users',JSON.stringify(state));
             }

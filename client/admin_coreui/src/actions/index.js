@@ -45,3 +45,39 @@ export const search_user = (keyword) =>{
         keyword
     }
 }
+
+//-----------------------------------------------------------------------------
+
+export const list_all_role = () =>{
+    return {
+        type: type.GET_ALL_ROLE
+    }
+}
+
+export const save_role = (role) =>{
+    return {
+        type: type.SAVE_ROLE,
+        role
+    }
+}
+
+export const edit_role = (role) =>{
+    return {
+        type: type.EDIT_ROLE,
+        role
+    }
+}
+
+export const delete_role = (nf_id) =>{
+    return {
+        type: type.DELETE_ROLE,
+        nf_id
+    }
+}
+
+export const search_role = (keyword) =>{
+    return {
+        type: type.SEARCH_ROLE,
+        keyword
+    }
+}

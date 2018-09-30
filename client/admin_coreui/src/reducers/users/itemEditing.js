@@ -1,6 +1,4 @@
-import * as types from './../constants/ActionType';
-import { toast } from "react-toastify";
-import * as notifications from '../constants/Notifications';
+import * as types from './../../constants/ActionType';
 
 var initialState = {};
 
@@ -9,6 +7,9 @@ var myReducer = (state = initialState, action) => {
     {
         case types.EDIT_USER:
             return action.user;
+
+        case types.EDIT_ROLE:
+            return action.role;
 
         default: return state;
     }

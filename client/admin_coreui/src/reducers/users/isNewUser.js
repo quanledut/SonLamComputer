@@ -1,4 +1,4 @@
-import * as types from './../constants/ActionType';
+import * as types from './../../constants/ActionType';
 
 var initialState = false;
 

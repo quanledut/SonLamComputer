@@ -192,6 +192,16 @@ const NewUser = Loadable({
   loading: Loading,
 });
 
+const Role = Loadable({
+  loader: () => import('./views/RoleManager/index'),
+  loading: Loading,
+});
+
+const NewRole = Loadable({
+  loader: () => import('./views/RoleManager/NewRole'),
+  loading: Loading,
+});
+
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
   { path: '/', exact: true, name: 'Home', component: DefaultLayout },
@@ -237,7 +247,10 @@ const routes = [
   { path: '/users/:id', exact: true, name: 'User Details', component: User },
   { path: '/usermanager/', exact: true, name: 'User Manager', component: UserManager },
   { path: '/newuser/', exact: true, name: 'Add New User', component: NewUser },
-  { path: '/edituser/', exact: true, name: 'Edit User', component: NewUser }
+  { path: '/edituser/', exact: true, name: 'Edit User', component: NewUser },
+  { path: '/roles/', exact: true, name: 'Role Manager', component: Role },
+  { path: '/roles/newRole', exact: true, name: 'New Role', component: NewRole },
+  { path: '/roles/editRole', exact: true, name: 'Edit Role', component: NewRole }
 ];
 
 export default routes;
