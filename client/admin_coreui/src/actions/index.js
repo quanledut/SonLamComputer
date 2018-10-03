@@ -81,3 +81,37 @@ export const search_role = (keyword) =>{
         keyword
     }
 }
+//---------------------------------------------------------------------
+export const list_all_service = () =>{
+    return {
+        type: type.GET_ALL_SERVICE
+    }
+}
+
+export const save_service = (service) =>{
+    return {
+        type: type.SAVE_SERVICE,
+        service
+    }
+}
+
+export const edit_service = (service) =>{
+    return {
+        type: type.EDIT_SERVICE,
+        service
+    }
+}
+
+export const delete_service = (nf_id) =>{
+    return {
+        type: type.DELETE_SERVICE,
+        nf_id
+    }
+}
+
+export const search_service = (keyword) =>{
+    return {
+        type: type.SEARCH_SERVICE,
+        keyword
+    }
+}

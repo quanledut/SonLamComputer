@@ -5,6 +5,8 @@ import isNewUser from './users/isNewUser';
 import SearchUser from './users/SearchUser';
 import RoleGroup from './roles/index';
 import SearchRole from './roles/SearchRole';
+import ServiceState from './service/index';
+import SearchService from './service/SearchService';
 
 const myReducer = combineReducers({
     usermanager,
@@ -12,6 +14,8 @@ const myReducer = combineReducers({
     isNewUser,
     SearchUser,
     RoleGroup,
-    SearchRole
+    SearchRole,
+    ServiceState,
+    SearchService
 });
 export default myReducer;

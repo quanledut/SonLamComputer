@@ -13,3 +13,9 @@ export const EDIT_ROLE = 'EDIT_ROLE';
 //export const IS_EDIT_ROLE = 'IS_EDIT_ROLE';
 export const DELETE_ROLE = 'DELETE_ROLE';
 export const SEARCH_ROLE = 'SEARCH_ROLE';
+//-------------------------------------------------------
+export const GET_ALL_SERVICE = 'GET_ALL_SERVICE';
+export const SAVE_SERVICE = 'SAVE_SERVICE';
+export const EDIT_SERVICE = 'EDIT_SERVICE';
+export const DELETE_SERVICE = 'DELETE_SERVICE';
+export const SEARCH_SERVICE = 'SEARCH_SERVICE';
