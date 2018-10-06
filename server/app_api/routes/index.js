@@ -11,6 +11,7 @@ const permission = require('../controller/permission');
 const ctrlUser = require('../controller/user/users');
 const ctrlRole = require('../controller/user/roles');
 const ctrlServiceType = require('../controller/service/serviceType');
+const ctrDeviceType = require('../controller/device/deviceTypes');
 
 const checkPermissionForCollection = permission.checkPermissionForCollection;
 
@@ -25,6 +26,7 @@ router.get('/roles', auth, checkPermissionForRole(permission.type.READ), ctrlRol
 /* ServiceType Api */
 const checkPermissionForServiceType = checkPermissionForCollection('ServiceType');
 
+const checkPermissionForDeviceType = checkPermissionForCollection('DeviceType');
 router.get(
 	'/serviceTypes', 
 	auth,
@@ -60,5 +62,46 @@ router.delete(
 	ctrlServiceType.deleteById
 );
 
+router.get(
+	'/deviceTypes',
+	auth,
+	checkPermissionForDeviceType(permission.type.READ),
+	ctrDeviceType.find
+);
+
+router.get(
+	'/deviceTypes/:deviceTypeID',
+	auth,
+	checkPermissionForDeviceType(permission.type.READ),
+	ctrDeviceType.findByID
+);
+
+router.get(
+	'/deviceTypes/:name',
+	auth,
+	checkPermissionForDeviceType(permission.type.READ),
+	ctrDeviceType.findByName
+);
+
+router.post(
+	'/deviceTypes',
+	auth,
+	checkPermissionForDeviceType(permission.type.CREATE),
+	ctrDeviceType.create
+);
+
+router.put(
+	'/deviceTypes/:deviceTypeID',
+	auth,
+	checkPermissionForDeviceType(permission.type.READ),
+	ctrDeviceType.updateByID
+);
+
+router.delele(
+	'/deviceTypes/:deviceTypeID',
+	auth,
+	checkPermissionForDeviceType(permission.type.DELETE),
+	ctrDeviceType.deleteByID
+)
 
 module.exports = router;
