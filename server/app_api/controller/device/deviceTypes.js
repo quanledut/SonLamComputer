@@ -63,7 +63,7 @@ const updateByID = (req,res) => {
         req.params.deviceTypeID
         ,{
             $set: {
-                name: req.body.name;
+                name: req.body.name
             }
         }
     )
