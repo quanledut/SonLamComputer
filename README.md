@@ -38,15 +38,13 @@ git merge master
 * https://robomongo.org/
 6. Install Postman (for testing the API)
 * https://www.getpostman.com/
-7. Run mongodb
+
+7. Create user to for accessing to db
 ```
-//For ubuntu
-chmod +x run_mongo_db.sh
-./run_mongo_db.sh
-//For windows
-mongod --dbpath ${PATH_TO_THIS_FOLDER}/db_data
+open a terminal or cmd
+cd to server folder
+mongod --dbpath ./db_data
 ```
-8. Create user to for accessing to db
 ```
 open new terminal or cmd 
 mongo
@@ -59,6 +57,14 @@ use test_sonlamcomputer
 db.createUser({ user: "test", pwd: "123456", roles: [{ role: "readWrite", db: "test_sonlamcomputer" }]})
 exit
 
+```
+8. Run mongodb
+```
+//For ubuntu
+chmod +x run_mongo_db.sh
+./run_mongo_db.sh
+//For windows
+mongod --dbpath ${PATH_TO_THIS_FOLDER}/db_data
 ```
 9. Install dependency 
 ```

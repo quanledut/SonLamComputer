@@ -6,12 +6,46 @@ const auth = jwt({
 });
 const permission = require('../controller/permission');
 const ctrlServiceType = require('../controller/service/serviceType');
+const ctrlService = require('../controller/service/service');
+
 const checkPermissionForCollection = permission.checkPermissionForCollection;
 
 
 const route_service = (router) => {
     const checkPermissionForServiceType = checkPermissionForCollection('ServiceType');
+    const checkPermissionForService = checkPermissionForCollection('Service');
 
+    //For services
+    router.get(
+        '/services',
+        auth,
+        checkPermissionForService(permission.type.READ),
+        ctrlService.find
+    )
+
+    router.get(
+        '/services/:serviceId',
+        auth,
+        checkPermissionForService(permission.type.READ),
+        ctrlService.findById
+    )
+
+    router.post(
+        '/services',
+        auth,
+        checkPermissionForService(permission.type.CREATE),
+        ctrlService.create
+    )
+    
+    router.delete(
+        '/services/:serviceId',
+        auth,
+        checkPermissionForService(permission.type.DELETE),
+        ctrlService.deleteById
+    )
+
+
+    //For serviceTypes
     router.get(
         '/serviceTypes', 
         auth,
