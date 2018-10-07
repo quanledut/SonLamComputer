@@ -46,7 +46,7 @@ const mapStateToProps = (state) =>{
 const mapDispatchToProps = (dispatch, props) => {
     return {
         onSearch : (keyword) =>{
-            dispatch(actions.search_role(keyword));
+            dispatch(actions.search_service(keyword));
         }
     }
 }

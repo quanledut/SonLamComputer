@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
-import { Badge, Card, CardBody, CardHeader, Col, Pagination, PaginationItem, PaginationLink, Row, Table } from 'reactstrap';
+import {Badge, Card, CardBody, CardHeader, Col, Pagination, PaginationItem, PaginationLink, Row, Table } from 'reactstrap';
 import PopUpDelete from './PopUpDelete';
 import { connect } from 'react-redux';
 import * as actions from './../../actions/index';
 import {Redirect} from 'react-router-dom';
-import Search from './SearchRole';
+import SearchService from './SearchService';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import * as configvalue from './../../constants/ConfigValue';
 
-class Role extends Component {
+class Exchange extends Component {
     constructor(props) {
         super(props);
 
@@ -17,8 +18,8 @@ class Role extends Component {
         };
     }
 
-    EditActionRole = (role) =>{
-        this.props.editRole(role);
+    EditActionService = (service) =>{
+        this.props.editService(service);
         this.setState({
             isRedirect: true
         });
@@ -34,35 +35,34 @@ class Role extends Component {
         if(this.state.isRedirect)
         {
             return(
-                <Redirect to="/roles/editRole"/>
+                <Redirect to="/services/editService"/>
             )
         }
         var {keyword} = this.props;
-        var roleList = this.props.todos;
-        roleList = roleList.filter((role) => {
-            return role.nf_grouprole.toLowerCase().indexOf(keyword.toLowerCase()) !== -1;
+        var serviceList = this.props.todos;
+        serviceList = serviceList.filter((service) => {
+            return service.nf_username.toLowerCase().indexOf(keyword.toLowerCase()) !== -1;
         });
-        var roleItem = roleList.map((role, index) => {
+        var serviceItem = serviceList.map((service, index) => {
             return (
                 <tr key = {index}>
-                    <td>{role.nf_grouprole}</td>
-                    <td>{role.date_input}</td>
-                    <td>{role.select}</td>
+                    <td>{service.nf_username}</td>
                     <td>
-                        <Badge color="success">Alive</Badge>
+                        {(service.select === "1") ?
+                            <Badge color="success">{configvalue.HOAT_DONG}</Badge>
+                        :
+                            <Badge color="warning">{configvalue.NGUNG_HOAT_DONG}</Badge>
+                        }
                     </td>
                     <td>
                         <div className="btn-group">
                             <div className="btn btn-success">
                                 <i className="fa fa-eye"> View Details </i>
                             </div>
-                            <div className="btn btn-primary" onClick = {() => this.EditActionRole(role)}>
+                            <div className="btn btn-primary" onClick = {() => this.EditActionService(service)}>
                                 <i className="fa fa-edit"> Edit </i>
                             </div>
-                            {/* <div className="btn btn-danger">
-                                                        <i className="fa fa-trash"> Delete </i>
-                                                    </div> */}
-                            <PopUpDelete role={role}/>
+                            <PopUpDelete service={service}/>
                         </div>
                     </td>
                 </tr>
@@ -75,31 +75,27 @@ class Role extends Component {
                     <Col>
                         <Card>
                             <CardHeader>
-                                <i className="fa fa-align-justify"></i> Danh sách quyền
+                                <i className="fa fa-align-justify"></i> Danh sách dịch vụ
                             </CardHeader>
                             <CardBody>
-                                <div>
-                                    <div className="btn btn-primary" style={{ backgroundColor: '#17a2b8' }} onClick={this.onClear}>
-                                        <a href="#/roles/NewRole"><i className="fa fa-plus text-white"> Add new Group Role </i></a>
-                                    </div>
+                                <div className="btn btn-primary" style={{ backgroundColor: '#17a2b8' }} onClick={this.onClear}>
+                                    <a href="#/services/newService"><i className="fa fa-plus text-white"> Add new Service </i></a>
                                 </div>
                                 <hr />
 
-                                <Search/>
+                                <SearchService/>
                                 <hr />
 
                                 <Table hover bordered striped responsive size="sm">
                                     <thead>
                                         <tr>
-                                            <th>Group Role Name</th>
-                                            <th>Date registered</th>
-                                            <th>Role</th>
-                                            <th>Status</th>
-                                            <th style={{ width: '10%' }}>Actions</th>
+                                            <th>ServiceName</th>
+                                            <th style={{ width: '15%' }}>Status</th>
+                                            <th style={{ width: '15%' }}>Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {roleItem}
+                                        {serviceItem}
                                     </tbody>
                                 </Table>
                                 <nav>
@@ -109,8 +105,6 @@ class Role extends Component {
                                             <PaginationLink tag="button">1</PaginationLink>
                                         </PaginationItem>
                                         <PaginationItem><PaginationLink tag="button">2</PaginationLink></PaginationItem>
-                                        <PaginationItem><PaginationLink tag="button">3</PaginationLink></PaginationItem>
-                                        <PaginationItem><PaginationLink tag="button">4</PaginationLink></PaginationItem>
                                         <PaginationItem><PaginationLink next tag="button">Next</PaginationLink></PaginationItem>
                                     </Pagination>
                                 </nav>
@@ -126,17 +120,17 @@ class Role extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        todos: state.RoleGroup,
-        keyword : state.SearchRole
+        todos: state.ServiceState,
+        keyword : state.SearchService
     }
 }
 
 const mapDispatchToProps = (dispatch, props) =>
 {
     return {
-        editRole: (role) =>
+        editService: (service) =>
         {
-            dispatch(actions.edit_role(role));
+            dispatch(actions.edit_service(service));
         },
         isAddUser: () =>
         {
@@ -148,4 +142,4 @@ const mapDispatchToProps = (dispatch, props) =>
         }
     }
 }
-export default connect(mapStateToProps,mapDispatchToProps)(Role);
+export default connect(mapStateToProps,mapDispatchToProps)(Exchange);

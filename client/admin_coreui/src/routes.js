@@ -157,16 +157,6 @@ const Modals = Loadable({
   loading: Loading,
 });
 
-const Colors = Loadable({
-  loader: () => import('./views/Theme/Colors'),
-  loading: Loading,
-});
-
-const Typography = Loadable({
-  loader: () => import('./views/Theme/Typography'),
-  loading: Loading,
-});
-
 const Widgets = Loadable({
   loader: () => import('./views/Widgets/Widgets'),
   loading: Loading,
@@ -202,13 +192,20 @@ const NewRole = Loadable({
   loading: Loading,
 });
 
+const Service = Loadable({
+  loader: () => import('./views/ServiceManager/index'),
+  loading: Loading,
+});
+
+const NewService = Loadable({
+  loader: () => import('./views/ServiceManager/NewService'),
+  loading: Loading,
+});
+
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
   { path: '/', exact: true, name: 'Home', component: DefaultLayout },
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
-  { path: '/theme', exact: true, name: 'Theme', component: Colors },
-  { path: '/theme/colors', name: 'Colors', component: Colors },
-  { path: '/theme/typography', name: 'Typography', component: Typography },
   { path: '/base', exact: true, name: 'Base', component: Cards },
   { path: '/base/cards', name: 'Cards', component: Cards },
   { path: '/base/forms', name: 'Forms', component: Forms },
@@ -250,7 +247,10 @@ const routes = [
   { path: '/edituser/', exact: true, name: 'Edit User', component: NewUser },
   { path: '/roles/', exact: true, name: 'Role Manager', component: Role },
   { path: '/roles/newRole', exact: true, name: 'New Role', component: NewRole },
-  { path: '/roles/editRole', exact: true, name: 'Edit Role', component: NewRole }
+  { path: '/roles/editRole', exact: true, name: 'Edit Role', component: NewRole },
+  { path: '/services/', exact: true, name: 'Service Manager', component: Service },
+  { path: '/services/newService', exact: true, name: 'New Service', component: NewService },
+  { path: '/services/editService', exact: true, name: 'Edit Service', component: NewService },
 ];
 
 export default routes;

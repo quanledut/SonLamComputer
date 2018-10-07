@@ -11,6 +11,9 @@ var myReducer = (state = initialState, action) => {
         case types.EDIT_ROLE:
             return action.role;
 
+        case types.EDIT_SERVICE:
+            return action.service;
+
         default: return state;
     }
 }
