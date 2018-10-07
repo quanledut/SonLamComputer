@@ -53,6 +53,12 @@ mongo
 use sonlamcomputer
 db.createUser({ user: "admin", pwd: "123456", roles: [{ role: "readWrite", db: "sonlamcomputer" }]})
 exit
+
+mongo
+use test_sonlamcomputer
+db.createUser({ user: "test", pwd: "123456", roles: [{ role: "readWrite", db: "test_sonlamcomputer" }]})
+exit
+
 ```
 9. Install dependency 
 ```

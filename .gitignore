@@ -72,5 +72,5 @@ typings/
 # Serverless directories
 .serverless
 
-/server/db_data/
+server/db_data/
 db_data/

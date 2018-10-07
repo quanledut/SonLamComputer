@@ -27,8 +27,8 @@ describe('[Login] api', () => {
 
 		it ('When_HasValidUsername_And_HasValidPassword_Expect_LoginSuccessAndReturnToken', (done)=> {
 			let form = {
-				username: variables.usernamePassword.root_admin.username,
-				password: variables.usernamePassword.root_admin.password
+				username: variables.usernamePassword.user.username,
+				password: variables.usernamePassword.user.password
 			}
 
 			chai.request(server)
