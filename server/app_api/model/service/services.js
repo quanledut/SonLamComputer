@@ -9,7 +9,7 @@ let subDeviceSchema = new mongoose.Schema({
 })
 
 let serviceSchema = new mongoose.Schema({
-    serivceType: { type: mongoose.Schema.Types.ObjectId, ref: 'ServiceType' },
+    serviceType: { type: mongoose.Schema.Types.ObjectId, ref: 'ServiceType' },
     customer_name: { type: String, required: true },
     customer_id_card: { type: String, required: true },
     customer: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
@@ -18,4 +18,4 @@ let serviceSchema = new mongoose.Schema({
     totalPrice: { type: Number, default: 0 }
 })
 
-mongoose.model('Serivce', serviceSchema)
+mongoose.model('Service', serviceSchema)
