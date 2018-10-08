@@ -109,13 +109,10 @@ componentWillReceiveProps(nextProps) {
     this.props.history.push("/")
 
   }
-
-
 }
 
   render() {
     const { history } = this.props
-
     return (
       <div className="app flex-row align-items-center">
         <Modal 

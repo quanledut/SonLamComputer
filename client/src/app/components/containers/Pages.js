@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
-import { LoginView, RegisterView, Page404View, Page500View } from '../ui/Pages'
-import { loginRequest, registerRequest, isLoggedIn } from '../../actions/auth'
+import { LoginView, RegisterView, Page404View, Page500View, DefaultLayoutView } from '../ui/Pages'
+import { loginRequest, registerRequest } from '../../actions/auth'
 
 export const Login = connect(
     ({auth}) => {return { token: auth.token, loginError: auth.loginError}},
@@ -32,3 +32,7 @@ export const Page404 = connect(
 export const Page500 = connect(
     null, null
 )(Page500View)
+
+export const DefaultLayout = connect(
+    null, null
+)(DefaultLayoutView)
