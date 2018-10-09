@@ -26,13 +26,9 @@ import { isLoggedIn } from '../../../utils/index';
 class DefaultLayout extends Component {
 
   componentWillMount() {
-    if (isLoggedIn()) {
-        this.props.history.push("/")
-    }
-    else
-    {
+    if (!isLoggedIn()) {
       this.props.history.push("/login")
-    }  
+    }
   }
 
   render() {

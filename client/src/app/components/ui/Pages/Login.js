@@ -62,6 +62,10 @@ _closeModal () {
   })
 }
 
+componentWillReceiveProps(nextProps) {
+  this.props.history.push("/")
+}
+
 _submit (e) {
     e.preventDefault()
     const { username, password } = this.state.form
@@ -86,7 +90,6 @@ _submit (e) {
           content: "Login Success",
           isLoading: false
         })
-        this.props.history.push("/")
 
       }
     })

@@ -2,7 +2,8 @@ import React from 'react';
 import Loadable from 'react-loadable'
 
 import DefaultLayout from './components/ui/DefaultLayout';
-import NewUserPage from './components/ui/UserManager/NewUser'
+
+import {UserForm} from './components/containers/UserManager'
 
 function Loading() {
   return <div>Loading...</div>;
@@ -29,12 +30,12 @@ const UserManager = Loadable({
 });
 
 const NewUser = Loadable({
-  loader: () => import('./components/ui/UserManager/NewUser'),
+  loader: () => <UserForm />,
   loading: Loading,
 });
 
 const EditUser = Loadable({
-  loader: ({match}) => <NewUserPage match = {match}/>,
+  loader: ({match}) => <UserForm match = {match}/>,
   loading: Loading,
 });
 
@@ -65,7 +66,7 @@ const routes = [
   // { path: '/users', exact: true,  name: 'Users', component: Users },
   // { path: '/users/:id', exact: true, name: 'User Details', component: User },
    { path: '/usermanager', exact: true, name: 'User Manager', component: UserManager },
-   { path: '/usermanager/newuser', exact: true, name: 'Add New User', component: NewUser },
+   { path: '/usermanager/newuser', exact: true, name: 'Add New User', component: UserForm },
    { path: '/usermanager/:id/edituser', exact: true, name: 'Edit User', component: EditUser },
   // { path: '/roles/', exact: true, name: 'Role Manager', component: Role },
   // { path: '/roles/newRole', exact: true, name: 'New Role', component: NewRole },

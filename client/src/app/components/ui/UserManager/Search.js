@@ -40,14 +40,14 @@ class SearchUser extends Component {
         );
     }
 }
-const mapStateToProps = (state) =>{
-    return{}
-}
-const mapDispatchToProps = (dispatch, props) => {
-    return {
-        onSearch : (keyword) =>{
-            dispatch(actions.searchUserRequest(keyword));
-        }
-    }
-}
-export default connect(mapStateToProps,mapDispatchToProps)(SearchUser);
+// const mapStateToProps = (state) =>{
+//     return{}
+// }
+// const mapDispatchToProps = (dispatch, props) => {
+//     return {
+//         onSearch : (keyword) =>{
+//             dispatch(actions.searchUserRequest(keyword));
+//         }
+//     }
+// }
+export default connect(null,null)(SearchUser);

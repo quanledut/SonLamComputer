@@ -17,7 +17,7 @@ export const request = (
 
     const defaultOptions = {
         headers,
-        timeout: 9000
+        timeout: 5000
     }
     /*
     |--------------------------------------------------
