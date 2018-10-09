@@ -11,17 +11,17 @@ export function * loginFlow() {
     while (true) {
         //Looking for login request
         const request = yield take(AUTH_CONSTANTS.LOGIN_REQUEST)
-        const {username, password} = request.data
+        const {username, password, cb} = request.data
         yield put(loginRequestBegin())
         try {
             let {result, timeout} = yield race({
                 result: call(loginApi, username, password),
                 timeout: call(delay , 5000)
             })
-            if (!timeout) yield put(loginRequestSuccess(result))
-            else yield put(loginRequestFailure("Timeout"))
+            if (!timeout) yield put(loginRequestSuccess({data: result, cb}))
+            else yield put(loginRequestFailure({error: "Timeout", cb}))
         } catch(err) {
-            yield put(loginRequestFailure(err.message))
+            yield put(loginRequestFailure({error: err.message, cb}))
         }
     }
 }

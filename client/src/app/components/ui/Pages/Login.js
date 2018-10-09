@@ -72,7 +72,24 @@ _submit (e) {
       title: "Loading"
     })
 
-    this.props.submit(username, password)    
+    this.props.submit(username, password, (res, err) => {
+      this._closeModal()
+      if (err) {
+        this._openModal({
+          title: "Error",
+          content: err,
+          isLoading: false,
+        })
+      } else if (res) {
+        this._openModal({
+          title: "Success",
+          content: "Login Success",
+          isLoading: false
+        })
+        this.props.history.push("/")
+
+      }
+    })
 }
 
 _onChangeInput(e) {
@@ -91,32 +108,12 @@ componentWillMount() {
     }
 }
 
-componentWillReceiveProps(nextProps) {
-  const requestDone = (nextProps.loginError) || (nextProps.token)
-  if (requestDone) this._closeModal()
-  if (nextProps.loginError) {
-    this._openModal({
-      title: "Error",
-      content: nextProps.loginError,
-      isLoading: false,
-    })
-  } else if (nextProps.token) {
-    this._openModal({
-      title: "Success",
-      content: "Login Success",
-      isLoading: false
-    })
-    this.props.history.push("/")
-
-  }
-}
-
   render() {
     const { history } = this.props
     return (
       <div className="app flex-row align-items-center">
-        <Modal 
-          isOpened={this.state.modal.isOpened} 
+        <Modal
+          isOpened={this.state.modal.isOpened}
           isLoading={this.state.modal.isLoading}
           title={this.state.modal.title}
           content={this.state.modal.content}
@@ -139,11 +136,11 @@ componentWillReceiveProps(nextProps) {
                             <i className="icon-user"></i>
                           </InputGroupText>
                         </InputGroupAddon>
-                        <Input 
+                        <Input
                           name="username"
-                          type="text" 
-                          placeholder="Username" 
-                          autoComplete="username" 
+                          type="text"
+                          placeholder="Username"
+                          autoComplete="username"
                           onChange = {this._onChangeInput} />
                       </InputGroup>
                       <InputGroup className="mb-4">
@@ -152,11 +149,11 @@ componentWillReceiveProps(nextProps) {
                             <i className="icon-lock"></i>
                           </InputGroupText>
                         </InputGroupAddon>
-                        <Input 
+                        <Input
                           name="password"
-                          type="password" 
-                          placeholder="Password" 
-                          autoComplete="current-password" 
+                          type="password"
+                          placeholder="Password"
+                          autoComplete="current-password"
                           onChange = {this._onChangeInput} />
                       </InputGroup>
                       <Row>

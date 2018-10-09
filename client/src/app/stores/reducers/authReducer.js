@@ -1,4 +1,5 @@
 import { CONSTANTS as AUTH_CONSTANTS } from '../../actions/auth'
+import { callbackify } from 'util';
 
 let initialState = {
     token: localStorage.getItem('token') ? localStorage.getItem('token') : '',
@@ -9,20 +10,22 @@ let initialState = {
 const reducer = (state = initialState, action) => {
     switch (action.type) {
         case AUTH_CONSTANTS.LOGIN_REQUEST_BEGIN: {
-            const {loginError,...temp} = state
-            return {...temp}
+          return state
         }
 
         case AUTH_CONSTANTS.LOGIN_REQUEST_SUCCESS: {
-            const token = action.data.token
+            const {data, cb} = action.data
+            const token = data.token
             const currentUser = window.atob(token.split('.')[1])
             localStorage.setItem('token', token)
             localStorage.setItem('currentUser', currentUser)
-
+            cb(token, null)
             return {...state, token, currentUser, isLoggedIn: true}
         }
-        case AUTH_CONSTANTS.LOGIN_REQUEST_FAILURE: 
-            return {...state, loginError: action.error}
+        case AUTH_CONSTANTS.LOGIN_REQUEST_FAILURE:
+            const {error, cb} = action.error
+            cb(null, error)
+            return state
         default:
             return state
     }

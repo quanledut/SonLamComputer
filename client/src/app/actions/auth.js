@@ -24,7 +24,7 @@ export const CONSTANTS = {
     REGISTER_REQUEST_FAILURE
 }
 
-export function loginRequest(data) {
+export function loginRequest(data,) {
     return {type: CONSTANTS.LOGIN_REQUEST, data}
 }
 

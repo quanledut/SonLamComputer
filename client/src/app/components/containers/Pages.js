@@ -5,8 +5,8 @@ import { loginRequest, registerRequest } from '../../actions/auth'
 export const Login = connect(
     ({auth}) => {return { token: auth.token, loginError: auth.loginError}},
     dispatch => ({
-        submit(username, password) {
-            dispatch(loginRequest({username, password}))
+        submit(username, password, cb) {
+            dispatch(loginRequest({username, password, cb}))
         }
     })
 )(LoginView)
@@ -14,12 +14,13 @@ export const Login = connect(
 export const Register = connect(
     null,
     dispatch => ({
-        submit(username, email, password, repeatPassword) {
+        submit(username, email, password, repeatPassword, cb) {
             dispatch(registerRequest({
                 username,
                 email,
-                password, 
-                repeatPassword
+                password,
+                repeatPassword,
+                cb
             }))
         }
     })
