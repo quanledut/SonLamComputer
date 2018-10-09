@@ -3,10 +3,10 @@ import { LoginView, RegisterView, Page404View, Page500View, DefaultLayoutView } 
 import { loginRequest, registerRequest } from '../../actions/auth'
 
 export const Login = connect(
-    ({auth}) => {return { token: auth.token, loginError: auth.loginError}},
+    ({auth}) => {return { token: auth.token}},
     dispatch => ({
         submit(username, password, cb) {
-            dispatch(loginRequest({username, password, cb}))
+            dispatch(loginRequest({username, password}, cb))
         }
     })
 )(LoginView)
@@ -20,8 +20,7 @@ export const Register = connect(
                 email,
                 password,
                 repeatPassword,
-                cb
-            }))
+            }, cb))
         }
     })
 )(RegisterView)

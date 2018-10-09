@@ -4,6 +4,8 @@ import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 
 import { isLoggedIn } from '../../../utils/index'
+
+import {Redirect} from 'react-router-dom';
 import Modal from '../utils/Modal'
 
 class Login extends Component {
@@ -21,7 +23,8 @@ class Login extends Component {
           isLoading: false,
           title: "",
           content: ""
-        }
+        },
+        redirect: false
     }
 
     this._reset = this._reset.bind(this)
@@ -62,9 +65,6 @@ _closeModal () {
   })
 }
 
-componentWillReceiveProps(nextProps) {
-  this.props.history.push("/")
-}
 
 _submit (e) {
     e.preventDefault()
@@ -95,6 +95,7 @@ _submit (e) {
     })
 }
 
+
 _onChangeInput(e) {
     e.preventDefault()
     this.setState({
@@ -105,10 +106,8 @@ _onChangeInput(e) {
     })
 }
 
-componentWillMount() {
-    if (isLoggedIn()) {
-        this.props.history.push("/")
-    }
+componentWillReceiveProps(nextProps) {
+  nextProps.history.push("/")
 }
 
   render() {
