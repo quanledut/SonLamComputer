@@ -46,6 +46,7 @@ class UserFormUI extends Component {
                 title: "",
                 content: ""
             },      
+            roles: [],
             isDisabled:true,
             isRedirect: false
         };
@@ -55,8 +56,6 @@ class UserFormUI extends Component {
         this._openModal = this._openModal.bind(this)
         this._closeModal = this._closeModal.bind(this)
     }
-
-    roles = []
 
     componentWillMount(){
         var {match} = this.props;
@@ -72,11 +71,12 @@ class UserFormUI extends Component {
             })
         }
         this.props.findAllRoles((roles, err) => {
-            if (!err) this.roles = roles
+            console.log(roles, err)
+            if (!err) this.setState({
+                ...this.state,
+                roles
+            })
         })
-    }
-
-    componentWillReceiveProps(nextProps){
     }
 
     onClear = () =>{
@@ -319,10 +319,11 @@ class UserFormUI extends Component {
                                             onChange = {(event) => (this.isChange(event))} 
                                             value = {this.state.select}
                                             type="select" name="roles" id="select">
-                                            <option value="0">Please select</option>
-                                            <option value="1">Option #1</option>
-                                            <option value="2">Option #2</option>
-                                            <option value="3">Option #3</option>
+                                            {
+                                                this.state.roles.map((e, id) => 
+                                                    <option key={id} value={e._id}>{e.name}</option>
+                                                )
+                                            }
                                         </Input>
                                     </FormGroup>
                                 </Form>

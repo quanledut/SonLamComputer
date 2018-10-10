@@ -6,6 +6,6 @@ export const CONSTANTS = {
     FIND_ALL_REQUEST
 }
 
-export function findAllRequet() {
-    return {type: CONSTANTS.FIND_ALL_REQUEST}
+export function findAllRequet(cb) {
+    return {type: CONSTANTS.FIND_ALL_REQUEST, cb}
 }

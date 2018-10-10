@@ -46,7 +46,7 @@ export function * addUser() {
 
 export function * getUserById() {
     while (true) {
-        const request = yield take(userActions.CONSTANTS.GET_USER_BY_ID_REQUEST)
+        const request = yield take(userActions.CONSTANTS.FIND_BY_ID_REQUEST)
         const {id} = request.data
         
         // try {
@@ -64,7 +64,7 @@ export function * getUserById() {
 
 export function * updateUser() {
     while (true) {
-        const request = yield take(userActions.CONSTANTS.UPDATE_USER_REQUEST)
+        const request = yield take(userActions.CONSTANTS.UPDATE_REQUEST)
         const data = request.data
 
         // try {

@@ -6,10 +6,8 @@ const { sendJsonResponse } = require('../utils');
 const find = (req, res) => {
     Role
         .find({})
-        .exec((roles) => {
+        .exec((err, roles) => {
             sendJsonResponse(res, 200, roles);
-        }, (err) => {
-            sendJsonResponse(res, 500, err);
         })
 }
 
@@ -17,11 +15,9 @@ const findById = (req, res) => {
     Role
         .findById(req.param.roleId)
         .populate('users')
-        .exec((role) => {
+        .exec((err, role) => {
             if (!role) sendJsonResponse(res, 404, "Not found");
             else sendJsonResponse(res, 200, role);
-        }, (err) => {
-            sendJsonResponse(res, 500, err);
         })
 }
 
