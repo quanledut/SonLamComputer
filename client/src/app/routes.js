@@ -3,7 +3,7 @@ import Loadable from 'react-loadable'
 
 import DefaultLayout from './components/ui/DefaultLayout';
 
-import {UserForm} from './components/containers/UserManager'
+import {UserForm} from './components/containers/user'
 
 function Loading() {
   return <div>Loading...</div>;

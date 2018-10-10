@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Badge, Card, CardBody, CardHeader, Col, Pagination, PaginationItem, PaginationLink, Row, Table } from 'reactstrap';
 import PopUpDelete from './PopUpDelete';
 import { connect } from 'react-redux';
-import * as actions from './../../../actions/usermanager';
+import * as actions from '../../../actions/user';
 import {Link} from 'react-router-dom';
 import SearchUser from './Search';
 import { ToastContainer } from "react-toastify";
@@ -113,7 +113,7 @@ const mapDispatchToProps = (dispatch, props) =>
 {
     return {
         listAllUser : () => {
-            dispatch(actions.listAllUserRequest())
+            dispatch(actions.findAllRequest())
         }
     }
 }

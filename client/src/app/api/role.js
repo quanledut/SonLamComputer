@@ -7,3 +7,5 @@ const findAll = () =>
         .catch((err) => {
             throw err
         });
+
+export {findAll}

@@ -1,4 +1,4 @@
-import { CONSTANTS as USER_CONSTANTS } from '../../../actions/usermanager'
+import { CONSTANTS as USER_CONSTANTS } from '../../../actions/user'
 
 var initialState = {};
 

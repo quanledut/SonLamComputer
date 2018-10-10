@@ -1,4 +1,4 @@
-import { CONSTANTS as USER_CONSTANTS } from '../../../actions/usermanager'
+import { CONSTANTS as USER_CONSTANTS } from '../../../actions/user'
 import { toast } from "react-toastify";
 import * as notifications from '../../../constants/Notifications';
 

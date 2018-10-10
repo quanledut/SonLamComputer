@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Popup from 'reactjs-popup';
 import { connect } from 'react-redux';
-import * as actions from './../../../actions/usermanager';
+import * as actions from '../../../actions/user';
 
 class PopupDelete extends Component {
 
@@ -47,7 +47,7 @@ const mapStateToProps = (state) =>{
 const mapDispatchToProps = (dispatch, props) => {
     return {
         onDelete : (id) =>{
-            dispatch(actions.deleteUserRequest(id));
+            dispatch(actions.deleteRequest(id));
         }
     }
 }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
-import * as actions from '../../../actions/usermanager';
+import * as actions from '../../../actions/user';
 import {Redirect} from 'react-router-dom';
 import Modal from '../utils/Modal'
 
@@ -56,6 +56,8 @@ class UserFormUI extends Component {
         this._closeModal = this._closeModal.bind(this)
     }
 
+    roles = []
+
     componentWillMount(){
         var {match} = this.props;
         if(match.params.id)
@@ -69,6 +71,9 @@ class UserFormUI extends Component {
                 })
             })
         }
+        this.props.findAllRoles((roles, err) => {
+            if (!err) this.roles = roles
+        })
     }
 
     componentWillReceiveProps(nextProps){
