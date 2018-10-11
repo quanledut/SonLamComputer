@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
-import {connect} from 'react-redux';
-import * as actions from '../../../actions/user';
 import {Redirect} from 'react-router-dom';
 import Modal from '../utils/Modal'
 
 import {
-    Badge,
     Button,
     Card,
     CardBody,
@@ -171,13 +168,13 @@ class UserFormUI extends Component {
     }
 
     _validate(name, value) {
-        if (name == 'email') {
+        if (name === 'email') {
             const pattern = /[a-zA-Z0-9]+[.]?([a-zA-Z0-9]+)?[@][a-z]{3,9}[.][a-z]{2,5}/g;
             return !pattern.test(value);
-        } else if (name == 'username') {
+        } else if (name === 'username') {
             return !value.match(/^[a-zA-Z0-9]+$/)
         } else {
-            return value == "" || value == null
+            return value === "" || value === null
         }
     }
 

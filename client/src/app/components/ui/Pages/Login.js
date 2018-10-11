@@ -2,10 +2,6 @@ import React, { Component } from 'react';
 import { Button, Card, CardBody, CardGroup, Col, Container, Form, Input, InputGroup, InputGroupAddon, InputGroupText, Row } from 'reactstrap';
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
-
-import { isLoggedIn } from '../../../utils/index'
-
-import {Redirect} from 'react-router-dom';
 import Modal from '../utils/Modal'
 
 class Login extends Component {
