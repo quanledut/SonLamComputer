@@ -7,7 +7,7 @@ export const UserForm = connect(
     null, 
     dispatch => ({
         findAllRoles(cb) {
-            dispatch(roleActions.findAllRequet(cb));
+            dispatch(roleActions.findAllRequest(cb));
         },
         createUser(user, cb) {
             dispatch(userActions.createRequest(user, cb));

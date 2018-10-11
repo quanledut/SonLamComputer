@@ -3,7 +3,8 @@ import Loadable from 'react-loadable'
 
 import DefaultLayout from './components/ui/DefaultLayout';
 
-import {UserForm} from './components/containers/user'
+import {UserForm } from './components/containers/user'
+import {RoleForm, Roles} from './components/containers/roles'
 
 function Loading() {
   return <div>Loading...</div>;
@@ -14,40 +15,17 @@ const Dashboard = Loadable({
   loading: Loading,
 });
 
-// const Users = Loadable({
-//   loader: () => import('./views/Users/Users'),
-//   loading: Loading,
-// });
-
-// const User = Loadable({
-//   loader: () => import('./views/Users/User'),
-//   loading: Loading,
-// });
-
 const UserManager = Loadable({
   loader: () => import('./components/ui/UserManager/UserManager'),
   loading: Loading,
 });
 
-const NewUser = Loadable({
-  loader: () => <UserForm />,
-  loading: Loading,
-});
 
 const EditUser = Loadable({
   loader: ({match}) => <UserForm match = {match}/>,
   loading: Loading,
 });
 
-// const Role = Loadable({
-//   loader: () => import('./views/RoleManager/index'),
-//   loading: Loading,
-// });
-
-// const NewRole = Loadable({
-//   loader: () => import('./views/RoleManager/NewRole'),
-//   loading: Loading,
-// });
 
 // const Service = Loadable({
 //   loader: () => import('./views/ServiceManager/index'),
@@ -68,9 +46,9 @@ const routes = [
    { path: '/usermanager', exact: true, name: 'User Manager', component: UserManager },
    { path: '/usermanager/newuser', exact: true, name: 'Add New User', component: UserForm },
    { path: '/usermanager/:id/edituser', exact: true, name: 'Edit User', component: EditUser },
-  // { path: '/roles/', exact: true, name: 'Role Manager', component: Role },
-  // { path: '/roles/newRole', exact: true, name: 'New Role', component: NewRole },
-  // { path: '/roles/editRole', exact: true, name: 'Edit Role', component: NewRole },
+  { path: '/roles/', exact: true, name: 'Role Manager', component: Roles },
+  { path: '/roles/new', exact: true, name: 'New Role', component: RoleForm },
+  { path: '/roles/:id/edit', exact: true, name: 'Edit Role', component: RoleForm },
   // { path: '/services/', exact: true, name: 'Service Manager', component: Service },
   // { path: '/services/newService', exact: true, name: 'New Service', component: NewService },
   // { path: '/services/editService', exact: true, name: 'Edit Service', component: NewService },
