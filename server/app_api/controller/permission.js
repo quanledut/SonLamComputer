@@ -9,17 +9,9 @@ const READ = 4;
 const UPDATE = 2;
 const DELETE = 1;
 
-const decimalToBinary = (dec) => {
-    binary = [];
-    while (dec != 0) {
-        binary.push(dec % 2);
-        dec = Math.floor( dec / 2);
-    }
-    return binary.reverse();
-}
 
 const checkPolicyForPermission = (policies, action) => {
-    console.log(policies);
+    // console.log(policies);
     for (let id in policies) {
         let policy = policies[id];
         if (policy.permission & action) return true 
@@ -62,6 +54,7 @@ const checkPermission = async (roles, collectionName, action) => {
 const checkPermissionForCollection = (collectionName) => (action) => async (req, res, next) => {
     const roles = req.payload.roles.map((r) => new ObjectId(r._id));
     const allowed = await checkPermission(roles, collectionName, action);
+    console.log(collectionName, action, roles)
     if (allowed) {
         next();
     } else {

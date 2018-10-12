@@ -1,3 +1,2 @@
-require('./user/index.js');
-require('./role/index.js');
+require('./user');
 require('./service/index.js');

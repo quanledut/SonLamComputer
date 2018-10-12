@@ -6,6 +6,6 @@ require('./device')(router)
 require('./role')(router)
 require('./service')(router)
 require('./user')(router)
-
+require('./policy')(router)
 
 module.exports = router;

@@ -27,15 +27,21 @@ const findById = (req, res) => {
 }
 
 const create = (req, res) => {
-    if (!req.body.customer_name.name || req.body.customer_name.length == 0 ||
+    if (!req.body.serviceType || 
+        !req.body.customer_name || req.body.customer_name.length == 0 ||
         !req.body.customer_id_card || req.body.customer_id_card.length == 0 || 
         req.body.devices.length == 0)  {
             sendJsonResponse(res, 400, "Invalid input")
             return;
     }
     let service = new Service();
-    service.customer_name = req.body
-    serviceType.save((err, st) => {
+    service.serviceType = req.body.serviceType
+    service.customer_name = req.body.customer_name;
+    service.customer_id_card = req.body.customer_id_card,
+    service.devices = req.body.devices
+    service.calculatePrice()
+
+    service.save((err, st) => {
         if (err) sendJsonResponse(res, 500, err);
         else sendJsonResponse(res, 201, st);
     })

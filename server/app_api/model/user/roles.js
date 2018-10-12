@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 let roleSchema = new mongoose.Schema({
-    name: { type: String, required: true } ,
+    name: { type: String, required: true, unique: true } ,
 }, {
     toJSON: {
         virtuals: true

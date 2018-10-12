@@ -11,6 +11,10 @@ const assert = chai.assert;
 const { api, token } = require('../../shared/variables.json');
 const utils = require('../../shared/utils');
 
+const getFindByIdApi = (serviceTypeId) => {
+    return api.serviceTypes.findById.replace(":serviceTypeId", serviceTypeId)
+}
+
 chai.use(chaiHttp);
 
 describe('[Read ServiceType] Api', () => {
@@ -18,7 +22,7 @@ describe('[Read ServiceType] Api', () => {
         describe('[Read All ServiceType] Permission', () => {
             it('When_HasNoAccessToken_Expect_Fail', (done) => {
                 chai.request(server)
-                    .get(api.get.serviceTypes)
+                    .get(api.serviceTypes.find)
                     .end((err, res) => {
                         res.status.should.equal(401);
                         done();
@@ -27,7 +31,7 @@ describe('[Read ServiceType] Api', () => {
             
             it('When_UserHasNoReadPolicy_Expect_Fail', (done) => {
                 chai.request(server)
-                    .get(api.get.serviceTypes)
+                    .get(api.serviceTypes.find)
                     .set('Authorization', 'Bearer ' + token.user)
                     .end((err, res) => {
                         res.status.should.equal(401);
@@ -37,7 +41,7 @@ describe('[Read ServiceType] Api', () => {
     
             it('When_UserHasReadPolicy_Expect_Success', (done) => {
                 chai.request(server)
-                    .get(api.get.serviceTypes)
+                    .get(api.serviceTypes.find)
                     .set('Authorization', 'Bearer ' + token.root_admin)
                     .end((err, res) => {
                         res.status.should.equal(200);
@@ -53,7 +57,7 @@ describe('[Read ServiceType] Api', () => {
 
         before((done) => {
             chai.request(server)
-                .get(api.get.serviceTypes)
+                .get(api.serviceTypes.find)
                 .set('Authorization', 'Bearer ' + token.root_admin)
                 .end((err, res) => {
                     types = res.body;
@@ -64,7 +68,7 @@ describe('[Read ServiceType] Api', () => {
         describe('[Read ServiceType By ID] Permission', () => {
             it('When_HasNoAccessToken_Expect_Fail', (done) => {
                 chai.request(server)
-                    .get(utils.getFindServiceTypeById(types[0]._id))
+                    .get(getFindByIdApi(types[0]._id))
                     .end((err, res) => {
                         res.status.should.equal(401);
                         done();
@@ -73,7 +77,7 @@ describe('[Read ServiceType] Api', () => {
             
             it('When_UserHasNoReadPolicy_Expect_Fail', (done) => {
                 chai.request(server)
-                .get(utils.getFindServiceTypeById(types[0]._id))
+                .get(getFindByIdApi(types[0]._id))
                 .set('Authorization', 'Bearer ' + token.user)
                     .end((err, res) => {
                         res.status.should.equal(401);
@@ -83,7 +87,7 @@ describe('[Read ServiceType] Api', () => {
     
             it('When_UserHasReadPolicy_Expect_Success', (done) => {
                 chai.request(server)
-                .get(utils.getFindServiceTypeById(types[0]._id))
+                .get(getFindByIdApi(types[0]._id))
                 .set('Authorization', 'Bearer ' + token.root_admin)
                     .end((err, res) => {
                         res.status.should.equal(200);
