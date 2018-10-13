@@ -31,11 +31,12 @@ export function * findAll() {
 export function * deleted() {
     while (true) {
         const request = yield take(roleActions.CONSTANTS.DELETE_REQUEST)
-        const id = request.id
+        const id = request.data
         try {
             let result = yield call(roleApi.deleteApi, id)
+            console.log(result)
             request.cb(result, null)
-            yield put(roleActions.deleteRequestSuccess(result))
+            yield put(roleActions.deleteRequestSuccess({_id: id}))
         } catch(err) {
             request.cb(null, err.message)
         }
@@ -50,6 +51,7 @@ export function * add() {
             request.cb(result, null)
             yield put(roleActions.createRequestSuccess(result))
         } catch(err) {
+            console.log(err)
             request.cb(null, err.message)
         }
     }
@@ -73,6 +75,7 @@ export function * updated() {
         const request = yield take(roleActions.CONSTANTS.UPDATE_REQUEST)
         const data = request.data
         try {
+            console.log(data)
             let result = yield call(roleApi.updateApi, data)
             request.cb(result, null)
             yield put(roleActions.updateRequestSuccess(result))
@@ -83,6 +86,7 @@ export function * updated() {
 }
 
 export default function * root () {
+    yield fork(add)
     yield fork(findCollections)
     yield fork(findAll)
     yield fork(deleted)

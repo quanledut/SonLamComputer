@@ -3,8 +3,10 @@ import Popup from 'reactjs-popup';
 
 class PopupDelete extends Component {
 
-    onDelete = (id) =>{
-        this.props.onDelete(id);
+    onDelete = (id, close) =>{
+        this.props.onDelete(id, () => {
+            close()
+        });
     }
 
     render() {
@@ -23,7 +25,7 @@ class PopupDelete extends Component {
                             Bạn có chắc chắn muốn xóa {this.props.role.name} không?
                         </div>
                         <div className="actions">
-                            <div className="btn btn-danger button" onClick = {() =>{this.onDelete(this.props.role._id)}}>
+                            <div className="btn btn-danger button" onClick = {() =>{this.onDelete(this.props.role._id, close)}}>
                                 <i className="fa fa-check"> Có </i>
                             </div>
                             <div className="btn btn-primary button" onClick={() => {

@@ -35,12 +35,12 @@ class RoleManager extends Component {
                                 <i className="fa fa-eye"> Chi tiết </i>
                             </div>
                             <Link 
-                                to = {`/roles/${role._id}/editrole`}
+                                to = {`/roles/${role._id}/edit`}
                                 className="btn btn-primary"
                             >
                                 <i className="fa fa-edit"> Sửa </i>
                             </Link>
-                            <PopUpDelete role={role}/>
+                            <PopUpDelete role={role} onDelete={this.props.delete}/>
                         </div>
                     </td>
                 </tr>

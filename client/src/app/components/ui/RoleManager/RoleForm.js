@@ -51,6 +51,7 @@ class RoleFormUI extends Component {
         this.isChange = this.isChange.bind(this)
         this._openModal = this._openModal.bind(this)
         this._closeModal = this._closeModal.bind(this)
+        this._deletePolicy = this._deletePolicy.bind(this)
     }
 
     componentWillMount(){
@@ -60,12 +61,14 @@ class RoleFormUI extends Component {
             var id = match.params.id;
 
             this.props.findById(id, (data) => {
+                console.log(data)
                 this.setState({
                     ...this.state,
+                    isDisabled: false,
                     form: data
                 })
             })
-        } else {
+        } 
             this.props.findCollectionNames((data, error) => {
                 this.setState({
                     collections: data.collections,
@@ -73,7 +76,6 @@ class RoleFormUI extends Component {
                 })
 
             })
-        }
     }
 
     onClear = () =>{
@@ -112,18 +114,40 @@ class RoleFormUI extends Component {
         })
     }
 
+    _isPoliciesValid() {
+        let collectionNames = []
+        for (let i=0; i < this.state.form.policies.length; i++) {
+            let policy = this.state.form.policies[i]
+            if (policy.collectionName == "None") return false
+            if (collectionNames.indexOf(policy.collectionName) != -1) return false
+            collectionNames.push(policy.collectionName) 
+        }
+        return true
+    }
+
     onSubmitForm = (event) =>
-    {
-        
+    { 
         event.preventDefault();
+
+        if (!this._isPoliciesValid()) {
+            this._openModal({
+                isLoading: false, 
+                isOpened: true,
+                title: "Error",
+                content: "Invalid input!"
+            })
+            return;
+        }
+
         this._openModal({
             isLoading: true,
             isOpened: true,
             title: "Loading"
         })
 
-        let {_id} = this.props
-        if (_id) {
+        var {match} = this.props;
+        if (match.params.id) {
+            console.log(this.state.form)
             this.props.update(this.state.form, (res, error) => {
                 this._closeModal()
                 if (res) {
@@ -168,42 +192,89 @@ class RoleFormUI extends Component {
 
     _validate(name, value) {
         if (name === 'name') {
-            return !(value.length > 50)
+            return value.length > 50
         } else {
             return value === "" || value === null
         }
     }
 
-    _addPermission = (event) => {
+    _deletePolicy = (event, i) => {
+        event.preventDefault
+        this.setState({
+            tbody: this.state.tbody.filter((item, id) =>  id != i),
+            form: {
+                ...this.state.form,
+                policies: this.state.form.policies.filter((item, id) => id  != i)
+            }
+        })
+    }
+
+    _handlePolicies = (e, key) => {
+        this.setState({
+            form: {
+                ...this.state.form,
+                policies: this.state.form.policies.map((policy, id) => {
+                    if (id != key) return policy
+                    if (e.target.name == "collectionName") {
+                        policy[e.target.name] = e.target.value
+                        return policy
+                    } else {
+                        policy[e.target.name] = !policy[e.target.name]
+                        return policy
+                    }
+                        
+                })
+            }
+        })
+    }
+
+    _addPolicy = (event) => {
+        const key = this.state.tbody.length
         event.preventDefault()
         this.setState({
-            tbody: [
-                ...this.state.tbody,
-                <tr key={this.state.tbody.length}>
-                    <td>
-                        <Input type="select" name="select" id="exampleSelect">
-                            <option>Hãy chọn bảng</option>
-                            {this.state.collections.map((item, id)=> <option key={id}>{item}</option>)}
-                        </Input>
-                    </td>
+            form: {
+                ...this.state.form,
+                policies: [
+                    ...this.state.form.policies,
                     {
-                        this.state.permissions.map((item, id) => 
-                            <td key={id}>
-                                <FormGroup check>
-                                    <Input type="checkbox" />
-                                </FormGroup>
-                            </td>)
+                        collectionName: "None",
+                        ...this.state.permissions.reduce((obj, i) => {
+                            obj[i] = false
+                            return obj
+                        }, {}) 
                     }
-                    <td><Button>Delete</Button></td>
-                </tr>                
-            ]
+                ]
+            }
         })
+        // this.setState({
+        //     tbody: [
+        //         ...this.state.tbody,
+        //         <tr key={this.state.tbody.length}>
+        //             <td>
+        //                 <Input value={this.state.form.policies[key].collectionName} onChange={(e) => this._handlePolicies(e, key)} type="select" name="collectionName" id="exampleSelect">
+        //                     <option value="None">Hãy chọn bảng</option>
+        //                     {this.state.collections.map((item, id)=> <option key={id} value={item}>{item}</option>)}
+        //                 </Input>
+        //             </td>
+        //             {
+        //                 this.state.permissions.map((item, id) => 
+        //                     <td key={id}>
+        //                         <FormGroup check>
+        //                             <Input onChange={(e) => this._handlePolicies(e, key)} type="checkbox" name={item} checked={this.state.form.policies[key][item]}/>
+        //                         </FormGroup>
+        //                     </td>)
+        //             }
+        //             <td><Button onClick={(e) => this._deletePolicy(e, key)}>Delete</Button></td>
+        //         </tr>                
+        //     ]
+        // })
     }
 
     isChange = (event) =>
     {
         const name = event.target.name;
         const value = event.target.value;
+        console.log(name, value)
         this.setState({
             form: {
                 ...this.state.form,
@@ -260,7 +331,7 @@ class RoleFormUI extends Component {
                                     <FormGroup>
                                         <Label htmlFor="nf-username">Tên quyền</Label>
                                         <Input onChange = {(event) => (this.isChange(event))} 
-                                            value = {this.state.name}
+                                            value = {this.state.form.name}
                                             type="username" id="nf-username" name="name" placeholder="Nhập tên quyền..." autoComplete="current-password" />
                                          {this.state.error.name ? <FormText className="help-block"><span style={{color: "red"}}>Please enter valid your name</span></FormText> : ''} 
                                     </FormGroup>
@@ -272,11 +343,31 @@ class RoleFormUI extends Component {
                                         <tr>
                                             <th>Tên bảng</th>
                                             {this.state.permissions.map((item, id) => <th key={id}>{item}</th>)}
-                                            <td><Button onClick={this._addPermission}><i className="fa fa-plus"></i></Button></td>
+                                            <td><Button onClick={this._addPolicy}><i className="fa fa-plus"></i></Button></td>
                                         </tr>
                                     }
 
-                                    tbody = {this.state.tbody}
+                                    tbody = {this.state.form.policies.map((item, key) => {
+                                        return (
+                                            <tr key={key}>
+                                                <td>
+                                                    <Input value={item.collectionName} onChange={(e) => this._handlePolicies(e, key)} type="select" name="collectionName" id="exampleSelect">
+                                                        <option value="None">Hãy chọn bảng</option>
+                                                        {this.state.collections.map((item, id)=> <option key={id} value={item}>{item}</option>)}
+                                                    </Input>
+                                                </td>
+                                                {
+                                                    this.state.permissions.map((permission, id) => 
+                                                        <td key={id}>
+                                                            <FormGroup check>
+                                                                <Input onChange={(e) => this._handlePolicies(e, key)} type="checkbox" name={permission} checked={item[permission]}/>
+                                                            </FormGroup>
+                                                        </td>)
+                                                }
+                                                <td><Button onClick={(e) => this._deletePolicy(e, key)}>Delete</Button></td>
+                                            </tr>
+                                        )
+                                    })}
                                     hasPagination = {false}
                             />
 

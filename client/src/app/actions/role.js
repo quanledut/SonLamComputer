@@ -61,8 +61,8 @@ export function createRequestSuccess(data) {
 }
 
 //--------------------------------------------------------------
-export function deleteRequest(data) {
-    return {type: CONSTANTS.DELETE_REQUEST, data}
+export function deleteRequest(data, cb) {
+    return {type: CONSTANTS.DELETE_REQUEST, data, cb}
 }
 
 export function deleteRequestSuccess(data) {
@@ -70,8 +70,8 @@ export function deleteRequestSuccess(data) {
 }
 
 //------------------------------------------------------------
-export function updateRequest(data) {
-    return {type: CONSTANTS.UPDATE_REQUEST, data}
+export function updateRequest(data, cb) {
+    return {type: CONSTANTS.UPDATE_REQUEST, data, cb}
 }
 
 export function updateRequestSuccess(data) {
@@ -79,8 +79,8 @@ export function updateRequestSuccess(data) {
 }
 
 //--------------------------------------------------------------
-export function findByIdRequest(id) {
-    return {type: CONSTANTS.FIND_BY_ID_REQUEST, id}
+export function findByIdRequest(id, cb) {
+    return {type: CONSTANTS.FIND_BY_ID_REQUEST, id, cb}
 }
 
 //---------------------------------------------------------------------

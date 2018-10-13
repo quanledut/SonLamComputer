@@ -42,7 +42,7 @@ request()
 
 const updateApi = (data) => 
 request()
-    .put(`/roles/${data.id}`, data)
+    .put(`/roles/${data._id}`, data)
     .then((response) => response.data)
     .catch((err) => {
         throw err
