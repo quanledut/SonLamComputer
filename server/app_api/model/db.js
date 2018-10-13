@@ -1,6 +1,6 @@
 const config = require('../../config.json');
 let mongoose;
-if (process.env.NODE_ENV === 'test') mongoose = require( 'mongoose').set('debug', true);
+if (process.env.NODE_ENV === 'test') mongoose = require( 'mongoose')
 else mongoose = require( 'mongoose');
 let dbURI
 let db_info;
@@ -13,6 +13,10 @@ if (process.env.NODE_ENV === 'test') {
 }
 
 dbURI = `mongodb://${db_info.username}:${db_info.password}@${db_info.host}:${db_info.port}/${db_info.db_name}`;
+
+if (process.env.NODE_ENV === 'heroku') {
+	dbURI = process.env.MONGODB_URI
+}
 
 mongoose.connect(dbURI, { 
 	useCreateIndex: true,

@@ -19,7 +19,7 @@ describe('[Create ServiceType] Api', () => {
     describe('[Create ServiceType] Permission', () => {
         it('When_HasNoAccessToken_Expect_Fail', (done) => {
             chai.request(server)
-                .post(api.post.serviceTypes)
+                .post(api.serviceTypes.create)
                 .set('Content-Type', 'application/json')
                 .send({
                     'name': 'Sữa Chữa'
@@ -32,7 +32,7 @@ describe('[Create ServiceType] Api', () => {
         
         it('When_UserHasNoCreatePolicy_Expect_Fail', (done) => {
             chai.request(server)
-                .post(api.post.serviceTypes)
+                .post(api.serviceTypes.create)
                 .set('Authorization', 'Bearer ' + token.user)
                 .set('Content-Type', 'application/json')
                 .send({
@@ -46,7 +46,7 @@ describe('[Create ServiceType] Api', () => {
 
         it('When_UserHasCreatePolicy_Expect_Success', (done) => {
             chai.request(server)
-                .post(api.post.serviceTypes)
+                .post(api.serviceTypes.create)
                 .set('Authorization', 'Bearer ' + token.root_admin)
                 .set('Content-Type', 'application/json')
                 .send({
@@ -62,7 +62,7 @@ describe('[Create ServiceType] Api', () => {
     describe('[Create ServiceType] Behavior', () => {
         it('When_CreateDuplicateRole_Expect_Fail', (done) => {
             chai.request(server)
-                .post(api.post.serviceTypes)
+                .post(api.serviceTypes.create)
                 .set('Authorization', 'Bearer ' + token.root_admin)
                 .set('Content-Type', 'application/json')
                 .send({
@@ -76,7 +76,7 @@ describe('[Create ServiceType] Api', () => {
 
         it('When_CreateWithEmptyString_Expect_Fail', (done) => {
             chai.request(server)
-                .post(api.post.serviceTypes)
+                .post(api.serviceTypes.create)
                 .set('Authorization', 'Bearer ' + token.root_admin)
                 .set('Content-Type', 'application/json')
                 .send({
@@ -90,7 +90,7 @@ describe('[Create ServiceType] Api', () => {
 
         it('When_CreateNewValidRole_Expect_Success', (done) => {
             chai.request(server)
-                .post(api.post.serviceTypes)
+                .post(api.serviceTypes.create)
                 .set('Authorization', 'Bearer ' + token.root_admin)
                 .set('Content-Type', 'application/json')
                 .send({

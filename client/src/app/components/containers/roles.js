@@ -14,7 +14,10 @@ export const RoleForm = connect(
         update(role, cb) {
             dispatch(roleActions.updateRequest(role, cb));
         },
-        getById(id, cb) {
+        findCollectionNames(cb) {
+            dispatch(roleActions.findCollectionRequest(cb))
+        },
+        findById(id, cb) {
             dispatch(roleActions.findByIdRequest(id, cb));
         }
     })

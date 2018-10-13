@@ -14,8 +14,8 @@ describe('[Create Service] Api', () => {
     before(async () => {
         await removeService();
         let res = await chai.request(server)
-            .get(api.get.serviceTypes)
-            .set('Authorization', 'Bearer ' + token.user)
+            .get(api.serviceTypes.find)
+            .set('Authorization', 'Bearer ' + token.root_admin)
         serviceTypes = res.body
 
         baseData = {
@@ -35,7 +35,7 @@ describe('[Create Service] Api', () => {
     describe('[Create Service] Permission', () => {
         it('When_HasNoAccessToken_Expect_Fail', (done) => {
             chai.request(server)
-                .post(api.post.services)
+                .post(api.services.create)
                 .set('Content-Type', 'application/json')
                 .send(baseData)
                 .end((err, res) => {
@@ -46,7 +46,7 @@ describe('[Create Service] Api', () => {
         
         it('When_UserHasNoCreatePolicy_Expect_Fail', (done) => {
             chai.request(server)
-                .post(api.post.services)
+                .post(api.services.create)
                 .set('Authorization', 'Bearer ' + token.user)
                 .set('Content-Type', 'application/json')
                 .send(baseData)
@@ -57,12 +57,14 @@ describe('[Create Service] Api', () => {
         })
 
         it('When_UserHasCreatePolicy_Expect_Success', (done) => {
+            console.log(api.services.create)
             chai.request(server)
-                .post(api.post.services)
+                .post(api.services.create)
                 .set('Authorization', 'Bearer ' + token.root_admin)
                 .set('Content-Type', 'application/json')
                 .send(baseData)
                 .end((err, res) => {
+                    console.log(res.error)
                     res.status.should.equal(201);
                     done();
                 })

@@ -18,8 +18,8 @@ describe('[Login] api', () => {
 			};
 
 			chai.request(server)
-				.post(variables.api.post.login)
-				.type('form')
+				.post(variables.api.users.login)
+				.set('Content-Type', 'application/json')
 				.send(form)
 				.end((err, res)=> {
 					res.should.have.status(401);
@@ -34,11 +34,10 @@ describe('[Login] api', () => {
 			}
 
 			chai.request(server)
-				.post(variables.api.post.login)
-				.type('form')
+				.post(variables.api.users.login)
+				.set('Content-Type', 'application/json')
 				.send(form)
 				.end((err, res)=> {
-					console.log(res.body);
 					res.should.have.status(200);
 					res.body.should.have.property('token');
 					let token = res.body.token
@@ -56,8 +55,8 @@ describe('[Login] api', () => {
 			}
 
 			chai.request(server)
-				.post(variables.api.post.login)
-				.type('form')
+				.post(variables.api.users.login)
+				.set('Content-Type', 'application/json')
 				.send(form)
 				.end((err, res)=> {
 					console.log(res.body);

@@ -2,6 +2,8 @@ const PREFIX = "ROLE_CONSTANT";
 const FIND_ALL_REQUEST = PREFIX + "_FIND_ALL_REQUEST"
 const FIND_ALL_REQUEST_SUCCESS = FIND_ALL_REQUEST + "_SUCCESS"
 
+const FIND_COLLECTIONS_REQUEST = PREFIX + "_FIND_COLLECTIONS_REQUEST"
+
 const CREATE_REQUEST = PREFIX + "_CREATE_REQUEST"
 const CREATE_REQUEST_SUCCESS = CREATE_REQUEST + "_SUCCESS"
 
@@ -20,6 +22,8 @@ export const CONSTANTS = {
     FIND_ALL_REQUEST,
     FIND_ALL_REQUEST_SUCCESS,
 
+    FIND_COLLECTIONS_REQUEST,
+
     CREATE_REQUEST,
     CREATE_REQUEST_SUCCESS,
 
@@ -33,6 +37,12 @@ export const CONSTANTS = {
     SEARCH_REQUEST,
 }
 
+
+export function findCollectionRequest(cb) {
+    return {type: CONSTANTS.FIND_COLLECTIONS_REQUEST, cb}
+}
+
+//----------------------------------------------------------------------
 export function findAllRequest(cb) {
     return {type: CONSTANTS.FIND_ALL_REQUEST, cb}
 }

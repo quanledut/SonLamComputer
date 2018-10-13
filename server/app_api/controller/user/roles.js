@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Role = mongoose.model('Role');
-
+const {DEFAULT_PERMISSION_NAMES} = require('../../model/user/policy')
 const { sendJsonResponse } = require('../utils');
 
 const find = (req, res) => {
@@ -24,6 +24,18 @@ const findById = (req, res) => {
 const create = (req, res) => {
     const role = new Role();
     role.name = req.body.name;
+
+    for (let i=0; i < req.body.policies.length; i++) {
+        let policy = req.body.policies[i];
+        role.policies.push({
+            collectionName: policy.collectionName,
+            isCreate: policy.isCreate,
+            isRead: policy.isRead,
+            isUpdate: policy.isUpdate,
+            isDelete: policy.isDelete
+        })
+    }
+
     role.save((err, result) => {
         if (err) sendJsonResponse(res, 500, err);
         else sendJsonResponse(res, 201, result);
@@ -31,11 +43,14 @@ const create = (req, res) => {
 }
 
 const updateById = (req, res) => {
+    let newPolicies = req.body.policies
+
     Role
         .findByIdAndUpdate(
             req.param.roleId,
             {
-                name: req.body.name
+                name: req.body.name,
+                polices: newPolicies
             },
             {
                 new: true
@@ -58,11 +73,20 @@ const deleteById = (req, res) => {
         )
 }
 
+const getCollectionNames = (req, res) => {
+    sendJsonResponse(res, 200, {
+        collections: Object.keys(mongoose.connection.models),
+        permissions: DEFAULT_PERMISSION_NAMES
+
+    })
+}
+
 module.exports = {
     find,
     findById,
     create,
     updateById,
-    deleteById
+    deleteById,
+    getCollectionNames
 }
 

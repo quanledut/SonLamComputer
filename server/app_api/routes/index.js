@@ -7,5 +7,4 @@ require('./role')(router)
 require('./service')(router)
 require('./user')(router)
 
-
 module.exports = router;

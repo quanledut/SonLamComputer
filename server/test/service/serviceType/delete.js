@@ -9,16 +9,19 @@ const expect = chai.expect;
 const assert = chai.assert;
 
 const { api, token } = require('../../shared/variables.json');
-const utils = require('../../shared/utils');
 
 chai.use(chaiHttp);
+
+const getDeleteApi = (serviceTypeId) => {
+    return api.serviceTypes.deleteById.replace(":serviceTypeId", serviceTypeId)
+}
 
 describe('[Update ServiceType] Api', () => {
     let types = [];
 
     before((done) => {
         chai.request(server)
-            .get(api.get.serviceTypes)
+            .get(api.serviceTypes.find)
             .set('Authorization', 'Bearer ' + token.root_admin)
             .end((err, res) => {
                 types = res.body;
@@ -29,7 +32,7 @@ describe('[Update ServiceType] Api', () => {
     describe('[Update ServiceType] Permission', () => {
         it('When_HasNoAccessToken_Expect_Fail', (done) => {
             chai.request(server)
-                .delete(utils.getDeleteServiceTypeById(types[0]._id))
+                .delete(getDeleteApi(types[0]._id))
                 .end((err, res) => {
                     res.status.should.equal(401);
                     done();
@@ -38,7 +41,7 @@ describe('[Update ServiceType] Api', () => {
         
         it('When_UserHasNoUpdatePolicy_Expect_Fail', (done) => {
             chai.request(server)
-                .delete(utils.getDeleteServiceTypeById(types[0]._id))
+                .delete(getDeleteApi(types[0]._id))
                 .set('Authorization', 'Bearer ' + token.user)
                 .end((err, res) => {
                     res.status.should.equal(401);
@@ -48,7 +51,7 @@ describe('[Update ServiceType] Api', () => {
 
         it('When_UserHasUpdatePolicy_Expect_Success', (done) => {
             chai.request(server)
-                .delete(utils.getDeleteServiceTypeById(types[0]._id))
+                .delete(getDeleteApi(types[0]._id))
                 .set('Authorization', 'Bearer ' + token.root_admin)
                 .end((err, res) => {
                     console.log(res.error); 

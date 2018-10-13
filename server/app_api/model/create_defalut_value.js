@@ -2,7 +2,6 @@ const mongoose = require( 'mongoose' );
 
 const User = mongoose.model('User');
 const Role = mongoose.model('Role');
-const Policy = mongoose.model('Policy');
 
 const create_data = async () => {
     let admin;
@@ -24,8 +23,8 @@ const create_data = async () => {
                 admin = await create_admin(roleAdmin.id);
                 user = await create_user(roleUser.id);  
                 
-                await create_policies(roleAdmin.id, true);
-                await create_policies(roleUser.id, false);
+                // await create_policies(roleAdmin.id, true);
+                // await create_policies(roleUser.id, false);
             } catch(err) {
                 console.log("Error in creating admin");
             }
@@ -41,6 +40,22 @@ const create_role_admin = async () => {
     let role = new Role()
     let result
     role.name = 'root_admin'
+    Object.keys(mongoose.connection.models).forEach(async (collection) => {
+        try {
+            role.policies.push({
+                "collectionName": collection,
+                isCreate: true,
+                isRead: true,
+                isUpdate: true,
+                isDelete: true
+            })
+            // await create_policy(roleId, collection, isRoot)
+        } catch(err) {
+            console.log("Error in creating policy for table", collection);
+            console.log(err)
+        }
+    })    
+
     result = await role.save();
 
     return result;
@@ -82,26 +97,26 @@ const create_admin = async (roleId) => {
     return result
 }
 
-const create_policies = async (roleId, isRoot) => {
-    Object.keys(mongoose.connection.models).forEach(async (collection) => {
-        try {
-            await create_policy(roleId, collection, isRoot)
-        } catch(err) {
-            console.log("Error in creating policy for table", collection);
-            console.log(err)
-        }
-    })    
-}
+// const create_policies = async (roleId, isRoot) => {
+//     Object.keys(mongoose.connection.models).forEach(async (collection) => {
+//         try {
+//             await create_policy(roleId, collection, isRoot)
+//         } catch(err) {
+//             console.log("Error in creating policy for table", collection);
+//             console.log(err)
+//         }
+//     })    
+// }
+// 
+// const create_policy = async (roleId, collectionName, isRoot) => {
+//     if (!isRoot) return;
+//     if (!collectionName) return null;
+//     let policy = new Policy();
+//     policy.roleId = roleId;
+//     policy.collectionName = collectionName;
+//     policy.permission = policy.generatePermission(1, 1, 1, 1);
+//     await policy.save();
 
-const create_policy = async (roleId, collectionName, isRoot) => {
-    if (!isRoot) return;
-    if (!collectionName) return null;
-    let policy = new Policy();
-    policy.roleId = roleId;
-    policy.collectionName = collectionName;
-    policy.permission = policy.generatePermission(1, 1, 1, 1);
-    await policy.save();
-
-}
+// }
 
 create_data();

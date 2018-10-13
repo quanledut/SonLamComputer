@@ -1,27 +1,29 @@
 process.env.NODE_ENV = 'test';
-const server = require('../app');
+const server = require('../../../app');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
-const should = chai.should();
-const expect = chai.expect;
-const assert = chai.assert;
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
+
+const variables = require('../../shared/variables.json')
 
 chai.use(chaiHttp);
 
 
-describe('User', () => {
+describe('[Create User] Api', () => {
 	before((done)=> {
-		User.remove({}, (err)=> {
+		User.remove({
+			username: {
+				$nin: ["thanhson", "user"]
+			}
+		}, (err)=> {
 			console.log(err);	
 			User.find({}, (err, usrs)=> {
-				console.log(usrs);
 				done();
 			})
 		});
 	})
-	describe('Register', () => {
+	describe('[Register] Api', () => {
 		it ('It should register user sucessfully', (done) => {
 			let user = {
 				username: 'test',
@@ -31,7 +33,7 @@ describe('User', () => {
 			};
 
 			chai.request(server)
-				.post('/api/users')
+				.post(variables.api.users.register)
 				.type('form')
 				.send(user)
 				.end((err, res) => {
@@ -50,52 +52,28 @@ describe('User', () => {
 			};
 
 			chai.request(server)
-				.post('/api/users')
+				.post(variables.api.users.register)
 				.send(user)
 				.end((err, res) => {
 					res.should.have.status(400);
 					done();
 				})
-		})
+        })
+        
+        it ('When_RegisterSuccess_Expect_User_LoginSuccessfully', (done) => {
+            chai.request(server)
+                .post(variables.api.users.login)
+                .set('Content-Type', 'application/json')
+                .send({
+                    "username": "test",
+                    "password": "test"
+                })
+                .end((err, res) => {
+                    res.should.have.status(200)
+                    res.body.should.have.property('token')
+                    done()
+                })
+        })
 	})
-
-	describe('Login', ()=> {
-		it ('It should login fail', (done)=> {
-			let form = {
-				username: 'a',
-				password: 'a'
-			};
-
-			chai.request(server)
-				.post('/api/users/login')
-				.type('form')
-				.send(form)
-				.end((err, res)=> {
-					res.should.have.status(401);
-					done();
-				})
-		})
-
-		it ('It should login successfully and retunr token', (done)=> {
-			let form = {
-				username: 'test',
-				password: 'test'
-			}
-
-			chai.request(server)
-				.post('/api/users/login')
-				.type('form')
-				.send(form)
-				.end((err, res)=> {
-					res.should.have.status(200);
-					res.body.should.have.property('token');
-					done();
-				})
-		})
-
-	})
-
-
-
 })
 

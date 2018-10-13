@@ -14,6 +14,10 @@ const removeService = async () => {
     await Service.remove({});
 }
 
+const removeCollection = async (collectionName, condition={}) => {
+    const model = mongoose.model(collectionName)
+    await model.remove(condition)
+}
 
 const removeUsers = async () => {
     let unames = [];
@@ -38,6 +42,7 @@ const getDeleteServiceById = (id) => variables.api.delete.serviceById.replace(":
 
 
 module.exports = {
+    removeCollection,
     removeUsers,
     removeRoles,
     removeServiceType,

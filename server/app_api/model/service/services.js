@@ -18,4 +18,13 @@ let serviceSchema = new mongoose.Schema({
     totalPrice: { type: Number, default: 0 }
 })
 
+serviceSchema.methods.calculatePrice = function() {
+    let totalPrice = 0
+    for (let i=0; i < this.devices.length; i++) {
+        totalPrice += this.devices[i].price
+    }
+
+    this.totalPrice = totalPrice
+}
+
 mongoose.model('Service', serviceSchema)
