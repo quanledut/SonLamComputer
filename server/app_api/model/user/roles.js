@@ -1,7 +1,9 @@
 const mongoose = require('mongoose')
+const {policySchema} = require('./policy')
 
 let roleSchema = new mongoose.Schema({
     name: { type: String, required: true, unique: true } ,
+    policies: [policySchema]
 }, {
     toJSON: {
         virtuals: true

@@ -15,11 +15,12 @@ const route_user = (router) => {
     /* User Api */
     router.post('/users/register', ctrlUser.register);
     router.post('/users/login', ctrlUser.login);
+    router.post('/users', auth, checkPermission(permission.type.CREATE), ctrlUser.createUser)
 
     router.get('/users', auth, checkPermission(permission.type.READ), ctrlUser.find)
-    router.get('/users/:userId', auth, ctrlUser.findById)
-    router.put('/users/:userId/changePassword', auth, ctrlUser.changePassword)
-    router.put('/users/:userId', auth, ctrlUser.updateById)
+    router.get('/users/:userId', auth, checkPermission(permission.type.READ), ctrlUser.findById)
+    router.put('/users/:userId/changePassword', auth, checkPermission(permission.type.UPDATE), ctrlUser.changePassword)
+    router.put('/users/:userId', auth, checkPermission(permission.type.UPDATE), ctrlUser.updateById)
 }
 
 module.exports = route_user

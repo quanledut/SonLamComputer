@@ -14,6 +14,10 @@ if (process.env.NODE_ENV === 'test') {
 
 dbURI = `mongodb://${db_info.username}:${db_info.password}@${db_info.host}:${db_info.port}/${db_info.db_name}`;
 
+if (process.env.NODE_ENV === 'heroku') {
+	dbURI = process.env.MONGODB_URI
+}
+
 mongoose.connect(dbURI, { 
 	useCreateIndex: true,
 	useNewUrlParser: true

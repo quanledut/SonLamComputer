@@ -11,8 +11,14 @@ const utils = require('../../shared/utils')
 
 chai.use(chaiHttp);
 
-const baseData = {
-    "name": "moderator"
+const baseDataMod = {
+    name: "moderator",
+    policies: [{
+        collectionName: "ServiceType",
+        isCreate: true,
+        isRead: true,
+        isUpdate: true
+    }]
 }
 
 describe('[Crearte Role] Api', () => {
@@ -39,7 +45,7 @@ describe('[Crearte Role] Api', () => {
             chai.request(server)
                 .post(variables.api.roles.create)
                 .set('Content-Type', 'application/json')
-                .send(baseData)
+                .send(baseDataMod)
                 .end((err, res) => {
                     res.status.should.equal(401);
                     done();
@@ -51,7 +57,7 @@ describe('[Crearte Role] Api', () => {
                 .post(variables.api.roles.create)
                 .set('Authorization', 'Bearer ' + variables.token.user)
                 .set('Content-Type', 'application/json')
-                .send(baseData)
+                .send(baseDataMod)
                 .end((err, res) => {
                     res.status.should.equal(401);
                     done();
@@ -63,7 +69,7 @@ describe('[Crearte Role] Api', () => {
                 .post(variables.api.roles.create)
                 .set('Authorization', 'Bearer ' + variables.token.root_admin)
                 .set('Content-Type', 'application/json')
-                .send(baseData)
+                .send(baseDataMod)
                 .end((err, res) => {
                     res.status.should.equal(201);
                     done();
@@ -72,18 +78,20 @@ describe('[Crearte Role] Api', () => {
 
     })
 
-    describe('[Create Role Behavior', () => {
+
+    describe('[Create Policy] Permission Behavior', () => {
         it("When_CreateRole_With_Duplicate_Name_Expect_Fail", (done) => {
             chai.request(server)
                 .post(variables.api.roles.create)
                 .set('Content-Type', 'application/json')
                 .set('Authorization', 'Bearer ' + variables.token.root_admin)
                 .set('Content-Type', 'application/json')
-                .send(baseData)
+                .send(baseDataMod)
                 .end((err, res) => {
                     res.status.should.not.equal(201);
                     done();
                 })
         })
     })
+
 })

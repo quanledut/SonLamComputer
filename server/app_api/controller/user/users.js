@@ -142,27 +142,49 @@ const findById = (req, res) => {
 }
 
 const updateById = (req, res) => {
+
 	if (!req.body.username || !req.body.email) {
 		res.status(400).json("Username, email are required");
 		return;
 	} else {
-		Role
-        .findByIdAndUpdate(
-            req.param.roleId,
-            {
-				username: req.body.username,
-				email: req.body.email,
-				fullname: req.body.fullname,
-				phone: req.body.phone
-            },
-            {
-                new: true
-            },
-            (err, role) => {
-                if (err) sendJsonResponse(res, 500, err);
-                else sendJsonResponse(res, 200, role);
-            }
-        )
+		User.findById(req.params.userId, (err, currentUser) => {
+			if (err) sendJsonResponse(res, 500, err);
+			else {
+				const newUser = req.body
+				for (let key in newUser) {
+					if (newUser.hasOwnProperty(key)) {
+						currentUser[key] = newUser[key]
+					}
+				}
+
+				currentUser.save((err, user) => {
+					if (err) sendJsonResponse(res, 500, err);
+					else sendJsonResponse(res, 200, user);
+	
+				})
+			}
+
+		})
+		// User
+        // .findOneAndUpdate(
+        //     req.params.userId,
+        //     {
+		// 		username: req.body.username,
+		// 		email: req.body.email,
+		// 		fullname: req.body.fullname,
+		// 		phone: req.body.phone,
+		// 		roles: req.body.roles,
+        //     },
+        //     {
+		// 		new: true,
+		// 		useFindAndModify: false
+		// 	},
+        //     function(err, user) {
+		// 		console.log(err, user)
+        //         if (err) sendJsonResponse(res, 500, err);
+        //         else sendJsonResponse(res, 200, user);
+        //     }
+        // )
 	}
 
 }

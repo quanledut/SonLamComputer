@@ -1,11 +1,11 @@
 process.env.NODE_ENV = 'test';
-const server = require('../../app');
+const server = require('../../../app');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 const mongoose = require('mongoose');
 const User = mongoose.model('User');
 
-const variables = require('../shared/variables.json')
+const variables = require('../../shared/variables.json')
 
 chai.use(chaiHttp);
 

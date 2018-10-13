@@ -1,6 +1,6 @@
 
-require('./create')
+require('./user/create')
 require('./login');
 
 require('./role')
-require('./policy');
+require('./permission')

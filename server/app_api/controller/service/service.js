@@ -49,7 +49,7 @@ const create = (req, res) => {
 
 const deleteById = (req, res) => {
     Service
-        .findByIdAndRemove(req.params.serviceId, (err, result) => {
+        .findOneAndDelete(req.params.serviceId, (err, result) => {
             if (err) sendJsonResponse(res, 500, err);
             else sendJsonResponse(res, 204, {});
         })

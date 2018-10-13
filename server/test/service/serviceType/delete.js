@@ -13,7 +13,7 @@ const { api, token } = require('../../shared/variables.json');
 chai.use(chaiHttp);
 
 const getDeleteApi = (serviceTypeId) => {
-    return api.serviceTypes.delete.replace(":serviceTypeId", serviceTypeId)
+    return api.serviceTypes.deleteById.replace(":serviceTypeId", serviceTypeId)
 }
 
 describe('[Update ServiceType] Api', () => {

@@ -13,7 +13,7 @@ const utils = require('../../shared/utils');
 
 chai.use(chaiHttp);
 
-const getUpdateApi = (serviceTypeId) => api.serviceTypes.update.replace(":serviceTypeId", serviceTypeId)
+const getUpdateApi = (serviceTypeId) => api.serviceTypes.updateById.replace(":serviceTypeId", serviceTypeId)
 
 describe('[Update ServiceType] Api', () => {
     let types = [];

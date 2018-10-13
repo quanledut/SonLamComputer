@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node ./bin/www",
     "test": "mocha --timeout 7000 --exit test/index.js",
-    "test_specific": "mocha --timeout 7000 --exit"
+    "test_specific": "mocha --timeout 10000 --exit"
   },
   "repository": {
     "type": "git",
