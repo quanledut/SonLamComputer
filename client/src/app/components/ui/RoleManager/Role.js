@@ -5,6 +5,7 @@ import {Link} from 'react-router-dom';
 import SearchRole from './Search';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import CustomTable from '../utils/Table'
 
 class RoleManager extends Component {
 
@@ -54,7 +55,7 @@ class RoleManager extends Component {
                             <CardHeader>
                                 <i className="fa fa-align-justify"></i> Danh sách phân quyền
                             </CardHeader>
-                            <CardBody>
+                            <CardBody>  
                                 <Link
                                     to = {'/roles/new'}
                                     className="btn" style={{ backgroundColor: '#17a2b8' }}>
@@ -64,31 +65,17 @@ class RoleManager extends Component {
 
                                 <SearchRole/>
                                 <hr />
-
-                                <Table hover bordered striped responsive size="sm">
-                                    <thead>
+                                <CustomTable 
+                                    thead = {
                                         <tr>
                                             <th>Tên nhóm người dùng</th>
                                             <th style={{ width: '15%' }}>Trạng thái</th>
                                             <th style={{ width: '15%' }}>Hành động</th>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        {roleItem}
-                                    </tbody>
-                                </Table>
-                                <nav>
-                                    <Pagination>
-                                        <PaginationItem><PaginationLink previous tag="button">Prev</PaginationLink></PaginationItem>
-                                        <PaginationItem active>
-                                            <PaginationLink tag="button">1</PaginationLink>
-                                        </PaginationItem>
-                                        <PaginationItem><PaginationLink tag="button">2</PaginationLink></PaginationItem>
-                                        <PaginationItem><PaginationLink tag="button">3</PaginationLink></PaginationItem>
-                                        <PaginationItem><PaginationLink tag="button">4</PaginationLink></PaginationItem>
-                                        <PaginationItem><PaginationLink next tag="button">Next</PaginationLink></PaginationItem>
-                                    </Pagination>
-                                </nav>
+                                    }
+
+                                    tbody = {roleItem}
+                                />
                             </CardBody>
                         </Card>
                     </Col>

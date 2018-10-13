@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Role = mongoose.model('Role');
-
+const {DEFAULT_PERMISSION_NAMES} = require('../../model/user/policy')
 const { sendJsonResponse } = require('../utils');
 
 const find = (req, res) => {
@@ -73,11 +73,20 @@ const deleteById = (req, res) => {
         )
 }
 
+const getCollectionNames = (req, res) => {
+    sendJsonResponse(res, 200, {
+        collections: Object.keys(mongoose.connection.models),
+        permissions: DEFAULT_PERMISSION_NAMES
+
+    })
+}
+
 module.exports = {
     find,
     findById,
     create,
     updateById,
-    deleteById
+    deleteById,
+    getCollectionNames
 }
 

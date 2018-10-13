@@ -7,6 +7,7 @@ import {Link} from 'react-router-dom';
 import SearchUser from './Search';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import CustomTable from '../utils/Table';
 
 class UserManager extends Component {
 
@@ -66,8 +67,8 @@ class UserManager extends Component {
                                 <SearchUser/>
                                 <hr />
 
-                                <Table hover bordered striped responsive size="sm">
-                                    <thead>
+                                <CustomTable 
+                                    thead = {(
                                         <tr>
                                             <th>Username</th>
                                             <th>Date registered</th>
@@ -75,23 +76,10 @@ class UserManager extends Component {
                                             <th>Status</th>
                                             <th style={{ width: '10%' }}>Actions</th>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        {userItem}
-                                    </tbody>
-                                </Table>
-                                <nav>
-                                    <Pagination>
-                                        <PaginationItem><PaginationLink previous tag="button">Prev</PaginationLink></PaginationItem>
-                                        <PaginationItem active>
-                                            <PaginationLink tag="button">1</PaginationLink>
-                                        </PaginationItem>
-                                        <PaginationItem><PaginationLink tag="button">2</PaginationLink></PaginationItem>
-                                        <PaginationItem><PaginationLink tag="button">3</PaginationLink></PaginationItem>
-                                        <PaginationItem><PaginationLink tag="button">4</PaginationLink></PaginationItem>
-                                        <PaginationItem><PaginationLink next tag="button">Next</PaginationLink></PaginationItem>
-                                    </Pagination>
-                                </nav>
+                                    )}
+
+                                    tbody = {userItem}
+                                />
                             </CardBody>
                         </Card>
                     </Col>

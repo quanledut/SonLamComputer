@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import Modal from './../utils/Modal'
 import {Redirect} from 'react-router-dom';
 
+import CustomTable from '../utils/Table'
+
 import {
     Button,
     Card,
@@ -20,6 +22,7 @@ import {
 const DEFAULT_FORM = {
     _id :'',
     name :'',
+    policies: []
 }
 
 class RoleFormUI extends Component {
@@ -38,7 +41,10 @@ class RoleFormUI extends Component {
             },      
             roles: [],
             isDisabled:true,
-            isRedirect: false
+            isRedirect: false,
+            collections: [],
+            permissions: [],
+            tbody: []
         };
 
         this.onClear = this.onClear.bind(this)
@@ -53,11 +59,19 @@ class RoleFormUI extends Component {
         {
             var id = match.params.id;
 
-            this.props.getById(id, (data) => {
+            this.props.findById(id, (data) => {
                 this.setState({
                     ...this.state,
                     form: data
                 })
+            })
+        } else {
+            this.props.findCollectionNames((data, error) => {
+                this.setState({
+                    collections: data.collections,
+                    permissions: data.permissions
+                })
+
             })
         }
     }
@@ -98,7 +112,7 @@ class RoleFormUI extends Component {
         })
     }
 
-    onSubmitForm =(event) =>
+    onSubmitForm = (event) =>
     {
         
         event.preventDefault();
@@ -115,7 +129,7 @@ class RoleFormUI extends Component {
                 if (res) {
                     this._openModal({
                         title: "Success",
-                        content: "Updat success",
+                        content: "Update success",
                         isLoading: false
                     })
                     this.setState({
@@ -160,6 +174,32 @@ class RoleFormUI extends Component {
         }
     }
 
+    _addPermission = (event) => {
+        event.preventDefault()
+        this.setState({
+            tbody: [
+                ...this.state.tbody,
+                <tr key={this.state.tbody.length}>
+                    <td>
+                        <Input type="select" name="select" id="exampleSelect">
+                            <option>Hãy chọn bảng</option>
+                            {this.state.collections.map((item, id)=> <option key={id}>{item}</option>)}
+                        </Input>
+                    </td>
+                    {
+                        this.state.permissions.map((item, id) => 
+                            <td key={id}>
+                                <FormGroup check>
+                                    <Input type="checkbox" />
+                                </FormGroup>
+                            </td>)
+                    }
+                    <td><Button>Delete</Button></td>
+                </tr>                
+            ]
+        })
+    }
+
     isChange = (event) =>
     {
         const name = event.target.name;
@@ -189,6 +229,7 @@ class RoleFormUI extends Component {
   
         }
     }
+
 
     render() {
         if(this.state.isRedirect)
@@ -224,7 +265,21 @@ class RoleFormUI extends Component {
                                          {this.state.error.name ? <FormText className="help-block"><span style={{color: "red"}}>Please enter valid your name</span></FormText> : ''} 
                                     </FormGroup>
                                 </Form>
+
                             </CardBody>
+                            <CustomTable 
+                                    thead = {
+                                        <tr>
+                                            <th>Tên bảng</th>
+                                            {this.state.permissions.map((item, id) => <th key={id}>{item}</th>)}
+                                            <td><Button onClick={this._addPermission}><i className="fa fa-plus"></i></Button></td>
+                                        </tr>
+                                    }
+
+                                    tbody = {this.state.tbody}
+                                    hasPagination = {false}
+                            />
+
                             <CardFooter>
                                 <Button type="submit" size="sm" color="primary" disabled={this.state.isDisabled} onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button>
                                 <Button type="reset" size="sm" color="danger" onClick = {this.onClear}><i className="fa fa-ban"></i> Reset</Button>

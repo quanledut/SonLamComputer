@@ -3,6 +3,18 @@ import {take, call, put, fork} from 'redux-saga/effects'
 import * as roleActions from '../../actions/role'
 import * as roleApi from '../../api/role'
 
+export function * findCollections() {
+    while (true) {
+        const request = yield take(roleActions.CONSTANTS.FIND_COLLECTIONS_REQUEST)
+        try {
+            let result = yield call(roleApi.findCollectionNames)
+            request.cb(result, null)
+        } catch(err) {
+            request.cb(null, err.message)
+        }
+    }
+}
+
 export function * findAll() {
     while(true) {
         const request = yield take(roleActions.CONSTANTS.FIND_ALL_REQUEST)
@@ -71,6 +83,7 @@ export function * updated() {
 }
 
 export default function * root () {
+    yield fork(findCollections)
     yield fork(findAll)
     yield fork(deleted)
     yield fork(findById)

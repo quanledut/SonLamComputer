@@ -13,6 +13,7 @@ const route_role = (router) => {
 /* Role Api */
 	const checkPermissionForRole = checkPermissionForCollection('Role');
 	
+	router.get('/roles/collectionNames', auth, checkPermissionForRole(permission.type.READ), ctrlRole.getCollectionNames)
 	router.get('/roles', auth, checkPermissionForRole(permission.type.READ), ctrlRole.find);
 	router.get('/roles/:roleId', auth, checkPermissionForRole(permission.type.READ), ctrlRole.findById)
 	router.post('/roles', auth, checkPermissionForRole(permission.type.CREATE), ctrlRole.create)

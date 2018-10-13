@@ -7,15 +7,23 @@ const CONSTANT = {
     DELETE: 1
 }
 
+const DEFAULT_PERMISSION_NAMES = ["isCreate", "isRead", "isUpdate", "isDelete"]
+// const DEFAULT_PERMISSIONS = {
+//     isCreate: { type: Boolean, default: false},
+//     isUpdate: { type: Boolean, default: false},
+//     isDelete: { type: Boolean, default: false},
+//     isRead: { type: Boolean, default: false},
+// }
+
+const DEFAULT_PERMISSIONS = DEFAULT_PERMISSION_NAMES.reduce((permission, item) => {
+    permission[item] = { type: Boolean, default: false}
+    return permission
+}, {})
+
 let policySchema = new mongoose.Schema({
     // roleId: { type: mongoose.Schema.Types.ObjectId, required: true },
     collectionName: { type: String, required: true },
-    isCreate: { type: Boolean, default: false},
-    isUpdate: { type: Boolean, default: false},
-    isDelete: { type: Boolean, default: false},
-    isRead: { type: Boolean, default: false},
-    // permission: { type: Number, required: true, default: 0 }
-          
+    ...DEFAULT_PERMISSIONS
 }, {
     toObject: {
         virtuals: true
@@ -51,6 +59,6 @@ virtual.get(function() {
         }
     });
 
-module.exports = {policySchema, CONSTANT}
+module.exports = {policySchema, CONSTANT, DEFAULT_PERMISSION_NAMES}
 // export default policySchema;
 // mongoose.model('Policy', policySchema);

@@ -1,5 +1,13 @@
 import request from '../utils/request'
 
+const findCollectionNames = () => 
+    request()
+        .get('/roles/collectionNames')
+        .then((response) => response.data)
+        .catch((err) => {
+            throw err
+        })
+
 const findAll = () => 
     request()
         .get("/roles")
@@ -40,4 +48,4 @@ request()
         throw err
     });
         
-export {findAll, deleteApi, addApi, findByIdApi, updateApi}
+export {findAll, deleteApi, addApi, findByIdApi, updateApi, findCollectionNames}

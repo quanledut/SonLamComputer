@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-const {policySchema} = require('./policy')
+const {policySchema, DEFAULT_PERMISSION_NAMES} = require('./policy')
 
 let roleSchema = new mongoose.Schema({
     name: { type: String, required: true, unique: true } ,
@@ -15,5 +15,6 @@ roleSchema.virtual('users', {
     localField: '_id',
     foreignField: 'roles'
 })
+
   
 mongoose.model('Role', roleSchema);
