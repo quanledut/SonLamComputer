@@ -3,7 +3,6 @@ import { Redirect, Route, Switch } from 'react-router-dom';
 import { Container } from 'reactstrap';
 
 import {
-  AppAside,
   AppBreadcrumb,
   AppFooter,
   AppHeader,
@@ -18,16 +17,32 @@ import {
 import navigation from '../../../_nav';
 // routes config
 import routes from '../../../routes';
-import DefaultAside from './DefaultAside';
 import DefaultFooter from './DefaultFooter';
 import DefaultHeader from './DefaultHeader';
 import { isLoggedIn } from '../../../utils/index';
 
 class DefaultLayout extends Component {
-
+  constructor(props){
+    super(props);
+    this.state = {
+      user: {
+        name:'',
+        _id:'',
+        username:''
+      }
+    }
+  }
   componentWillMount() {
     if (!isLoggedIn()) {
       this.props.history.push("/login")
+    }
+    else
+    {
+      var users = JSON.parse(localStorage.getItem("currentUser"));
+      console.log(users)
+      this.setState({
+        user:users
+      })
     }
   }
 
@@ -35,11 +50,11 @@ class DefaultLayout extends Component {
     return (
       <div className="app">
         <AppHeader fixed>
-          <DefaultHeader />
+          <DefaultHeader  user={this.state.user}/>
         </AppHeader>
         <div className="app-body">
           <AppSidebar fixed display="lg">
-            <AppSidebarHeader />
+            <AppSidebarHeader/>
             <AppSidebarForm />
             <AppSidebarNav navConfig={navigation} {...this.props} />
             <AppSidebarFooter />
@@ -61,9 +76,6 @@ class DefaultLayout extends Component {
               </Switch>
             </Container>
           </main>
-          <AppAside fixed hidden>
-            <DefaultAside />
-          </AppAside>
         </div>
         <AppFooter>
           <DefaultFooter />

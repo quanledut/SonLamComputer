@@ -1,16 +1,16 @@
 import request from '../utils/request'
 
-const findAllApi = () => 
+const findAll = () => 
     request()
-        .get("/usermanagers")
+        .get("/devices/computerType")
         .then((response) => response.data)
         .catch((err) => {
             throw err
         });
 
-const deleteApi = (data) => 
+const deleteApi = (id) => 
     request()
-        .delete(`/usermanagers/${data}`)
+        .delete(`/devices/computerType/${id}`)
         .then((response) => response.data)
         .catch((err) => {
             throw err
@@ -18,7 +18,7 @@ const deleteApi = (data) =>
 
 const addApi = (data) => 
 request()
-    .post("/usermanagers",data)
+    .post("/devices/computerType",data)
     .then((response) => response.data)
     .catch((err) => {
         throw err
@@ -26,7 +26,7 @@ request()
 
 const findByIdApi = (id) => 
 request()
-    .get(`/usermanagers/${id}`)
+    .get(`/devices/computerType/${id}`)
     .then((response) => response.data)
     .catch((err) => {
         throw err
@@ -34,11 +34,10 @@ request()
 
 const updateApi = (data) => 
 request()
-    .put(`/usermanagers/${data.id}`, data)
+    .put(`/devices/computerType/${data.id}`, data)
     .then((response) => response.data)
     .catch((err) => {
         throw err
     });
-
-export {findAllApi, deleteApi, addApi, findByIdApi, updateApi}
-  
+        
+export {findAll, deleteApi, addApi, findByIdApi, updateApi}

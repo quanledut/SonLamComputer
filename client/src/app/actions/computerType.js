@@ -1,19 +1,20 @@
-const USER_PREFIX = "USER_CONSTANT";
-const FIND_ALL_REQUEST = USER_PREFIX + "_FIND_ALL_REQUEST"
+const PREFIX = "COMPUTER_TYPE_CONSTANT";
+const FIND_ALL_REQUEST = PREFIX + "_FIND_ALL_REQUEST"
 const FIND_ALL_REQUEST_SUCCESS = FIND_ALL_REQUEST + "_SUCCESS"
 
-const CREATE_REQUEST = USER_PREFIX + "_CREATE_REQUEST"
+const CREATE_REQUEST = PREFIX + "_CREATE_REQUEST"
 const CREATE_REQUEST_SUCCESS = CREATE_REQUEST + "_SUCCESS"
 
-const DELETE_REQUEST = USER_PREFIX + "_DELETE_REQUEST";
+const DELETE_REQUEST = PREFIX + "_DELETE_REQUEST";
 const DELETE_REQUEST_SUCCESS = DELETE_REQUEST + "_SUCCESS"
 
-const UPDATE_REQUEST = USER_PREFIX + "_UPDATE_REQUEST";
+const UPDATE_REQUEST = PREFIX + "_UPDATE_REQUEST";
 const UPDATE_REQUEST_SUCCESS = UPDATE_REQUEST + "_SUCCESS"
 
-const FIND_BY_ID_REQUEST = USER_PREFIX + "_FIND_BY_ID_REQUEST";
+const FIND_BY_ID_REQUEST = PREFIX + "_FIND_BY_ID_REQUEST";
 
-const SEARCH_REQUEST = USER_PREFIX + "_SEARCH_REQUEST_REQUEST";
+const SEARCH_REQUEST = PREFIX + "_SEARCH_REQUEST_REQUEST";
+
 
 export const CONSTANTS = {
     FIND_ALL_REQUEST,
@@ -32,8 +33,8 @@ export const CONSTANTS = {
     SEARCH_REQUEST,
 }
 
-export function findAllRequest() {
-    return {type: CONSTANTS.FIND_ALL_REQUEST}
+export function findAllRequest(cb) {
+    return {type: CONSTANTS.FIND_ALL_REQUEST, cb}
 }
 
 export function findALlSuccess(data) {
@@ -50,16 +51,16 @@ export function createRequestSuccess(data) {
 }
 
 //--------------------------------------------------------------
-export function deleteRequest(id, cb) {
-    return {type: CONSTANTS.DELETE_REQUEST, id, cb}
+export function deleteRequest(data, cb) {
+    return {type: CONSTANTS.DELETE_REQUEST, data, cb}
 }
 
-export function deleteRequestSuccess(id) {
-    return {type: CONSTANTS.DELETE_REQUEST_SUCCESS, id}
+export function deleteRequestSuccess(data) {
+    return {type: CONSTANTS.DELETE_REQUEST_SUCCESS, data}
 }
 
 //------------------------------------------------------------
-export function updateRequest(data, cb) {
+export function updateRequest(data,cb) {
     return {type: CONSTANTS.UPDATE_REQUEST, data, cb}
 }
 
@@ -68,9 +69,10 @@ export function updateRequestSuccess(data) {
 }
 
 //--------------------------------------------------------------
-export function findByIdRequest(id) {
-    return {type: CONSTANTS.FIND_BY_ID_REQUEST, id}
+export function findByIdRequest(id, cb) {
+    return {type: CONSTANTS.FIND_BY_ID_REQUEST, id, cb}
 }
+
 //---------------------------------------------------------------------
 export function searchRequest(keyword) {
     return {type: CONSTANTS.SEARCH_REQUEST, keyword}

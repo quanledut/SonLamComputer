@@ -1,8 +1,8 @@
 import { connect } from 'react-redux'
 import RoleFormUI from '../ui/RoleManager/RoleForm'
 import RoleManager from '../ui/RoleManager/Role'
-import Search from '../ui/RoleManager/Search'
-import PopUpDelete from '../ui/RoleManager/PopUpDelete'
+import Search from '../ui/utils/Search'
+import PopUpDelete from '../ui/utils/PopUpDelete'
 import * as roleActions from '../../actions/role'
 
 export const RoleForm = connect(
@@ -53,8 +53,8 @@ export const SearchFrom = connect(
 export const DeleteFrom = connect(
     null,
     dispatch => ({
-        onDelete : (id) =>{
-            dispatch(roleActions.deleteRequest(id));
+        onDelete : (id, cb) =>{
+            dispatch(roleActions.deleteRequest(id, cb));
         }
     })
 )(PopUpDelete);

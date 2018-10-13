@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 
-class SearchUser extends Component {
+class Search extends Component {
     constructor(props){
         super(props);
         this.state = {
@@ -39,14 +38,5 @@ class SearchUser extends Component {
         );
     }
 }
-// const mapStateToProps = (state) =>{
-//     return{}
-// }
-// const mapDispatchToProps = (dispatch, props) => {
-//     return {
-//         onSearch : (keyword) =>{
-//             dispatch(actions.searchUserRequest(keyword));
-//         }
-//     }
-// }
-export default connect(null,null)(SearchUser);
+
+export default Search

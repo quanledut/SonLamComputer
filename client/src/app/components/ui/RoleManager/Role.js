@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { Badge, Card, CardBody, CardHeader, Col, Pagination, PaginationItem, PaginationLink, Row, Table } from 'reactstrap';
-import PopUpDelete from './PopUpDelete';
+import {DeleteFrom} from '../../containers/roles';
 import {Link} from 'react-router-dom';
-import SearchRole from './Search';
+import {SearchFrom} from '../../containers/roles';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import CustomTable from '../utils/Table'
@@ -17,7 +17,6 @@ class RoleManager extends Component {
 
     render() {
         var {keyword} = this.props;
-        console.log(this.props)
         var roleList = this.props.todos;
         roleList = roleList.filter((role) => {
             return role.name.toLowerCase().indexOf(keyword.toLowerCase()) !== -1;
@@ -40,7 +39,10 @@ class RoleManager extends Component {
                             >
                                 <i className="fa fa-edit"> Sửa </i>
                             </Link>
-                            <PopUpDelete role={role} onDelete={this.props.delete}/>
+                            <DeleteFrom 
+                                name={role.name} 
+                                id={role._id}
+                            />
                         </div>
                     </td>
                 </tr>
@@ -63,7 +65,7 @@ class RoleManager extends Component {
                                 </Link>
                                 <hr />
 
-                                <SearchRole/>
+                                <SearchFrom/>
                                 <hr />
                                 <CustomTable 
                                     thead = {

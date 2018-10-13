@@ -1,5 +1,8 @@
 import { connect } from 'react-redux'
 import UserFormUI from '../ui/UserManager/UserForm'
+import UserManager from '../ui/UserManager/UserManager'
+import Search from '../ui/utils/Search'
+import PopUpDelete from '../ui/utils/PopUpDelete'
 import * as userActions from '../../actions/user'
 import * as roleActions from '../../actions/role'
 
@@ -21,3 +24,34 @@ export const UserForm = connect(
     })
 )(UserFormUI);
 
+export const Users = connect(
+    state => { 
+        return {
+            todos: state.usermanager, 
+            keyword: state.searchUser    
+        }
+    }, 
+    dispatch => ({
+        findAll : () => {
+            dispatch(userActions.findAllRequest())
+        }
+    })
+)(UserManager);
+
+export const SearchFrom = connect(
+    null,
+    dispatch => ({
+        onSearch : (keyword) => {
+            dispatch(userActions.searchRequest(keyword));
+        }
+    })
+)(Search);
+
+export const DeleteFrom = connect(
+    null,
+    dispatch => ({
+        onDelete : (id, cb) =>{
+            dispatch(userActions.deleteRequest(id, cb));
+        }
+    })
+)(PopUpDelete);
