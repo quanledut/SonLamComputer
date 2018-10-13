@@ -13,6 +13,7 @@ const UPDATE_REQUEST_SUCCESS = UPDATE_REQUEST + "_SUCCESS"
 
 const FIND_BY_ID_REQUEST = USER_PREFIX + "_FIND_BY_ID_REQUEST";
 
+const SEARCH_REQUEST = USER_PREFIX + "_SEARCH_REQUEST_REQUEST";
 
 export const CONSTANTS = {
     FIND_ALL_REQUEST,
@@ -28,6 +29,7 @@ export const CONSTANTS = {
     UPDATE_REQUEST_SUCCESS,
 
     FIND_BY_ID_REQUEST,
+    SEARCH_REQUEST,
 }
 
 export function findAllRequest() {
@@ -48,17 +50,17 @@ export function createRequestSuccess(data) {
 }
 
 //--------------------------------------------------------------
-export function deleteRequest(data) {
-    return {type: CONSTANTS.DELETE_REQUEST, data}
+export function deleteRequest(id, cb) {
+    return {type: CONSTANTS.DELETE_REQUEST, id, cb}
 }
 
-export function deleteRequestSuccess(data) {
-    return {type: CONSTANTS.DELETE_REQUEST_SUCCESS, data}
+export function deleteRequestSuccess(id) {
+    return {type: CONSTANTS.DELETE_REQUEST_SUCCESS, id}
 }
 
 //------------------------------------------------------------
-export function updateRequest(data) {
-    return {type: CONSTANTS.UPDATE_REQUEST, data}
+export function updateRequest(data, cb) {
+    return {type: CONSTANTS.UPDATE_REQUEST, data, cb}
 }
 
 export function updateRequestSuccess(data) {
@@ -68,4 +70,8 @@ export function updateRequestSuccess(data) {
 //--------------------------------------------------------------
 export function findByIdRequest(id) {
     return {type: CONSTANTS.FIND_BY_ID_REQUEST, id}
+}
+//---------------------------------------------------------------------
+export function searchRequest(keyword) {
+    return {type: CONSTANTS.SEARCH_REQUEST, keyword}
 }

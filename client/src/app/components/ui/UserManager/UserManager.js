@@ -1,17 +1,15 @@
 import React, { Component } from 'react';
-import { Badge, Card, CardBody, CardHeader, Col, Pagination, PaginationItem, PaginationLink, Row, Table } from 'reactstrap';
-import PopUpDelete from './PopUpDelete';
-import { connect } from 'react-redux';
-import * as actions from '../../../actions/user';
+import { Card, CardBody, CardHeader, Col, Pagination, PaginationItem, PaginationLink, Row, Table } from 'reactstrap';
+import {DeleteFrom} from '../../containers/user';
 import {Link} from 'react-router-dom';
-import SearchUser from './Search';
+import {SearchFrom} from './../../containers/user';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 class UserManager extends Component {
 
     componentDidMount(){
-        this.props.listAllUser();
+        this.props.findAll();
     }
 
     render() {
@@ -27,20 +25,17 @@ class UserManager extends Component {
                     <td>{user.create_time}</td>
                     <td>{user.roles}</td>
                     <td>
-                        <Badge color="success">Alive</Badge>
-                    </td>
-                    <td>
                         <div className="btn-group">
-                            <div className="btn btn-success">
-                                <i className="fa fa-eye"> View Details </i>
-                            </div>
                             <Link 
-                                to = {`/usermanager/${user._id}/edituser`}
+                                to = {`/usermanager/${user._id}/edit`}
                                 className="btn btn-primary"
                             >
-                                <i className="fa fa-edit"> Edit </i>
+                                <i className="fa fa-edit"> Sửa </i>
                             </Link>
-                            <PopUpDelete user={user}/>
+                            <DeleteFrom 
+                                name={user.username} 
+                                id={user._id}
+                            />
                         </div>
                     </td>
                 </tr>
@@ -57,23 +52,22 @@ class UserManager extends Component {
                             </CardHeader>
                             <CardBody>
                                 <Link
-                                    to = {'/usermanager/newuser'}
+                                    to = {'/usermanager/new'}
                                     className="btn" style={{ backgroundColor: '#17a2b8' }}>
-                                    <i className="fa fa-plus text-white"> Add new User </i>
+                                    <i className="fa fa-plus text-white"> Tạo mới người dùng </i>
                                 </Link>
                                 <hr />
 
-                                <SearchUser/>
+                                <SearchFrom/>
                                 <hr />
 
                                 <Table hover bordered striped responsive size="sm">
                                     <thead>
                                         <tr>
-                                            <th>Username</th>
-                                            <th>Date registered</th>
-                                            <th>Role</th>
-                                            <th>Status</th>
-                                            <th style={{ width: '10%' }}>Actions</th>
+                                            <th>Tên người dùng</th>
+                                            <th>Ngày tạo</th>
+                                            <th>Quyền</th>
+                                            <th style={{ width: '10%' }}>Hành động</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -102,19 +96,4 @@ class UserManager extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        todos: state.usermanager,
-        keyword : state.searchUser
-    }
-}
-
-const mapDispatchToProps = (dispatch, props) =>
-{
-    return {
-        listAllUser : () => {
-            dispatch(actions.findAllRequest())
-        }
-    }
-}
-export default connect(mapStateToProps,mapDispatchToProps)(UserManager);
+export default UserManager

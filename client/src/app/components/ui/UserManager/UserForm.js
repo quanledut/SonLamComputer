@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {Redirect} from 'react-router-dom';
 import Modal from '../utils/Modal'
+import * as notifications from '../../../constants/Notifications'
 
 import {
     Button,
@@ -130,7 +131,7 @@ class UserFormUI extends Component {
                 if (res) {
                     this._openModal({
                         title: "Success",
-                        content: "Updat user success",
+                        content: notifications.SUCCESS_EDIT,
                         isLoading: false
                     })
                     this.setState({
@@ -139,7 +140,7 @@ class UserFormUI extends Component {
                 } else {
                     this._openModal({
                         title: "Error",
-                        content: error,
+                        content: notifications.ERROR_EDIT,
                         isLoading: false,
                       })              
                 }
@@ -150,7 +151,7 @@ class UserFormUI extends Component {
                 if (res) {
                     this._openModal({
                         title: "Success",
-                        content: "Create user success",
+                        content: notifications.SUCCESS_NEW,
                         isLoading: false
                     })
                     this.setState({
@@ -159,7 +160,7 @@ class UserFormUI extends Component {
                 } else{
                     this._openModal({
                         title: "Error",
-                        content: error,
+                        content: notifications.ERROR_NEW,
                         isLoading: false,
                       })              
                 }
@@ -338,4 +339,3 @@ class UserFormUI extends Component {
 }
 
 export default UserFormUI
-

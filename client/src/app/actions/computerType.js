@@ -1,4 +1,4 @@
-const PREFIX = "ROLE_CONSTANT";
+const PREFIX = "COMPUTER_TYPE_CONSTANT";
 const FIND_ALL_REQUEST = PREFIX + "_FIND_ALL_REQUEST"
 const FIND_ALL_REQUEST_SUCCESS = FIND_ALL_REQUEST + "_SUCCESS"
 
@@ -60,7 +60,7 @@ export function deleteRequestSuccess(data) {
 }
 
 //------------------------------------------------------------
-export function updateRequest(data, cb) {
+export function updateRequest(data,cb) {
     return {type: CONSTANTS.UPDATE_REQUEST, data, cb}
 }
 

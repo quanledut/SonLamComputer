@@ -1,47 +1,40 @@
 import React, { Component } from 'react';
-import { Badge, Card, CardBody, CardHeader, Col, Pagination, PaginationItem, PaginationLink, Row, Table } from 'reactstrap';
-import {DeleteFrom} from '../../containers/roles';
+import {Card, CardBody, CardHeader, Col, Pagination, PaginationItem, PaginationLink, Row, Table } from 'reactstrap';
 import {Link} from 'react-router-dom';
-import {SearchFrom} from '../../containers/roles';
+import {DeleteFrom, SearchFrom} from '../../../../containers/computername';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-class RoleManager extends Component {
+class ComputerNameUI extends Component {
 
     componentDidMount(){
-        this.props.findAllRole((roles, err) => {
-            console.log(roles, err)
+        this.props.findAll((result, err) => {
+            console.log(result, err)
         });
     }
 
     render() {
         var {keyword} = this.props;
-        console.log(this.props)
-        var roleList = this.props.todos;
-        roleList = roleList.filter((role) => {
-            return role.name.toLowerCase().indexOf(keyword.toLowerCase()) !== -1;
+        var mapList = this.props.todos;
+        mapList = mapList.filter((item) => {
+            return item.name.toLowerCase().indexOf(keyword.toLowerCase()) !== -1;
         });
-        var roleItem = roleList.map((role, index) => {
+        var listItem = mapList.map((item, index) => {
             return (
                 <tr key = {index}>
-                    <td>{role.name}</td>
-                    <td>
-                        <Badge color="success">Alive</Badge>
-                    </td>
+                    <td>{item.name}</td>
+                    <td>{item.type}</td>
                     <td>
                         <div className="btn-group">
-                            <div className="btn btn-success">
-                                <i className="fa fa-eye"> Chi tiết </i>
-                            </div>
                             <Link 
-                                to = {`/roles/${role._id}/edit`}
+                                to = {`/devices/computerName/${item._id}/edit`}
                                 className="btn btn-primary"
                             >
                                 <i className="fa fa-edit"> Sửa </i>
                             </Link>
                             <DeleteFrom 
-                                name={role.name} 
-                                id={role._id}
+                                name={item.name} 
+                                id={item._id}
                             />
                         </div>
                     </td>
@@ -55,13 +48,13 @@ class RoleManager extends Component {
                     <Col>
                         <Card>
                             <CardHeader>
-                                <i className="fa fa-align-justify"></i> Danh sách phân quyền
+                                <i className="fa fa-align-justify"></i> Danh sách máy tính
                             </CardHeader>
                             <CardBody>
                                 <Link
-                                    to = {'/roles/new'}
+                                    to = {'/devices/computerName/new'}
                                     className="btn" style={{ backgroundColor: '#17a2b8' }}>
-                                    <i className="fa fa-plus text-white"> Tạo mới phân quyền </i>
+                                    <i className="fa fa-plus text-white"> Tạo mới máy tính </i>
                                 </Link>
                                 <hr />
 
@@ -71,13 +64,13 @@ class RoleManager extends Component {
                                 <Table hover bordered striped responsive size="sm">
                                     <thead>
                                         <tr>
-                                            <th>Tên nhóm người dùng</th>
-                                            <th style={{ width: '15%' }}>Trạng thái</th>
-                                            <th style={{ width: '15%' }}>Hành động</th>
+                                            <th>Tên máy tính</th>
+                                            <th>Loại máy tính</th>
+                                            <th style={{ width: '20%' }}>Hành động</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {roleItem}
+                                        {listItem}
                                     </tbody>
                                 </Table>
                                 <nav>
@@ -102,4 +95,4 @@ class RoleManager extends Component {
     }
 }
 
-export default RoleManager;
+export default ComputerNameUI
