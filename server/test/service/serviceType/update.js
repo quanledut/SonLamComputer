@@ -13,12 +13,14 @@ const utils = require('../../shared/utils');
 
 chai.use(chaiHttp);
 
+const getUpdateApi = (serviceTypeId) => api.serviceTypes.updateById.replace(":serviceTypeId", serviceTypeId)
+
 describe('[Update ServiceType] Api', () => {
     let types = [];
 
     before((done) => {
         chai.request(server)
-            .get(api.get.serviceTypes)
+            .get(api.serviceTypes.find)
             .set('Authorization', 'Bearer ' + token.root_admin)
             .end((err, res) => {
                 types = res.body;
@@ -29,7 +31,7 @@ describe('[Update ServiceType] Api', () => {
     describe('[Update ServiceType] Permission', () => {
         it('When_HasNoAccessToken_Expect_Fail', (done) => {
             chai.request(server)
-                .put(utils.getUpdateServiceTypeById(types[0]._id))
+                .put(getUpdateApi(types[0]._id))
                 .set('Content-Type', 'application/json')
                 .send({
                     'name': 'Sữa Chữa 1'
@@ -42,7 +44,7 @@ describe('[Update ServiceType] Api', () => {
         
         it('When_UserHasNoUpdatePolicy_Expect_Fail', (done) => {
             chai.request(server)
-                .put(utils.getUpdateServiceTypeById(types[0]._id))
+                .put(getUpdateApi(types[0]._id))
                 .set('Authorization', 'Bearer ' + token.user)
                 .set('Content-Type', 'application/json')
                 .send({
@@ -56,7 +58,7 @@ describe('[Update ServiceType] Api', () => {
 
         it('When_UserHasUpdatePolicy_Expect_Success', (done) => {
             chai.request(server)
-                .put(utils.getUpdateServiceTypeById(types[0]._id))
+                .put(getUpdateApi(types[0]._id))
                 .set('Authorization', 'Bearer ' + token.root_admin)
                 .set('Content-Type', 'application/json')
                 .send({

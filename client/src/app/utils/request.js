@@ -1,5 +1,5 @@
 import axios from "axios";
-import { API_URL } from "app/config";
+import { API_URL } from "./../../app/config";
 
 export const request = (
   opts = {},
@@ -17,7 +17,7 @@ export const request = (
 
     const defaultOptions = {
         headers,
-        timeout: 9000
+        timeout: 5000
     }
     /*
     |--------------------------------------------------

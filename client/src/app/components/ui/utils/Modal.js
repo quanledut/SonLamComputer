@@ -5,10 +5,6 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import PropTypes from 'prop-types'
 
 class CustomModal extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
     // componentWillReceiveProps(nextProps) {
     //     this.state.isOpened = nextProps.isOpened
     // }

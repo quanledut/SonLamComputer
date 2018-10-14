@@ -41,7 +41,7 @@ const create = (req, res) => {
 
 const updateById = (req, res) => {
     ServiceType
-        .findByIdAndUpdate(
+        .findOneAndUpdate(
             req.params.serviceTypeId,
             {
                 $set: {
@@ -60,7 +60,7 @@ const updateById = (req, res) => {
 
 const deleteById = (req, res) => {
     ServiceType
-        .findByIdAndRemove(req.params.serviceTypeId, (err, result) => {
+        .findOneAndDelete(req.params.serviceTypeId, (err, result) => {
             if (err) sendJsonResponse(res, 500, err);
             else sendJsonResponse(res, 204, {});
         })
