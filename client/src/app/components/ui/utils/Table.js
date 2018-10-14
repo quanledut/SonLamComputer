@@ -10,7 +10,6 @@ class CustomTable extends React.Component {
     // }
 
     render() {
-        console.log(this.props)
         return (
             <div>
                 <Table hover bordered striped responsive size="sm">

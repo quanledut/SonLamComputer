@@ -134,7 +134,7 @@ const find = (req, res) => {
 
 const findById = (req, res) => {
     User
-        .findById(req.param.userId)
+        .findById(req.params.userId)
         .exec((err, user) => {
             if (!user) sendJsonResponse(res, 404, "Not found");
             else sendJsonResponse(res, 200, user);

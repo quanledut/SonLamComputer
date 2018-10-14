@@ -13,7 +13,7 @@ const find = (req, res) => {
 
 const findById = (req, res) => {
     Role
-        .findById(req.param.roleId)
+        .findById(req.params.roleId)
         .populate('users')
         .exec((err, role) => {
             if (!role) sendJsonResponse(res, 404, "Not found");
@@ -43,29 +43,28 @@ const create = (req, res) => {
 }
 
 const updateById = (req, res) => {
-    let newPolicies = req.body.policies
-
+    console.log("In update")
     Role
-        .findByIdAndUpdate(
-            req.param.roleId,
-            {
-                name: req.body.name,
-                polices: newPolicies
-            },
-            {
-                new: true
-            },
-            (err, role) => {
-                if (err) sendJsonResponse(res, 500, err);
-                else sendJsonResponse(res, 200, role);
+        .findById(
+            req.params.roleId
+        , (err, role) => {
+            if (err) sendJsonResponse(res, 500, err);
+            else {
+                role.policies = req.body.policies
+                console.log(role, req.body.polices)
+                if (role.name != req.body.name) role.name = req.body.name
+                role.save((err,r) => {
+                    if (err) sendJsonResponse(res, 500, err);
+                    else sendJsonResponse(res, 200, r);
+                })
             }
-        )
+        })
 }
 
 const deleteById = (req, res) => {
     Role
         .findByIdAndRemove(
-            req.param.roleId,
+            req.params.roleId,
             (err, result) => {
                 if (err) sendJsonResponse(res, 500 ,err);
                 else sendJsonResponse(res, 204, {});

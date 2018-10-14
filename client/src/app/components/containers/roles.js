@@ -34,7 +34,10 @@ export const Roles = connect(
     dispatch => ({
         findAllRole(cb) {
             dispatch(roleActions.findAllRequest(cb));
-        }
+        },
+        delete(data, cb) {
+            dispatch(roleActions.deleteRequest(data, cb))
+        },
     })
 )(RoleManager);
 
