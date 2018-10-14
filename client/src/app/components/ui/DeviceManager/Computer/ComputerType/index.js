@@ -4,6 +4,7 @@ import {Link} from 'react-router-dom';
 import {DeleteFrom, SearchFrom} from '../../../../containers/computertype';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import CustomTable from '../../../utils/Table'
 
 class ComputerTypeUI extends Component {
 
@@ -59,30 +60,16 @@ class ComputerTypeUI extends Component {
 
                                 <SearchFrom/>
                                 <hr />
-
-                                <Table hover bordered striped responsive size="sm">
-                                    <thead>
+                                <CustomTable
+                                    thead = {
                                         <tr>
                                             <th>Tên loại máy tính</th>
                                             <th style={{ width: '20%' }}>Hành động</th>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        {listItem}
-                                    </tbody>
-                                </Table>
-                                <nav>
-                                    <Pagination>
-                                        <PaginationItem><PaginationLink previous tag="button">Prev</PaginationLink></PaginationItem>
-                                        <PaginationItem active>
-                                            <PaginationLink tag="button">1</PaginationLink>
-                                        </PaginationItem>
-                                        <PaginationItem><PaginationLink tag="button">2</PaginationLink></PaginationItem>
-                                        <PaginationItem><PaginationLink tag="button">3</PaginationLink></PaginationItem>
-                                        <PaginationItem><PaginationLink tag="button">4</PaginationLink></PaginationItem>
-                                        <PaginationItem><PaginationLink next tag="button">Next</PaginationLink></PaginationItem>
-                                    </Pagination>
-                                </nav>
+                                    }
+
+                                    tbody = {listItem}
+                                />
                             </CardBody>
                         </Card>
                     </Col>

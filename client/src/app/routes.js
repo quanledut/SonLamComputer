@@ -9,6 +9,7 @@ import {RoleForm, Roles} from './components/containers/roles'
 import {DeviceTypeForm, DeviceTypes} from './components/containers/devicetype'
 import {ComputerTypeForm, ComputerType} from './components/containers/computertype'
 import {ComputerNameForm, ComputerName} from './components/containers/computername'
+import {ServiceTypeForm, ServiceTypes} from './components/containers/servicetype'
 
 function Loading() {
   return <div>Loading...</div>;
@@ -44,9 +45,10 @@ const routes = [
   { path: '/devices/computerName', exact: true, name: 'Computer Name', component: ComputerName },
   { path: '/devices/computerName/new', exact: true, name: 'New Computer Name', component: ComputerNameForm },
   { path: '/devices/computerName/:id/edit', exact: true, name: 'Edit Computer Name', component: ComputerNameForm },
-  // { path: '/services/', exact: true, name: 'Service Manager', component: Service },
-  // { path: '/services/newService', exact: true, name: 'New Service', component: NewService },
-  // { path: '/services/editService', exact: true, name: 'Edit Service', component: NewService },
+
+  { path: '/services/serviceType', exact: true, name: 'Service Type', component: ServiceTypes },
+  { path: '/services/serviceType/new', exact: true, name: 'New Service Type', component: ServiceTypeForm },
+  { path: '/services/serviceType/:id/edit', exact: true, name: 'Edit Service Type', component: ServiceTypeForm },
 ];
 
 export default routes;

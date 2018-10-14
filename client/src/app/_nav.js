@@ -73,6 +73,23 @@ export default {
       name: 'Quản lý dịch vụ',
       url: '/services',
       icon: 'fa fa-exchange',
+      children: [
+        {
+          name: 'Dịch vụ',
+          url: '/pages',
+          icon: 'fa fa-microchip',
+        },
+        {
+          name: 'Loại dịch vụ',
+          url: '/services/serviceType',
+          icon: 'fa fa-boxes',
+        },
+        {
+          name: 'Lịch sử',
+          url: '/pages',
+          icon: 'icon-star',
+        },
+      ],
     },
     //-----------------------------------------------------
     //Quản lý thiết bị đã sửa chữa

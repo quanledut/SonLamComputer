@@ -10,6 +10,8 @@ import computerTypes from './computerTypeReducer/index'
 import searchComputerType from './computerTypeReducer/search'
 import computerNames from './computerNameReducer/index'
 import searchComputerName from './computerNameReducer/search'
+import serviceTypes from './serviceTypeReducer/index'
+import searchServiceType from './serviceTypeReducer/search'
 
 export default combineReducers({
     auth,
@@ -23,4 +25,6 @@ export default combineReducers({
     searchComputerType,
     computerNames,
     searchComputerName,
+    serviceTypes,
+    searchServiceType
 });
