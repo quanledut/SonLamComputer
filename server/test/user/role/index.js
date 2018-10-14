@@ -1,3 +1,3 @@
 require('./create');
 require('./read');  
-require('./delete')
+// require('./delete')
