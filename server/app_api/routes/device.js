@@ -19,10 +19,10 @@ const route_device = (router) => {
     );
 
     router.get(
-        '/deviceTypes/:deviceTypeID',
+        '/deviceTypes/:deviceTypeId',
         auth,
         checkPermissionForDeviceType(permission.type.READ),
-        ctrDeviceType.findByID
+        ctrDeviceType.findById
     );
 
     router.get(
@@ -40,17 +40,18 @@ const route_device = (router) => {
     );
 
     router.put(
-        '/deviceTypes/:deviceTypeID',
+        '/deviceTypes/:deviceTypeId',
         auth,
-        checkPermissionForDeviceType(permission.type.READ),
-        ctrDeviceType.updateByID
+        checkPermissionForDeviceType(permission.type.UPDATE),
+        ctrDeviceType.updateById
     );
 
+
     router.delete(
-        '/deviceTypes/:deviceTypeID',
+        '/deviceTypes/:deviceTypeId',
         auth,
         checkPermissionForDeviceType(permission.type.DELETE),
-        ctrDeviceType.deleteByID
+        ctrDeviceType.deleteById
     )
 }
 

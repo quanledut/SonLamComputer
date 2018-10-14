@@ -15,9 +15,9 @@ const find = (req,res) => {
     })
 };
 
-const findByID = (req,res) => {
+const findById = (req,res) => {
     DeviceType
-    .findById(req.params.deviceTypeID)
+    .findById(req.params.deviceTypeId)
     .exec()
     .then((deviceType) => {
         if(deviceType) sendJsonResponse(res,200,deviceType)
@@ -57,25 +57,45 @@ const create = (req,res) => {
     })
 }
 
-const updateByID = (req,res) => {
+// const updateById = (req,res) => {
+//     DeviceType
+//     .findByIdAndUpdate(
+//         req.params.deviceTypeId
+//         ,{
+//             $set: {
+//                 name: req.body.name
+//             }
+//         }
+//         ,{
+//             new: true
+//         }
+//     )
+//     ,(err,deviceType) => {
+//         if(err) sendJsonResponse(res,500,err);
+//         else sendJsonResponse(res,200,deviceType);
+//     }
+// }
+
+const updateById = (req, res) => {
     DeviceType
-    .findByIdAndUpdate(
-        req.params.deviceTypeID
-        ,{
-            $set: {
-                name: req.body.name
+        .findByIdAndUpdate(
+            req.params.deviceTypeId,
+            {
+                    name: req.body.name
+            }, 
+            {
+                new: true
+            },
+            (err, deviceType) => {
+                if (err) sendJsonResponse(res, 500, err);
+                else sendJsonResponse(res, 200, deviceType);
             }
-        }
-    )
-    ,(err,deviceType) => {
-        if(err) sendJsonResponse(res,500,'err');
-        else sendJsonResponse(res,200,deviceType);
-    }
+        )
 }
 
-const deleteByID = (req, res) => {
+const deleteById = (req, res) => {
     DeviceType
-        .findByIdAndRemove(req.params.deviceTypeID, (err, result) => {
+        .findByIdAndRemove(req.params.deviceTypeId, (err, result) => {
             if (err) sendJsonResponse(res, 500, err);
             else sendJsonResponse(res, 204, {});
         })
@@ -83,9 +103,9 @@ const deleteByID = (req, res) => {
 
 module.exports = {
     find,
-    findByID,
+    findById,
     findByName,
     create,
-    updateByID,
-    deleteByID
+    updateById,
+    deleteById
 }
