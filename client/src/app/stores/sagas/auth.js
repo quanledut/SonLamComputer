@@ -1,8 +1,7 @@
-import { delay } from 'redux-saga'
-import {take, call, put, fork, race} from 'redux-saga/effects'
+import {take, call, put, fork} from 'redux-saga/effects'
 import {CONSTANTS as AUTH_CONSTANTS } from '../../actions/auth'
 
-import { loginRequestBegin, loginRequestSuccess, loginRequestFailure } from '../../actions/auth'
+import {loginRequestSuccess} from '../../actions/auth'
 
 import { loginApi } from '../../api/auth'
 

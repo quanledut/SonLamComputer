@@ -1,5 +1,4 @@
 import { CONSTANTS as AUTH_CONSTANTS } from '../../actions/auth'
-import { callbackify } from 'util';
 
 let initialState = {
     token: localStorage.getItem('token') ? localStorage.getItem('token') : '',

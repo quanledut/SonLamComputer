@@ -118,8 +118,8 @@ class RoleFormUI extends Component {
         let collectionNames = []
         for (let i=0; i < this.state.form.policies.length; i++) {
             let policy = this.state.form.policies[i]
-            if (policy.collectionName == "None") return false
-            if (collectionNames.indexOf(policy.collectionName) != -1) return false
+            if (policy.collectionName === "None") return false
+            if (collectionNames.indexOf(policy.collectionName) !== -1) return false
             collectionNames.push(policy.collectionName) 
         }
         return true
@@ -199,12 +199,12 @@ class RoleFormUI extends Component {
     }
 
     _deletePolicy = (event, i) => {
-        event.preventDefault
+        event.preventDefault();
         this.setState({
-            tbody: this.state.tbody.filter((item, id) =>  id != i),
+            tbody: this.state.tbody.filter((item, id) =>  id !== i),
             form: {
                 ...this.state.form,
-                policies: this.state.form.policies.filter((item, id) => id  != i)
+                policies: this.state.form.policies.filter((item, id) => id  !== i)
             }
         })
     }
@@ -214,8 +214,8 @@ class RoleFormUI extends Component {
             form: {
                 ...this.state.form,
                 policies: this.state.form.policies.map((policy, id) => {
-                    if (id != key) return policy
-                    if (e.target.name == "collectionName") {
+                    if (id !== key) return policy
+                    if (e.target.name === "collectionName") {
                         policy[e.target.name] = e.target.value
                         return policy
                     } else {

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Card, CardBody, CardHeader, Col, Row, Table } from 'reactstrap';
+import {Card, CardBody, CardHeader, Col, Row} from 'reactstrap';
 import {Link} from 'react-router-dom';
 import {DeleteFrom, SearchFrom} from '../../../containers/servicetype';
 import { ToastContainer } from "react-toastify";

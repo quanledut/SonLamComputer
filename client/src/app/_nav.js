@@ -50,7 +50,7 @@ export default {
         },
         {
           name: 'Thiết bị',
-          url: '/devices/deviceName',
+          url: '/devices/device',
           icon: 'fa fa-microchip',
         },
         {

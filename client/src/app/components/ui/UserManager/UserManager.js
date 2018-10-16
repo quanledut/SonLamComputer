@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, CardBody, CardHeader, Col, Pagination, PaginationItem, PaginationLink, Row, Table } from 'reactstrap';
+import { Card, CardBody, CardHeader, Col, Row} from 'reactstrap';
 import {DeleteFrom} from '../../containers/user';
 import {Link} from 'react-router-dom';
 import {SearchFrom} from './../../containers/user';

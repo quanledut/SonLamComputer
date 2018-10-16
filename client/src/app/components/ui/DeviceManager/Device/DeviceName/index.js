@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import {Card, CardBody, CardHeader, Col, Row} from 'reactstrap';
 import {Link} from 'react-router-dom';
-import {DeleteFrom, SearchFrom} from '../../../../containers/computername';
+import {DeleteFrom, SearchFrom} from '../../../../containers/devicename';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import CustomTable from '../../../utils/Table'
 
-class ComputerNameUI extends Component {
+class DeviceNameUI extends Component {
 
     componentDidMount(){
         this.props.findAll((result, err) => {
@@ -24,11 +24,10 @@ class ComputerNameUI extends Component {
             return (
                 <tr key = {index}>
                     <td>{item.name}</td>
-                    <td>{item.type}</td>
                     <td>
                         <div className="btn-group">
                             <Link 
-                                to = {`/devices/computerName/${item._id}/edit`}
+                                to = {`devices/device/${item._id}/edit`}
                                 className="btn btn-primary"
                             >
                                 <i className="fa fa-edit"> Sửa </i>
@@ -49,13 +48,13 @@ class ComputerNameUI extends Component {
                     <Col>
                         <Card>
                             <CardHeader>
-                                <i className="fa fa-align-justify"></i> Danh sách máy tính
+                                <i className="fa fa-align-justify"></i> Danh sách thiết bị
                             </CardHeader>
                             <CardBody>
                                 <Link
-                                    to = {'/devices/computerName/new'}
+                                    to = {'/devices/device/new'}
                                     className="btn" style={{ backgroundColor: '#17a2b8' }}>
-                                    <i className="fa fa-plus text-white"> Tạo mới máy tính </i>
+                                    <i className="fa fa-plus text-white"> Tạo mới thiết bị </i>
                                 </Link>
                                 <hr />
 
@@ -64,8 +63,10 @@ class ComputerNameUI extends Component {
                                 <CustomTable
                                     thead = {
                                         <tr>
+                                            <th>Tên thiết bị</th>
                                             <th>Tên máy tính</th>
-                                            <th>Loại máy tính</th>
+                                            <th>Loại thiết bị</th>
+                                            <th>Loại dịch vụ</th>
                                             <th style={{ width: '20%' }}>Hành động</th>
                                         </tr>
                                     }
@@ -82,4 +83,4 @@ class ComputerNameUI extends Component {
     }
 }
 
-export default ComputerNameUI
+export default DeviceNameUI

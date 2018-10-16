@@ -2,7 +2,7 @@ import request from '../utils/request'
 
 const findAll = () => 
     request()
-        .get("/devices/computerName")
+        .get("/computerNames")
         .then((response) => response.data)
         .catch((err) => {
             throw err
@@ -10,7 +10,7 @@ const findAll = () =>
 
 const deleteApi = (id) => 
     request()
-        .delete(`/devices/computerName/${id}`)
+        .delete(`/computerNames/${id}`)
         .then((response) => response.data)
         .catch((err) => {
             throw err
@@ -18,7 +18,7 @@ const deleteApi = (id) =>
 
 const addApi = (data) => 
 request()
-    .post("/devices/computerName",data)
+    .post("/computerNames",data)
     .then((response) => response.data)
     .catch((err) => {
         throw err
@@ -26,7 +26,7 @@ request()
 
 const findByIdApi = (id) => 
 request()
-    .get(`/devices/computerName/${id}`)
+    .get(`/computerNames/${id}`)
     .then((response) => response.data)
     .catch((err) => {
         throw err
@@ -34,7 +34,7 @@ request()
 
 const updateApi = (data) => 
 request()
-    .put(`/devices/computerName/${data.id}`, data)
+    .put(`/computerNames/${data.id}`, data)
     .then((response) => response.data)
     .catch((err) => {
         throw err

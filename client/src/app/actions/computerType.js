@@ -43,6 +43,7 @@ export function findALlSuccess(data) {
 
 //----------------------------------------------------------------------
 export function createRequest(data, cb) {
+    console.log(data)
     return {type: CONSTANTS.CREATE_REQUEST, data, cb}
 }
 

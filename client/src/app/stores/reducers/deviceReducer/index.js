@@ -1,4 +1,4 @@
-import { CONSTANTS as USER_CONSTANTS } from '../../../actions/user'
+import { CONSTANTS} from '../../../actions/deviceName'
 import { toast } from "react-toastify";
 import * as notifications from '../../../constants/Notifications';
 
@@ -19,18 +19,18 @@ var findIndex = (users, id) =>
 const reducer = (state = initialState, action) => {
     switch (action.type) {
 
-        case USER_CONSTANTS.FIND_ALL_REQUEST_SUCCESS: {
+        case CONSTANTS.FIND_ALL_REQUEST_SUCCESS: {
             state = action.data;
             return [...state]
         }
 
-        case USER_CONSTANTS.CREATE_REQUEST_SUCCESS: {
+        case CONSTANTS.CREATE_REQUEST_SUCCESS: {
             toast.success(notifications.SAVE_SUCCESS);
             state.push(action.data);
             return [...state]
         }
 
-        case USER_CONSTANTS.DELETE_REQUEST_SUCCESS: {
+        case CONSTANTS.DELETE_REQUEST_SUCCESS: {
             var id = action._id;
             if(id)
             {
@@ -41,7 +41,7 @@ const reducer = (state = initialState, action) => {
             return [...state]
         }
 
-        case USER_CONSTANTS.UPDATE_REQUEST_SUCCESS: {
+        case CONSTANTS.UPDATE_REQUEST_SUCCESS: {
             id = action.data._id;
             if(id)
             {

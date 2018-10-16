@@ -72,6 +72,7 @@ export function * updated() {
 
 export default function * root () {
     yield fork(findAll)
+    yield fork(add)
     yield fork(deleted)
     yield fork(findById)
     yield fork(updated)
