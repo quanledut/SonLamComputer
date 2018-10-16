@@ -34,7 +34,7 @@ request()
 
 const updateApi = (data) => 
 request()
-    .put(`/usermanagers/${data.id}`, data)
+    .put(`/usermanagers/${data._id}`, data)
     .then((response) => response.data)
     .catch((err) => {
         throw err

@@ -28,8 +28,16 @@ let policySchema = new mongoose.Schema({
     toObject: {
         virtuals: true
     }
+}, {
+    toJSON: {
+        virtuals: true 
+    }
 });
 
+const generatePermission = (policy) => {
+    return policy.isCreate * CONSTANT.CREATE + policy.isRead * CONSTANT.READ
+    + policy.isUpdate * CONSTANT.UPDATE + policy.isDelete * CONSTANT.DELETE
+}
 
 
 var virtual = policySchema.virtual('permission');
@@ -59,6 +67,6 @@ virtual.get(function() {
         }
     });
 
-module.exports = {policySchema, CONSTANT, DEFAULT_PERMISSION_NAMES}
+module.exports = {policySchema, CONSTANT, DEFAULT_PERMISSION_NAMES, generatePermission}
 // export default policySchema;
 // mongoose.model('Policy', policySchema);

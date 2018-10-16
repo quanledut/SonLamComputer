@@ -16,7 +16,7 @@ const find = (req,res) =>{
 
 const findById = (req,res) => {
     ComputerName
-    .findById(req.params.id)
+    .findById(req.params.computerNameId)
     .exec((err,computerName)=>{
         if(err) sendJsonResponse(res,500,err);
         else if(computerName) sendJsonResponse(res,200,computerName);
@@ -66,7 +66,7 @@ const updateById = (req, res) => {
 const deleteById = (req,res) =>{
     ComputerName
     .findByIdAndRemove(req.params.computerNameId
-    ,(err) => {
+    ,(err, computerName) => {
         if(err) sendJsonResponse(res,500,err);
         if(computerName) sendJsonResponse(res,200,'Deleted');
     })

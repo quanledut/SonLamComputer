@@ -107,7 +107,7 @@ class ServiceTypeFormUI extends Component {
             title: "Loading"
         })
 
-        let {_id} = this.props
+        let {_id} = this.state.form
         if (_id) {
             this.props.update(this.state.form, (res, error) => {
                 this._closeModal()
@@ -203,7 +203,7 @@ class ServiceTypeFormUI extends Component {
         if(this.state.isRedirect)
         {
             return(
-                <Redirect to="/devices/deviceType"/>
+                <Redirect to="/services/serviceType"/>
             )
         }
         return (
@@ -228,7 +228,7 @@ class ServiceTypeFormUI extends Component {
                                     <FormGroup>
                                         <Label htmlFor="nf-username">Tên loại dịch vụ</Label>
                                         <Input onChange = {(event) => (this.isChange(event))} 
-                                            value = {this.state.name}
+                                            value = {this.state.form.name}
                                             type="username" id="nf-username" name="name" placeholder="Nhập tên loại dịch vụ..." autoComplete="current-password" />
                                          {this.state.error.name ? <FormText className="help-block"><span style={{color: "red"}}>Please enter valid your name</span></FormText> : ''} 
                                     </FormGroup>

@@ -7,12 +7,10 @@ class PopupDelete extends Component {
 
     onDelete = (id) =>{
         this.props.onDelete(id, (res, error) => {
-            if (res) {
-                toast.success(notifications.SUCCESS_DELETE);         
-            } else{
+            if (error !== null) {
                 console.log(error)
-                toast.success(notifications.ERROR_DELETE); 
-            }             
+                toast.success(notifications.ERROR_DELETE);     
+            }      
         });
     }
 
@@ -32,7 +30,7 @@ class PopupDelete extends Component {
                             Bạn có chắc chắn muốn xóa {this.props.name} không?
                         </div>
                         <div className="actions">
-                            <div className="btn btn-danger button" onClick = {() =>{this.onDelete(this.props.id)}}>
+                            <div className="btn btn-danger button" onClick = {() =>{this.onDelete(this.props.id); close()}}>
                                 <i className="fa fa-check"> Có </i>
                             </div>
                             <div className="btn btn-primary button" onClick={() => {

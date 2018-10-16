@@ -8,7 +8,7 @@ var findIndex = (users, id) =>
 {
     var result = -1;
     users.forEach((user,index)=>{
-        if(user.nf_id === id)
+        if(user._id === id)
         {
             result = index;
         }
@@ -31,7 +31,7 @@ const reducer = (state = initialState, action) => {
         }
 
         case CONSTANTS.DELETE_REQUEST_SUCCESS: {
-            var id = action._id;
+            var id = action.data;
             if(id)
             {
                 var indexx = findIndex(state, id);

@@ -107,7 +107,7 @@ class DeviceTypeFormUI extends Component {
             title: "Loading"
         })
 
-        let {_id} = this.props
+        let {_id} = this.state.form
         if (_id) {
             this.props.update(this.state.form, (res, error) => {
                 this._closeModal()
@@ -228,7 +228,7 @@ class DeviceTypeFormUI extends Component {
                                     <FormGroup>
                                         <Label htmlFor="nf-username">Tên loại thiết bị</Label>
                                         <Input onChange = {(event) => (this.isChange(event))} 
-                                            value = {this.state.name}
+                                            value = {this.state.form.name}
                                             type="username" id="nf-username" name="name" placeholder="Nhập tên loại thiết bị..." autoComplete="current-password" />
                                          {this.state.error.name ? <FormText className="help-block"><span style={{color: "red"}}>Please enter valid your name</span></FormText> : ''} 
                                     </FormGroup>

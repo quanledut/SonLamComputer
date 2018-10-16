@@ -12,13 +12,13 @@ export const ComputerNameForm = connect(
         findAllComputerType(cb) {
             dispatch(typeActions.findAllRequest(cb));
         },
-        createUser(data, cb) {
+        create(data, cb) {
             dispatch(nameActions.createRequest(data, cb));
         },
-        updateUser(data, cb) {
+        update(data, cb) {
             dispatch(nameActions.updateRequest(data, cb));
         },
-        getUserById(id, cb) {
+        getById(id, cb) {
             dispatch(nameActions.findByIdRequest(id, cb));
         }
     })
@@ -32,8 +32,8 @@ export const ComputerName = connect(
         }
     }, 
     dispatch => ({
-        findAll : () => {
-            dispatch(nameActions.findAllRequest())
+        findAll : (cb) => {
+            dispatch(nameActions.findAllRequest(cb))
         }
     })
 )(ComputerNameUI);

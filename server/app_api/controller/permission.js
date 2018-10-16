@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const ObjectId = mongoose.Types.ObjectId; 
 
-const { CONSTANT } = require("../model/user/policy")
+const { CONSTANT, generatePermission } = require("../model/user/policy")
 
 // const checkPolicyForPermission = (policies, action) => {
 //     // console.log(policies);
@@ -63,7 +63,8 @@ const checkPermissionForCollection = (collectionName) => (action) => async (req,
 
     const allowed = policies.reduce((isAllowed, policy) => {
         if (isAllowed) return isAllowed
-        return policy.permission & action
+        const permission = generatePermission(policy)
+        return permission & action
     }, false)
 
     if (allowed) next();

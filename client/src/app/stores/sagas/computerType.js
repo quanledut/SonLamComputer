@@ -19,11 +19,11 @@ export function * findAll() {
 export function * deleted() {
     while (true) {
         const request = yield take(Actions.CONSTANTS.DELETE_REQUEST)
-        const id = request.id
+        const id = request.data
         try {
             let result = yield call(Api.deleteApi, id)
             request.cb(result, null)
-            yield put(Actions.deleteRequestSuccess(result))
+            yield put(Actions.deleteRequestSuccess(id))
         } catch(err) {
             request.cb(null, err.message)
         }

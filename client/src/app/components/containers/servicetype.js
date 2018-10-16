@@ -25,7 +25,7 @@ export const ServiceTypes = connect(
         console.log(state);
         return {
             todos: state.serviceTypes, 
-            keyword: state.searchserviceType    
+            keyword: state.searchServiceType    
         }
     },
     dispatch => ({

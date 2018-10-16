@@ -34,7 +34,7 @@ request()
 
 const updateApi = (data) => 
 request()
-    .put(`/serviceTypes/${data.id}`, data)
+    .put(`/serviceTypes/${data._id}`, data)
     .then((response) => response.data)
     .catch((err) => {
         throw err

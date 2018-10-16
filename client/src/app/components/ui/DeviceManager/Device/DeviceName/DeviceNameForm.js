@@ -138,7 +138,7 @@ class DeviceNameFormUI extends Component {
             title: "Loading"
         })
 
-        let {_id} = this.props
+        let {_id} = this.state.form
         if (_id) {
             this.props.update(this.state.form, (res, error) => {
                 this._closeModal()

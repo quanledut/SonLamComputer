@@ -23,7 +23,7 @@ export function * deleted() {
         try {
             let result = yield call(userApi.deleteApi, id)
             request.cb(result, null)
-            yield put(userActions.deleteRequestSuccess(result))
+            yield put(userActions.deleteRequestSuccess(id))
         } catch(err) {
             request.cb(null, err.message)
         }

@@ -34,7 +34,7 @@ request()
 
 const updateApi = (data) => 
 request()
-    .put(`/deviceTypes/${data.id}`, data)
+    .put(`/deviceTypes/${data._id}`, data)
     .then((response) => response.data)
     .catch((err) => {
         throw err
