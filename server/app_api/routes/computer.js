@@ -23,8 +23,8 @@ const route_computer = (router) => {
     router.get(
         '/computerNames/:computerNameId'
         ,auth
-        ,checkPermissionForComputerName(permission.type.READ
-        ,ctrComputerName.findById)
+        ,checkPermissionForComputerName(permission.type.READ)
+        ,ctrComputerName.findById
     )
     router.post(
         '/computerNames'

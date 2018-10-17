@@ -38,6 +38,7 @@ const create = (req,res) => {
     }
     let newComputerName = new ComputerName();
     newComputerName.name = req.body.name;
+    newComputerName.type = req.body.type;
     newComputerName.save((err,cn)=>{
         if(err) sendJsonResponse(res,500,err);
         if(cn) sendJsonResponse(res,200,cn);
@@ -50,7 +51,8 @@ const updateById = (req, res) => {
             req.params.computerNameId,
             {
                 $set: {
-                    name: req.body.name
+                    name: req.body.name,
+		    type: req.body.type
                 }
             }, 
             {

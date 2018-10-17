@@ -185,16 +185,16 @@ class DeviceNameFormUI extends Component {
     _validate(name, value) {
         const re = /^\$?[0-9]+(\.[0-9][0-9])?$/;
         if (name === 'computerName') {
-            return !(value !== null || value !== "")
+            return !(value !== null && value !== "")
         }
         if (name === 'deviceType') {
-            return !(value !== null || value !== "")
+            return !(value !== null && value !== "")
         }
         if (name === 'serviceType') {
-            return !(value !== null || value !== "")
+            return !(value !== null && value !== "")
         }
         if (name === 'price') {
-            return !(re.test(value)) && !(value > 0)
+            return !(re.test(value)) && (value > 0)
         }
         if (name === 'amount') {
             return !(re.test(value) && (value > 0))
@@ -230,7 +230,11 @@ class DeviceNameFormUI extends Component {
             this.setState({
                 isDisabled:false
               })
-  
+        }
+        else{
+            this.setState({
+                isDisabled:true
+              })
         }
     }
 
@@ -265,12 +269,11 @@ class DeviceNameFormUI extends Component {
                                             <Input 
                                                 onChange = {(event) => (this.isChange(event))} 
                                                 value = {this.state.form.computerName}
-                                                type="select" name="computerNames" id="select">
-                                                {
-                                                    this.state.computerNames.map((e, id) => 
+                                                type="select" name="computerName" id="select">
+                                                    <option value="None">---Chọn---</option>
+                                                    {this.state.computerNames.map((e, id) => 
                                                         <option key={id} value={e._id}>{e.name}</option>
-                                                    )
-                                                }
+                                                    )}
                                             </Input>
                                     </FormGroup>
                                     <FormGroup>
@@ -278,7 +281,8 @@ class DeviceNameFormUI extends Component {
                                             <Input 
                                                 onChange = {(event) => (this.isChange(event))} 
                                                 value = {this.state.form.deviceType}
-                                                type="select" name="deviceTypes" id="select">
+                                                type="select" name="deviceType" id="select">
+                                                <option value="None">---Chọn---</option>
                                                 {
                                                     this.state.deviceTypes.map((e, id) => 
                                                         <option key={id} value={e._id}>{e.name}</option>
@@ -291,7 +295,8 @@ class DeviceNameFormUI extends Component {
                                             <Input 
                                                 onChange = {(event) => (this.isChange(event))} 
                                                 value = {this.state.form.serviceType}
-                                                type="select" name="serviceTypes" id="select">
+                                                type="select" name="serviceType" id="select">
+                                                <option value="None">---Chọn---</option>
                                                 {
                                                     this.state.serviceTypes.map((e, id) => 
                                                         <option key={id} value={e._id}>{e.name}</option>

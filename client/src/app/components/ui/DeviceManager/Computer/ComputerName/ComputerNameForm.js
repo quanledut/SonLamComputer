@@ -53,12 +53,13 @@ class ComputerNameFormUI extends Component {
         if(match.params.id)
         {
             var id = match.params.id;
-
             this.props.getById(id, (data) => {
-                this.setState({
-                    ...this.state,
-                    form: data
-                })
+                if(data)
+                    {this.setState({
+                        ...this.state,
+                        form: data
+                    })
+                }
             })
         }
         this.props.findAllComputerType((types, err) => {
@@ -139,6 +140,7 @@ class ComputerNameFormUI extends Component {
             })
         } else {
             this.props.create(this.state.form, (res, error) => {
+                console.log(this.state.form)
                 this._closeModal()
                 if (res) {
                     this._openModal({

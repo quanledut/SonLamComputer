@@ -1,7 +1,7 @@
 import {take, call, put, fork} from 'redux-saga/effects'
 
-import * as Actions from '../../actions/computerName'
-import * as Api from '../../api/computerName'
+import * as Actions from '../../actions/deviceName'
+import * as Api from '../../api/deviceName'
 
 export function * findAll() {
     while(true) {

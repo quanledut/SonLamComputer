@@ -6,6 +6,7 @@ import serviceTypeSaga from './serviceType'
 import deviceTypeSaga from './deviceType'
 import computerTypeSaga from './computerType'
 import computerNameSaga from './computerName'
+import devicesSaga from './devices'
 export default function * root() {
     yield all([
         call(authSaga),
@@ -15,5 +16,6 @@ export default function * root() {
         call(deviceTypeSaga),
         call(computerTypeSaga),
         call(computerNameSaga),
+        call(devicesSaga),
     ])
 }
