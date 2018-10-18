@@ -1,77 +1,76 @@
 const mongoose = require("mongoose");
 const ObjectId = mongoose.Types.ObjectId; 
 
-const { CONSTANT, generatePermission } = require("../model/user/policy")
+const { CONSTANT } = require("../model/user/policy")
 
-// const checkPolicyForPermission = (policies, action) => {
-//     // console.log(policies);
-//     for (let id in policies) {
-//         let policy = policies[id];
-//         if (policy.permission & action) return true 
-//         // permissionArray = decimalToBinary(policy.permission);
+const Policy = mongoose.model('Policy');
 
-//         // switch (action) {
-//         //     case CREATE:
-//         //         return permissionArray[3] == 1;
-//         //     case READ:
-//         //         return permissionArray[2] == 1;
-//         //     case UPDATE:
-//         //         return permissionArray[1] == 1;
-//         //     case DELETE:
-//         //         return permissionArray[0] == 1;
-//         // }
-//     }
-//     return false;
-// }
+const checkPolicyForPermission = (policies, action) => {
+    for (let id in policies) {
+        let policy = policies[id];
+        if (policy.permission & action) return true 
+        // permissionArray = decimalToBinary(policy.permission);
 
-// const checkPermission = async (roles, collectionName, action) => {
-//     try {
-//         // let policies = await Policy.find({
-//         //     collectionName: collectionName,
-//         //     roleId: {
-//         //         $in: roles
-//         //     }
-//         // }).exec();
-//         // if (!policies) return false;
+        // switch (action) {
+        //     case CREATE:
+        //         return permissionArray[3] == 1;
+        //     case READ:
+        //         return permissionArray[2] == 1;
+        //     case UPDATE:
+        //         return permissionArray[1] == 1;
+        //     case DELETE:
+        //         return permissionArray[0] == 1;
+        // }
+    }
+    return false;
+}
 
-//         let policy = roles
-//         return checkPolicyForPermission(policies, action);
-//         // return true
-//     } catch(err) {
-//         console.log("Error in finding policy");
-//         console.log(err)
-//         return false;
-//     }
+const checkPermission = async (roles, collectionName, action) => {
+    try {
+        let policies = await Policy.find({
+            collectionName: collectionName,
+            roleId: {
+                $in: roles
+            }
+        }).exec();
+        if (!policies) return false;
 
-// }
+        return checkPolicyForPermission(policies, action);
+        // return true
+    } catch(err) {
+        console.log("Error in finding policy");
+        console.log(err)
+        return false;
+    }
+
+}
 
 const checkPermissionForCollection = (collectionName) => (action) => async (req, res, next) => {
-    // const roles = req.payload.roles.map((r) => new ObjectId(r._id));
-    // const allowed = await checkPermission(roles, collectionName, action);
-    // console.log(collectionName, action, roles)
-    // if (allowed) {
-    //     next();
-    // } else {
-    //     res.status(401);
-    //     res.json("Unauthorized");
-    // }
-
-    const policies = req.payload.roles.reduce((policies, role) => {
-        if (role == null || role.policies == null || role.policies.length == 0) return [...policies]
-        return [...policies, ...role.policies.filter((r) => r.collectionName == collectionName)]
-    }, [])
-
-    const allowed = policies.reduce((isAllowed, policy) => {
-        if (isAllowed) return isAllowed
-        const permission = generatePermission(policy)
-        return permission & action
-    }, false)
-
-    if (allowed) next();
-    else {
+    const roles = req.payload.roles.map((r) => new ObjectId(r._id));
+    const allowed = await checkPermission(roles, collectionName, action);
+    if (allowed) {
+        next();
+    } else {
         res.status(401);
-        res.json("Unauthorized")
+        res.json("Unauthorized");
     }
+
+    // const policies = req.payload.roles.reduce((policies, role) => {
+    //     if (role == null || role.policies == null || role.policies.length == 0) return [...policies]
+    //     return [...policies, ...role.policies.filter((r) => r.collectionName == collectionName)]
+    // }, [])
+
+    // const allowed = policies.reduce((isAllowed, policy) => {
+    //     if (isAllowed) return isAllowed
+    //     const permission = generatePermission(policy)
+    //     return permission & action
+    // }, false)
+
+    // if (allowed) next();
+    // else {
+    //     res.status(401);
+    //     res.json("Unauthorized")
+    // }
 }
 
 module.exports = {

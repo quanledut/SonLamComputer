@@ -7,7 +7,7 @@ const auth = jwt({
 const permission = require('../controller/permission');
 const checkPermissionForCollection = permission.checkPermissionForCollection;
 const ctrDeviceType = require('../controller/device/deviceTypes')
-
+const ctrlDevice = require('../controller/device/devices')
 const route_device = (router) => {
     const checkPermissionForDeviceType = checkPermissionForCollection('DeviceType');
 
@@ -53,6 +53,45 @@ const route_device = (router) => {
         checkPermissionForDeviceType(permission.type.DELETE),
         ctrDeviceType.deleteById
     )
+
+    const checkPermissionForDevice = checkPermissionForCollection('Device');
+
+    router.get(
+        '/devices',
+        auth,
+        checkPermissionForDeviceType(permission.type.READ),
+        ctrlDevice.find
+    );
+
+    router.get(
+        '/devices/:deviceId',
+        auth,
+        checkPermissionForDeviceType(permission.type.READ),
+        ctrlDevice.findById
+    );
+
+    router.post(
+        '/devices',
+        auth,
+        checkPermissionForDeviceType(permission.type.CREATE),
+        ctrlDevice.create
+    );
+
+    router.put(
+        '/devices/:deviceId',
+        auth,
+        checkPermissionForDeviceType(permission.type.UPDATE),
+        ctrlDevice.updateById
+    );
+
+
+    router.delete(
+        '/devices/:deviceId',
+        auth,
+        checkPermissionForDeviceType(permission.type.DELETE),
+        ctrlDevice.deleteById
+    )
+
 }
 
 module.exports = route_device

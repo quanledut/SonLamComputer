@@ -1,15 +1,26 @@
 const mongoose = require('mongoose')
-const {policySchema, DEFAULT_PERMISSION_NAMES} = require('./policy')
 
 let roleSchema = new mongoose.Schema({
-    name: { type: String, required: true, unique: true } ,
-    policies: [policySchema]
+    name: { type: String, required: true, unique: true } 
+}, {
+    toObject: {
+        virtuals: true
+    }, 
+    toJSON: {
+        virtuals: true
+    }
 });
 
 roleSchema.virtual('users', {
     ref: 'User',
     localField: '_id',
     foreignField: 'roles'
+})
+
+roleSchema.virtual('policies', {
+    ref: 'Policy',
+    localField: '_id',
+    foreignField: 'roleId'
 })
 
   

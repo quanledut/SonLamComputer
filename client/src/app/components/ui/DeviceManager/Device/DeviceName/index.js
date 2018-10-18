@@ -17,13 +17,17 @@ class DeviceNameUI extends Component {
     render() {
         var {keyword} = this.props;
         var mapList = this.props.todos;
+        console.log(this.props)
         mapList = mapList.filter((item) => {
-            return item.name.toLowerCase().indexOf(keyword.toLowerCase()) !== -1;
+            return item.deviceType.name.toLowerCase().indexOf(keyword.toLowerCase()) !== -1;
         });
         var listItem = mapList.map((item, index) => {
             return (
                 <tr key = {index}>
-                    <td>{item.name}</td>
+                    <td>{item.computerName.name}</td>
+                    <td>{item.deviceType.name}</td>
+                    <td>{item.serviceType.name}</td>
+
                     <td>
                         <div className="btn-group">
                             <Link 
@@ -33,7 +37,7 @@ class DeviceNameUI extends Component {
                                 <i className="fa fa-edit"> Sửa </i>
                             </Link>
                             <DeleteFrom 
-                                name={item.name} 
+                                name={item.deviceType.name} 
                                 id={item._id}
                             />
                         </div>
@@ -63,7 +67,6 @@ class DeviceNameUI extends Component {
                                 <CustomTable
                                     thead = {
                                         <tr>
-                                            <th>Tên thiết bị</th>
                                             <th>Tên máy tính</th>
                                             <th>Loại thiết bị</th>
                                             <th>Loại dịch vụ</th>

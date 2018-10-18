@@ -5,6 +5,7 @@ var {sendJsonResponse} = require('../utils');
 const find = (req,res) =>{
     ComputerName
     .find({})
+    .populate('type')
     .exec((err,computerNames)=>{
         if(err) sendJsonResponse(res,500,err);
         else{
@@ -17,6 +18,7 @@ const find = (req,res) =>{
 const findById = (req,res) => {
     ComputerName
     .findById(req.params.computerNameId)
+    .populate('type')
     .exec((err,computerName)=>{
         if(err) sendJsonResponse(res,500,err);
         else if(computerName) sendJsonResponse(res,200,computerName);

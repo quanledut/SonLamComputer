@@ -21,7 +21,7 @@ const DEFAULT_PERMISSIONS = DEFAULT_PERMISSION_NAMES.reduce((permission, item) =
 }, {})
 
 let policySchema = new mongoose.Schema({
-    // roleId: { type: mongoose.Schema.Types.ObjectId, required: true },
+    roleId: { type: mongoose.Schema.Types.ObjectId, required: true },
     collectionName: { type: String, required: true },
     ...DEFAULT_PERMISSIONS
 }, {
@@ -34,14 +34,15 @@ let policySchema = new mongoose.Schema({
     }
 });
 
-const generatePermission = (policy) => {
-    return policy.isCreate * CONSTANT.CREATE + policy.isRead * CONSTANT.READ
-    + policy.isUpdate * CONSTANT.UPDATE + policy.isDelete * CONSTANT.DELETE
+policySchema.methods.generatePermission = function(){
+    return this.isCreate * CONSTANT.CREATE + this.isRead * CONSTANT.READ
+    + this.isUpdate * CONSTANT.UPDATE + this.isDelete * CONSTANT.DELETE
 }
 
 
 var virtual = policySchema.virtual('permission');
-virtual.get(function() {
+virtual
+    .get(function() {
         return this.isCreate * CONSTANT.CREATE + this.isRead * CONSTANT.READ
             + this.isUpdate * CONSTANT.UPDATE + this.isDelete * CONSTANT.DELETE
     })
@@ -67,6 +68,6 @@ virtual.get(function() {
         }
     });
 
-module.exports = {policySchema, CONSTANT, DEFAULT_PERMISSION_NAMES, generatePermission}
+mongoose.model('Policy', policySchema);
+module.exports = {CONSTANT, DEFAULT_PERMISSION_NAMES}
 // export default policySchema;
-// mongoose.model('Policy', policySchema);

@@ -24,7 +24,7 @@ class ComputerNameUI extends Component {
             return (
                 <tr key = {index}>
                     <td>{item.name}</td>
-                    <td>{item.type}</td>
+                    <td>{item.type.name}</td>
                     <td>
                         <div className="btn-group">
                             <Link 
