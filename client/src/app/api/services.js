@@ -1,16 +1,16 @@
 import request from '../utils/request'
 
-const findAllApi = () => 
+const findAll = () => 
     request()
-        .get("/users")
+        .get("/services")
         .then((response) => response.data)
         .catch((err) => {
             throw err
         });
 
-const deleteApi = (data) => 
+const deleteApi = (id) => 
     request()
-        .delete(`/users/${data}`)
+        .delete(`/services/${id}`)
         .then((response) => response.data)
         .catch((err) => {
             throw err
@@ -18,7 +18,7 @@ const deleteApi = (data) =>
 
 const addApi = (data) => 
 request()
-    .post("/users",data)
+    .post("/services",data)
     .then((response) => response.data)
     .catch((err) => {
         throw err
@@ -26,7 +26,7 @@ request()
 
 const findByIdApi = (id) => 
 request()
-    .get(`/users/${id}`)
+    .get(`/services/${id}`)
     .then((response) => response.data)
     .catch((err) => {
         throw err
@@ -34,11 +34,10 @@ request()
 
 const updateApi = (data) => 
 request()
-    .put(`/users/${data._id}`, data)
+    .put(`/services/${data._id}`, data)
     .then((response) => response.data)
     .catch((err) => {
         throw err
     });
-
-export {findAllApi, deleteApi, addApi, findByIdApi, updateApi}
-  
+        
+export {findAll, deleteApi, addApi, findByIdApi, updateApi}

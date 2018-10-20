@@ -1,16 +1,15 @@
 import {take, call, put, fork} from 'redux-saga/effects'
 
-import * as userActions from '../../actions/user'
-
-import * as userApi from '../../api/usermanager'
+import * as Actions from '../../actions/services'
+import * as Api from '../../api/services'
 
 export function * findAll() {
-    while (true) {
-        const request = yield take(userActions.CONSTANTS.FIND_ALL_REQUEST)
+    while(true) {
+        const request = yield take(Actions.CONSTANTS.FIND_ALL_REQUEST)
         try {
-            let result = yield call(userApi.findAllApi)
+            let result = yield call(Api.findAll)
             request.cb(result, null)
-            yield put(userActions.findALlSuccess(result))
+            yield put(Actions.findALlSuccess(result))
         } catch(err) {
             request.cb(null, err.message)
         }
@@ -19,12 +18,12 @@ export function * findAll() {
 
 export function * deleted() {
     while (true) {
-        const request = yield take(userActions.CONSTANTS.DELETE_REQUEST)
-        const id = request.id
+        const request = yield take(Actions.CONSTANTS.DELETE_REQUEST)
+        const id = request.data
         try {
-            let result = yield call(userApi.deleteApi, id)
+            let result = yield call(Api.deleteApi, id)
             request.cb(result, null)
-            yield put(userActions.deleteRequestSuccess(id))
+            yield put(Actions.deleteRequestSuccess(id))
         } catch(err) {
             request.cb(null, err.message)
         }
@@ -33,11 +32,11 @@ export function * deleted() {
 
 export function * add() {
     while (true) {
-        const request = yield take(userActions.CONSTANTS.CREATE_REQUEST)
+        const request = yield take(Actions.CONSTANTS.CREATE_REQUEST)
         try {
-            let result = yield call(userApi.addApi, request.data)
+            let result = yield call(Api.addApi, request.data)
             request.cb(result, null)
-            yield put(userActions.createRequestSuccess(result))
+            yield put(Actions.createRequestSuccess(result))
         } catch(err) {
             request.cb(null, err.message)
         }
@@ -46,12 +45,13 @@ export function * add() {
 
 export function * findById() {
     while (true) {
-        const request = yield take(userActions.CONSTANTS.FIND_BY_ID_REQUEST)
+        const request = yield take(Actions.CONSTANTS.FIND_BY_ID_REQUEST)
         const id = request.id
         try {
-            let result = yield call(userApi.findByIdApi, id)
+            let result = yield call(Api.findByIdApi, id)
             request.cb(result, null)
         } catch(err) {
+            console.log(err.message)
             request.cb(null, err.message)
         }
     }
@@ -59,12 +59,12 @@ export function * findById() {
 
 export function * updated() {
     while (true) {
-        const request = yield take(userActions.CONSTANTS.UPDATE_REQUEST)
+        const request = yield take(Actions.CONSTANTS.UPDATE_REQUEST)
         const data = request.data
         try {
-            let result = yield call(userApi.updateApi, data)
+            let result = yield call(Api.updateApi, data)
             request.cb(result, null)
-            yield put(userActions.updateRequestSuccess(result))
+            yield put(Actions.updateRequestSuccess(result))
         } catch(err) {
             request.cb(null, err.message)
         }

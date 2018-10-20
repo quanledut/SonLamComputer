@@ -21,7 +21,6 @@ const DEFAULT_FORM = {
     _id :'',
     computerName:'',
     deviceType:'',
-    serviceType:'',
     description:'',
     image_url:'',
     amount:0,
@@ -44,7 +43,6 @@ class DeviceNameFormUI extends Component {
                 content: ""
             },      
             deviceTypes: [],
-            serviceTypes: [],
             computerNames: [],
             isDisabled:true,
             isRedirect: false
@@ -81,13 +79,6 @@ class DeviceNameFormUI extends Component {
             if (!err) this.setState({
                 ...this.state,
                 deviceTypes
-            })
-        });
-        this.props.findAllServiceType((serviceTypes, err) => {
-            console.log(serviceTypes, err)
-            if (!err) this.setState({
-                ...this.state,
-                serviceTypes
             })
         });
     }
@@ -190,9 +181,6 @@ class DeviceNameFormUI extends Component {
         if (name === 'deviceType') {
             return !(value !== null && value !== "")
         }
-        if (name === 'serviceType') {
-            return !(value !== null && value !== "")
-        }
         if (name === 'price') {
             return !(re.test(value)) && (value > 0)
         }
@@ -285,20 +273,6 @@ class DeviceNameFormUI extends Component {
                                                 <option value="None">---Chọn---</option>
                                                 {
                                                     this.state.deviceTypes.map((e, id) => 
-                                                        <option key={id} value={e._id}>{e.name}</option>
-                                                    )
-                                                }
-                                            </Input>
-                                    </FormGroup>
-                                    <FormGroup>
-                                            <Label htmlFor="select">Loại dịch vụ</Label>
-                                            <Input 
-                                                onChange = {(event) => (this.isChange(event))} 
-                                                value = {this.state.form.serviceType}
-                                                type="select" name="serviceType" id="select">
-                                                <option value="None">---Chọn---</option>
-                                                {
-                                                    this.state.serviceTypes.map((e, id) => 
                                                         <option key={id} value={e._id}>{e.name}</option>
                                                     )
                                                 }

@@ -10,7 +10,9 @@ import CustomTable from '../utils/Table';
 class UserManager extends Component {
 
     componentDidMount(){
-        this.props.findAll();
+        this.props.findAll((result, err) => {
+            console.log(result, err)
+        });
     }
 
     render() {
@@ -23,8 +25,8 @@ class UserManager extends Component {
             return (
                 <tr key = {index}>
                     <td>{user.username}</td>
-                    <td>{user.create_time}</td>
-                    <td>{user.roles}</td>
+                    <td>{user.created_time}</td>
+                    <td>{user.roles.name}</td>
                     <td>
                         <div className="btn-group">
                             <Link 

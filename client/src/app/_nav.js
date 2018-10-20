@@ -62,11 +62,11 @@ export default {
     },
     //-----------------------------------------------------
     //Quản lý giao dịch
-    {
-      name: 'Quản lý giao dịch',
-      url: '/pages',
-      icon: 'fa fa-handshake-o',
-    },
+    // {
+    //   name: 'Quản lý giao dịch',
+    //   url: '/pages',
+    //   icon: 'fa fa-handshake-o',
+    // },
     //-----------------------------------------------------
     //Quản lý dịch vụ
     {
@@ -76,64 +76,64 @@ export default {
       children: [
         {
           name: 'Dịch vụ',
-          url: '/pages',
+          url: '/services/service',
           icon: 'fa fa-microchip',
         },
         {
           name: 'Loại dịch vụ',
           url: '/services/serviceType',
-          icon: 'fa fa-boxes',
+          icon: 'fa fa-code',
         },
-        {
-          name: 'Lịch sử',
-          url: '/pages',
-          icon: 'icon-star',
-        },
+        // {
+        //   name: 'Lịch sử',
+        //   url: '/pages',
+        //   icon: 'icon-star',
+        // },
       ],
     },
     //-----------------------------------------------------
     //Quản lý thiết bị đã sửa chữa
-    {
-      name: 'Quản lý thiết bị đã sửa chữa',
-      url: '/pages',
-      icon: 'fa fa-recycle',
-    },
+    // {
+    //   name: 'Quản lý thiết bị đã sửa chữa',
+    //   url: '/pages',
+    //   icon: 'fa fa-recycle',
+    // },
     //-----------------------------------------------------
     //Quản lý kho thiết bị
-    {
-      name: 'Quản lý kho thiết bị',
-      url: '/pages',
-      icon: 'fa fa-tasks',
-    },
+    // {
+    //   name: 'Quản lý kho thiết bị',
+    //   url: '/pages',
+    //   icon: 'fa fa-tasks',
+    // },
     //-----------------------------------------------------
     //Báo cáo thống kê
-    {
-      name: 'Báo cáo thống kê',
-      url: '/pages',
-      icon: 'fa fa-building',
-      children: [
-        {
-          name: 'Login',
-          url: '/login',
-          icon: 'icon-star',
-        },
-        {
-          name: 'Register',
-          url: '/register',
-          icon: 'icon-star',
-        },
-        {
-          name: 'Error 404',
-          url: '/404',
-          icon: 'icon-star',
-        },
-        {
-          name: 'Error 500',
-          url: '/500',
-          icon: 'icon-star',
-        },
-      ],
-    },
+    // {
+    //   name: 'Báo cáo thống kê',
+    //   url: '/pages',
+    //   icon: 'fa fa-building',
+    //   children: [
+    //     {
+    //       name: 'Login',
+    //       url: '/login',
+    //       icon: 'icon-star',
+    //     },
+    //     {
+    //       name: 'Register',
+    //       url: '/register',
+    //       icon: 'icon-star',
+    //     },
+    //     {
+    //       name: 'Error 404',
+    //       url: '/404',
+    //       icon: 'icon-star',
+    //     },
+    //     {
+    //       name: 'Error 500',
+    //       url: '/500',
+    //       icon: 'icon-star',
+    //     },
+    //   ],
+    // },
     //-----------------------------------------------------
   ],
 };

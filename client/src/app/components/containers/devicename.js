@@ -6,7 +6,6 @@ import PopUpDelete from '../ui/utils/PopUpDelete'
 import * as deviceNameActions from '../../actions/deviceName'
 import * as computerNameActions from '../../actions/computerName'
 import * as deviceTypeActions from '../../actions/deviceType'
-import * as serviceTypeActions from '../../actions/serviceType'
 
 export const DeviceNameForm = connect(
     null, 
@@ -25,9 +24,6 @@ export const DeviceNameForm = connect(
         },
         findAlldeviceType(cb){
             dispatch(deviceTypeActions.findAllRequest(cb));
-        },
-        findAllServiceType(cb){
-            dispatch(serviceTypeActions.findAllRequest(cb));
         }
     })
 )(DeviceNameFormUI);

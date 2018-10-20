@@ -32,8 +32,8 @@ export const Users = connect(
         }
     }, 
     dispatch => ({
-        findAll : () => {
-            dispatch(userActions.findAllRequest())
+        findAll : (cb) => {
+            dispatch(userActions.findAllRequest(cb))
         }
     })
 )(UserManager);

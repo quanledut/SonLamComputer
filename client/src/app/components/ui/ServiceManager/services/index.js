@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import {Card, CardBody, CardHeader, Col, Row} from 'reactstrap';
 import {Link} from 'react-router-dom';
-import {DeleteFrom, SearchFrom} from '../../../../containers/devicename';
+import {DeleteFrom, SearchFrom} from '../../../containers/services';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import CustomTable from '../../../utils/Table'
+import CustomTable from '../../utils/Table'
 
-class DeviceNameUI extends Component {
+class ServiceUI extends Component {
 
     componentDidMount(){
         this.props.findAll((result, err) => {
@@ -19,23 +19,26 @@ class DeviceNameUI extends Component {
         var mapList = this.props.todos;
         console.log(this.props)
         mapList = mapList.filter((item) => {
-            return item.deviceType.name.toLowerCase().indexOf(keyword.toLowerCase()) !== -1;
+            return item.customer_name.toLowerCase().indexOf(keyword.toLowerCase()) !== -1;
         });
         var listItem = mapList.map((item, index) => {
             return (
                 <tr key = {index}>
-                    <td>{item.computerName.name}</td>
-                    <td>{item.deviceType.name}</td>
+                    <td>{item.customer_name}</td>
+                    <td>{item.serviceType}</td>
+                    <td>{item.date}</td>
+                    <td>{item.totalPrice}</td>
+
                     <td>
                         <div className="btn-group">
                             <Link 
-                                to = {`devices/device/${item._id}/edit`}
+                                to = {`/services/service/${item._id}/edit`}
                                 className="btn btn-primary"
                             >
                                 <i className="fa fa-edit"> Sửa </i>
                             </Link>
                             <DeleteFrom 
-                                name={item.deviceType.name} 
+                                name={item.customer_name} 
                                 id={item._id}
                             />
                         </div>
@@ -50,13 +53,13 @@ class DeviceNameUI extends Component {
                     <Col>
                         <Card>
                             <CardHeader>
-                                <i className="fa fa-align-justify"></i> Danh sách thiết bị
+                                <i className="fa fa-align-justify"></i> Danh sách dịch vụ
                             </CardHeader>
                             <CardBody>
                                 <Link
-                                    to = {'/devices/device/new'}
+                                    to = {'/services/service/new'}
                                     className="btn" style={{ backgroundColor: '#17a2b8' }}>
-                                    <i className="fa fa-plus text-white"> Tạo mới thiết bị </i>
+                                    <i className="fa fa-plus text-white"> Tạo mới dịch vụ </i>
                                 </Link>
                                 <hr />
 
@@ -65,8 +68,10 @@ class DeviceNameUI extends Component {
                                 <CustomTable
                                     thead = {
                                         <tr>
-                                            <th>Tên máy tính</th>
-                                            <th>Loại thiết bị</th>
+                                            <th>Tên khách hàng</th>
+                                            <th>Loại dịch vụ</th>
+                                            <th>Ngày dịch vụ</th>
+                                            <th>Tổng tiền</th>
                                             <th style={{ width: '20%' }}>Hành động</th>
                                         </tr>
                                     }
@@ -83,4 +88,4 @@ class DeviceNameUI extends Component {
     }
 }
 
-export default DeviceNameUI
+export default ServiceUI
