@@ -91,6 +91,15 @@ export default {
         // },
       ],
     },
+
+    //-----------------------------------------------------
+    //Quản lý giao dịch
+    {
+      name: 'Thanh toán',
+      url: '/payments',
+      icon: 'fa fa-handshake-o',
+    },
+
     //-----------------------------------------------------
     //Quản lý thiết bị đã sửa chữa
     // {

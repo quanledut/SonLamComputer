@@ -39,5 +39,5 @@ request()
     .catch((err) => {
         throw err
     });
-        
+                    
 export {findAll, deleteApi, addApi, findByIdApi, updateApi}

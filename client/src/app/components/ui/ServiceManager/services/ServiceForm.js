@@ -31,6 +31,7 @@ const DEFAULT_FORM = {
     customer_id_card:'',
     date:'',
     totalPrice:0,
+    status:false
 }
 
 class ServiceFormUI extends Component {

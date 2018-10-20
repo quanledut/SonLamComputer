@@ -1,12 +1,6 @@
-const PREFIX = "SERVICE_CONSTANT";
+const PREFIX = "PAYMENT_CONSTANT";
 const FIND_ALL_REQUEST = PREFIX + "_FIND_ALL_REQUEST"
 const FIND_ALL_REQUEST_SUCCESS = FIND_ALL_REQUEST + "_SUCCESS"
-
-const CREATE_REQUEST = PREFIX + "_CREATE_REQUEST"
-const CREATE_REQUEST_SUCCESS = CREATE_REQUEST + "_SUCCESS"
-
-const DELETE_REQUEST = PREFIX + "_DELETE_REQUEST";
-const DELETE_REQUEST_SUCCESS = DELETE_REQUEST + "_SUCCESS"
 
 const UPDATE_REQUEST = PREFIX + "_UPDATE_REQUEST";
 const UPDATE_REQUEST_SUCCESS = UPDATE_REQUEST + "_SUCCESS"
@@ -18,12 +12,6 @@ const SEARCH_REQUEST = PREFIX + "_SEARCH_REQUEST_REQUEST";
 export const CONSTANTS = {
     FIND_ALL_REQUEST,
     FIND_ALL_REQUEST_SUCCESS,
-
-    CREATE_REQUEST,
-    CREATE_REQUEST_SUCCESS,
-
-    DELETE_REQUEST,
-    DELETE_REQUEST_SUCCESS,
 
     UPDATE_REQUEST,
     UPDATE_REQUEST_SUCCESS,
@@ -38,24 +26,6 @@ export function findAllRequest(cb) {
 
 export function findALlSuccess(data) {
     return {type: CONSTANTS.FIND_ALL_REQUEST_SUCCESS, data}
-}
-
-//----------------------------------------------------------------------
-export function createRequest(data, cb) {
-    return {type: CONSTANTS.CREATE_REQUEST, data, cb}
-}
-
-export function createRequestSuccess(data) {
-    return {type: CONSTANTS.CREATE_REQUEST_SUCCESS, data}
-}
-
-//--------------------------------------------------------------
-export function deleteRequest(data, cb) {
-    return {type: CONSTANTS.DELETE_REQUEST, data, cb}
-}
-
-export function deleteRequestSuccess(data) {
-    return {type: CONSTANTS.DELETE_REQUEST_SUCCESS, data}
 }
 
 //------------------------------------------------------------

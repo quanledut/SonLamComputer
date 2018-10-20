@@ -16,6 +16,8 @@ import devices from './deviceReducer/index'
 import searchDevices from './deviceReducer/search'
 import services from './serviceReducer/index'
 import searchServices from './serviceReducer/search'
+import payments from './paymentReducer/index'
+import searchPayments from './paymentReducer/search'
 
 export default combineReducers({
     auth,
@@ -34,5 +36,7 @@ export default combineReducers({
     devices,
     searchDevices,
     services,
-    searchServices
+    searchServices,
+    payments,
+    searchPayments
 });

@@ -8,6 +8,7 @@ import computerTypeSaga from './computerType'
 import computerNameSaga from './computerName'
 import devicesSaga from './devices'
 import serviceSaga from './service'
+import paymentSaga from './payment'
 
 export default function * root() {
     yield all([
@@ -20,5 +21,6 @@ export default function * root() {
         call(computerNameSaga),
         call(devicesSaga),
         call(serviceSaga),
+        call(paymentSaga),
     ])
 }
