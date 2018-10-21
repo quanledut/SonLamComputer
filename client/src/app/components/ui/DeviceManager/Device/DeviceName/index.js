@@ -14,7 +14,8 @@ class DeviceNameUI extends Component {
             limit: 10,
             page: 1,
             pages: 1,
-            total: 1
+            total: 1,
+            queryString: null
         }
 
         this.gotoPage = this.gotoPage.bind(this);
@@ -22,14 +23,17 @@ class DeviceNameUI extends Component {
     }
 
     componentDidMount(){
-        this.gotoPage(1)
+        this.gotoPage()(1)
     }
 
     search = (queryString) => {
-        this.gotoPage(1, queryString)
+        this.setState({
+            queryString: queryString
+        })
+        this.gotoPage(queryString)(1)
     }
 
-    gotoPage = (page, queryString) => {
+    gotoPage = (queryString) => (page) => {
         this.props.findAll({
             string: queryString,
             limit: 10,
@@ -39,15 +43,13 @@ class DeviceNameUI extends Component {
                 ...this.state,
                 ...result
             })
-            console.log(result)
+            // console.log(result)
         });
 
     }
 
     render() {
-        var {keyword} = this.props;
         var mapList = this.state.docs;
-
         var listItem = mapList.map((item, index) => {
             return (
                 <tr key = {index}>
@@ -101,7 +103,7 @@ class DeviceNameUI extends Component {
                                     tbody = {listItem}
                                     page = {this.state.page}
                                     pages = {this.state.pages}
-                                    gotoPage = {this.gotoPage}
+                                    gotoPage = {this.gotoPage(this.state.queryString)}
 
                                 />
                             </CardBody>

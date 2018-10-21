@@ -10,7 +10,7 @@ const createPaginationQueryByAggregate = async (aggregate, query) => {
     if (!limit) limit = 10
 
     if (count.length == 0) return {page, pages:1, limit:10, skip:0, total:0}
-    console.log(page, limit, count)
+
     const total = count[0].total
 
     const pages = Math.ceil(total / limit)
