@@ -3,16 +3,102 @@ const { sendJsonResponse } = require ('../utils');
 
 const Service = mongoose.model('Service');
 
-const find = (req, res) => {
-    Service
-        .find({})
-        .exec()
-        .then((service) => {
-            sendJsonResponse(res, 200, service);
-        }, (err) => {
-            sendJsonResponse(res, 500, err);
+const {createPaginationQueryByAggregate} = require('../../helpers/paginationHelper')
+
+const createAggregate = (stringQuery) => {
+    let aggreagte = Service
+    .aggregate()
+    .lookup({
+        from: 'servicetypes',
+        localField: 'serviceType',
+        foreignField: '_id',
+        as: 'serviceType'
+    })
+    .unwind('$serviceType')
+
+    if (stringQuery) {
+        aggreagte = aggreagte.match({
+            $or: [
+                {
+                    'serviceType.name': {
+                        $regex: stringQuery, $options:"$i"
+                    }
+                },
+                {
+                    'customer_name': {
+                        $regex: stringQuery, $options:"$i"
+                    }
+                },
+                {
+                    'customer_id_card': {
+                        $regex: stringQuery, $options:"$i"
+                    }
+                }
+            ]
         })
+    }
+    return aggreagte
 }
+
+
+
+// const find = (req, res) => {
+//     Service
+//         .find({})
+//         .exec()
+//         .then((service) => {
+//             sendJsonResponse(res, 200, service);
+//         }, (err) => {
+//             sendJsonResponse(res, 500, err);
+//         })
+// }
+
+const find = async (req,res) => {
+    try {
+        // const device = await Device
+        //     .find(query, {}, {
+        //         skip,
+        //         limit
+        //     })
+        //     .populate('computerName')
+        //     .populate('deviceType')
+        //     .populate('serviceType')
+        //     .exec()
+        if (req.query.all) {
+            const device = await Service
+                .find({})
+                .populate('serviceType')
+                .exec()
+                
+            sendJsonResponse(res,200,{
+                docs: device,
+        
+            });
+
+            return;
+        }
+
+        const {page, pages, limit, skip, total} = await createPaginationQueryByAggregate(createAggregate(req.query.string), req.query)
+    
+        
+        const docs = await createAggregate(req.query.string)
+            .skip(skip)
+            .limit(limit)
+
+        sendJsonResponse(res,200,{
+            docs,
+            total,
+            pages,
+            page,
+            limit
+        });
+    }
+    catch (err) {
+        console.log(err)
+        sendJsonResponse(res,500,err);
+    }
+};
+
 
 const findById = (req, res) => {
     Service

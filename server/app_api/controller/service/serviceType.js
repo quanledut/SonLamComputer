@@ -2,17 +2,59 @@ const mongoose = require("mongoose");
 const { sendJsonResponse } = require ('../utils');
 
 const ServiceType = mongoose.model('ServiceType');
+const {createPaginationQueryByAggregate} = require('../../helpers/paginationHelper')
 
-const find = (req, res) => {
-    ServiceType
-        .find({})
-        .exec()
-        .then((serviceTypes) => {
-            sendJsonResponse(res, 200, serviceTypes);
-        }, (err) => {
-            sendJsonResponse(res, 500, err);
+const createAggregate = (stringQuery) => {
+    let aggreagte = ServiceType
+    .aggregate()
+
+
+    if (stringQuery) {
+        aggreagte = aggreagte.match({
+            $or: [
+                {
+                    'name': {
+                        $regex: stringQuery, $options:"$i"
+                    }
+                },
+            ]
         })
+    }
+    return aggreagte
 }
+
+const find = async (req,res) => {
+    try {
+        if (req.query.all) {
+            const docs = await ServiceType
+                .find({})
+                .exec()
+                
+            sendJsonResponse(res,200,docs);
+
+            return;
+        }
+
+        const {page, pages, limit, skip, total} = await createPaginationQueryByAggregate(createAggregate(req.query.string), req.query)
+    
+        
+        const docs = await createAggregate(req.query.string)
+            .skip(skip)
+            .limit(limit)
+
+        sendJsonResponse(res,200,{
+            docs,
+            total,
+            pages,
+            page,
+            limit
+        });
+    }
+    catch (err) {
+        console.log(err)
+        sendJsonResponse(res,500,err);
+    }
+};
 
 const findById = (req, res) => {
     ServiceType

@@ -1,21 +1,107 @@
 const mongoose = require('mongoose');
 const Device = mongoose.model('Device');
 const {sendJsonResponse} = require('../utils');
+const {createPaginationQueryByAggregate} = require('../../helpers/paginationHelper')
 
-const find = (req,res) => {
-    Device
-    .find({})
-    .populate('computerName')
-    .populate('deviceType')
-    .populate('serviceType')
-    .exec()
-    .then((device) => {
-        if(device) sendJsonResponse(res,200,device);
-        else sendJsonResponse(res,404,'Not foud');
-    }
-    ,(err) => {
-        sendJsonResponse(res,500,err);
+const createAggregate = (stringQuery) => {
+    let aggreagte = Device
+    .aggregate()
+    .lookup({
+        from: 'computernames',
+        localField: 'computerName',
+        foreignField: '_id',
+        as: 'computerName'
     })
+    .unwind('$computerName')
+    .lookup({
+        from: 'devicetypes',
+        localField: 'deviceType',
+        foreignField: '_id',
+        as: 'deviceType'
+    })
+    .unwind('$deviceType')
+    .lookup({
+        from: 'servicetypes',
+        localField: 'serviceType',
+        foreignField: '_id',
+        as: 'serviceType'
+    })
+    .unwind('$serviceType')
+
+
+    if (stringQuery) {
+        aggreagte = aggreagte.match({
+            $or: [
+                {
+                    'computerName.name': {
+                        $regex: stringQuery, $options:"$i"
+                    }
+                },
+                {
+                    'deviceType.name': {
+                        $regex: stringQuery, $options:"$i"
+                    }
+                },
+                {
+                    'serviceType.name': {
+                        $regex: stringQuery, $options:"$i"
+                    }
+                }
+            ]
+        })
+    }
+    return aggreagte
+}
+
+const find = async (req,res) => {
+    try {
+        // const device = await Device
+        //     .find(query, {}, {
+        //         skip,
+        //         limit
+        //     })
+        //     .populate('computerName')
+        //     .populate('deviceType')
+        //     .populate('serviceType')
+        //     .exec()
+        console.log(req.query)
+        if (req.query.all) {
+            const device = await Device
+                .find({})
+                .populate('computerName')
+                .populate('deviceType')
+                .populate('serviceType')
+                .exec()
+                
+            sendJsonResponse(res,200,{
+                docs: device,
+        
+            });
+
+            return;
+        }
+        
+    
+    
+        const {page, pages, limit, skip, total} = await createPaginationQueryByAggregate(createAggregate(req.query.string), req.query)
+    
+        
+        const device = await createAggregate(req.query.string)
+            .skip(skip)
+            .limit(limit)
+
+        sendJsonResponse(res,200,{
+            docs: device,
+            total,
+            pages,
+            page,
+            limit
+        });
+    }
+    catch (err) {
+        console.log(err)
+        sendJsonResponse(res,500,err);
+    }
 };
 
 const findById = (req,res) => {

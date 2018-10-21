@@ -32,19 +32,15 @@ export const ComputerName = connect(
         }
     }, 
     dispatch => ({
-        findAll : (cb) => {
-            dispatch(nameActions.findAllRequest(cb))
+        findAll(query, cb) {
+            dispatch(nameActions.findAllRequest(query, cb));
         }
     })
 )(ComputerNameUI);
 
 export const SearchFrom = connect(
     null,
-    dispatch => ({
-        onSearch : (keyword) => {
-            dispatch(nameActions.searchRequest(keyword));
-        }
-    })
+    null
 )(Search);
 
 export const DeleteFrom = connect(

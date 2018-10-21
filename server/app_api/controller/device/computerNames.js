@@ -1,19 +1,71 @@
 var mongoose = require('mongoose');
 var ComputerName = mongoose.model('ComputerName');
 var {sendJsonResponse} = require('../utils');
+const {createPaginationQueryByAggregate} = require('../../helpers/paginationHelper')
 
-const find = (req,res) =>{
-    ComputerName
-    .find({})
-    .populate('type')
-    .exec((err,computerNames)=>{
-        if(err) sendJsonResponse(res,500,err);
-        else{
-            if(computerNames.length == 0) sendJsonResponse(res,400,'Computer name is Empty');
-            else sendJsonResponse(res,200,computerNames);
-        }
-    });
+const createAggregate = (stringQuery) => {
+    let aggreagte = ComputerName
+    .aggregate()
+    .lookup({
+        from: 'computertypes',
+        localField: 'type',
+        foreignField: '_id',
+        as: 'type'
+    })
+    .unwind('$type')
+
+
+    if (stringQuery) {
+        aggreagte = aggreagte.match({
+            $or: [
+                {
+                    'type.name': {
+                        $regex: stringQuery, $options:"$i"
+                    }
+                },
+            ]
+        })
+    }
+    return aggreagte
 }
+
+const find = async (req,res) => {
+    try {
+        if (req.query.all) {
+            const device = await ComputerName
+                .find({})
+                .populate('type')
+                .exec()
+                
+            sendJsonResponse(res,200,{
+                docs: device,
+        
+            });
+
+            return;
+        }
+
+        const {page, pages, limit, skip, total} = await createPaginationQueryByAggregate(createAggregate(req.query.string), req.query)
+    
+        
+        const docs = await createAggregate(req.query.string)
+            .skip(skip)
+            .limit(limit)
+
+        sendJsonResponse(res,200,{
+            docs,
+            total,
+            pages,
+            page,
+            limit
+        });
+    }
+    catch (err) {
+        console.log(err)
+        sendJsonResponse(res,500,err);
+    }
+};
+
 
 const findById = (req,res) => {
     ComputerName

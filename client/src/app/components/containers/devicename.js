@@ -19,37 +19,32 @@ export const DeviceNameForm = connect(
         getById(id, cb) {
             dispatch(deviceNameActions.findByIdRequest(id, cb));
         },
-        findAllComputerName(cb){
-            dispatch(computerNameActions.findAllRequest(cb));
+        findAllComputerName(query, cb){
+            dispatch(computerNameActions.findAllRequest(query, cb));
         },
-        findAlldeviceType(cb){
-            dispatch(deviceTypeActions.findAllRequest(cb));
+        findAlldeviceType(query, cb){
+            dispatch(deviceTypeActions.findAllRequest(query, cb));
         }
     })
 )(DeviceNameFormUI);
 
 export const DeviceNames = connect(
     state => { 
-        console.log(state);
         return {
             todos: state.devices, 
             keyword: state.searchDevices 
         }
     },
     dispatch => ({
-        findAll(cb) {
-            dispatch(deviceNameActions.findAllRequest(cb));
+        findAll(query, cb) {
+            dispatch(deviceNameActions.findAllRequest(query, cb));
         }
     })
 )(DeviceNameUI);
 
 export const SearchFrom = connect(
     null,
-    dispatch => ({
-        onSearch(keyword) {
-            dispatch(deviceNameActions.searchRequest(keyword));
-        }
-    })
+    null
 )(Search);
 
 export const DeleteFrom = connect(

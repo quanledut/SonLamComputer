@@ -29,19 +29,15 @@ export const ServiceTypes = connect(
         }
     },
     dispatch => ({
-        findAll(cb) {
-            dispatch(serviceTypeActions.findAllRequest(cb));
+        findAll(query, cb) {
+            dispatch(serviceTypeActions.findAllRequest(query, cb));
         }
     })
 )(ServiceTypeUI);
 
 export const SearchFrom = connect(
     null,
-    dispatch => ({
-        onSearch(keyword) {
-            dispatch(serviceTypeActions.searchRequest(keyword));
-        }
-    })
+    null
 )(Search);
 
 export const DeleteFrom = connect(

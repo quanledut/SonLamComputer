@@ -22,26 +22,21 @@ export const DeviceTypeForm = connect(
 
 export const DeviceTypes = connect(
     state => { 
-        console.log(state);
         return {
             todos: state.deviceTypes, 
             keyword: state.searchDeviceType    
         }
     },
     dispatch => ({
-        findAll(cb) {
-            dispatch(deviceTypeActions.findAllRequest(cb));
+        findAll(query, cb) {
+            dispatch(deviceTypeActions.findAllRequest(query, cb));
         }
     })
 )(DeviceType);
 
 export const SearchFrom = connect(
     null,
-    dispatch => ({
-        onSearch(keyword) {
-            dispatch(deviceTypeActions.searchRequest(keyword));
-        }
-    })
+    null
 )(Search);
 
 export const DeleteFrom = connect(

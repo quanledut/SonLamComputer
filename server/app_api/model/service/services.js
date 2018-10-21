@@ -15,7 +15,8 @@ let serviceSchema = new mongoose.Schema({
     customer: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     date: { type: Date, default: Date.now },
     devices: [subDeviceSchema],
-    totalPrice: { type: Number, default: 0 }
+    totalPrice: { type: Number, default: 0 },
+    status: Number
 })
 
 serviceSchema.methods.calculatePrice = function() {

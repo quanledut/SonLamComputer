@@ -67,18 +67,22 @@ class DeviceNameFormUI extends Component {
                 })
             })
         }
-        this.props.findAllComputerName((computerNames, err) => {
+        this.props.findAllComputerName({
+            all: true
+        }, (computerNames, err) => {
             console.log(computerNames, err)
             if (!err) this.setState({
                 ...this.state,
-                computerNames
+                computerNames: computerNames.docs
             })
         });
-        this.props.findAlldeviceType((deviceTypes, err) => {
+        this.props.findAlldeviceType({
+            all: true
+        }, (deviceTypes, err) => {
             console.log(deviceTypes, err)
             if (!err) this.setState({
                 ...this.state,
-                deviceTypes
+                deviceTypes: deviceTypes.docs
             })
         });
     }

@@ -7,20 +7,47 @@ import "react-toastify/dist/ReactToastify.css";
 import CustomTable from '../../../utils/Table'
 
 class DeviceNameUI extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            docs: [],
+            limit: 10,
+            page: 1,
+            pages: 1,
+            total: 1
+        }
+
+        this.gotoPage = this.gotoPage.bind(this);
+        this.search = this.search.bind(this);
+    }
 
     componentDidMount(){
-        this.props.findAll((result, err) => {
-            console.log(result, err)
+        this.gotoPage(1)
+    }
+
+    search = (queryString) => {
+        this.gotoPage(1, queryString)
+    }
+
+    gotoPage = (page, queryString) => {
+        this.props.findAll({
+            string: queryString,
+            limit: 10,
+            page: page
+        }, (result, err) => {
+            this.setState({
+                ...this.state,
+                ...result
+            })
+            console.log(result)
         });
+
     }
 
     render() {
         var {keyword} = this.props;
-        var mapList = this.props.todos;
-        console.log(this.props)
-        mapList = mapList.filter((item) => {
-            return item.deviceType.name.toLowerCase().indexOf(keyword.toLowerCase()) !== -1;
-        });
+        var mapList = this.state.docs;
+
         var listItem = mapList.map((item, index) => {
             return (
                 <tr key = {index}>
@@ -60,7 +87,7 @@ class DeviceNameUI extends Component {
                                 </Link>
                                 <hr />
 
-                                <SearchFrom/>
+                                <SearchFrom onSearch={this.search}/>
                                 <hr />
                                 <CustomTable
                                     thead = {
@@ -72,6 +99,10 @@ class DeviceNameUI extends Component {
                                     }
 
                                     tbody = {listItem}
+                                    page = {this.state.page}
+                                    pages = {this.state.pages}
+                                    gotoPage = {this.gotoPage}
+
                                 />
                             </CardBody>
                         </Card>

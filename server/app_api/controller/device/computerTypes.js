@@ -1,16 +1,63 @@
 const mongoose = require('mongoose');
 const ComputerType = mongoose.model('ComputerType');
 const {sendJsonResponse} = require('../utils');
+const {createPaginationQueryByAggregate} = require('../../helpers/paginationHelper')
 
-const find = (req,res) =>{
-    ComputerType
-    .find({})
-    .exec((err,computerTypes) => {
-        if(err) sendJsonResponse(res,500,err);
-        else sendJsonResponse(res,200,computerTypes);
-        //else sendJsonResponse(res,404,'Not found');
-    })
+const createAggregate = (stringQuery) => {
+    let aggreagte = ComputerType
+    .aggregate()
+
+
+    if (stringQuery) {
+        aggreagte = aggreagte.match({
+            $or: [
+                {
+                    'name': {
+                        $regex: stringQuery, $options:"$i"
+                    }
+                },
+            ]
+        })
+    }
+    return aggreagte
 }
+
+const find = async (req,res) => {
+    try {
+        if (req.query.all) {
+            const device = await ComputerType
+                .find({})
+                .exec()
+                
+            sendJsonResponse(res,200,{
+                docs: device,
+        
+            });
+
+            return;
+        }
+
+        const {page, pages, limit, skip, total} = await createPaginationQueryByAggregate(createAggregate(req.query.string), req.query)
+    
+        
+        const docs = await createAggregate(req.query.string)
+            .skip(skip)
+            .limit(limit)
+
+        sendJsonResponse(res,200,{
+            docs,
+            total,
+            pages,
+            page,
+            limit
+        });
+    }
+    catch (err) {
+        console.log(err)
+        sendJsonResponse(res,500,err);
+    }
+};
+
 
 const findById = (req,res) =>{
     ComputerType

@@ -20,14 +20,14 @@ export const ServiceForm = connect(
         getById(id, cb) {
             dispatch(serviceActions.findByIdRequest(id, cb));
         },
-        findAlldevices(cb){
-            dispatch(deviceNameActions.findAllRequest(cb));
+        findAlldevices(query, cb){
+            dispatch(deviceNameActions.findAllRequest(query, cb));
         },
         findAllcustomer(cb){
             dispatch(userActions.findAllRequest(cb));
         },
-        findAllServiceType(cb){
-            dispatch(serviceTypeActions.findAllRequest(cb));
+        findAllServiceType(query, cb){
+            dispatch(serviceTypeActions.findAllRequest(query, cb));
         },
         findCustomerByID(id,cb){
             dispatch(userActions.findByIdRequest(id,cb));
@@ -47,19 +47,15 @@ export const Services = connect(
         }
     },
     dispatch => ({
-        findAll(cb) {
-            dispatch(serviceActions.findAllRequest(cb));
+        findAll(query, cb) {
+            dispatch(serviceActions.findAllRequest(query, cb));
         }
     })
 )(ServiceUI);
 
 export const SearchFrom = connect(
     null,
-    dispatch => ({
-        onSearch(keyword) {
-            dispatch(serviceActions.searchRequest(keyword));
-        }
-    })
+    null
 )(Search);
 
 export const DeleteFrom = connect(

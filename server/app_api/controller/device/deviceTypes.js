@@ -1,18 +1,61 @@
 const mongoose = require('mongoose');
 const DeviceType = mongoose.model('DeviceType');
 const {sendJsonResponse} = require('../utils');
+const {createPaginationQueryByAggregate} = require('../../helpers/paginationHelper')
 
-const find = (req,res) => {
-    DeviceType
-    .find({})
-    .exec()
-    .then((deviceTypes) => {
-        if(deviceTypes) sendJsonResponse(res,200,deviceTypes);
-        else sendJsonResponse(res,404,'Not foud');
+const createAggregate = (stringQuery) => {
+    let aggreagte = DeviceType
+    .aggregate()
+
+
+    if (stringQuery) {
+        aggreagte = aggreagte.match({
+            $or: [
+                {
+                    'name': {
+                        $regex: stringQuery, $options:"$i"
+                    }
+                },
+            ]
+        })
     }
-    ,(err) => {
+    return aggreagte
+}
+
+const find = async (req,res) => {
+    try {
+        if (req.query.all) {
+            const device = await DeviceType
+                .find({})
+                .exec()
+                
+            sendJsonResponse(res,200,{
+                docs: device,
+        
+            });
+
+            return;
+        }
+
+        const {page, pages, limit, skip, total} = await createPaginationQueryByAggregate(createAggregate(req.query.string), req.query)
+    
+        
+        const docs = await createAggregate(req.query.string)
+            .skip(skip)
+            .limit(limit)
+
+        sendJsonResponse(res,200,{
+            docs,
+            total,
+            pages,
+            page,
+            limit
+        });
+    }
+    catch (err) {
+        console.log(err)
         sendJsonResponse(res,500,err);
-    })
+    }
 };
 
 const findById = (req,res) => {

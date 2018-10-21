@@ -66,7 +66,7 @@ class ComputerNameFormUI extends Component {
             console.log(types, err)
             if (!err) this.setState({
                 ...this.state,
-                types
+                types: types.docs
             })
         })
     }

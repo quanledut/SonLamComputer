@@ -1,8 +1,12 @@
 import request from '../utils/request'
 
-const findAll = () => 
+const findAll = (query) => 
     request()
-        .get("/serviceTypes")
+        .get("/serviceTypes", {
+            params: {
+                ...query
+            }
+        })
         .then((response) => response.data)
         .catch((err) => {
             throw err

@@ -29,19 +29,15 @@ export const ComputerType = connect(
         }
     },
     dispatch => ({
-        findAll(cb) {
-            dispatch(computerTypeActions.findAllRequest(cb));
+        findAll(query, cb) {
+            dispatch(computerTypeActions.findAllRequest(query, cb));
         }
     })
 )(ComputerTypeUI);
 
 export const SearchFrom = connect(
     null,
-    dispatch => ({
-        onSearch(keyword) {
-            dispatch(computerTypeActions.searchRequest(keyword));
-        }
-    })
+    null
 )(Search);
 
 export const DeleteFrom = connect(

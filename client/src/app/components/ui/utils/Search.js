@@ -17,6 +17,7 @@ class Search extends Component {
     onSearch = () =>{
         this.props.onSearch(this.state.keyword);
     }
+    
     render() {
         return (
             <div className="input-group col-xs-6 col-sm-6 col-md-6 col-lg-6" style={{ paddingLeft: 0 }}>

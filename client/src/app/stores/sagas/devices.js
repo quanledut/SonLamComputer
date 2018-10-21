@@ -7,7 +7,8 @@ export function * findAll() {
     while(true) {
         const request = yield take(Actions.CONSTANTS.FIND_ALL_REQUEST)
         try {
-            let result = yield call(Api.findAll)
+            console.log(request)
+            let result = yield call(Api.findAll, request.query)
             request.cb(result, null)
             yield put(Actions.findALlSuccess(result))
         } catch(err) {

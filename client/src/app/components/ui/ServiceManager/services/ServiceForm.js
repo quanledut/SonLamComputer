@@ -76,18 +76,20 @@ class ServiceFormUI extends Component {
                 })
             })
         }
-        this.props.findAlldevices((devices, err) => {
-            console.log(devices, err)
+        this.props.findAlldevices({
+            all: true
+        }, (devices, err) => {
+            console.log("devices: ", devices.docs, err)
             if (!err) this.setState({
                 ...this.state,
-                devices
+                devices: devices.docs
             })
         });
         this.props.findAllServiceType((serviceTypes, err) => {
-            console.log(serviceTypes, err)
+            console.log("serviceTypes: ", serviceTypes.docs, err)
             if (!err) this.setState({
                 ...this.state,
-                serviceTypes
+                serviceTypes: serviceTypes.docs
             })
         });
         this.props.findAllcustomer((customers, err) => {
@@ -285,7 +287,7 @@ class ServiceFormUI extends Component {
     {
         event.preventDefault()
         this.props.findDeviceByID(id,(_devices, err) => {
-            console.log(_devices)
+            console.log("Devices: ", _devices)
             if (!err) this.setState({
                 form: {
                     ...this.state.form,

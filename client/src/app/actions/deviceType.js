@@ -33,8 +33,10 @@ export const CONSTANTS = {
     SEARCH_REQUEST,
 }
 
-export function findAllRequest(cb) {
-    return {type: CONSTANTS.FIND_ALL_REQUEST, cb}
+
+export function findAllRequest(query, cb) {
+    if (cb) return {type: CONSTANTS.FIND_ALL_REQUEST, query, cb}
+    else return {type: CONSTANTS.FIND_ALL_REQUEST, cb: query}
 }
 
 export function findALlSuccess(data) {
