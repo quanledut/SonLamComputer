@@ -57,7 +57,7 @@ class CustomTable extends React.Component {
                                         }
                                         {
                                             [this.state.page - 3, this.state.page - 2, this.state.page - 1].map((e, id) => {
-                                                if (id == 0 && e > 0) return <PaginationItem key={id}><PaginationLink>...</PaginationLink></PaginationItem>
+                                                if (id === 0 && e > 0) return <PaginationItem key={id}><PaginationLink>...</PaginationLink></PaginationItem>
                                                 if (e > 0) return <PaginationItem onClick={() => this.gotoPage(e)} key={id}><PaginationLink tag="button">{e}</PaginationLink></PaginationItem>
                                             })
                                         }
@@ -66,7 +66,7 @@ class CustomTable extends React.Component {
                                         </PaginationItem>
                                         {
                                             [this.state.page + 1, this.state.page + 2, this.state.page + 3].filter(e => e <= this.state.pages).map((e, id) => {
-                                                if (id == 2 && e < this.state.pages) return <PaginationItem key={id}><PaginationLink>...</PaginationLink></PaginationItem>
+                                                if (id === 2 && e < this.state.pages) return <PaginationItem key={id}><PaginationLink>...</PaginationLink></PaginationItem>
                                                 return <PaginationItem onClick={() => this.gotoPage(e)} key={id}><PaginationLink tag="button">{e}</PaginationLink></PaginationItem>
                                             })
                                         }

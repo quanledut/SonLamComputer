@@ -6,12 +6,42 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import CustomTable from '../utils/Table'
 
-class ServiceUI extends Component {
+class PaymentUI extends Component {
+
+    constructor(props) {
+        super(props)
+        this.state = {
+            docs: [],
+            limit: 10,
+            page: 1,
+            pages: 1,
+            total: 1
+        }
+
+        this.gotoPage = this.gotoPage.bind(this);
+        this.search = this.search.bind(this);
+    }
 
     componentDidMount(){
-        this.props.findAll((result, err) => {
-            console.log(result, err)
+        this.gotoPage(1)
+    }
+
+    search = (queryString) => {
+        this.gotoPage(1, queryString)
+    }
+
+    gotoPage = (page, queryString) => {
+        this.props.findAll({
+            string: queryString,
+            limit: 10,
+            page: page
+        }, (result, err) => {
+            this.setState({
+                ...this.state,
+                ...result
+            })
         });
+
     }
 
     render() {
@@ -70,6 +100,9 @@ class ServiceUI extends Component {
                                     }
 
                                     tbody = {listItem}
+                                    page = {this.state.page}
+                                    pages = {this.state.pages}
+                                    gotoPage = {this.gotoPage}
                                 />
                             </CardBody>
                         </Card>
@@ -81,4 +114,4 @@ class ServiceUI extends Component {
     }
 }
 
-export default ServiceUI
+export default PaymentUI

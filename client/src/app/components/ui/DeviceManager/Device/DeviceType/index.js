@@ -39,6 +39,7 @@ class DeviceType extends Component {
                 ...this.state,
                 ...result
             })
+            console.log(result)
         });
 
     }

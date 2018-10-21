@@ -26,8 +26,8 @@ export const Payments = connect(
         }
     },
     dispatch => ({
-        findAll(cb) {
-            dispatch(actions.findAllRequest(cb));
+        findAll(query ,cb) {
+            dispatch(actions.findAllRequest(query, cb));
         }
     })
 )(PaymentUI);
