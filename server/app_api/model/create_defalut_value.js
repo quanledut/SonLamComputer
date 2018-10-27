@@ -12,8 +12,8 @@ const ServiceType = mongoose.model('ServiceType');
 const DATA = {
     DeviceType: [
         "Laptop",
-        "Bàn Phím",
         "Chuột",
+        "Bàn Phím",
         "Tai Nghe",
         "Pin",
         "Màn Hình",

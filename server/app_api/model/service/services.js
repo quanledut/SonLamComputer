@@ -1,4 +1,8 @@
 const mongoose = require('mongoose')
+const DEFAUT_STATUS = {
+    NEW: 0,
+    PAY: 1
+}
 
 let subDeviceSchema = new mongoose.Schema({
     computerName: String,
@@ -16,7 +20,7 @@ let serviceSchema = new mongoose.Schema({
     date: { type: Date, default: Date.now },
     devices: [subDeviceSchema],
     totalPrice: { type: Number, default: 0 },
-    status: Number
+    status: { type: Number, default: DEFAUT_STATUS.NEW }
 })
 
 serviceSchema.methods.calculatePrice = function() {
