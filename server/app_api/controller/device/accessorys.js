@@ -15,11 +15,11 @@ const createAggregate = (stringQuery) => {
     .unwind('$computerName')
     .lookup({
         from: 'accessorytypes',
-        localField: 'accessoryType',
+        localField: 'type',
         foreignField: '_id',
-        as: 'accessoryType'
+        as: 'type'
     })
-    .unwind('$accessoryType')
+    .unwind('$type')
 
 
     if (stringQuery) {
@@ -31,7 +31,7 @@ const createAggregate = (stringQuery) => {
                     }
                 },
                 {
-                    'accessoryType.name': {
+                    'type.name': {
                         $regex: stringQuery, $options:"$i"
                     }
                 },

@@ -13,6 +13,9 @@ import {ServiceTypeForm, ServiceTypes} from './components/containers/servicetype
 import {DeviceNameForm, DeviceNames} from './components/containers/devicename'
 import {ServiceForm, Services} from './components/containers/services'
 import {PaymentForm, Payments} from './components/containers/payments'
+import {AccessoryTypeForm, AccessoryTypes} from './components/containers/accessorytype'
+import {AccessoryNameForm, AccessoryNames} from './components/containers/accessoryname'
+
 
 function Loading() {
   return <div>Loading...</div>;
@@ -41,6 +44,11 @@ const routes = [
   { path: '/devices/deviceType/new', exact: true, name: 'New Device Type', component: DeviceTypeForm },
   { path: '/devices/deviceType/:id/edit', exact: true, name: 'Edit Device Type', component: DeviceTypeForm },
 
+  { path: '/devices/accessoryType', exact: true, name: 'Accessory Type', component: AccessoryTypes },
+  { path: '/devices/accessoryType/new', exact: true, name: 'New Accessory Type', component: AccessoryTypeForm },
+  { path: '/devices/accessoryType/:id/edit', exact: true, name: 'Edit Accessory Type', component: AccessoryTypeForm },
+
+
   { path: '/devices/computerType', exact: true, name: 'Computer Type', component: ComputerType },
   { path: '/devices/computerType/new', exact: true, name: 'New Computer Type', component: ComputerTypeForm },
   { path: '/devices/computerType/:id/edit', exact: true, name: 'Edit Computer Type', component: ComputerTypeForm },
@@ -56,6 +64,11 @@ const routes = [
   { path: '/devices/device', exact: true, name: 'Device', component: DeviceNames },
   { path: '/devices/device/new', exact: true, name: 'New Device', component: DeviceNameForm },
   { path: '/devices/device/:id/edit', exact: true, name: 'Edit Device', component: DeviceNameForm },
+
+  { path: '/devices/accessory', exact: true, name: 'Accessory', component: AccessoryNames },
+  { path: '/devices/accessory/new', exact: true, name: 'New Accessory', component: AccessoryNameForm },
+  { path: '/devices/accessory/:id/edit', exact: true, name: 'Edit Accessory', component: AccessoryNameForm },
+
 
   { path: '/services/service', exact: true, name: 'Service', component: Services },
   { path: '/services/service/new', exact: true, name: 'New Service', component: ServiceForm },

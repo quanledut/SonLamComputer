@@ -17,6 +17,13 @@ const DATA = {
     ServiceType: ["Sữa chữa", "Thay Thế", "Mua Bán"]
 }
 
+const FAKE_IMAGE_NAME = {
+    "Bàn Phím": "keyboard",
+    "Màn Hình": "monitor",
+    "Pin": "battery",
+
+}
+
 const createRegexComputerName = (computerType) => {
     const numWords = computerType.split(" ").length;
     const base = "[^\\s]+"
@@ -187,6 +194,11 @@ const create_policy = async (roleId, collectionName, isRoot) => {
 }
 
 const create_other_data = async (data) => {
+    let count = await Device.count({})
+    console.log(count)
+
+    if (count) return;
+
     const accessoryData = {
         "Bàn Phím": [],
         "Màn Hình": [],
@@ -283,7 +295,7 @@ const _createDevice = async (data, deviceTypes) => {
                 name: deviceData.name,
                 type: deviceTypeId,
                 description: deviceData.spec,
-                image_url: deviceData.images[0].path.replace("full", "files/images"),
+                image_url: deviceData.images[0].path.replace("full", "/images"),
                 amount: 100,
                 price: deviceData.price,
                 guaranteeDuration: 0
@@ -300,7 +312,7 @@ const _createAccessory = async (data, computerName, accessoryType) => {
                 computerName: computerName[i]._id,
                 type: accessoryTypeId,
                 description: "",
-                image_url: "files/images/accessory_" + type + ".jpg",
+                image_url: "files/images/accessory_" + FAKE_IMAGE_NAME[type] + ".jpg",
                 amount: 100,
                 price: 0,
                 guaranteeDuration: 0

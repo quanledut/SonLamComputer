@@ -8,17 +8,17 @@ const createAggregate = (stringQuery) => {
     .aggregate()
     .lookup({
         from: 'devicetypes',
-        localField: 'deviceType',
+        localField: 'type',
         foreignField: '_id',
-        as: 'deviceType'
+        as: 'type'
     })
-    .unwind('$deviceType')
+    .unwind('$type')
 
     if (stringQuery) {
         aggreagte = aggreagte.match({
             $or: [
                 {
-                    'deviceType.name': {
+                    'type.name': {
                         $regex: stringQuery, $options:"$i"
                     }
                 },

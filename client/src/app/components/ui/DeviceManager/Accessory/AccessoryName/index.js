@@ -54,7 +54,8 @@ class AccessoryNameUI extends Component {
             return (
                 <tr key = {index}>
                     <td>{item.computerName.name}</td>
-                    <td>{item.accessoryType.name}</td>
+                    <td>{item.type.name}</td>
+                    <td>{item.amount}</td>
                     <td>
                         <div className="btn-group">
                             <Link 
@@ -64,7 +65,7 @@ class AccessoryNameUI extends Component {
                                 <i className="fa fa-edit"> Sửa </i>
                             </Link>
                             <DeleteFrom 
-                                name={item.accessoryType.name} 
+                                name={item.type.name} 
                                 id={item._id}
                             />
                         </div>
@@ -96,6 +97,7 @@ class AccessoryNameUI extends Component {
                                         <tr>
                                             <th>Tên máy tính</th>
                                             <th>Loại thiết bị</th>
+                                            <th>Số lượng</th>
                                             <th style={{ width: '20%' }}>Hành động</th>
                                         </tr>
                                     }

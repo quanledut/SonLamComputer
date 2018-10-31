@@ -53,8 +53,11 @@ class DeviceNameUI extends Component {
         var listItem = mapList.map((item, index) => {
             return (
                 <tr key = {index}>
-                    <td>{item.computerName.name}</td>
-                    <td>{item.deviceType.name}</td>
+                    <td>{item.name}</td>
+                    <td>{item.type.name}</td>
+                    <td>{item.amount}</td>
+                    <td>{item.price}</td>
+                    <td>{item.guaranteeDuration}</td>
                     <td>
                         <div className="btn-group">
                             <Link 
@@ -64,7 +67,7 @@ class DeviceNameUI extends Component {
                                 <i className="fa fa-edit"> Sửa </i>
                             </Link>
                             <DeleteFrom 
-                                name={item.deviceType.name} 
+                                name={item.type.name} 
                                 id={item._id}
                             />
                         </div>
@@ -94,8 +97,11 @@ class DeviceNameUI extends Component {
                                 <CustomTable
                                     thead = {
                                         <tr>
-                                            <th>Tên máy tính</th>
+                                            <th>Tên thiết bị</th>
                                             <th>Loại thiết bị</th>
+                                            <th>Số lượng</th>
+                                            <th>Giá</th>
+                                            <th>Thời hạn bảo hành</th>
                                             <th style={{ width: '20%' }}>Hành động</th>
                                         </tr>
                                     }

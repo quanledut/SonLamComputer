@@ -19,6 +19,7 @@ app.disable('etag');
 
 // view engine setup
 
+app.use(express.static('files'))
 app.use(favicon());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -28,7 +29,6 @@ app.use('/api', apiRouter);
 
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {
-    console.log(req.url)
     const err = new Error('Not Found');
     err.status = 404;
     next(err);

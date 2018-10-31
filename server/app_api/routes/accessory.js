@@ -6,8 +6,8 @@ const auth = jwt({
 });
 const permission = require('../controller/permission');
 const checkPermissionForCollection = permission.checkPermissionForCollection;
-const ctrAccessoryType = require('../controller/accessory/accessoryTypes')
-const ctrlAccessory = require('../controller/accessory/accessorys')
+const ctrAccessoryType = require('../controller/device/accessoryTypes')
+const ctrlAccessory = require('../controller/device/accessorys')
 const route_accessory = (router) => {
     const checkPermissionForAccessoryType = checkPermissionForCollection('AccessoryType');
 

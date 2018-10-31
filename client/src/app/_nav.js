@@ -58,6 +58,16 @@ export default {
           url: '/devices/deviceType',
           icon: 'icon-star',
         },
+        {
+          name: 'Linh Kiện',
+          url: '/devices/accessory',
+          icon: 'fa fa-microchip',
+        },
+        {
+          name: 'Loại Linh Kiện',
+          url: '/devices/accessoryType',
+          icon: 'icon-star',
+        },
       ],
     },
     //-----------------------------------------------------
