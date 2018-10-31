@@ -4,16 +4,16 @@ import { API_URL } from "../config";
 export const request = (
   opts = {},
 ) => {
-
-    let token = localStorage.getItem("token")
+    console.log("Api: ", API_URL)
+    // let token = localStorage.getItem("token")
     let headers = {
         ...opts
     }
 
-    if (token) headers = {
-        ...headers, 
-        Authorization: `Bearer ${token}`
-    }
+    // if (token) headers = {
+    //     ...headers, 
+    //     Authorization: `Bearer ${token}`
+    // }
 
     const defaultOptions = {
         headers,
@@ -24,6 +24,9 @@ export const request = (
     | Custom axios api
     |--------------------------------------------------
     */
+
+    console.log(defaultOptions)
+    
     const axiosApi = axios.create({
         baseURL: API_URL,
         ...defaultOptions,

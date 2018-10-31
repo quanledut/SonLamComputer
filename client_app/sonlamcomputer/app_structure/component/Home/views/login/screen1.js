@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, ImageBackground, Dimensions, Alert } from 'react-native';
+import { StyleSheet, Text, View, ImageBackground, Dimensions } from 'react-native';
 import { Input, Button } from 'react-native-elements'
-import { connect } from 'react-redux'
-import * as AuthAction from '../../actions/auth'
 
-// import { Font } from 'expo';
+
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -12,14 +10,14 @@ const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 const BG_IMAGE = require('../../../assets/images/bg_screen1.jpg');
 
-class LoginScreen1 extends Component {
+export default class LoginScreen1 extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       fontLoaded: false,
-      username: '',
-      username_valid: true,
+      email: '',
+      email_valid: true,
       password: '',
       login_failed: false,
       showLoading: false
@@ -27,21 +25,20 @@ class LoginScreen1 extends Component {
   }
 
   async componentDidMount() {
-    // await Font.loadAsync({
-    //   'georgia': require('../../../assets/fonts/Georgia.ttf'),
-    //   'regular': require('../../../assets/fonts/Montserrat-Regular.ttf'),
-    //   'light': require('../../../assets/fonts/Montserrat-Light.ttf'),
-    //   'bold': require('../../../assets/fonts/Montserrat-Bold.ttf'),
-    // });
+    await Font.loadAsync({
+      'georgia': require('../../../assets/fonts/Georgia.ttf'),
+      'regular': require('../../../assets/fonts/Montserrat-Regular.ttf'),
+      'light': require('../../../assets/fonts/Montserrat-Light.ttf'),
+      'bold': require('../../../assets/fonts/Montserrat-Bold.ttf'),
+    });
 
     this.setState({ fontLoaded: true });
   }
 
-  validateUsername(username) {
-    // var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  validateEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-    // return re.test(username);
-    return true
+    return re.test(email);
   }
 
   submitLoginCredentials() {
@@ -50,31 +47,11 @@ class LoginScreen1 extends Component {
     this.setState({
       showLoading: !showLoading
     });
-
-    this.props.login({
-      username: this.state.username,
-      password: this.state.password
-    }, (result, err) => {
-      console.log(result, err);
-      this.setState({
-        showLoading: false
-      });
-  
-      if (result) {
-        Alert.alert(
-          'Success'
-        )
-      } else {
-        Alert.alert(
-          'Failure'
-        )
-      }
-      
-    })
   }
 
   render() {
-    const { username, password, username_valid, showLoading } = this.state;
+    const { email, password, email_valid, showLoading } = this.state;
+
     return (
       <View style={styles.container}>
         <ImageBackground
@@ -85,11 +62,11 @@ class LoginScreen1 extends Component {
           <View style={styles.loginView}>
             <View style={styles.loginTitle}>
               <View style={{flexDirection: 'row'}}>
-                <Text style={styles.travelText}>Sonlam</Text>
+                <Text style={styles.travelText}>TRAVEL</Text>
                 <Text style={styles.plusText}>+</Text>
               </View>
               <View style={{marginTop: -10}}>
-                <Text style={styles.travelText}>Computer</Text>
+                <Text style={styles.travelText}>LEISURE</Text>
               </View>
             </View>
             <View style={styles.loginInput}>
@@ -102,25 +79,25 @@ class LoginScreen1 extends Component {
                   />
                 }
                 containerStyle={{marginVertical: 10}}
-                onChangeText={username => this.setState({username})}
-                value={username}
+                onChangeText={email => this.setState({email})}
+                value={email}
                 inputStyle={{marginLeft: 10, color: 'white'}}
                 keyboardAppearance="light"
-                placeholder="Username"
+                placeholder="Email"
                 autoFocus={false}
                 autoCapitalize="none"
                 autoCorrect={false}
-                keyboardType="default"
+                keyboardType="email-address"
                 returnKeyType="next"
-                ref={ input => this.usernameInput = input }
+                ref={ input => this.emailInput = input }
                 onSubmitEditing={() => {
-                  this.setState({username_valid: this.validateUsername(username)});
+                  this.setState({email_valid: this.validateEmail(email)});
                   this.passwordInput.focus();
                 }}
                 blurOnSubmit={false}
                 placeholderTextColor="white"
                 errorStyle={{textAlign: 'center', fontSize: 12}}
-                errorMessage={username_valid ? null : "Please enter a valid username"}
+                errorMessage={email_valid ? null : "Please enter a valid email address"}
               />
               <Input
                 leftIcon={
@@ -153,7 +130,7 @@ class LoginScreen1 extends Component {
               onPress={this.submitLoginCredentials.bind(this)}
               loading={showLoading}
               loadingProps={{size: 'small', color: 'white'}}
-              disabled={ !username_valid && password.length < 8}
+              disabled={ !email_valid && password.length < 8}
               buttonStyle={{height: 50, width: 250, backgroundColor: 'transparent', borderWidth: 2, borderColor: 'white', borderRadius: 30}}
               containerStyle={{marginVertical: 10}}
               titleStyle={{fontWeight: 'bold', color: 'white'}}
@@ -226,13 +203,3 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   }
 });
-
-const mapDispatchToProps = (dispatch) => {
-    return ({
-        login: (user, cb) => {
-            dispatch(AuthAction.loginRequest(user, cb))
-        }
-    })
-}
-
-export default connect(null, mapDispatchToProps)(LoginScreen1)

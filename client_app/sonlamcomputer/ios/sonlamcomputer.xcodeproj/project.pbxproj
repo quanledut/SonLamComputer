@@ -83,6 +83,9 @@
 		E5D7EC236F964AC1BA2072F7 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E4E6D341CDE04473A7B8F594 /* Octicons.ttf */; };
 		416E046167AB40C18AE834D8 /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FD41302FDA134194AEEA82AB /* SimpleLineIcons.ttf */; };
 		D52156E0CFCE49A2B9721A5B /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C4762145981E4E3BBE30EAC8 /* Zocial.ttf */; };
+		7EF04213B41A4FE5B1C7DB01 /* logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A672AB3B09144158BDC710B1 /* logo.jpg */; };
+		635E4996C45540EE8AE523F3 /* logo (another copy).png in Resources */ = {isa = PBXBuildFile; fileRef = 3EF44BCA66B6440E9EAE6499 /* logo (another copy).png */; };
+		43065E62B12B4E3A855968E3 /* logo (copy).png in Resources */ = {isa = PBXBuildFile; fileRef = BDDD26D4BBDB41339B4D8DE8 /* logo (copy).png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -435,6 +438,9 @@
 		E4E6D341CDE04473A7B8F594 /* Octicons.ttf */ = {isa = PBXFileReference; name = "Octicons.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		FD41302FDA134194AEEA82AB /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; name = "SimpleLineIcons.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		C4762145981E4E3BBE30EAC8 /* Zocial.ttf */ = {isa = PBXFileReference; name = "Zocial.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		A672AB3B09144158BDC710B1 /* logo.jpg */ = {isa = PBXFileReference; name = "logo.jpg"; path = "../assets/images/logo.jpg"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		3EF44BCA66B6440E9EAE6499 /* logo (another copy).png */ = {isa = PBXFileReference; name = "logo (another copy).png"; path = "../assets/images/logo (another copy).png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		BDDD26D4BBDB41339B4D8DE8 /* logo (copy).png */ = {isa = PBXFileReference; name = "logo (copy).png"; path = "../assets/images/logo (copy).png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -746,6 +752,9 @@
 				E4E6D341CDE04473A7B8F594 /* Octicons.ttf */,
 				FD41302FDA134194AEEA82AB /* SimpleLineIcons.ttf */,
 				C4762145981E4E3BBE30EAC8 /* Zocial.ttf */,
+				A672AB3B09144158BDC710B1 /* logo.jpg */,
+				3EF44BCA66B6440E9EAE6499 /* logo (another copy).png */,
+				BDDD26D4BBDB41339B4D8DE8 /* logo (copy).png */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1241,6 +1250,9 @@
 				E5D7EC236F964AC1BA2072F7 /* Octicons.ttf in Resources */,
 				416E046167AB40C18AE834D8 /* SimpleLineIcons.ttf in Resources */,
 				D52156E0CFCE49A2B9721A5B /* Zocial.ttf in Resources */,
+				7EF04213B41A4FE5B1C7DB01 /* logo.jpg in Resources */,
+				635E4996C45540EE8AE523F3 /* logo (another copy).png in Resources */,
+				43065E62B12B4E3A855968E3 /* logo (copy).png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -31,5 +31,5 @@ export function registerRequest(data, cb) {
 }
 
 export function isLoggedIn() {
-    return localStorage.getItem('token') != null
+    return false
 }

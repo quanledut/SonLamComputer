@@ -15,6 +15,8 @@ export function * loginFlow() {
         console.log(request)
         const {username, password} = request.data
         try {
+            console.log(username, password);
+
             let result = yield call(loginApi, username, password)
             request.cb(result, null)
             yield put(loginRequestSuccess(result))
