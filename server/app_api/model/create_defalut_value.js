@@ -1,99 +1,88 @@
 const mongoose = require( 'mongoose' );
+const fs = require('fs');
+const path = require('path');
 
 const User = mongoose.model('User');
 const Role = mongoose.model('Role');
 const Policy = mongoose.model('Policy');
 const DeviceType = mongoose.model('DeviceType');
 const Device = mongoose.model('Device');
+const AccessoryType = mongoose.model('AccessoryType');
+const Accessory = mongoose.model('Accessory');
 const ComputerType = mongoose.model('ComputerType');
 const ComputerName = mongoose.model('ComputerName');
 const ServiceType = mongoose.model('ServiceType');
 
 const DATA = {
-    DeviceType: [
-        "Laptop",
-        "Chuột",
-        "Bàn Phím",
-        "Tai Nghe",
-        "Pin",
-        "Màn Hình",
-    ],
-    ServiceType: [
-        "Sữa Chữa",
-        "Thay Thế"
-    ],
-    ComputerType: [
-        "Dell",
-        "HP",
-        "Asus",
-        "Acer",
-        "Lenovo",
-        "Macbook"
-    ],
-    ComputerName: {
-        Dell: [
-            "Dell Inpiration 3365",
-            "Dell Inpiration 3567",
-            "Dell Inpiration 5570",
-            "Dell Inpiration 5370",
-            "Dell Inpiration 7373",
-            "Dell Inpiration 3565",
-            "Dell Inpiration 5567",
-            "Dell Inpiration 7759",
-            "Dell Vostro 3758",
-            "Dell Vostro 3468",
-            "Dell Vostro 3568",
-        ],
-        HP: [
-            "HP Pavilion 15",
-            "HP Pavilion x360",
-            "HP 14",
-            "HP 15",
-            "HP Envy 13",
-            "HP Envy 17",
-            "HP Envy x360",
-            "HP Spectre x2",
-            "HP Spectre",
-            "HP Spectre Folio 13",
-            "HP Probook 450 G1",
-            "HP Probook 450 G2",
-            "HP EliteBook 1040",
-            "HP EliteBook 840"
-        ],
-        Asus: [
-            "Asus ROG Strix GL503",
-            "Asus VivoBook Max",
-            "Asus VivoBook",
-            "Asus VivoBook S15",
-            "Asus TUF Gaming",
-            "Asus ROG GL553VD",
-            "Asus VivoBook 15",
-            "Asus VivoBook 14",
-        ],
-        Acer: [
-            "Acer Aspire ES1",
-            "Acer Nitro 5",
-            "Acer Aspire 5",
-            "Acer Predator Helios",
-        ],
-        Lenovo: [
-            "Lenovo Ideapad 320",
-            "Lenovo Ideapad 120s",
-            "Lenovo Thinkpad X1 Carbon",
-            "Lenovo Yoga 300"
-        ],
-        Macbook: [
-            "Macbook Air 2016",
-            "Macbook Air 2015",
-            "Macbook Air 2017",
-            "Macbook Pro 2016",
-            "Macbook Pro 2015",
-            "Macbook Pro 2017",
-            "Macbook 12",
-            "Macbook 2017",
-            "Macbook 2016"
-        ]
+    ServiceType: ["Sữa chữa", "Thay Thế", "Mua Bán"]
+}
+
+const createRegexComputerName = (computerType) => {
+    const numWords = computerType.split(" ").length;
+    const base = "[^\\s]+"
+    let result = "" + base;
+    for (let i = 1; i < numWords + 2; i++) {
+        result += "\\s+"
+        result += base;
     }
+    return result;
+}
+
+const read_json = () => {
+    const dir = fs.readdirSync(path.resolve('default_data'));
+    const data = {}
+    for (let i = 0; i < dir.length; i++) {
+        let content = fs.readFileSync(path.resolve('default_data', dir[i]), {
+            encoding: 'utf-8'
+        })
+        content = JSON.parse(content);
+
+        const type = dir[i].split('.')[0];
+        // console.log(type, content)
+        switch (type) {
+            case 'hdd': 
+                data['HDD'] = content;
+                break;
+            case 'mouse': 
+                data['Chuột'] = content;
+                break;
+            case 'keyboard':
+                data['Bàn Phím'] = content;
+                break;
+            case 'ssd':
+                data['SSD'] = content
+                break;
+            case 'laps':
+                const lapTypes = {};
+
+                for (let i = 0; i < content.length; i++) {
+                    const lap = content[i]
+                    let lapName = new RegExp(createRegexComputerName(lap.lap_type)).exec(lap.name)
+                    if (lapName == null) continue
+
+                    lapName = lapName[0]
+                        .replace(/\s+/g, " ")
+                        .replace(/\s*[-(].*/g, "").toUpperCase()
+                    // console.log(lapName)
+                    if (!lapTypes.hasOwnProperty(lap.lap_type)) {
+                        lapTypes[lap.lap_type] = {};
+                    }
+
+                    if (!lapTypes[lap.lap_type].hasOwnProperty(lapName)) {
+                        lapTypes[lap.lap_type][lapName] = []
+                    }
+
+                    lapTypes[lap.lap_type][lapName].push(content)
+                    // console.log(lapName)
+                }
+
+                data["LapTop"] = lapTypes;
+
+                break;
+        }
+    }
+
+    return data;
 }
 
 const create_data = async () => {
@@ -197,26 +186,30 @@ const create_policy = async (roleId, collectionName, isRoot) => {
 
 }
 
-const create_other_data = async () => {
-    let devices = await Device.find({})
-    console.log(devices.length)
-    if (devices.length > 0) return
+const create_other_data = async (data) => {
+    const accessoryData = {
+        "Bàn Phím": [],
+        "Màn Hình": [],
+        "Pin": [],
+    }
 
     await DeviceType.remove({})
     await Device.remove({})
     await ComputerType.remove({})
     await ComputerName.remove({})
     await ServiceType.remove({})
+    await Accessory.remove({})
+    await AccessoryType.remove({})
 
-    let computers = await _createComputer()
-    let deviceTypes = await _createDeviceType()
-    let serviceTypes = await _createServiceType() 
+    let computers = await _createComputer(data)
+    let deviceTypes = await _createDeviceType(data)
+    let serviceTypes = await _createServiceType(data)
+    let accessoryType = await _createAccessoryType(accessoryData)
+    
+    await _createDevice(data,deviceTypes);
+    await _createAccessory(accessoryData, computers, accessoryType)
 
-    return await _createDevice(
-        computers,
-        deviceTypes,
-        serviceTypes
-    )
+    return 
 }
 
 const _createServiceType = async () => {
@@ -233,13 +226,13 @@ const _createServiceType = async () => {
     return serviceTypes
 }
 
-const _createDeviceType = async () => {
+const _createDeviceType = async (data) => {
     let deviceTypes = [];
 
-    for (let i = 0; i < DATA.DeviceType.length; i++) {
+    for (let type in data) {
         const result = await DeviceType.create({
-            name: DATA.DeviceType[i]
-        })
+            name: type
+        });
         deviceTypes.push(result)
     }
     
@@ -247,55 +240,85 @@ const _createDeviceType = async () => {
 
 }
 
-const _createComputer = async () => {
+const _createAccessoryType = async (data) => {
+    let accessoryTypes = [];
+
+    for (let type in data) {
+        const result = await AccessoryType.create({
+            name: type
+        });
+        accessoryTypes.push(result)
+    }
+    
+    return accessoryTypes
+
+}
+
+const _createComputer = async (data) => {
     let computers = []
-
-    for (let i = 0; i < DATA.ComputerType.length; i++) {
-        let computerType = DATA.ComputerType[i];
+    let computerTypes = data['LapTop'];
+    for (let type in computerTypes) {
         const t = await ComputerType.create({
-            name: computerType
-        })
+            name: type
+        });
 
-        let computerNames = DATA.ComputerName[computerType]
-
-        for (let j = 0; j < computerNames.length; j++) {
-            let computerName = computerNames[j]
-
-            let result = await ComputerName.create({
+        for (let name in computerTypes[type]) {
+            const computerName = await ComputerName.create({
                 type: t._id,
-                name: computerName
+                name: name
+            });
+            computers.push(computerName)
+        }
+    }
+
+    return computers;
+}
+
+const _createDevice = async (data, deviceTypes) => {
+    for (let type in data) {
+        const deviceTypeId = deviceTypes.filter(i => i.name == type)[0].id
+        for (let i = 0; i < data[type].length; i++) {
+            const deviceData = data[type][i];
+            await Device.create({
+                name: deviceData.name,
+                type: deviceTypeId,
+                description: deviceData.spec,
+                image_url: deviceData.images[0].path.replace("full", "files/images"),
+                amount: 100,
+                price: deviceData.price,
+                guaranteeDuration: 0
             })
-
-            computers.push(result)
-        }
-
-    }
-
-    return computers
-}
-
-const _createDevice = async (computers, deviceTypes, serviceTypes ) => {
-    for (let i = 0; i < serviceTypes.length; i++) {
-        let serviceType = serviceTypes[i]
-        for (let j = 0; j < computers.length; j++) {
-            let computer = computers[j]
-            for (let e = 0; e < deviceTypes.length; e++) {
-                let deviceType = deviceTypes[e]
-                if (serviceType.name == "Thay Thế" && deviceType == "Máy Tính") continnue
-                Device.create({
-                    computerName: computer._id,
-                    deviceType: deviceType._id,
-                    serviceType: serviceType._id,
-                    amount: 100,
-                    price: 0,
-                    guaranteeDuration: 30
-                })
-            }
         }
     }
 }
+
+const _createAccessory = async (data, computerName, accessoryType) => {
+    for (let type in data) {
+        const accessoryTypeId = accessoryType.filter(i => i.name == type)[0].id
+        for (let i = 0; i < computerName.length; i++) {
+            await Accessory.create({
+                computerName: computerName[i]._id,
+                type: accessoryTypeId,
+                description: "",
+                image_url: "files/images/accessory_" + type + ".jpg",
+                amount: 100,
+                price: 0,
+                guaranteeDuration: 0
+            })
+        }
+    }
+
+}
+
+// create_data();
+// create_other_data()
+//     .then(() => console.log("done"))
+//     .catch((err) => console.log(err))
+
+const data = read_json()
 
 create_data();
-create_other_data()
+create_other_data(data)
     .then(() => console.log("done"))
     .catch((err) => console.log(err))
+

@@ -70,6 +70,8 @@ require("./device/computerNames")
 require("./device/deviceTypes")
 require("./device/devices")
 require("./device/storageHistories")
+require("./device/accessoriesTypes")
+require("./device/accessories")
 
 require("./service/serviceTypes")
 require("./service/services")

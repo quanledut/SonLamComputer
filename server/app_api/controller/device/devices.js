@@ -7,43 +7,23 @@ const createAggregate = (stringQuery) => {
     let aggreagte = Device
     .aggregate()
     .lookup({
-        from: 'computernames',
-        localField: 'computerName',
-        foreignField: '_id',
-        as: 'computerName'
-    })
-    .unwind('$computerName')
-    .lookup({
         from: 'devicetypes',
         localField: 'deviceType',
         foreignField: '_id',
         as: 'deviceType'
     })
     .unwind('$deviceType')
-    .lookup({
-        from: 'servicetypes',
-        localField: 'serviceType',
-        foreignField: '_id',
-        as: 'serviceType'
-    })
-    .unwind('$serviceType')
-
 
     if (stringQuery) {
         aggreagte = aggreagte.match({
             $or: [
-                {
-                    'computerName.name': {
-                        $regex: stringQuery, $options:"$i"
-                    }
-                },
                 {
                     'deviceType.name': {
                         $regex: stringQuery, $options:"$i"
                     }
                 },
                 {
-                    'serviceType.name': {
+                    'name': {
                         $regex: stringQuery, $options:"$i"
                     }
                 }
@@ -68,9 +48,7 @@ const find = async (req,res) => {
         if (req.query.all) {
             const device = await Device
                 .find({})
-                .populate('computerName')
                 .populate('deviceType')
-                .populate('serviceType')
                 .exec()
                 
             sendJsonResponse(res,200,{
@@ -107,9 +85,7 @@ const find = async (req,res) => {
 const findById = (req,res) => {
     Device
     .findById(req.params.deviceId)
-    .populate('computerName')
     .populate('deviceType')
-    .populate('serviceType')
     .exec()
     .then((deviceType) => {
         if(deviceType) sendJsonResponse(res,200,deviceType)
@@ -132,9 +108,8 @@ const findByName = (req,res) =>{
 
 const create = (req,res) => {
     Device.create({
-        computerName: req.body.computerName,
-        deviceType: req.body.deviceType,
-        serviceType: req.body.serviceType,
+        name: req.body.name,
+        type: req.body.deviceType,
         description: req.body.description,
         image_url: req.body.image_url,
         amount: req.body.amount,
