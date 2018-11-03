@@ -52,13 +52,11 @@ const find = async (req,res) => {
         //     .populate('accessoryType')
         //     .populate('serviceType')
         //     .exec()
-        console.log(req.query)
         if (req.query.all) {
             const accessory = await Accessory
                 .find({})
                 .populate('computerName')
-                .populate('accessoryType')
-                .populate('serviceType')
+                .populate('type')
                 .exec()
                 
             sendJsonResponse(res,200,{
@@ -119,18 +117,28 @@ const findByName = (req,res) =>{
 }
 
 const create = (req,res) => {
-    Accessory.create({
-        computerName: req.body.computerName,
-        type: req.body.accessoryType,
-        description: req.body.description,
-        image_url: req.body.image_url,
-        amount: req.body.amount,
-        price: req.body.price,
-        guaranteeDuration: req.body.guaranteeDuration
-    }, (err, accessory) => {
-        if(err) sendJsonResponse(res,500,err);
-        else sendJsonResponse(res,200,accessory);
-    })
+    Accessory
+    .findOne({computerName:req.body.computerName, type: req.body.type})
+    .exec((err,ct)=>{
+        if(ct){
+            sendJsonResponse(res,500,'Accessory is existed');
+            return;
+        }
+        else{
+            Accessory.create({
+                computerName: req.body.computerName,
+                type: req.body.type,
+                description: req.body.description,
+                image_url: req.body.image_url,
+                amount: req.body.amount,
+                price: req.body.price,
+                guaranteeDuration: req.body.guaranteeDuration
+            }, (err, accessory) => {
+                if(err) sendJsonResponse(res,500, "Try again later");
+                else sendJsonResponse(res,200,accessory);
+            })
+        }
+    });
 }
 
 // const updateById = (req,res) => {

@@ -113,19 +113,21 @@ const findById = (req, res) => {
 }
 
 const create = (req, res) => {
+    console.log(req.body)
     if (!req.body.serviceType || 
         !req.body.customer_name || req.body.customer_name.length == 0 ||
         !req.body.customer_id_card || req.body.customer_id_card.length == 0 || 
-        req.body.devices.length == 0)  {
+        (req.body.devices.length == 0) && (req.body.accessories == 0))  {
             sendJsonResponse(res, 400, "Invalid input")
             return;
     }
     let service = new Service();
     service.serviceType = req.body.serviceType
     service.customer_name = req.body.customer_name;
-    service.customer_id_card = req.body.customer_id_card,
-    service.devices = req.body.devices,
-	service.customer = req.body.customer,
+    service.customer_id_card = req.body.customer_id_card
+    service.devices = req.body.devices
+    service.accessories = req.body.accessories
+    if (req.body.customer.length != 0) service.customer = req.body.customer
 	service.date = req.body.date,
     service.calculatePrice()
 

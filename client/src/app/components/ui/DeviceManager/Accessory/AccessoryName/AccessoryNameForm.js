@@ -76,7 +76,7 @@ class AccessoryNameFormUI extends Component {
                 computerNames: computerNames.docs
             })
         });
-        this.props.findAlltype({
+        this.props.findAllaccessoryType({
             all: true
         }, (types, err) => {
             console.log(types, err)
@@ -155,6 +155,7 @@ class AccessoryNameFormUI extends Component {
                 }
             })
         } else {
+            console.log(this.state.form);
             this.props.create(this.state.form, (res, error) => {
                 this._closeModal()
                 if (res) {
@@ -234,7 +235,7 @@ class AccessoryNameFormUI extends Component {
         if(this.state.isRedirect)
         {
             return(
-                <Redirect to="/accessorys/accessory"/>
+                <Redirect to="/devices/accessory"/>
             )
         }
         return (
@@ -269,7 +270,7 @@ class AccessoryNameFormUI extends Component {
                                             </Input>
                                     </FormGroup>
                                     <FormGroup>
-                                            <Label htmlFor="select">Loại thiết bị</Label>
+                                            <Label htmlFor="select">Loại linh kiện</Label>
                                             <Input 
                                                 onChange = {(event) => (this.isChange(event))} 
                                                 value = {this.state.form.type}

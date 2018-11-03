@@ -107,18 +107,30 @@ const findByName = (req,res) =>{
 }
 
 const create = (req,res) => {
-    Device.create({
-        name: req.body.name,
-        type: req.body.deviceType,
-        description: req.body.description,
-        image_url: req.body.image_url,
-        amount: req.body.amount,
-        price: req.body.price,
-        guaranteeDuration: req.body.guaranteeDuration
-    }, (err, device) => {
-        if(err) sendJsonResponse(res,500,err);
-        else sendJsonResponse(res,200,device);
-    })
+    Device
+    .findOne({name:req.body.name, type: req.body.deviceType})
+    .exec((err,ct)=>{
+        if(ct){
+            sendJsonResponse(res,500,'Accessory is existed');
+            return;
+        }
+        else{
+            Device.create({
+                name: req.body.name,
+                type: req.body.deviceType,
+                description: req.body.description,
+                image_url: req.body.image_url,
+                amount: req.body.amount,
+                price: req.body.price,
+                guaranteeDuration: req.body.guaranteeDuration
+            }, (err, device) => {
+                if(err) sendJsonResponse(res,500,'Try again later');
+                else sendJsonResponse(res,200,device);
+            })        
+        }
+    });
+
+
 }
 
 // const updateById = (req,res) => {

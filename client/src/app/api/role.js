@@ -5,7 +5,7 @@ const findCollectionNames = () =>
         .get('/roles/collectionNames')
         .then((response) => response.data)
         .catch((err) => {
-            throw err
+            throw new Error(err.response.data)
         })
 
 const findAll = () => 
@@ -13,7 +13,7 @@ const findAll = () =>
         .get("/roles")
         .then((response) => response.data)
         .catch((err) => {
-            throw err
+            throw new Error(err.response.data)
         });
 
 const deleteApi = (id) => 
@@ -21,7 +21,7 @@ const deleteApi = (id) =>
         .delete(`/roles/${id}`)
         .then((response) => response.data)
         .catch((err) => {
-            throw err
+            throw new Error(err.response.data)
         });
 
 const addApi = (data) => 
@@ -29,7 +29,7 @@ request()
     .post("/roles",data)
     .then((response) => response.data)
     .catch((err) => {
-        throw err
+        throw new Error(err.response.data)
     });
 
 const findByIdApi = (id) => 
@@ -37,7 +37,7 @@ request()
     .get(`/roles/${id}`)
     .then((response) => response.data)
     .catch((err) => {
-        throw err
+        throw new Error(err.response.data)
     });
 
 const updateApi = (data) => 
@@ -45,7 +45,7 @@ request()
     .put(`/roles/${data._id}`, data)
     .then((response) => response.data)
     .catch((err) => {
-        throw err
+        throw new Error(err.response.data)
     });
         
 export {findAll, deleteApi, addApi, findByIdApi, updateApi, findCollectionNames}

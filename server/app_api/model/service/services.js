@@ -20,7 +20,9 @@ let serviceSchema = new mongoose.Schema({
     date: { type: Date, default: Date.now },
     devices: [subDeviceSchema],
     totalPrice: { type: Number, default: 0 },
-    status: { type: Number, default: DEFAUT_STATUS.NEW }
+    status: { type: Number, default: DEFAUT_STATUS.NEW },
+    date: { type: Date, default: Date.now },
+
 })
 
 serviceSchema.methods.calculatePrice = function() {

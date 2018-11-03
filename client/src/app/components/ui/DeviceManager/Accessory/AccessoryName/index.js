@@ -84,7 +84,7 @@ class AccessoryNameUI extends Component {
                             </CardHeader>
                             <CardBody>
                                 <Link
-                                    to = {'/accessorys/accessory/new'}
+                                    to = {'/devices/accessory/new'}
                                     className="btn" style={{ backgroundColor: '#17a2b8' }}>
                                     <i className="fa fa-plus text-white"> Tạo mới thiết bị </i>
                                 </Link>

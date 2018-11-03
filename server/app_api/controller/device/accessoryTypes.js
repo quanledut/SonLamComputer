@@ -82,22 +82,25 @@ const findByName = (req,res) =>{
 }
 
 const create = (req,res) => {
-    AccessoryType.findOne({name: req.body.name})
-    .exec()
-    .then((accessoryTypes =>{
-        if(accessoryTypes){
-            sendJsonResponse(res,500,'Device type is existing!!');
-            return;
-        }
-    }))
     if(!req.body.name || req.body.name.lenth == 0){
         sendJsonResponse(res,400,'Invalid Input');
+        return;
     }
-    let accessoryType = new AccessoryType({name: req.body.name});
-    accessoryType.save((err,accessoryType) =>{
-        if (err) sendJsonResponse(res, 500, err);
-        else sendJsonResponse(res, 201, accessoryType);
-    })
+    AccessoryType
+    .findOne({name:req.body.name})
+    .exec((err,ct)=>{
+        if(ct){
+            sendJsonResponse(res,500,'Accessory Type is exist');
+            return;
+        }
+        else{
+            let accessoryType = new AccessoryType({name: req.body.name});
+            accessoryType.save((err,accessoryType) =>{
+                if (err) sendJsonResponse(res, 500, err);
+                else sendJsonResponse(res, 201, accessoryType);
+            })
+        }
+    });
 }
 
 // const updateById = (req,res) => {

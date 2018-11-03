@@ -79,24 +79,27 @@ const findById = (req,res) => {
 }
 
 const create = (req,res) => {
-    ComputerName
-    .findOne({name:req.body.name})
-    .exec((err,computerName) => {
-        if(computerName){
-            sendJsonResponse(res,404,'Computer Name is exist');
-            return;
-        }
-    });
     if(!req.body.name && req.body.name.length == 0){
         sendJsonResponse(res,400,'Invalid Input');
+        return;
     }
-    let newComputerName = new ComputerName();
-    newComputerName.name = req.body.name;
-    newComputerName.type = req.body.type;
-    newComputerName.save((err,cn)=>{
-        if(err) sendJsonResponse(res,500,err);
-        if(cn) sendJsonResponse(res,200,cn);
-    })
+    ComputerName
+    .findOne({name:req.body.name, type: req.body.type})
+    .exec((err,computerName) => {
+        if(computerName){
+            sendJsonResponse(res,500,'Computer Name is exist');
+            return;
+        }
+
+        let newComputerName = new ComputerName();
+        newComputerName.name = req.body.name;
+        newComputerName.type = req.body.type;
+        newComputerName.save((err,cn)=>{
+            if(err) sendJsonResponse(res,500,err);
+            if(cn) sendJsonResponse(res,200,cn);
+        })
+    
+    });
 }
 
 const updateById = (req, res) => {

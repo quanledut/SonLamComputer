@@ -30,7 +30,6 @@ class CustomTable extends React.Component {
     }
 
     componentWillReceiveProps(props) {
-        console.log(props)
         this.setState({
             ...props
         })
@@ -38,47 +37,53 @@ class CustomTable extends React.Component {
 
 
     render() {
-        return (
+        return  (
             <div>
-                <Table hover bordered striped responsive size="sm">
-                    <thead>
-                        {this.state.thead}
-                    </thead>
-                    <tbody>
-                        {this.state.tbody}
-                    </tbody>
-                </Table>
-                { this.props.hasPagination && (
-                                    <nav>
-                                    <Pagination>
-                                        <PaginationItem onClick={() => this.gotoPage(this.state.page - 1)}><PaginationLink previous tag="button">Prev</PaginationLink></PaginationItem>
-                                        {
-                                            (this.state.page - 2 > 1) && <PaginationItem onClick={() => this.gotoPage(1)}><PaginationLink tag="button">1</PaginationLink></PaginationItem>
-                                        }
-                                        {
-                                            [this.state.page - 3, this.state.page - 2, this.state.page - 1].map((e, id) => {
-                                                if (id === 0 && e > 0) return <PaginationItem key={id}><PaginationLink>...</PaginationLink></PaginationItem>
-                                                if (e > 0) return <PaginationItem onClick={() => this.gotoPage(e)} key={id}><PaginationLink tag="button">{e}</PaginationLink></PaginationItem>
-                                            })
-                                        }
-                                        <PaginationItem active>
-                                            <PaginationLink tag="button">{this.state.page}</PaginationLink>
-                                        </PaginationItem>
-                                        {
-                                            [this.state.page + 1, this.state.page + 2, this.state.page + 3].filter(e => e <= this.state.pages).map((e, id) => {
-                                                if (id === 2 && e < this.state.pages) return <PaginationItem key={id}><PaginationLink>...</PaginationLink></PaginationItem>
-                                                return <PaginationItem onClick={() => this.gotoPage(e)} key={id}><PaginationLink tag="button">{e}</PaginationLink></PaginationItem>
-                                            })
-                                        }
-                                        {
-                                            (this.state.pages > this.state.page + 2) && <PaginationItem onClick={() => this.gotoPage(this.state.pages)}><PaginationLink tag="button">{this.state.pages}</PaginationLink></PaginationItem>
-                                        }
-                                        <PaginationItem><PaginationLink onClick={() => this.gotoPage(this.state.page + 1)} next tag="button">Next</PaginationLink></PaginationItem>
-                                    </Pagination>
-                                </nav>
-                
-                )}
+                {
+                    this.props.isShow  && 
+                    <div>
+                        <Table hover bordered striped responsive size="sm">
+                            <thead>
+                                {this.state.thead}
+                            </thead>
+                            <tbody>
+                                {this.state.tbody}
+                            </tbody>
+                        </Table>
+                        { this.props.hasPagination && (
+                                            <nav>
+                                            <Pagination>
+                                                <PaginationItem onClick={() => this.gotoPage(this.state.page - 1)}><PaginationLink previous tag="button">Prev</PaginationLink></PaginationItem>
+                                                {
+                                                    (this.state.page - 2 > 1) && <PaginationItem onClick={() => this.gotoPage(1)}><PaginationLink tag="button">1</PaginationLink></PaginationItem>
+                                                }
+                                                {
+                                                    [this.state.page - 3, this.state.page - 2, this.state.page - 1].map((e, id) => {
+                                                        if (id === 0 && e > 0) return <PaginationItem key={id}><PaginationLink>...</PaginationLink></PaginationItem>
+                                                        if (e > 0) return <PaginationItem onClick={() => this.gotoPage(e)} key={id}><PaginationLink tag="button">{e}</PaginationLink></PaginationItem>
+                                                    })
+                                                }
+                                                <PaginationItem active>
+                                                    <PaginationLink tag="button">{this.state.page}</PaginationLink>
+                                                </PaginationItem>
+                                                {
+                                                    [this.state.page + 1, this.state.page + 2, this.state.page + 3].filter(e => e <= this.state.pages).map((e, id) => {
+                                                        if (id === 2 && e < this.state.pages) return <PaginationItem key={id}><PaginationLink>...</PaginationLink></PaginationItem>
+                                                        return <PaginationItem onClick={() => this.gotoPage(e)} key={id}><PaginationLink tag="button">{e}</PaginationLink></PaginationItem>
+                                                    })
+                                                }
+                                                {
+                                                    (this.state.pages > this.state.page + 2) && <PaginationItem onClick={() => this.gotoPage(this.state.pages)}><PaginationLink tag="button">{this.state.pages}</PaginationLink></PaginationItem>
+                                                }
+                                                <PaginationItem><PaginationLink onClick={() => this.gotoPage(this.state.page + 1)} next tag="button">Next</PaginationLink></PaginationItem>
+                                            </Pagination>
+                                        </nav>
+                        
+                        )}
+                    </div> 
+                }
             </div>
+
         );  
     }
 }
@@ -87,6 +92,7 @@ CustomTable.propTypes = {
     thead: PropTypes.object.isRequired,
     tbody: PropTypes.array.isRequired,
     hasPagination: PropTypes.bool,
+    isShow: PropTypes.bool,
     page: PropTypes.number,
     pages: PropTypes.number,
     gotoPage: PropTypes.func,
@@ -94,6 +100,7 @@ CustomTable.propTypes = {
 
 CustomTable.defaultProps = {
     hasPagination: true,
+    isShow: true,
     page: 1,
     pages: 1,
     gotoPage: () => {},

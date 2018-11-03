@@ -19,7 +19,7 @@ import {
 
 const DEFAULT_FORM = {
     _id :'',
-    computerName:'',
+    name:'',
     deviceType:'',
     description:'',
     image_url:'',
@@ -67,15 +67,6 @@ class DeviceNameFormUI extends Component {
                 })
             })
         }
-        this.props.findAllComputerName({
-            all: true
-        }, (computerNames, err) => {
-            console.log(computerNames, err)
-            if (!err) this.setState({
-                ...this.state,
-                computerNames: computerNames.docs
-            })
-        });
         this.props.findAlldeviceType({
             all: true
         }, (deviceTypes, err) => {
@@ -179,7 +170,7 @@ class DeviceNameFormUI extends Component {
 
     _validate(name, value) {
         const re = /^\$?[0-9]+(\.[0-9][0-9])?$/;
-        if (name === 'computerName') {
+        if (name === 'name') {
             return !(value !== null && value !== "")
         }
         if (name === 'deviceType') {
@@ -257,16 +248,11 @@ class DeviceNameFormUI extends Component {
                             <CardBody>
                                 <Form action="" method="post">
                                     <FormGroup>
-                                            <Label htmlFor="select">Tên máy tính</Label>
-                                            <Input 
-                                                onChange = {(event) => (this.isChange(event))} 
-                                                value = {this.state.form.computerName}
-                                                type="select" name="computerName" id="select">
-                                                    <option value="None">---Chọn---</option>
-                                                    {this.state.computerNames.map((e, id) => 
-                                                        <option key={id} value={e._id}>{e.name}</option>
-                                                    )}
-                                            </Input>
+                                            <Label htmlFor="select">Tên thiết bị</Label>
+                                            <Input onChange = {(event) => (this.isChange(event))} 
+                                            value = {this.state.form.name}
+                                            type="username" id="nf-username" name="name" placeholder="Nhập tên thiết bị..." autoComplete="current-password" />
+                                         {this.state.error.name ? <FormText className="help-block"><span style={{color: "red"}}>Vui lòng nhập đúng định dạng!</span></FormText> : ''} 
                                     </FormGroup>
                                     <FormGroup>
                                             <Label htmlFor="select">Loại thiết bị</Label>
@@ -274,7 +260,7 @@ class DeviceNameFormUI extends Component {
                                                 onChange = {(event) => (this.isChange(event))} 
                                                 value = {this.state.form.deviceType}
                                                 type="select" name="deviceType" id="select">
-                                                <option value="None">---Chọn---</option>
+                                                <option value="">---Chọn---</option>
                                                 {
                                                     this.state.deviceTypes.map((e, id) => 
                                                         <option key={id} value={e._id}>{e.name}</option>

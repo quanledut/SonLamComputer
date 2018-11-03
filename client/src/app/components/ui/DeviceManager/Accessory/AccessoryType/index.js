@@ -58,7 +58,7 @@ class AccessoryType extends Component {
                     <td>
                         <div className="btn-group">
                             <Link 
-                                to = {`/accessorys/accessoryType/${item._id}/edit`}
+                                to = {`/devices/accessoryType/${item._id}/edit`}
                                 className="btn btn-primary"
                             >
                                 <i className="fa fa-edit"> Sửa </i>
@@ -79,13 +79,13 @@ class AccessoryType extends Component {
                     <Col>
                         <Card>
                             <CardHeader>
-                                <i className="fa fa-align-justify"></i> Danh sách loại thiết bị
+                                <i className="fa fa-align-justify"></i> Danh sách loại linh kiện
                             </CardHeader>
                             <CardBody>
                                 <Link
-                                    to = {'/accessorys/accessoryType/new'}
+                                    to = {'/devices/accessoryType/new'}
                                     className="btn" style={{ backgroundColor: '#17a2b8' }}>
-                                    <i className="fa fa-plus text-white"> Tạo mới loại thiết bị </i>
+                                    <i className="fa fa-plus text-white"> Tạo mới loại linh kiện </i>
                                 </Link>
                                 <hr />
 
@@ -94,7 +94,7 @@ class AccessoryType extends Component {
                                 <CustomTable
                                     thead = {
                                         <tr>
-                                            <th>Tên loại thiết bị</th>
+                                            <th>Tên loại linh kiện</th>
                                             <th style={{ width: '20%' }}>Hành động</th>
                                         </tr>
                                     }

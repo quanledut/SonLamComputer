@@ -7,6 +7,8 @@ import * as deviceNameActions from '../../actions/deviceName'
 import * as userActions from '../../actions/user'
 import * as serviceTypeActions from '../../actions/serviceType'
 import * as serviceActions from '../../actions/services'
+import * as accessoryNameActions from '../../actions/accessoryName'
+
 
 export const ServiceForm = connect(
     null, 
@@ -23,6 +25,10 @@ export const ServiceForm = connect(
         findAlldevices(query, cb){
             dispatch(deviceNameActions.findAllRequest(query, cb));
         },
+        findAllaccessories(query, cb){
+            dispatch(accessoryNameActions.findAllRequest(query, cb));
+        },
+
         findAllcustomer(cb){
             dispatch(userActions.findAllRequest(cb));
         },
@@ -34,6 +40,9 @@ export const ServiceForm = connect(
         },
         findDeviceByID(id,cb){
             dispatch(deviceNameActions.findByIdRequest(id,cb));
+        },
+        findAccessoryById(id, cb) {
+            dispatch(accessoryNameActions.findByIdRequest(id,cb))
         }
     })
 )(ServiceFormUI);

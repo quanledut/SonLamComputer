@@ -82,22 +82,24 @@ const findByName = (req,res) =>{
 }
 
 const create = (req,res) => {
+    if(!req.body.name || req.body.name.lenth == 0){
+        sendJsonResponse(res,400,'Invalid Input');
+        return;
+    }
     DeviceType.findOne({name: req.body.name})
     .exec()
     .then((deviceTypes =>{
         if(deviceTypes){
-            sendJsonResponse(res,500,'Device type is existing!!');
+            sendJsonResponse(res,500,'Device type is existed!!');
             return;
         }
+
+        let deviceType = new DeviceType({name: req.body.name});
+        deviceType.save((err,deviceType) =>{
+            if (err) sendJsonResponse(res, 500, err);
+            else sendJsonResponse(res, 201, deviceType);
+        })    
     }))
-    if(!req.body.name || req.body.name.lenth == 0){
-        sendJsonResponse(res,400,'Invalid Input');
-    }
-    let deviceType = new DeviceType({name: req.body.name});
-    deviceType.save((err,deviceType) =>{
-        if (err) sendJsonResponse(res, 500, err);
-        else sendJsonResponse(res, 201, deviceType);
-    })
 }
 
 // const updateById = (req,res) => {

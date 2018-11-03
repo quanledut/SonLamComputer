@@ -10,4 +10,7 @@ let deviceSchema = new mongoose.Schema({
     guaranteeDuration: Number
 })
 
+deviceSchema.index({ type: 1, name: 1 }, { unique: true })
+
+
 mongoose.model('Device', deviceSchema)

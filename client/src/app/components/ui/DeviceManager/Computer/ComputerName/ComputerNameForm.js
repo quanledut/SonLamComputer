@@ -30,7 +30,10 @@ class ComputerNameFormUI extends Component {
 
         this.state = {
             form: {...DEFAULT_FORM},
-            error: {},
+            error: {
+                name: true,
+                type: true,
+            },
             modal: {
                 isOpened: false,
                 isLoading: false,
@@ -174,6 +177,7 @@ class ComputerNameFormUI extends Component {
     {
         const name = event.target.name;
         const value = event.target.value;
+
         this.setState({
             form: {
                 ...this.state.form,
@@ -199,14 +203,11 @@ class ComputerNameFormUI extends Component {
   
         }
 
-        if(name === "name")
+        if(value === "" || value === null)
         {
-            if(value === "" || value === null)
-            {
-                this.setState({
-                    isDisabled: true
-                })
-            }
+            this.setState({
+                isDisabled: true
+            })
         }
     }
 
@@ -232,7 +233,7 @@ class ComputerNameFormUI extends Component {
                 <Col xs="12" md="9">
                         <Card>
                             <CardHeader>
-                                <strong>Thông tin quyền</strong>
+                                <strong>Thông tin máy tính</strong>
                             </CardHeader>
                             <CardBody>
                                 <Form action="" method="post">
@@ -249,6 +250,7 @@ class ComputerNameFormUI extends Component {
                                             onChange = {(event) => (this.isChange(event))} 
                                             value = {this.state.form.type}
                                             type="select" name="type" id="select">
+                                            <option value="">---Chọn---</option>
                                             {
                                                 this.state.types.map((e, id) => 
                                                     <option key={id} value={e._id}>{e.name}</option>

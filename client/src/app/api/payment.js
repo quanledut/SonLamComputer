@@ -9,7 +9,7 @@ const findAll = (query) =>
         })
         .then((response) => response.data)
         .catch((err) => {
-            throw err
+            throw new Error(err.response.data)
         });
 
 const findByIdApi = (id) => 
@@ -17,7 +17,7 @@ request()
     .get(`/payments/${id}`)
     .then((response) => response.data)
     .catch((err) => {
-        throw err
+        throw new Error(err.response.data)
     });
 
 const updateApi = (data) => 
@@ -25,7 +25,7 @@ request()
     .put(`/payments/${data._id}`, data)
     .then((response) => response.data)
     .catch((err) => {
-        throw err
+        throw new Error(err.response.data)
     });
                     
 export {findAll, findByIdApi, updateApi}

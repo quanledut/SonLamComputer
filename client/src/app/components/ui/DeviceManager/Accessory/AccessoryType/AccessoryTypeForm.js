@@ -203,7 +203,7 @@ class AccessoryTypeFormUI extends Component {
         if(this.state.isRedirect)
         {
             return(
-                <Redirect to="/accessorys/accessoryType"/>
+                <Redirect to="/devices/accessoryType"/>
             )
         }
         return (

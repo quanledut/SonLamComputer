@@ -9,7 +9,7 @@ const findAll = (query) =>
         })
         .then((response) => response.data)
         .catch((err) => {
-            throw err
+            throw new Error(err.response.data)
         });
 
 const deleteApi = (id) => 
@@ -17,7 +17,7 @@ const deleteApi = (id) =>
         .delete(`/serviceTypes/${id}`)
         .then((response) => response.data)
         .catch((err) => {
-            throw err
+            throw new Error(err.response.data)
         });
 
 const addApi = (data) => 
@@ -25,7 +25,7 @@ request()
     .post("/serviceTypes",data)
     .then((response) => response.data)
     .catch((err) => {
-        throw err
+        throw new Error(err.response.data)
     });
 
 const findByIdApi = (id) => 
@@ -33,7 +33,7 @@ request()
     .get(`/serviceTypes/${id}`)
     .then((response) => response.data)
     .catch((err) => {
-        throw err
+        throw new Error(err.response.data)
     });
 
 const updateApi = (data) => 
@@ -41,7 +41,7 @@ request()
     .put(`/serviceTypes/${data._id}`, data)
     .then((response) => response.data)
     .catch((err) => {
-        throw err
+        throw new Error(err.response.data)
     });
         
 export {findAll, deleteApi, addApi, findByIdApi, updateApi}

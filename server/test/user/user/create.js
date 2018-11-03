@@ -43,7 +43,7 @@ describe('[Create User] Api', () => {
 				})
 		});
 
-		it ('It should throw error due to duplicate username', (done) => {
+		it ('It should throw new Error(err.response.data)or due to duplicate username', (done) => {
 			let user = {
 				username: 'test',
 				password: 'test',
