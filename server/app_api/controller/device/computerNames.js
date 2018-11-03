@@ -31,9 +31,12 @@ const createAggregate = (stringQuery) => {
 
 const find = async (req,res) => {
     try {
-        if (req.query.all) {
+        const {all, ...query} = req.body
+        if (all) {
             const device = await ComputerName
-                .find({})
+                .find({
+                    ...query
+                })
                 .populate('type')
                 .exec()
                 

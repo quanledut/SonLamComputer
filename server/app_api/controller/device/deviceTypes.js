@@ -24,9 +24,12 @@ const createAggregate = (stringQuery) => {
 
 const find = async (req,res) => {
     try {
-        if (req.query.all) {
+        const {all, ...query} = req.body
+        if (all) {
             const device = await DeviceType
-                .find({})
+                .find({
+                    ...query
+                })
                 .exec()
                 
             sendJsonResponse(res,200,{

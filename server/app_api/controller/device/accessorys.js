@@ -52,9 +52,12 @@ const find = async (req,res) => {
         //     .populate('accessoryType')
         //     .populate('serviceType')
         //     .exec()
-        if (req.query.all) {
+        const {all, ...query} = req.body
+        if (all) {
             const accessory = await Accessory
-                .find({})
+                .find({
+                    ...query
+                })
                 .populate('computerName')
                 .populate('type')
                 .exec()

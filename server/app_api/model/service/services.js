@@ -4,13 +4,22 @@ const DEFAUT_STATUS = {
     PAY: 1
 }
 
-let subDeviceSchema = new mongoose.Schema({
+let subAccessorySchema = new mongoose.Schema({
     computerName: String,
-    deviceType: String,
+    type: String,
     guaranteeDuration: Number, 
     price: Number,
     date: { type: Date, default: Date.now }
 })
+
+let subDeviceSchema = new mongoose.Schema({
+    name: String,
+    type: String,
+    guaranteeDuration: Number, 
+    price: Number,
+    date: { type: Date, default: Date.now }
+})
+
 
 let serviceSchema = new mongoose.Schema({
     serviceType: { type: mongoose.Schema.Types.ObjectId, ref: 'ServiceType' },
@@ -18,6 +27,7 @@ let serviceSchema = new mongoose.Schema({
     customer_id_card: { type: String, required: true },
     customer: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     date: { type: Date, default: Date.now },
+    accessories: [subAccessorySchema],
     devices: [subDeviceSchema],
     totalPrice: { type: Number, default: 0 },
     status: { type: Number, default: DEFAUT_STATUS.NEW },

@@ -20,6 +20,7 @@ import {
 } from 'reactstrap';
 
 import CustomTable from '../../utils/Table'
+import { access } from 'fs';
 
 const DEFAULT_FORM = {
     _id :'',
@@ -47,7 +48,11 @@ class ServiceFormUI extends Component {
                 title: "",
                 content: ""
             },      
-            accessories: [],
+            accessory: {},
+            devices: [],
+            accessoryTypes: [],
+            deviceTypes: [],
+            computerNames: [],
             serviceTypes: [],
             customers: [],
             _device_id:'',
@@ -96,18 +101,6 @@ class ServiceFormUI extends Component {
         });
     }
 
-    _findAllAccessories() {
-        this.props.findAllaccessories({
-            all: true
-        }, (accessories, err) => {
-            console.log("accessories: ", accessories.docs, err)
-            if (!err) this.setState({
-                ...this.state,
-                accessories: accessories.docs
-            })
-        });
-    }
-
     onClear = () =>{
         this.setState({
             form: {...DEFAULT_FORM},
@@ -145,6 +138,42 @@ class ServiceFormUI extends Component {
         })
     }
 
+    _findAllComputernames() {
+        this.props.findAllComputername({
+            all: true
+        }, (computerNames, err) => {
+            if (!err) this.setState({
+                ...this.state,
+                computerNames: computerNames.docs
+            })
+        })
+    }
+
+    _findAllAccessoryTypes() {
+        this.props.findAllAccessoryTypes({
+            all: true
+        }, (accessoryTypes, err) => {
+            if (!err) this.setState({
+                ...this.state,
+                accessoryTypes: accessoryTypes.docs
+            })
+        })
+    }
+
+    _findAccessory(computerName, accessoryType) {
+        this.props.findAllaccessories({
+            computerName,
+            type: accessoryType,
+            all: true
+        }, (accessories, err) => {
+            console.log("accessories: ", accessories.docs, err)
+            if (!err) this.setState({
+                ...this.state,
+                accessory: accessories.docs[0]
+            })
+        });
+    }
+
     _addAccessory(event) {
         const key = this.state.tbody.length
         event.preventDefault()
@@ -162,25 +191,32 @@ class ServiceFormUI extends Component {
     }
 
     _handleAccessories = (e, key) => {
+        const {name, value} = e.target
         this.setState({
+            accessory: {
+                ...this.state.accessory,
+                [name]: value
+            },
             form: {
                 ...this.state.form,
                 accessories: this.state.form.accessories.map((accessory, id) => {
                     if (id !== key) return accessory
+                    accessory[e.target.name] = e.target.value
+                
+                    if (name == "computerName" || name == "type") {
+                        this.setState({
+                            accessory: {}
+                        })
+                    } 
 
-                    if (e.target.name === "computerName") {
-                        accessory = {
-                            "computerName": e.target.value,
-                        }                        
-                        return accessory
-                    } else if (e.target.name == "deviceType"){
-                        accessory = {
-                            "computerName": accessory.computerName,
-                            "deviceType": e.target.value
-                        }
-                        return accessory
+                    if (accessory.computerName && accessory.type && !this.state.accessory.type) {
+                        this._findAccessory({
+                            computerName: accessory.computerName,
+                            type: accessory.type
+                        })
                     }
-                        
+
+                    return accessory
                 })
             }
         })
@@ -351,36 +387,18 @@ class ServiceFormUI extends Component {
                         isFix: true
                     })
 
-                    if (this.state.accessories.length == 0) {
-                        this._findAllAccessories();
+                    if (this.state.computerNames.length == 0) {
+                        this._findAllComputernames();
                     }
+                    if (this.state.accessoryTypes.length == 0) {
+                        this._findAllAccessoryTypes();
+                    }
+
                 }    
             })
 
         }
 
-    }
-
-    addAccessory = (event, id) =>
-    {
-        event.preventDefault()
-        this.props.findAccessoryByID(id,(_accessories, err) => {
-            console.log("Accessorys: ", _accessories)
-            if (!err) this.setState({
-                form: {
-                    ...this.state.form,
-                    accessories: [
-                        ...this.state.form.accessories,
-                        {
-                            computerName: _accessories.computerName.name,
-                            deviceType: _accessories.deviceType.name,
-                            guaranteeDuration: _accessories.guaranteeDuration,
-                            price: _accessories.price,
-                        }
-                    ]
-                }
-            })
-        });
     }
 
     _deleteAccessory = (event, i) => {
@@ -496,27 +514,6 @@ class ServiceFormUI extends Component {
                                                 <FormText className="help-block"><span style={{color: "red"}}>Vui lòng loại dịch vụ!</span></FormText>
                                             ) 
                                         }
-                                        {/* <InputGroup>
-                                            <Input 
-                                                onChange = {(event) => (this.isChange(event))} 
-                                                value = {this.state._device_id}
-                                                type="select" name="deviceChoose" id="select">
-                                                <option value="None">---Chọn---</option>
-                                                {
-                                                    this.state.accessories.map((e, id) => 
-                                                        <option key={id} value={e._id}>
-                                                            Tên: {e.computerName.name} --- 
-                                                            Loại: {e.deviceType.name} --- 
-                                                            Giá: {e.price} --- 
-                                                            Thời gian bảo hành: {e.guaranteeDuration}
-                                                        </option>
-                                                    )
-                                                }
-                                            </Input>
-                                            <InputGroupAddon addonType="append">
-                                            <Button type="button" color="primary" onClick = {(e) => this.addAccessory(e,this.state._device_id)}>Add</Button>
-                                            </InputGroupAddon>
-                                        </InputGroup> */}
                                     </Col>
                                 </FormGroup>
                                 <CustomTable
@@ -537,49 +534,39 @@ class ServiceFormUI extends Component {
                                                 <td>
                                                     <Input value={item.computerName} onChange={(e) => this._handleAccessories(e, key)} type="select" name="computerName" id="exampleSelect">
                                                         <option value="None">Hãy chọn loại máy tính</option>
-                                                        {this.state.accessories.map(i=>i.computerName).map((item, id)=> <option key={id} value={item.name}>{item.name}</option>)}
+                                                        {this.state.computerNames.map((item, id)=> <option key={id} value={item.name}>{item.name}</option>)}
+                                                    </Input>
+                                                </td>
+                                                <td>
+                                                    <Input value={item.type} onChange={(e) => this._handleAccessories(e, key)} type="select" name="type" id="exampleSelect">
+                                                            <option value="None">Hãy chọn loại thiết bị</option>
+                                                            {this.state.accessoryTypes.map((i1, id)=> <option key={id} value={i1.name}>{i1.name}</option>)}
                                                     </Input>
                                                 </td>
                                                 <td>
                                                     {   
-                                                        (item.computerName == "None") &&
-                                                        <p>Xin hãy chọn loại máy tính</p>
+                                                        (!item.type || !item.computerName || item.computerName == "None" || item.type == "None") &&
+                                                        <p>Xin hãy chọn loại thiết bị và loại máy tính</p>
                                                         
                                                     }
 
                                                     {
-                                                        !(item.computerName == "None") &&
-                                                        <Input value={item.type} onChange={(e) => this._handleAccessories(e, key)} type="select" name="deviceType" id="exampleSelect">
-                                                            <option value="None">Hãy chọn loại thiết bị</option>
-                                                            {this.state.accessories.filter(i=>i.computerName.name == item.computerName).map(i=>i.type.name).map((i1, id)=> <option key={id} value={i1}>{i1}</option>)}
+                                                        (item.type && item.computerName && item.type != "None" && item.computerName != "None") &&
+                                                        <Input value={this.state.accessory.price} onChange={(e) => this._handleAccessories(e, key)} type="text" name="price" id="exampleSelect">
                                                         </Input>
 
                                                     }
                                                 </td>
                                                 <td>
                                                     {   
-                                                        (!item.deviceType || item.deviceType == "None") &&
-                                                        <p>Xin hãy chọn loại thiết bị</p>
+                                                        (!item.type || !item.computerName || item.computerName == "None" || item.type == "None") &&
+                                                        <p>Xin hãy chọn loại thiết bị và loại máy tính</p>
                                                         
                                                     }
 
                                                     {
-                                                        (item.deviceType &&item.deviceType != "None") &&
-                                                        <Input value={this.state.accessories.filter(i=> i.computerName.name == item.computerName && i.type.name == item.deviceType)[0].price} onChange={(e) => this._handleAccessories(e, key)} type="text" name="price" id="exampleSelect">
-                                                        </Input>
-
-                                                    }
-                                                </td>
-                                                <td>
-                                                    {   
-                                                        (!item.deviceType || item.deviceType == "None") &&
-                                                        <p>Xin hãy chọn loại thiết bị</p>
-                                                        
-                                                    }
-
-                                                    {
-                                                        (item.deviceType &&item.deviceType != "None") &&
-                                                        <Input value={this.state.accessories.filter(i=> i.computerName.name == item.computerName && i.type.name == item.deviceType)[0].guaranteeDuration} onChange={(e) => this._handleAccessories(e, key)} type="text" name="guaranteeDuration" id="exampleSelect">
+                                                        (item.type && item.computerName && item.type != "None" && item.computerName != "None") &&
+                                                        <Input value={this.state.accessory.guaranteeDuration} onChange={(e) => this._handleAccessories(e, key)} type="text" name="guaranteeDuration" id="exampleSelect">
                                                         </Input>
 
                                                     }
@@ -592,7 +579,7 @@ class ServiceFormUI extends Component {
                                         hasPagination = {false}
 
                                         isShow = {this.state.isFix}
-                                    />
+                                />
                                 
                             </CardBody>
                             <CardFooter>

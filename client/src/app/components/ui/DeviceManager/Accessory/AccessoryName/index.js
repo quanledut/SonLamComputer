@@ -53,8 +53,8 @@ class AccessoryNameUI extends Component {
         var listItem = mapList.map((item, index) => {
             return (
                 <tr key = {index}>
-                    <td>{item.computerName.name}</td>
                     <td>{item.type.name}</td>
+                    <td>{item.computerName.name}</td>
                     <td>{item.amount}</td>
                     <td>
                         <div className="btn-group">
@@ -95,8 +95,8 @@ class AccessoryNameUI extends Component {
                                 <CustomTable
                                     thead = {
                                         <tr>
-                                            <th>Tên máy tính</th>
                                             <th>Loại thiết bị</th>
+                                            <th>Tên máy tính</th>
                                             <th>Số lượng</th>
                                             <th style={{ width: '20%' }}>Hành động</th>
                                         </tr>
