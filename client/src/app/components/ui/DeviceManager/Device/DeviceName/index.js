@@ -61,7 +61,7 @@ class DeviceNameUI extends Component {
                     <td>
                         <div className="btn-group">
                             <Link 
-                                to = {`devices/device/${item._id}/edit`}
+                                to = {`device/${item._id}/edit`}
                                 className="btn btn-primary"
                             >
                                 <i className="fa fa-edit"> Sửa </i>

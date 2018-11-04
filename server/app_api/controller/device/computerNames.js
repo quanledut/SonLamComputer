@@ -31,7 +31,8 @@ const createAggregate = (stringQuery) => {
 
 const find = async (req,res) => {
     try {
-        const {all, ...query} = req.body
+        const {all, ...query} = req.query
+        console.log(all, query, req.query)
         if (all) {
             const device = await ComputerName
                 .find({

@@ -38,6 +38,7 @@ export function * add() {
             request.cb(result, null)
             yield put(Actions.createRequestSuccess(result))
         } catch(err) {
+            console.log(err);
             request.cb(null, err.message)
         }
     }

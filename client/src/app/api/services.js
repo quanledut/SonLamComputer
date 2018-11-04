@@ -25,7 +25,8 @@ request()
     .post("/services",data)
     .then((response) => response.data)
     .catch((err) => {
-        throw new Error(err.response.data)
+        if (err.response) throw new Error(err.response.data)
+        else throw new Error(err)
     });
 
 const findByIdApi = (id) => 

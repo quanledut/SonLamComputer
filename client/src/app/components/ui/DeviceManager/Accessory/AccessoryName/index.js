@@ -56,10 +56,12 @@ class AccessoryNameUI extends Component {
                     <td>{item.type.name}</td>
                     <td>{item.computerName.name}</td>
                     <td>{item.amount}</td>
+                    <td>{item.price}</td>
+                    <td>{item.guaranteeDuration}</td>
                     <td>
                         <div className="btn-group">
                             <Link 
-                                to = {`accessorys/accessory/${item._id}/edit`}
+                                to = {`accessory/${item._id}/edit`}
                                 className="btn btn-primary"
                             >
                                 <i className="fa fa-edit"> Sửa </i>
@@ -98,7 +100,9 @@ class AccessoryNameUI extends Component {
                                             <th>Loại thiết bị</th>
                                             <th>Tên máy tính</th>
                                             <th>Số lượng</th>
-                                            <th style={{ width: '20%' }}>Hành động</th>
+                                            <th>Giá</th>
+                                            <th>Thời hạn bảo hành</th>
+                                            <th style={{ width: '10%' }}>Hành động</th>
                                         </tr>
                                     }
 

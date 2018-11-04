@@ -44,10 +44,10 @@ const find = async (req,res) => {
         //     .populate('deviceType')
         //     .populate('serviceType')
         //     .exec()
-        console.log(req.query)
-        if (req.query.all) {
+        let {all, ...query} = req.query
+        if (all) {
             const device = await Device
-                .find({})
+                .find(query)
                 .populate('deviceType')
                 .exec()
                 

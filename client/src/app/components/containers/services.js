@@ -11,6 +11,7 @@ import * as accessoryNameActions from '../../actions/accessoryName'
 import * as computerNameActions from '../../actions/computerName'
 import * as accessoryTypeActions from '../../actions/accessoryType'
 import * as deviceTypeActions from '../../actions/deviceType'
+import * as computerTypeActions from '../../actions/computerType'
 
 export const ServiceForm = connect(
     null, 
@@ -24,11 +25,14 @@ export const ServiceForm = connect(
         getById(id, cb) {
             dispatch(serviceActions.findByIdRequest(id, cb));
         },
-        findAlldevices(query, cb){
+        findAllDevices(query, cb){
             dispatch(deviceNameActions.findAllRequest(query, cb));
         },
         findAllaccessories(query, cb){
             dispatch(accessoryNameActions.findAllRequest(query, cb));
+        },
+        findAllComputertype(query, cb) {
+            dispatch(computerTypeActions.findAllRequest(query, cb))
         },
         findAllComputername(query, cb) {
             dispatch(computerNameActions.findAllRequest(query, cb))
@@ -36,7 +40,7 @@ export const ServiceForm = connect(
         findAllAccessoryTypes(query, cb) {
             dispatch(accessoryTypeActions.findAllRequest(query, cb));
         },
-        findAllDeviceTypeRequest(query, cb) {
+        findAllDeviceTypes(query, cb) {
             dispatch(deviceTypeActions.findAllRequest(query, cb))
         },
         findAllcustomer(cb){

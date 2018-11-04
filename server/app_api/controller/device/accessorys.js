@@ -52,7 +52,9 @@ const find = async (req,res) => {
         //     .populate('accessoryType')
         //     .populate('serviceType')
         //     .exec()
-        const {all, ...query} = req.body
+        let {all, ...query} = req.query
+        if (query.computerName) query.computerName = mongoose.Types.ObjectId(query.computerName)
+        if (query.type) query.type = mongoose.Types.ObjectId(query.type)
         if (all) {
             const accessory = await Accessory
                 .find({
