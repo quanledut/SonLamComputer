@@ -18,6 +18,15 @@ import '../stylesheets/scss/style.css'
 // Pages
 import { Login, Page404, Page500, Register, DefaultLayout } from './containers/pages';
 // import { renderRoutes } from 'react-router-config';
+import { Home} from './containers/client/home';
+import {Shops} from './containers/client/shop'
+
+import '../stylesheets/styles/bootstrap4/bootstrap.min.css'
+import '../stylesheets/plugins/fontawesome-free-5.0.1/css/fontawesome-all.css'
+import '../stylesheets/plugins/OwlCarousel2-2.2.1/owl.carousel.css'
+import '../stylesheets/plugins/OwlCarousel2-2.2.1/owl.theme.default.css'
+import '../stylesheets/plugins/OwlCarousel2-2.2.1/animate.css'
+import '../stylesheets/plugins/slick-1.8.0/slick.css'
 
 class App extends Component {
   render() {
@@ -28,6 +37,8 @@ class App extends Component {
           <Route exact path="/register" name="Register Page" component={Register} />
           <Route exact path="/404" name="Page 404" component={Page404} />
           <Route exact path="/500" name="Page 500" component={Page500} />
+          <Route exact path="/client" name="Client Home" component={Home} />
+          <Route exact path="/shop" name="Shop Home" component={Shops} />
           <Route path="/" name="Home" component={DefaultLayout} />
         </Switch>
       </HashRouter>
