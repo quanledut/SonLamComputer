@@ -3,6 +3,7 @@ import { Button, Card, CardBody, CardGroup, Col, Container, Form, Input, InputGr
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import Modal from '../utils/Modal'
+import {FormErrors} from '../utils/FormErrors'
 
 class Login extends Component {
 
@@ -20,7 +21,11 @@ class Login extends Component {
           title: "",
           content: ""
         },
-        redirect: false
+        redirect: false,
+        formErrors: {username: '',password: ''},
+        usernameValid: false,
+        passwordValid: false,
+        formValid: false
     }
 
     this._reset = this._reset.bind(this)
@@ -94,16 +99,48 @@ _submit (e) {
 
 _onChangeInput(e) {
     e.preventDefault()
+    const name = e.target.name;
+    const value = e.target.value;
     this.setState({
         form: {
             ...this.state.form,
             [e.target.name]: e.target.value
-        }
-    })
+        }},
+        () => { this.validateField(name, value)}
+    )
 }
 
 componentWillReceiveProps(nextProps) {
   nextProps.history.push("/")
+}
+
+validateField(fieldName, value) {
+  let fieldValidationErrors = this.state.formErrors;
+  let passwordValid = this.state.passwordValid;
+  let usernameValid = this.state.usernameValid;
+
+  switch(fieldName) {
+    case 'password':
+      passwordValid = value.length >= 6 && value.length <= 50;
+      fieldValidationErrors.password = passwordValid ? '': 'Vui lòng nhập password trong khoảng 6-50 ký tự!';
+      break;
+    case 'username':
+      usernameValid = value.length >= 6 && value.length <= 50;
+      fieldValidationErrors.username = usernameValid ? '': ' Vui lòng nhập username trong khoảng 6-50 ký tự!';
+      break;
+    default:
+      break;
+  }
+  this.setState({formErrors: fieldValidationErrors,
+                  passwordValid: passwordValid,
+                  usernameValid: usernameValid,
+                }, this.validateForm);
+}
+
+validateForm() {
+  console.log(this.state.passwordValid , 
+    this.state.usernameValid)
+  this.setState({formValid: this.state.passwordValid && this.state.usernameValid });
 }
 
   render() {
@@ -139,7 +176,8 @@ componentWillReceiveProps(nextProps) {
                           type="text"
                           placeholder="Username"
                           autoComplete="username"
-                          onChange = {this._onChangeInput} />
+                          onChange = {this._onChangeInput} 
+                          value={this.state.form.username}/>
                       </InputGroup>
                       <InputGroup className="mb-4">
                         <InputGroupAddon addonType="prepend">
@@ -152,11 +190,15 @@ componentWillReceiveProps(nextProps) {
                           type="password"
                           placeholder="Password"
                           autoComplete="current-password"
-                          onChange = {this._onChangeInput} />
+                          onChange = {this._onChangeInput} 
+                          value={this.state.form.password}/>
+                      </InputGroup>
+                      <InputGroup className="mb-4">
+                        <FormErrors formErrors={this.state.formErrors} />
                       </InputGroup>
                       <Row>
                         <Col xs="6">
-                          <Button onClick={this._submit} color="primary" className="px-4">Login</Button>
+                          <Button onClick={this._submit} color="primary" className="px-4" disabled={!this.state.formValid}>Login</Button>
                         </Col>
                         <Col xs="6" className="text-right">
                           <Button color="link" className="px-0">Forgot password?</Button>
