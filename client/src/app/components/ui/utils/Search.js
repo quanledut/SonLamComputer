@@ -27,12 +27,12 @@ class Search extends Component {
                     className="form-control" 
                     name = "keyword" 
                     id="exampleInputAmount" 
-                    placeholder="Search" 
+                    placeholder="Tìm kiếm" 
                     onChange = {this.onChange}
                 />
                 <span className="input-group-btn">
                     <button type="button" className="btn" style={{ backgroundColor: '#17a2b8' }} onClick = {this.onSearch}>
-                        <i className="fa fa-search text-white"> Search</i>
+                        <i className="fa fa-search text-white"> Tìm kiếm</i>
                     </button>
                 </span>
             </div>

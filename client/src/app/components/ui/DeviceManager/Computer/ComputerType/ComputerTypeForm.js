@@ -153,7 +153,7 @@ class ComputerTypeFormUI extends Component {
 
     _validate(name, value) {
         if (name === 'name') {
-            return !(value.length <= 50)
+            return !((value.length <= 100) && (value.length >= 6))
         } else {
             return value === "" || value === null
         }
@@ -189,7 +189,7 @@ class ComputerTypeFormUI extends Component {
 
         if(name === "name")
         {
-            if(value === "" || value === null)
+            if(value === "" || value === null || value.length > 100 || value.length < 6)
             {
                 this.setState({
                     isDisabled: true
@@ -229,7 +229,7 @@ class ComputerTypeFormUI extends Component {
                                         <Input onChange = {(event) => (this.isChange(event))} 
                                             value = {this.state.form.name}
                                             type="username" id="nf-username" name="name" placeholder="Nhập tên loại máy tính..." autoComplete="current-password" />
-                                         {this.state.error.name ? <FormText className="help-block"><span style={{color: "red"}}>Please enter valid your name</span></FormText> : ''} 
+                                         {this.state.error.name ? <FormText className="help-block"><span style={{color: "red"}}>Vui lòng nhập tên loại máy tính trong khoảng 6-100 ký tự!</span></FormText> : ''} 
                                     </FormGroup>
                                 </Form>
                             </CardBody>

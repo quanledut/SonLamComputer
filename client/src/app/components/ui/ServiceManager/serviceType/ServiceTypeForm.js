@@ -153,7 +153,7 @@ class ServiceTypeFormUI extends Component {
 
     _validate(name, value) {
         if (name === 'name') {
-            return !(value.length <= 50)
+            return !((value.length <= 100) && (value.length >= 6))
         } else {
             return value === "" || value === null
         }
@@ -187,15 +187,12 @@ class ServiceTypeFormUI extends Component {
               })
   
         }
-
-        if(name === "name")
+        
+        if(value === "" || value === null || value.length > 100 || value.length < 6)
         {
-            if(value === "" || value === null)
-            {
-                this.setState({
-                    isDisabled: true
-                })
-            }
+            this.setState({
+                isDisabled: true
+            })
         }
     }
 
@@ -230,7 +227,7 @@ class ServiceTypeFormUI extends Component {
                                         <Input onChange = {(event) => (this.isChange(event))} 
                                             value = {this.state.form.name}
                                             type="username" id="nf-username" name="name" placeholder="Nhập tên loại dịch vụ..." autoComplete="current-password" />
-                                         {this.state.error.name ? <FormText className="help-block"><span style={{color: "red"}}>Please enter valid your name</span></FormText> : ''} 
+                                         {this.state.error.name ? <FormText className="help-block"><span style={{color: "red"}}>Vui lòng nhập tên loại dịch vụ trong khoảng 6-100 ký tự!</span></FormText> : ''} 
                                     </FormGroup>
                                 </Form>
                             </CardBody>
