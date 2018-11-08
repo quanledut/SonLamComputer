@@ -57,7 +57,13 @@ class ServiceFormUI extends Component {
             isRedirect: false,
             isSell: false,
             isFix: false,
-            tbody: []
+            tbody: [],
+            formErrors: {serviceType: '',totalPrice: '', customer_name: '',customer_phone: ''},
+            serviceTypeValid: false,
+            totalPriceValid: false,
+            customer_nameValid: false,
+            customer_phoneValid: false,
+            formValid: false
         };
 
         this.onClear = this.onClear.bind(this)
@@ -108,7 +114,13 @@ class ServiceFormUI extends Component {
             },      
             _device_id:'',
             isDisabled:true,
-            isRedirect: false
+            isRedirect: false,
+            formErrors: {serviceType: '',totalPrice: '', customer_name: '',customer_phone: ''},
+            serviceTypeValid: false,
+            totalPriceValid: false,
+            customer_nameValid: false,
+            customer_phoneValid: false,
+            formValid: false
         });
     }
 
@@ -350,27 +362,79 @@ class ServiceFormUI extends Component {
         }
     }
 
-    _validate(name, value) {
+    _validate(fieldName, value) {
+        let fieldValidationErrors = this.state.formErrors;
+        let customer_nameValid = this.state.customer_nameValid;
+        let customer_phoneValid = this.state.customer_phoneValid;
+        let serviceTypeValid = this.state.serviceTypeValid;
+        let totalPriceValid = this.state.totalPriceValid;
+
         const re = /^\$?[0-9]+(\.[0-9][0-9])?$/;
-        if (name === 'accessories') {
-            return !(value !== null && value !== "" && value !== "None")
+        const regex = /^\+?(?:[0-9] ?){8,14}[0-9]$/;
+
+        switch(fieldName) {
+          case 'serviceType':
+            serviceTypeValid = (value !== null && value !== "" && value !== "None");
+            fieldValidationErrors.serviceType = serviceTypeValid ? '' : 'Vui lòng chọn loại dịch vụ!';
+            break;
+          case 'totalPrice':
+            totalPriceValid = re.test(value);
+            fieldValidationErrors.totalPrice = totalPriceValid ? '': 'Định dạng số không đúng!';
+            break;
+          case 'customer_name':
+            customer_nameValid = value.length >0;
+            fieldValidationErrors.customer_name = customer_nameValid ? '': ' Vui lòng nhập tên khách hàng!';
+            break;
+          case 'customer_phone':
+            customer_phoneValid = (value.length > 0);
+            if(!customer_phoneValid)
+            {
+                fieldValidationErrors.customer_phone = customer_phoneValid ? '': 'Vui lòng nhập số điện thoại khách hàng!';
+            }else
+            {
+                customer_phoneValid = regex.test(value);
+                fieldValidationErrors.customer_phone = customer_phoneValid ? '': 'Định dạng số điện thoại không đúng!';
+            }
+            
+            break;
+          default:
+            break;
         }
-        if (name === 'serviceType') {
-            return !(value !== null && value !== "" && value !== "None")
-        }
-        if (name === 'date') {
-            return !(value !== null && value !== "")
-        }
-        if (name === 'totalPrice') {
-            return !(re.test(value) && (value > 0))
-        }
-        if (name === 'customer_name') {
-            return !(value !== null && value !== "")
-        }
-        if (name === 'customer_phone') {
-            return !(value !== null && value !== "")
-        }
-    }
+        this.setState({formErrors: fieldValidationErrors,
+                        customer_phoneValid: customer_phoneValid,
+                        customer_nameValid: customer_nameValid,
+                        serviceTypeValid: serviceTypeValid,
+                        totalPriceValid: totalPriceValid
+                      }, this.validateForm);
+      }
+    
+      validateForm() {
+        this.setState({formValid: this.state.customer_phoneValid && this.state.customer_nameValid && 
+                        this.state.serviceTypeValid && this.state.totalPriceValid});
+      }
+
+    // _validate(name, value) {
+    //     const re = /^\$?[0-9]+(\.[0-9][0-9])?$/;
+    //     const regex = /^\+?(?:[0-9] ?){8,14}[0-9]$/;
+    //     if (name === 'accessories') {
+    //         return !(value !== null && value !== "" && value !== "None")
+    //     }
+    //     if (name === 'serviceType') {
+    //         return !(value !== null && value !== "" && value !== "None")
+    //     }
+    //     if (name === 'date') {
+    //         return !(value !== null && value !== "")
+    //     }
+    //     if (name === 'totalPrice') {
+    //         return !(re.test(value) && (value > 0))
+    //     }
+    //     if (name === 'customer_name') {
+    //         return !(value !== null && value !== "")
+    //     }
+    //     if (name === 'customer_phone') {
+    //         return !(regex.test(value) && (value > 0))
+    //     }
+    // }
 
     isChange = (event) =>
     {
@@ -403,16 +467,11 @@ class ServiceFormUI extends Component {
         }
 
 
-        if (JSON.stringify(this.state.error) === JSON.stringify({})) {
-            this.setState({
-                isDisabled:false
-              })
-        }
-        else{
-            this.setState({
-                isDisabled:true
-              })
-        }
+        // if (JSON.stringify(this.state.error) === JSON.stringify({})) {
+        //     this.setState({
+        //         isDisabled:false
+        //       })
+        // }
 
         if (name === "serviceType") {
             let type = this.state.serviceTypes.filter((i) => i._id == value)[0]
@@ -455,9 +514,7 @@ class ServiceFormUI extends Component {
 
                 }    
             })
-
         }
-
     }
 
     _deleteAccessory = (event, i) => {
@@ -504,7 +561,7 @@ class ServiceFormUI extends Component {
                                             onChange = {(event) => (this.isChange(event))} 
                                             value = {this.state.form.customer_name}
                                             type="username" id="nf-username" name="customer_name" placeholder="Nhập tên khách hàng..." autoComplete="current-password" />
-                                        {this.state.error.customer_name ? <FormText className="help-block"><span style={{color: "red"}}>Vui lòng nhập đúng định dạng!</span></FormText> : ''} 
+                                        {this.state.formErrors.customer_name ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.customer_name}</span></FormText> : ''} 
                                     </FormGroup>
                                     <FormGroup>
                                         <Label htmlFor="nf-username">Số điện thoại</Label>
@@ -512,7 +569,7 @@ class ServiceFormUI extends Component {
                                             disabled = {(this.props.match.params.id)?"disabled":""}
                                             value = {this.state.form.customer_phone}
                                             type="username" id="nf-username" name="customer_phone" placeholder="Nhập mã số điện thoại..." />
-                                         {this.state.error.customer_id_card ? <FormText className="help-block"><span style={{color: "red"}}>Vui lòng nhập đúng định dạng!</span></FormText> : ''} 
+                                         {this.state.formErrors.customer_phone ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.customer_phone}</span></FormText> : ''} 
                                     </FormGroup>
                                     <FormGroup>
                                             <Label htmlFor="select">Loại dịch vụ</Label>
@@ -528,6 +585,7 @@ class ServiceFormUI extends Component {
                                                     )
                                                 }
                                             </Input>
+                                            {this.state.formErrors.serviceType ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.serviceType}</span></FormText> : ''} 
                                     </FormGroup>
                                     <FormGroup>
                                         <Label htmlFor="nf-username">Tổng tiền</Label>
@@ -535,7 +593,7 @@ class ServiceFormUI extends Component {
                                             disabled = {(this.props.match.params.id)?"disabled":""}
                                             value = {this.state.form.totalPrice}
                                             type="username" id="nf-username" name="totalPrice" placeholder="Nhập tổng tiền..." autoComplete="current-password" />
-                                         {this.state.error.totalPrice ? <FormText className="help-block"><span style={{color: "red"}}>Vui lòng nhập đúng định dạng!</span></FormText> : ''} 
+                                         {this.state.formErrors.totalPrice ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.totalPrice}</span></FormText> : ''} 
                                     </FormGroup>
                                 </Form>
                                 {/* <FormGroup>
@@ -765,7 +823,8 @@ class ServiceFormUI extends Component {
                             {
                                 (!this.props.match.params.id) && 
                                 <CardFooter>
-                                    <Button type="submit" size="sm" color="primary" disabled={this.state.isDisabled} onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button>
+                                    {/* <Button type="submit" size="sm" color="primary" disabled={this.state.isDisabled} onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button> */}
+                                    <Button type="submit" size="sm" color="primary" disabled={!this.state.formValid} onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button>
                                     <Button type="reset" size="sm" color="danger" onClick = {this.onClear}><i className="fa fa-ban"></i> Reset</Button>
                                 </CardFooter>
                             }
