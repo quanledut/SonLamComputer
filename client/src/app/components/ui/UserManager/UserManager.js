@@ -30,11 +30,18 @@ class UserManager extends Component {
                     <td>
                         <div className="btn-group">
                             <Link 
-                                to = {`/usermanager/${user._id}/edit`}
+                                to = {`/usermanager/${user._id}/edit/0`}
                                 className="btn btn-primary"
                             >
                                 <i className="fa fa-edit"> Sửa </i>
                             </Link>
+                            <Link 
+                                to = {`/usermanager/${user._id}/edit/1`}
+                                className="btn" style={{ backgroundColor: '#17a2b8' }}
+                            >
+                                <i className="fa fa-edit text-white"> Đổi mật khẩu </i>
+                            </Link>
+
                             <DeleteFrom 
                                 name={user.username} 
                                 id={user._id}

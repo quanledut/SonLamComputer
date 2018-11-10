@@ -95,7 +95,7 @@ const find = async (req,res) => {
     }
     catch (err) {
         console.log(err)
-        sendJsonResponse(res,500,err);
+        sendJsonResponse(res,500,{             msg: "Tìm kiếm thất bại",             detail: err         });
     }
 };
 
@@ -105,10 +105,16 @@ const findById = (req, res) => {
         .findById(req.params.serviceId)
         .exec()
         .then((service) => {
-            if (!service) sendJsonResponse(res, 404, "Not found");
+            if (!service) sendJsonResponse(res, 404, {
+                msg: "Tìm kiếm thất bại",
+                detail: "Not found"
+            });
             else sendJsonResponse(res, 200, service);
         }, (err) => {
-            sendJsonResponse(res, 500, err);
+            sendJsonResponse(res, 500, {
+                msg: "Tìm kiếm thất bại",
+                detail: err
+            });
         })
 }
 
@@ -118,7 +124,7 @@ const create = (req, res) => {
         !req.body.customer_name || req.body.customer_name.length == 0 ||
         !req.body.customer_phone || req.body.customer_phone.length == 0 || 
         (req.body.devices.length == 0) && (req.body.accessories == 0))  {
-            sendJsonResponse(res, 400, "Invalid input")
+            sendJsonResponse(res, 400, {msg: "Input không hợp lệ",detail: "Invalid input"})
             return;
     }
     let service = new Service();

@@ -34,7 +34,7 @@ const routes = [
   // { path: '/users/:id', exact: true, name: 'User Details', component: User },
   { path: '/usermanager', exact: true, name: 'User Manager', component: Users },
   { path: '/usermanager/new', exact: true, name: 'Add New User', component: UserForm },
-  { path: '/usermanager/:id/edit', exact: true, name: 'Edit User', component: UserForm },
+  { path: '/usermanager/:id/edit/:isChangePassword', exact: true, name: 'Edit User', component: UserForm },
 
   { path: '/roles/', exact: true, name: 'Role Manager', component: Roles },
   { path: '/roles/new', exact: true, name: 'New Role', component: RoleForm },

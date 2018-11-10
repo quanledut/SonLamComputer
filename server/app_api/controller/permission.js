@@ -48,6 +48,7 @@ const checkPermission = async (roles, collectionName, action) => {
 const checkPermissionForCollection = (collectionName) => (action) => async (req, res, next) => {
     const roles = req.payload.roles.map((r) => new ObjectId(r._id));
     const allowed = await checkPermission(roles, collectionName, action);
+
     if (allowed) {
         next();
     } else {

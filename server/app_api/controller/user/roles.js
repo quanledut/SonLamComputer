@@ -18,7 +18,10 @@ const findById = (req, res) => {
         .populate('users')
         .populate('policies')
         .exec((err, role) => {
-            if (!role) sendJsonResponse(res, 404, "Not found");
+            if (!role) sendJsonResponse(res, 404, {
+                msg: "Tìm kiếm thất bại",
+                detail: "Not found"
+            });
             else sendJsonResponse(res, 200, role);
         })
 }
@@ -45,7 +48,10 @@ const create = async (req, res) => {
         sendJsonResponse(res, 201, result);
     } catch (err) {
         console.log(err)
-        sendJsonResponse(res, 500, err);
+        sendJsonResponse(res, 500, {
+            msg: "Tạo mới thất bại",
+            detail: err
+        });
     }
 }
 
@@ -53,21 +59,27 @@ const updateById = async (req, res) => {
     // let role;
 
 
-    // Role
-    //     .findById(
-    //         req.params.roleId
-    //     , (err, role) => {
-    //         if (err) sendJsonResponse(res, 500, err);
-    //         else {
-    //             role.policies = req.body.policies
-    //             console.log(role, req.body.polices)
-    //             if (role.name != req.body.name) role.name = req.body.name
-    //             role.save((err,r) => {
-    //                 if (err) sendJsonResponse(res, 500, err);
-    //                 else sendJsonResponse(res, 200, r);
-    //             })
-    //         }
-    //     })
+    Role
+        .findById(
+            req.params.roleId
+        , (err, role) => {
+            if (err) sendJsonResponse(res, 500, {
+                msg: "Cập nhật thất bại",
+                detail: err
+            });
+            else {
+                role.policies = req.body.policies
+                console.log(role, req.body.polices)
+                if (role.name != req.body.name) role.name = req.body.name
+                role.save((err,r) => {
+                    if (err) sendJsonResponse(res, 500, {
+                        msg: "Cập nhật thất bại",
+                        detail: err
+                    });
+                    else sendJsonResponse(res, 200, r);
+                })
+            }
+        })
 }
 
 const deleteById = (req, res) => {
@@ -75,7 +87,10 @@ const deleteById = (req, res) => {
         .findByIdAndRemove(
             req.params.roleId,
             (err, result) => {
-                if (err) sendJsonResponse(res, 500 ,err);
+                if (err) sendJsonResponse(res, 500 ,{
+                    msg: "Xóa thất bại",
+                    detail: err
+                });
                 else sendJsonResponse(res, 204, {});
             }
         )
