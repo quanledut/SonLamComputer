@@ -71,10 +71,25 @@ export function * updated() {
     }
 }
 
+export function * changePassword() {
+    while (true) {
+        const request = yield take(userActions.CONSTANTS.CHANGE_PASSWORD_REQUEST)
+        const data = request.data
+        try {
+            let result = yield call(userApi.changePasswordApi, data)
+            request.cb(result, null)
+            yield put(userActions.changePasswordRequestSuccess(result))
+        } catch(err) {
+            request.cb(null, err.message)
+        }
+    }
+}
+
 export default function * root () {
     yield fork(findAll)
     yield fork(add)
     yield fork(deleted)
     yield fork(findById)
     yield fork(updated)
+    yield fork(changePassword)
 }

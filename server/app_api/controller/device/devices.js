@@ -78,7 +78,10 @@ const find = async (req,res) => {
     }
     catch (err) {
         console.log(err)
-        sendJsonResponse(res,500,err);
+        sendJsonResponse(res,500,{
+            msg: "Tìm kiếm thất bại",
+            detail: err
+        });
     }
 };
 
@@ -89,9 +92,12 @@ const findById = (req,res) => {
     .exec()
     .then((deviceType) => {
         if(deviceType) sendJsonResponse(res,200,deviceType)
-        else sendJsonResponse(res,400,'Not found');
+        else sendJsonResponse(res,404, {
+            msg: 'Tìm kiếm thất bại',
+            detail: 'Not found'
+        });
     })
-    .catch(err => sendJsonResponse(res,500,err));
+    .catch(err => sendJsonResponse(res,500,{             msg: "Tìm kiếm thất bại",             detail: err         }));
 }
 
 const findByName = (req,res) =>{
@@ -102,7 +108,7 @@ const findByName = (req,res) =>{
         if(deviceTypes) sendJsonResponse(res,200,deviceTypes);
         else sendJsonResponse(res,404, 'Not found')
     }
-    ,(err) => sendJsonResponse(res,500,err)
+    ,(err) => sendJsonResponse(res,500,{             msg: "Tìm kiếm thất bại",             detail: err         })
     )
 }
 
@@ -111,7 +117,10 @@ const create = (req,res) => {
     .findOne({name:req.body.name, type: req.body.deviceType})
     .exec((err,ct)=>{
         if(ct){
-            sendJsonResponse(res,500,'Accessory is existed');
+            sendJsonResponse(res,500, {
+                msg: "Thiết bị đã tồn tại",
+                detail: "Device existed"
+            });
             return;
         }
         else{
@@ -124,7 +133,10 @@ const create = (req,res) => {
                 price: req.body.price,
                 guaranteeDuration: req.body.guaranteeDuration
             }, (err, device) => {
-                if(err) sendJsonResponse(res,500,'Try again later');
+                if(err) sendJsonResponse(res,500, {
+                    msg: "Tạo mới thất bại",
+                    detail: err
+                });
                 else sendJsonResponse(res,200,device);
             })        
         }
@@ -147,7 +159,7 @@ const create = (req,res) => {
 //         }
 //     )
 //     ,(err,deviceType) => {
-//         if(err) sendJsonResponse(res,500,err);
+//         if(err) sendJsonResponse(res,500,{             msg: "Tìm kiếm thất bại",             detail: err         });
 //         else sendJsonResponse(res,200,deviceType);
 //     }
 // }

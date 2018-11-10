@@ -57,7 +57,7 @@ const find = async (req,res) => {
     }
     catch (err) {
         console.log(err)
-        sendJsonResponse(res,500,err);
+        sendJsonResponse(res,500,{             msg: "Tìm kiếm thất bại",             detail: err         });
     }
 };
 
@@ -67,9 +67,12 @@ const findById = (req,res) => {
     .exec()
     .then((deviceType) => {
         if(deviceType) sendJsonResponse(res,200,deviceType)
-        else sendJsonResponse(res,400,'Not found');
+        else sendJsonResponse(res,404, {
+            msg: 'Tìm kiếm thất bại',
+            detail: 'Not found'
+        });
     })
-    .catch(err => sendJsonResponse(res,500,err));
+    .catch(err => sendJsonResponse(res,500,{             msg: "Tìm kiếm thất bại",             detail: err         }));
 }
 
 const findByName = (req,res) =>{
@@ -78,22 +81,31 @@ const findByName = (req,res) =>{
     .exec()
     .then((deviceTypes) =>{
         if(deviceTypes) sendJsonResponse(res,200,deviceTypes);
-        else sendJsonResponse(res,404, 'Not found')
+        else sendJsonResponse(res,404, {
+            msg: 'Tìm kiếm thất bại',
+            detail: 'Not found'
+        });
     }
-    ,(err) => sendJsonResponse(res,500,err)
+    ,(err) => sendJsonResponse(res,500,{             msg: "Tìm kiếm thất bại",             detail: err         })
     )
 }
 
 const create = (req,res) => {
     if(!req.body.name || req.body.name.lenth == 0){
-        sendJsonResponse(res,400,'Invalid Input');
+        sendJsonResponse(res,400, {
+            msg: "Input không hợp lệ",
+            detail: "Invalid Input"
+        });
         return;
     }
     DeviceType.findOne({name: req.body.name})
     .exec()
     .then((deviceTypes =>{
         if(deviceTypes){
-            sendJsonResponse(res,500,'Device type is existed!!');
+            sendJsonResponse(res,500, {
+                msg: "Loại thiết bị đã tồn tại",
+                detail: "DeviceType existed"
+            });
             return;
         }
 
@@ -119,7 +131,7 @@ const create = (req,res) => {
 //         }
 //     )
 //     ,(err,deviceType) => {
-//         if(err) sendJsonResponse(res,500,err);
+//         if(err) sendJsonResponse(res,500,{             msg: "Tìm kiếm thất bại",             detail: err         });
 //         else sendJsonResponse(res,200,deviceType);
 //     }
 // }

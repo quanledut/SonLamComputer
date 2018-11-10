@@ -54,7 +54,10 @@ const find = async (req,res) => {
     }
     catch (err) {
         console.log(err)
-        sendJsonResponse(res,500,err);
+        sendJsonResponse(res,500, {
+            msg: "Tìm kiếm thất bại",
+            detail: err
+        });
     }
 };
 
@@ -63,9 +66,15 @@ const findById = (req,res) =>{
     ComputerType
     .findById(req.params.computerTypeId)
     .exec((err,computerType) =>{
-        if(err) sendJsonResponse(res,500,err);
+        if(err) sendJsonResponse(res,500,{
+            msg: "Tìm kiếm thất bại",
+            detail: err
+        });
         else if(computerType) sendJsonResponse(res,200,computerType);
-        else sendJsonResponse(res,404,'Not found');
+        else sendJsonResponse(res,404, {
+            msg: "Tìm kiếm thất bại",
+            detail: "Not found"
+        });
     })
 }
 
@@ -80,8 +89,14 @@ const updateById = (req,res) =>{
             new: true
         }
     ,(err,computerType) =>{
-        if(err) sendJsonResponse(res,500,err)
-        else if(!computerType) sendJsonResponse(res,404,'ComputerType not found');
+        if(err) sendJsonResponse(res,500,{
+            msg: "Cập nhật thất bại",
+            detail: err
+        })
+        else if(!computerType) sendJsonResponse(res,404, {
+            msg: "Cập nhật thất bại",
+            detail: "Not found"
+        });
         else sendJsonResponse(res,200,computerType)
         }
     )
@@ -89,21 +104,30 @@ const updateById = (req,res) =>{
 
 const create = (req,res) => {
     if(!req.body.name && req.body.name == ''){
-        sendJsonResponse(res,500,'Invalid input');
+        sendJsonResponse(res,500, {
+            msg: "Input không hợp lệ",
+            detail: "Invalid input"
+        });
         return;
     }
     ComputerType
     .findOne({name:req.body.name})
     .exec((err,ct)=>{
         if(ct){
-            sendJsonResponse(res,500,'Computer Type is exist');
+            sendJsonResponse(res,500, {
+                msg: "Loại máy tính đã tồn tại",
+                detail: "Computer Type is exist"
+            });
             return;
         }
         else{
             let computerType = new ComputerType();
             computerType.name = req.body.name;
             computerType.save((err,ct) =>{
-                if(err) sendJsonResponse(res,500,err);
+                if(err) sendJsonResponse(res,500, {
+                    msg: "Tạo mới thất bại",
+                    detail: err
+                });
                 else sendJsonResponse(res,200,ct);
             });
         }
@@ -114,7 +138,10 @@ const deleteById = (req,res) => {
     ComputerType
     .findByIdAndRemove(req.params.computerTypeId,
     (err)=>{
-        if(err) sendJsonResponse(res,500,err);
+        if(err) sendJsonResponse(res,500, {
+            msg: "Xóa thất bại",
+            detail: err
+        });
         else sendJsonResponse(res,200,'Deleted!');
     })
 }

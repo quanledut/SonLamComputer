@@ -59,28 +59,28 @@ const route_accessory = (router) => {
     router.get(
         '/accessorys',
         auth,
-        checkPermissionForAccessoryType(permission.type.READ),
+        checkPermissionForAccessory(permission.type.READ),
         ctrlAccessory.find
     );
 
     router.get(
         '/accessorys/:accessoryId',
         auth,
-        checkPermissionForAccessoryType(permission.type.READ),
+        checkPermissionForAccessory(permission.type.READ),
         ctrlAccessory.findById
     );
 
     router.post(
         '/accessorys',
         auth,
-        checkPermissionForAccessoryType(permission.type.CREATE),
+        checkPermissionForAccessory(permission.type.CREATE),
         ctrlAccessory.create
     );
 
     router.put(
         '/accessorys/:accessoryId',
         auth,
-        checkPermissionForAccessoryType(permission.type.UPDATE),
+        checkPermissionForAccessory(permission.type.UPDATE),
         ctrlAccessory.updateById
     );
 
@@ -88,7 +88,7 @@ const route_accessory = (router) => {
     router.delete(
         '/accessorys/:accessoryId',
         auth,
-        checkPermissionForAccessoryType(permission.type.DELETE),
+        checkPermissionForAccessory(permission.type.DELETE),
         ctrlAccessory.deleteById
     )
 

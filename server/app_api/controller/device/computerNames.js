@@ -66,7 +66,10 @@ const find = async (req,res) => {
     }
     catch (err) {
         console.log(err)
-        sendJsonResponse(res,500,err);
+        sendJsonResponse(res,500,{
+            msg: "Tìm kiếm thất bại",
+            detail: err
+        });
     }
 };
 
@@ -76,22 +79,31 @@ const findById = (req,res) => {
     .findById(req.params.computerNameId)
     .populate('type')
     .exec((err,computerName)=>{
-        if(err) sendJsonResponse(res,500,err);
+        if(err) sendJsonResponse(res,500,{             msg: "Tìm kiếm thất bại",             detail: err         });
         else if(computerName) sendJsonResponse(res,200,computerName);
-        else sendJsonResponse(res,404,'Not found');
+        else sendJsonResponse(res,404, {
+            msg: "Tìm kiếm thất bại",
+            detail: "Not found"
+        });
     });
 }
 
 const create = (req,res) => {
     if(!req.body.name && req.body.name.length == 0){
-        sendJsonResponse(res,400,'Invalid Input');
+        sendJsonResponse(res,400, {
+            msg: "Input không hợp lệ",
+            detail: "Invalid Input"
+        });
         return;
     }
     ComputerName
     .findOne({name:req.body.name, type: req.body.type})
     .exec((err,computerName) => {
         if(computerName){
-            sendJsonResponse(res,500,'Computer Name is exist');
+            sendJsonResponse(res,500, {
+                msg: "Tên máy tính đã tồn lại",
+                detail: "Computer Name is exist"
+            });
             return;
         }
 
@@ -99,7 +111,10 @@ const create = (req,res) => {
         newComputerName.name = req.body.name;
         newComputerName.type = req.body.type;
         newComputerName.save((err,cn)=>{
-            if(err) sendJsonResponse(res,500,err);
+            if(err) sendJsonResponse(res,500, {
+                msg: "Tạo mới thất bại",
+                detail: err
+            });
             if(cn) sendJsonResponse(res,200,cn);
         })
     
@@ -120,7 +135,10 @@ const updateById = (req, res) => {
                 new: true
             },
             (err, computerName) => {
-                if (err) sendJsonResponse(res, 500, err);
+                if (err) sendJsonResponse(res, 500, {
+                    msg: "Cập nhật thất bại",
+                    detail: err
+                });
                 else sendJsonResponse(res, 200, computerName);
             }
         )
@@ -130,7 +148,10 @@ const deleteById = (req,res) =>{
     ComputerName
     .findByIdAndRemove(req.params.computerNameId
     ,(err, computerName) => {
-        if(err) sendJsonResponse(res,500,err);
+        if(err) sendJsonResponse(res,500,{
+            msg: "Xóa thất bại",
+            detail: err
+        });
         if(computerName) sendJsonResponse(res,200,'Deleted');
     })
 }

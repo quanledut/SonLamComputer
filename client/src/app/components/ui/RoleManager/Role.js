@@ -30,9 +30,9 @@ class RoleManager extends Component {
                     </td>
                     <td>
                         <div className="btn-group">
-                            <div className="btn btn-success">
+                            {/* <div className="btn btn-success">
                                 <i className="fa fa-eye"> Chi tiết </i>
-                            </div>
+                            </div> */}
                             <Link 
                                 to = {`/roles/${role._id}/edit`}
                                 className="btn btn-primary"

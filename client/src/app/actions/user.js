@@ -11,6 +11,9 @@ const DELETE_REQUEST_SUCCESS = DELETE_REQUEST + "_SUCCESS"
 const UPDATE_REQUEST = USER_PREFIX + "_UPDATE_REQUEST";
 const UPDATE_REQUEST_SUCCESS = UPDATE_REQUEST + "_SUCCESS"
 
+const CHANGE_PASSWORD_REQUEST = USER_PREFIX + "_CHANGE_PASSWORD_REQUEST";
+const CHANGE_PASSWORD_REQUEST_SUCCESS = CHANGE_PASSWORD_REQUEST + "_SUCCESS"
+
 const FIND_BY_ID_REQUEST = USER_PREFIX + "_FIND_BY_ID_REQUEST";
 
 const SEARCH_REQUEST = USER_PREFIX + "_SEARCH_REQUEST_REQUEST";
@@ -27,6 +30,9 @@ export const CONSTANTS = {
 
     UPDATE_REQUEST,
     UPDATE_REQUEST_SUCCESS,
+
+    CHANGE_PASSWORD_REQUEST,
+    CHANGE_PASSWORD_REQUEST_SUCCESS,
 
     FIND_BY_ID_REQUEST,
     SEARCH_REQUEST,
@@ -66,6 +72,16 @@ export function updateRequest(data, cb) {
 export function updateRequestSuccess(data) {
     return {type: CONSTANTS.UPDATE_REQUEST_SUCCESS, data}
 }
+
+export function changePasswordRequest(data, cb) {
+    return {type: CONSTANTS.CHANGE_PASSWORD_REQUEST, data, cb}
+}
+
+export function changePasswordRequestSuccess(data) {
+    return {type: CONSTANTS.CHANGE_PASSWORD_REQUEST_SUCCESS, data}
+}
+
+
 
 //--------------------------------------------------------------
 export function findByIdRequest(id, cb) {

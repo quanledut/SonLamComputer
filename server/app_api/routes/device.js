@@ -59,28 +59,28 @@ const route_device = (router) => {
     router.get(
         '/devices',
         auth,
-        checkPermissionForDeviceType(permission.type.READ),
+        checkPermissionForDevice(permission.type.READ),
         ctrlDevice.find
     );
 
     router.get(
         '/devices/:deviceId',
         auth,
-        checkPermissionForDeviceType(permission.type.READ),
+        checkPermissionForDevice(permission.type.READ),
         ctrlDevice.findById
     );
 
     router.post(
         '/devices',
         auth,
-        checkPermissionForDeviceType(permission.type.CREATE),
+        checkPermissionForDevice(permission.type.CREATE),
         ctrlDevice.create
     );
 
     router.put(
         '/devices/:deviceId',
         auth,
-        checkPermissionForDeviceType(permission.type.UPDATE),
+        checkPermissionForDevice(permission.type.UPDATE),
         ctrlDevice.updateById
     );
 
@@ -88,7 +88,7 @@ const route_device = (router) => {
     router.delete(
         '/devices/:deviceId',
         auth,
-        checkPermissionForDeviceType(permission.type.DELETE),
+        checkPermissionForDevice(permission.type.DELETE),
         ctrlDevice.deleteById
     )
 

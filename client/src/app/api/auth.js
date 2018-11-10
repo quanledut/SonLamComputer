@@ -5,7 +5,7 @@ const loginApi = (username, password) =>
         .post("/users/login", {username, password})
         .then((response) => response.data)
         .catch((err) => {
-            throw new Error(err.response.data)
+            console.log(err); throw new Error(err.response.data.msg)
         })
 
 export {loginApi}

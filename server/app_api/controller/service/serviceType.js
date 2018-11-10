@@ -52,7 +52,7 @@ const find = async (req,res) => {
     }
     catch (err) {
         console.log(err)
-        sendJsonResponse(res,500,err);
+        sendJsonResponse(res,500,{             msg: "Tìm kiếm thất bại",             detail: err         });
     }
 };
 
@@ -70,7 +70,7 @@ const findById = (req, res) => {
 
 const create = (req, res) => {
     if (!req.body.name || req.body.name.length == 0)  {
-        sendJsonResponse(res, 400, "Invalid input")
+        sendJsonResponse(res, 400, {msg: "Input không hợp lệ",detail: "Invalid input"})
         return;
     }
     let serviceType = new ServiceType();

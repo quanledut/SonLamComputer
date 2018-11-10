@@ -9,6 +9,7 @@ let userSchema = new mongoose.Schema({
   fullname: String,
   address: String,
   phone: String,
+  gender: {type: String, default: "Khác"},
   roles: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Role' }],
   created_time: {type: Date, default: Date.now},
 	hash: String,

@@ -18,6 +18,9 @@ export const UserForm = connect(
         updateUser(user, cb) {
             dispatch(userActions.updateRequest(user, cb));
         },
+        changePassword(ps, cb) {
+            dispatch(userActions.changePasswordRequest(ps, cb));
+        },
         getUserById(id, cb) {
             dispatch(userActions.findByIdRequest(id, cb));
         }
