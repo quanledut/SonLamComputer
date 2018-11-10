@@ -31,8 +31,8 @@ class ComputerNameFormUI extends Component {
         this.state = {
             form: {...DEFAULT_FORM},
             error: {
-                name: true,
-                type: true,
+                name: false,
+                type: false,
             },
             modal: {
                 isOpened: false,
@@ -167,7 +167,9 @@ class ComputerNameFormUI extends Component {
 
     _validate(name, value) {
         if (name === 'name') {
-            return !(value.length <= 50)
+            return !((value.length <= 100) && (value.length >= 6))
+        }if (name === 'type') {
+            return !(value !== "")
         } else {
             return value === "" || value === null
         }
@@ -203,12 +205,13 @@ class ComputerNameFormUI extends Component {
   
         }
 
-        if(value === "" || value === null)
+        if(value === "" || value === null || value.length > 100 || value.length < 6)
         {
             this.setState({
                 isDisabled: true
             })
         }
+        
     }
 
     render() {
@@ -242,7 +245,7 @@ class ComputerNameFormUI extends Component {
                                         <Input onChange = {(event) => (this.isChange(event))} 
                                             value = {this.state.form.name}
                                             type="username" id="nf-username" name="name" placeholder="Nhập tên máy tính..." autoComplete="current-password" />
-                                         {this.state.error.name ? <FormText className="help-block"><span style={{color: "red"}}>Please enter valid your name</span></FormText> : ''} 
+                                         {this.state.error.name ? <FormText className="help-block"><span style={{color: "red"}}>Vui lòng nhập tên máy tính trong khoảng 6-100 ký tự!</span></FormText> : ''} 
                                     </FormGroup>
                                     <FormGroup>
                                         <Label htmlFor="select">Loại máy tính</Label>
@@ -257,6 +260,7 @@ class ComputerNameFormUI extends Component {
                                                 )
                                             }
                                         </Input>
+                                        {this.state.error.type ? <FormText className="help-block"><span style={{color: "red"}}>Vui lòng chọn loại máy tính!</span></FormText> : ''}
                                     </FormGroup>
                                 </Form>
                             </CardBody>

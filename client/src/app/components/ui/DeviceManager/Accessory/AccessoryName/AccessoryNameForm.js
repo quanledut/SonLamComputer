@@ -45,7 +45,14 @@ class AccessoryNameFormUI extends Component {
             types: [],
             computerNames: [],
             isDisabled:true,
-            isRedirect: false
+            isRedirect: false,
+            formErrors: {computerName: '',type: '',amount: '', price:'',guaranteeDuration:''},
+            computerNameValid: false,
+            typeValid: false,
+            amountValid: false,
+            priceValid: false,
+            guaranteeDurationValid: false,
+            formValid: false
         };
 
         this.onClear = this.onClear.bind(this)
@@ -98,7 +105,14 @@ class AccessoryNameFormUI extends Component {
                 content: ""
             },      
             isDisabled:true,
-            isRedirect: false
+            isRedirect: false,
+            formErrors: {computerName: '',type: '',amount: '', price:'',guaranteeDuration:''},
+            computerNameValid: false,
+            typeValid: false,
+            amountValid: false,
+            priceValid: false,
+            guaranteeDurationValid: false,
+            formValid: false
         });
     }
 
@@ -178,24 +192,90 @@ class AccessoryNameFormUI extends Component {
         }
     }
 
-    _validate(name, value) {
+    _validate(fieldName, value) {
+        let fieldValidationErrors = this.state.formErrors;
+        let computerNameValid = this.state.computerNameValid;
+        let typeValid = this.state.typeValid;
+        let amountValid = this.state.amountValid;
+        let priceValid = this.state.priceValid;
+        let guaranteeDurationValid = this.state.guaranteeDurationValid;
+
         const re = /^\$?[0-9]+(\.[0-9][0-9])?$/;
-        if (name === 'computerName') {
-            return !(value !== null && value !== "")
+
+        switch(fieldName) {
+          case 'deviceType':
+            typeValid = (value !== null && value !== "" && value !== "None");
+            fieldValidationErrors.type = typeValid ? '' : 'Vui lòng chọn loại thiết bị!';
+            break;
+          case 'amount':
+            amountValid = value.length > 0;
+            if(!amountValid)
+            {
+                fieldValidationErrors.amount = amountValid ? '': 'Vui lòng nhập số lượng!';
+            }else{
+                amountValid = re.test(value);
+                fieldValidationErrors.amount = amountValid ? '': 'Định dạng số không đúng!';
+            }
+            break;
+          case 'price':
+            priceValid = value.length > 0;
+            if(!priceValid)
+            {
+                fieldValidationErrors.price = priceValid ? '': 'Vui lòng nhập giá thiết bị!';
+            }else{
+                priceValid = re.test(value);
+                fieldValidationErrors.price = priceValid ? '': 'Định dạng số không đúng!';
+            }
+            break;
+          case 'computerName':
+            computerNameValid = (value !== null && value !== "" && value !== "None");
+            fieldValidationErrors.computerName = computerNameValid ? '': ' Vui lòng chọn tên máy tính!';
+            break;
+          case 'guaranteeDuration':
+            guaranteeDurationValid = value.length > 0;
+            if(!guaranteeDurationValid)
+            {
+                fieldValidationErrors.guaranteeDuration = guaranteeDurationValid ? '': 'Vui lòng nhập thời gian bảo hành!';
+            }else{
+                guaranteeDurationValid = re.test(value);
+                fieldValidationErrors.guaranteeDuration = guaranteeDurationValid ? '': 'Định dạng số không đúng!';
+            }
+            break;
+          default:
+            break;
         }
-        if (name === 'type') {
-            return !(value !== null && value !== "")
-        }
-        if (name === 'price') {
-            return !(re.test(value)) && (value > 0)
-        }
-        if (name === 'amount') {
-            return !(re.test(value) && (value > 0))
-        }
-        if (name === 'guaranteeDuration') {
-            return !(re.test(value) && (value > 0))
-        }
-    }
+        this.setState({formErrors: fieldValidationErrors,
+                        guaranteeDurationValid: guaranteeDurationValid,
+                        computerNameValid: computerNameValid,
+                        priceValid: priceValid,
+                        amountValid: amountValid,
+                        typeValid: typeValid
+                      }, this.validateForm);
+      }
+    
+      validateForm() {
+        this.setState({formValid: this.state.guaranteeDurationValid && this.state.computerNameValid && 
+                        this.state.priceValid && this.state.amountValid && this.state.typeValid});
+      }
+
+    // _validate(name, value) {
+    //     const re = /^\$?[0-9]+(\.[0-9][0-9])?$/;
+    //     if (name === 'computerName') {
+    //         return !(value !== null && value !== "")
+    //     }
+    //     if (name === 'type') {
+    //         return !(value !== null && value !== "")
+    //     }
+    //     if (name === 'price') {
+    //         return !(re.test(value)) && (value > 0)
+    //     }
+    //     if (name === 'amount') {
+    //         return !(re.test(value) && (value > 0))
+    //     }
+    //     if (name === 'guaranteeDuration') {
+    //         return !(re.test(value) && (value > 0))
+    //     }
+    // }
 
     isChange = (event) =>
     {
@@ -268,6 +348,7 @@ class AccessoryNameFormUI extends Component {
                                                         <option key={id} value={e._id}>{e.name}</option>
                                                     )}
                                             </Input>
+                                            {this.state.formErrors.computerName ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.computerName}</span></FormText> : ''} 
                                     </FormGroup>
                                     <FormGroup>
                                             <Label htmlFor="select">Loại linh kiện</Label>
@@ -282,27 +363,27 @@ class AccessoryNameFormUI extends Component {
                                                     )
                                                 }
                                             </Input>
+                                            {this.state.formErrors.type ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.type}</span></FormText> : ''} 
                                     </FormGroup>
                                     <FormGroup>
                                         <Label htmlFor="nf-username">Mô tả</Label>
                                         <Input onChange = {(event) => (this.isChange(event))} 
                                             value = {this.state.form.description}
                                             type="username" id="nf-username" name="description" placeholder="Nhập mô tả..." autoComplete="current-password" />
-                                         {this.state.error.description ? <FormText className="help-block"><span style={{color: "red"}}>Vui lòng nhập đúng định dạng!</span></FormText> : ''} 
                                     </FormGroup>
                                     <FormGroup>
                                         <Label htmlFor="nf-username">Giá bán</Label>
                                         <Input onChange = {(event) => (this.isChange(event))} 
                                             value = {this.state.form.price}
                                             type="username" id="nf-username" name="price" placeholder="Nhập giá bán..." autoComplete="current-password" />
-                                         {this.state.error.price ? <FormText className="help-block"><span style={{color: "red"}}>Vui lòng nhập đúng định dạng!</span></FormText> : ''} 
+                                         {this.state.formErrors.price ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.price}</span></FormText> : ''} 
                                     </FormGroup>
                                     <FormGroup>
-                                        <Label htmlFor="nf-username">Số tiền</Label>
+                                        <Label htmlFor="nf-username">Số lượng</Label>
                                         <Input onChange = {(event) => (this.isChange(event))} 
                                             value = {this.state.form.amount}
                                             type="username" id="nf-username" name="amount" placeholder="Nhập số tiền..." autoComplete="current-password" />
-                                         {this.state.error.amount ? <FormText className="help-block"><span style={{color: "red"}}>Vui lòng nhập đúng định dạng!</span></FormText> : ''} 
+                                         {this.state.formErrors.amount ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.amount}</span></FormText> : ''} 
                                     </FormGroup>
                                     <FormGroup>
                                         <Label htmlFor="nf-username">Link ảnh</Label>
@@ -316,12 +397,12 @@ class AccessoryNameFormUI extends Component {
                                         <Input onChange = {(event) => (this.isChange(event))} 
                                             value = {this.state.form.guaranteeDuration}
                                             type="username" id="nf-username" name="guaranteeDuration" placeholder="Nhập thời gian bảo hành..." autoComplete="current-password" />
-                                         {this.state.error.guaranteeDuration ? <FormText className="help-block"><span style={{color: "red"}}>Vui lòng nhập đúng định dạng!</span></FormText> : ''} 
+                                         {this.state.formErrors.guaranteeDuration ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.guaranteeDuration}</span></FormText> : ''} 
                                     </FormGroup>
                                 </Form>
                             </CardBody>
                             <CardFooter>
-                                <Button type="submit" size="sm" color="primary" disabled={this.state.isDisabled} onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button>
+                                <Button type="submit" size="sm" color="primary" disabled={!this.state.formValid} onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button>
                                 <Button type="reset" size="sm" color="danger" onClick = {this.onClear}><i className="fa fa-ban"></i> Reset</Button>
                             </CardFooter>
                         </Card>

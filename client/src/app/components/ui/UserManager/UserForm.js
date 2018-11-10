@@ -122,7 +122,16 @@ class UserFormUI extends Component {
                 content: ""
             },      
             isDisabled:true,
-            isRedirect: false
+            isRedirect: false,
+            formErrors: {email: '',password: '',username: '', gender:'',select:'',fullname:'',phone:''},
+            emailValid: false,
+            passwordValid: false,
+            usernameValid: false,
+            genderValid: false,
+            selectValid: false,
+            fullnameValid: false,
+            phoneValid: false,
+            formValid: false
         });
     }
 
@@ -294,16 +303,103 @@ class UserFormUI extends Component {
         }
     }
 
-    _validate(name, value) {
-        if (name === 'email') {
-            const pattern = /[a-zA-Z0-9]+[.]?([a-zA-Z0-9]+)?[@][a-z]{3,9}[.][a-z]{2,5}/g;
-            return !pattern.test(value);
-        } else if (name === 'username') {
-            return !value.match(/^[a-zA-Z0-9]+$/)
-        } else {
-            return value === "" || value === null
+    _validate(fieldName, value) {
+        let fieldValidationErrors = this.state.formErrors;
+        let emailValid = this.state.emailValid;
+        let passwordValid = this.state.passwordValid;
+        let usernameValid = this.state.usernameValid;
+        let genderValid = this.state.genderValid;
+        let selectValid = this.state.selectValid;
+        let fullnameValid = this.state.fullnameValid;
+        let phoneValid = this.state.phoneValid;
+
+        const sdt = /^\+?(?:[0-9] ?){8,14}[0-9]$/;
+        const email_check = /[a-zA-Z0-9]+[.]?([a-zA-Z0-9]+)?[@][a-z]{3,9}[.][a-z]{2,5}/g;
+        const reg_username = /^[a-zA-Z0-9]+$/;
+
+        switch(fieldName) {
+          case 'email':
+            emailValid = value.length >0;
+            if(!emailValid)
+            {
+                fieldValidationErrors.email = emailValid ? '': ' Vui lòng nhập email!';
+            }else
+            {
+                emailValid = email_check.test(value);
+                fieldValidationErrors.email = emailValid ? '': ' Vui lòng nhập đúng định dạng email!';
+            }
+            break;
+          case 'password':
+            passwordValid = value.length >6 && value.length <= 50;
+            fieldValidationErrors.password = passwordValid ? '': ' Vui lòng nhập mật khẩu trong khoảng 6-50 ký tự!';
+            break;
+          case 'username':
+            usernameValid = value.length >6 && value.length <= 50;
+            if(!usernameValid)
+            {
+                fieldValidationErrors.username = usernameValid ? '': ' Vui lòng nhập tài khoản trong khoảng 6-50 ký tự!';
+            }else
+            {
+                usernameValid = value.match(/^[a-zA-Z0-9]+$/);
+                fieldValidationErrors.username = usernameValid ? '': ' Vui lòng không nhập ký tự đặc biệt!';
+            }
+            break;
+          case 'fullname':
+            fullnameValid = value.length > 6 && value.length <= 50;
+            fieldValidationErrors.fullname = fullnameValid ? '': 'Vui lòng nhập tên người dùng trong khoảng 6-50 ký tự!';
+            break;
+          case 'gender':
+            genderValid = (value !== null && value !== "");
+            fieldValidationErrors.gender = genderValid ? '' : 'Vui lòng chọn giới tính!';
+            break;
+          case 'phone':
+            phoneValid = (value.length > 0);
+            if(!phoneValid)
+            {
+                fieldValidationErrors.phone = phoneValid ? '': 'Vui lòng nhập số điện thoại!';
+            }else
+            {
+                phoneValid = sdt.test(value);
+                fieldValidationErrors.phone = phoneValid ? '': 'Định dạng số điện thoại không đúng!';
+            }
+            
+            break;
+          case 'select':
+            selectValid = (value !== null && value !== "");
+            fieldValidationErrors.select = selectValid ? '' : 'Vui lòng chọn phân quyền!';
+            break;
+          
+          default:
+            break;
         }
-    }
+        this.setState({formErrors: fieldValidationErrors,
+                        selectValid: selectValid,
+                        phoneValid: phoneValid,
+                        genderValid: genderValid,
+                        fullnameValid: fullnameValid,
+                        usernameValid: usernameValid,
+                        passwordValid: passwordValid,
+                        emailValid: emailValid
+                      }, this.validateForm);
+      }
+    
+      validateForm() {
+        this.setState({formValid: this.state.selectValid && this.state.phoneValid && 
+                        this.state.genderValid && this.state.fullnameValid && this.state.usernameValid &&
+                        this.state.passwordValid && this.state.emailValid
+                    });
+      }
+
+    // _validate(name, value) {
+    //     if (name === 'email') {
+    //         const pattern = /[a-zA-Z0-9]+[.]?([a-zA-Z0-9]+)?[@][a-z]{3,9}[.][a-z]{2,5}/g;
+    //         return !pattern.test(value);
+    //     } else if (name === 'username') {
+    //         return !value.match(/^[a-zA-Z0-9]+$/)
+    //     } else {
+    //         return value === "" || value === null
+    //     }
+    // }
 
 
     isChange = (event) =>
