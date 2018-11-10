@@ -46,7 +46,16 @@ class UserFormUI extends Component {
             },      
             roles: [],
             isDisabled:true,
-            isRedirect: false
+            isRedirect: false,
+            formErrors: {email: '',password: '',username: '', gender:'',select:'',fullname:'',phone:''},
+            emailValid: false,
+            passwordValid: false,
+            usernameValid: false,
+            genderValid: false,
+            selectValid: false,
+            fullnameValid: false,
+            phoneValid: false,
+            formValid: false
         };
 
         this.onClear = this.onClear.bind(this)
@@ -88,7 +97,16 @@ class UserFormUI extends Component {
                 content: ""
             },      
             isDisabled:true,
-            isRedirect: false
+            isRedirect: false,
+            formErrors: {email: '',password: '',username: '', gender:'',select:'',fullname:'',phone:''},
+            emailValid: false,
+            passwordValid: false,
+            usernameValid: false,
+            genderValid: false,
+            selectValid: false,
+            fullnameValid: false,
+            phoneValid: false,
+            formValid: false
         });
     }
 
@@ -168,16 +186,103 @@ class UserFormUI extends Component {
         }
     }
 
-    _validate(name, value) {
-        if (name === 'email') {
-            const pattern = /[a-zA-Z0-9]+[.]?([a-zA-Z0-9]+)?[@][a-z]{3,9}[.][a-z]{2,5}/g;
-            return !pattern.test(value);
-        } else if (name === 'username') {
-            return !value.match(/^[a-zA-Z0-9]+$/)
-        } else {
-            return value === "" || value === null
+    _validate(fieldName, value) {
+        let fieldValidationErrors = this.state.formErrors;
+        let emailValid = this.state.emailValid;
+        let passwordValid = this.state.passwordValid;
+        let usernameValid = this.state.usernameValid;
+        let genderValid = this.state.genderValid;
+        let selectValid = this.state.selectValid;
+        let fullnameValid = this.state.fullnameValid;
+        let phoneValid = this.state.phoneValid;
+
+        const sdt = /^\+?(?:[0-9] ?){8,14}[0-9]$/;
+        const email_check = /[a-zA-Z0-9]+[.]?([a-zA-Z0-9]+)?[@][a-z]{3,9}[.][a-z]{2,5}/g;
+        const reg_username = /^[a-zA-Z0-9]+$/;
+
+        switch(fieldName) {
+          case 'email':
+            emailValid = value.length >0;
+            if(!emailValid)
+            {
+                fieldValidationErrors.email = emailValid ? '': ' Vui lòng nhập email!';
+            }else
+            {
+                emailValid = email_check.test(value);
+                fieldValidationErrors.email = emailValid ? '': ' Vui lòng nhập đúng định dạng email!';
+            }
+            break;
+          case 'password':
+            passwordValid = value.length >6 && value.length <= 50;
+            fieldValidationErrors.password = passwordValid ? '': ' Vui lòng nhập mật khẩu trong khoảng 6-50 ký tự!';
+            break;
+          case 'username':
+            usernameValid = value.length >6 && value.length <= 50;
+            if(!usernameValid)
+            {
+                fieldValidationErrors.username = usernameValid ? '': ' Vui lòng nhập tài khoản trong khoảng 6-50 ký tự!';
+            }else
+            {
+                usernameValid = value.match(/^[a-zA-Z0-9]+$/);
+                fieldValidationErrors.username = usernameValid ? '': ' Vui lòng không nhập ký tự đặc biệt!';
+            }
+            break;
+          case 'fullname':
+            fullnameValid = value.length > 6 && value.length <= 50;
+            fieldValidationErrors.fullname = fullnameValid ? '': 'Vui lòng nhập tên người dùng trong khoảng 6-50 ký tự!';
+            break;
+          case 'gender':
+            genderValid = (value !== null && value !== "");
+            fieldValidationErrors.gender = genderValid ? '' : 'Vui lòng chọn giới tính!';
+            break;
+          case 'phone':
+            phoneValid = (value.length > 0);
+            if(!phoneValid)
+            {
+                fieldValidationErrors.phone = phoneValid ? '': 'Vui lòng nhập số điện thoại!';
+            }else
+            {
+                phoneValid = sdt.test(value);
+                fieldValidationErrors.phone = phoneValid ? '': 'Định dạng số điện thoại không đúng!';
+            }
+            
+            break;
+          case 'select':
+            selectValid = (value !== null && value !== "");
+            fieldValidationErrors.select = selectValid ? '' : 'Vui lòng chọn phân quyền!';
+            break;
+          
+          default:
+            break;
         }
-    }
+        this.setState({formErrors: fieldValidationErrors,
+                        selectValid: selectValid,
+                        phoneValid: phoneValid,
+                        genderValid: genderValid,
+                        fullnameValid: fullnameValid,
+                        usernameValid: usernameValid,
+                        passwordValid: passwordValid,
+                        emailValid: emailValid
+                      }, this.validateForm);
+      }
+    
+      validateForm() {
+        this.setState({formValid: this.state.selectValid && this.state.phoneValid && 
+                        this.state.genderValid && this.state.fullnameValid && this.state.usernameValid &&
+                        this.state.passwordValid && this.state.emailValid
+                    });
+      }
+
+    // _validate(name, value) {
+    //     if (name === 'email') {
+    //         const pattern = /[a-zA-Z0-9]+[.]?([a-zA-Z0-9]+)?[@][a-z]{3,9}[.][a-z]{2,5}/g;
+    //         return !pattern.test(value);
+    //     } else if (name === 'username') {
+    //         return !value.match(/^[a-zA-Z0-9]+$/)
+    //     } else {
+    //         return value === "" || value === null
+    //     }
+    // }
 
 
     isChange = (event) =>
@@ -203,12 +308,12 @@ class UserFormUI extends Component {
         }
 
 
-        if (JSON.stringify(this.state.error) === JSON.stringify({})) {
-            this.setState({
-                isDisabled:false
-              })
+        // if (JSON.stringify(this.state.error) === JSON.stringify({})) {
+        //     this.setState({
+        //         isDisabled:false
+        //       })
   
-        }
+        // }
     }
 
     render() {
@@ -244,30 +349,30 @@ class UserFormUI extends Component {
                                             onChange = {(event) => (this.isChange(event))} 
                                             value = {this.state.form.email}
                                             type="email" id="nf-email" name="email" placeholder="Enter Email.." autoComplete="email" />
-                                        {this.state.error.email ? <FormText className="help-block"><span style={{color: "red"}}>Please enter valid your email</span></FormText> : ''} 
+                                        {this.state.formErrors.email ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.email}</span></FormText> : ''} 
                                     </FormGroup>
                                     <FormGroup>
-                                        <Label htmlFor="nf-password">Password</Label>
+                                        <Label htmlFor="nf-password">Mật khẩu</Label>
                                         <Input 
                                             onChange = {(event) => (this.isChange(event))} 
                                             value = {this.state.form.password}
                                             type="password" id="nf-password" name="password" placeholder="Enter Password.." autoComplete="current-password" />
                                         {/* <FormText className="help-block">Please enter your password</FormText> */}
-                                        {this.state.error.password ? <FormText className="help-block"><span style={{color: "red"}}>Please enter valid your password</span></FormText> : ''}  
+                                        {this.state.formErrors.password ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.password}</span></FormText> : ''}  
                                     </FormGroup>
                                     <FormGroup>
-                                        <Label htmlFor="nf-username">Username</Label>
+                                        <Label htmlFor="nf-username">Tên đăng nhập</Label>
                                         <Input onChange = {(event) => (this.isChange(event))} 
                                             value = {this.state.form.username}
                                             type="text" id="nf-username" name="username" placeholder="Enter UserName.." autoComplete="current-password" />
-                                        {this.state.error.username ? <FormText className="help-block"><span style={{color: "red"}}>Please enter valid your username</span></FormText> : ''} 
+                                        {this.state.formErrors.username ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.username}</span></FormText> : ''} 
                                     </FormGroup>
                                     <FormGroup>
-                                        <Label htmlFor="nf-fullname">FullName</Label>
+                                        <Label htmlFor="nf-fullname">Tên người dùng</Label>
                                         <Input onChange = {(event) => (this.isChange(event))} 
                                             value = {this.state.form.fullname}
                                             type="text" id="nf-fullname" name="fullname" placeholder="Enter FullName.." autoComplete="current-password" />
-                                        {this.state.error.fullname ? <FormText className="help-block"><span style={{color: "red"}}>Please enter valid your full name</span></FormText> : ''} 
+                                        {this.state.formErrors.fullname ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.fullname}</span></FormText> : ''} 
                                     </FormGroup>
                                     <FormGroup>
                                         <Label>Giới tính</Label>
@@ -300,16 +405,17 @@ class UserFormUI extends Component {
                                                 name="gender" 
                                                 value="khac" 
                                                 onChange = {(event) => (this.isChange(event))} 
-                                                checked={this.state.gender === "khac"}/>
+                                                checked={this.state.form.gender === "khac"}/>
                                             <Label className="form-check-label" check htmlFor="inline-radio3">Khác</Label>
                                         </FormGroup>
+                                        {this.state.formErrors.gender ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.gender}</span></FormText> : ''} 
                                     </FormGroup>
                                     <FormGroup>
                                         <Label htmlFor="nf-phone">Số điện thoại</Label>
                                         <Input onChange = {(event) => (this.isChange(event))} 
                                             value = {this.state.form.phone}
                                             type="text" id="nf-phone" name="phone" placeholder="Enter Phone.." autoComplete="current-password" />
-                                        {this.state.error.phone ? <FormText className="help-block"><span style={{color: "red"}}>Please enter valid your phone</span></FormText> : ''} 
+                                        {this.state.formErrors.phone ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.phone}</span></FormText> : ''} 
                                     </FormGroup>
                                     <FormGroup>
                                         <Label htmlFor="select">Phân quyền</Label>
@@ -323,11 +429,12 @@ class UserFormUI extends Component {
                                                 )
                                             }
                                         </Input>
+                                        {this.state.formErrors.select ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.select}</span></FormText> : ''} 
                                     </FormGroup>
                                 </Form>
                             </CardBody>
                             <CardFooter>
-                                <Button size="sm" color="primary" disabled={this.state.isDisabled} onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button>
+                                <Button size="sm" color="primary" disabled={!this.state.formValid} onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button>
                                 <Button size="sm" color="danger" onClick = {this.onClear}><i className="fa fa-ban"></i> Reset</Button>
                             </CardFooter>
                         </Card>
