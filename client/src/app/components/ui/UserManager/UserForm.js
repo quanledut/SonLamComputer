@@ -58,7 +58,16 @@ class UserFormUI extends Component {
             roles: [],
             isRedirect: false,
             isEdit: false,
-            isChangePassword: false
+            isChangePassword: false,
+            formErrors: {email: '',password: '',username: '', gender:'',select:'',fullname:'',phone:''},
+            emailValid: false,
+            passwordValid: false,
+            usernameValid: false,
+            genderValid: false,
+            selectValid: false,
+            fullnameValid: false,
+            phoneValid: false,
+            formValid: false
         };
 
         this.onClear = this.onClear.bind(this)
