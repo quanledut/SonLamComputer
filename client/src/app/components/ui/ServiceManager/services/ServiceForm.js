@@ -302,8 +302,17 @@ class ServiceFormUI extends Component {
 
     onSubmitForm =(event) =>
     {
-        
         event.preventDefault();
+
+        if (this._checkError()) {
+            this._openModal({
+                title: "Error",
+                content: "Xin hãy nhập dữ liệu hợp lệ",
+                isLoading: false,
+            })            
+            return;  
+        }
+
         this._openModal({
             isLoading: true,
             isOpened: true,
@@ -360,6 +369,31 @@ class ServiceFormUI extends Component {
                 }
             })
         }
+    }
+
+    _checkError(){
+        let isError = false;
+        let error = {};
+
+        const isEmpty = this.state.form.devices.reduce((isNone, item) => {
+            if (isNone) return isNone;
+            if (item === "None") return true;
+        }, false) || this.state.form.devices.length === 0
+        && (this.state.form.accessories.reduce((isNone2, item2) => {
+            if (isNone2) return isNone2;
+            if (item2 === "None") return true;
+        }, false) || this.state.form.accessories.length === 0);
+                        
+        if (isEmpty) {
+            isError = true
+            error.roles = true
+        }   
+
+        this.setState({
+            error
+        })
+
+        return isError;
     }
 
     _validate(fieldName, value) {
@@ -818,7 +852,7 @@ class ServiceFormUI extends Component {
 
                                         isShow = {this.state.isFix || this.state.isSell}
                                 />
-                                
+                                {this.state.error.roles ? <FormText className="help-block"><span style={{color: "red"}}>Vui lòng chọn thiết bị!</span></FormText> : ''} 
                             </CardBody>
                             {
                                 (!this.props.match.params.id) && 
