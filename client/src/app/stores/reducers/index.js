@@ -18,6 +18,11 @@ import services from './serviceReducer/index'
 import searchServices from './serviceReducer/search'
 import payments from './paymentReducer/index'
 import searchPayments from './paymentReducer/search'
+import accessorys from './accessoryReducer/index'
+import searchAccessorys from './accessoryReducer/search'
+import accessoryTypes from './accessoryTypeReducer/index'
+import searchAccessoryTypes from './accessoryTypeReducer/search'
+
 
 export default combineReducers({
     auth,
@@ -38,5 +43,9 @@ export default combineReducers({
     services,
     searchServices,
     payments,
-    searchPayments
+    searchPayments,
+    accessorys,
+    searchAccessorys,
+    accessoryTypes,
+    searchAccessoryTypes
 });

@@ -73,7 +73,7 @@ class CustomTable extends React.Component {
                                                     })
                                                 }
                                                 {
-                                                    (this.state.pages > this.state.page + 2) && <PaginationItem onClick={() => this.gotoPage(this.state.pages)}><PaginationLink tag="button">{this.state.pages}</PaginationLink></PaginationItem>
+                                                    (this.state.pages > this.state.page + 3) && <PaginationItem onClick={() => this.gotoPage(this.state.pages)}><PaginationLink tag="button">{this.state.pages}</PaginationLink></PaginationItem>
                                                 }
                                                 <PaginationItem><PaginationLink onClick={() => this.gotoPage(this.state.page + 1)} next tag="button">Next</PaginationLink></PaginationItem>
                                             </Pagination>

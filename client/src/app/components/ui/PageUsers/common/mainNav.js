@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {Link} from 'react-router-dom';
 import CatchMenu from './catch_menu'
+import {CatchMenuUI } from '../../../containers/client/catchMenu'
 
 class MainNav extends Component {
     render(){
@@ -16,7 +17,7 @@ class MainNav extends Component {
                           <div className="cat_burger"><span /><span /><span /></div>
                           <div className="cat_menu_text">Danh mục sản phẩm</div>
                         </div>
-                        <CatchMenu/>
+                        <CatchMenuUI/>
                       </div>
                       {/* Main Nav Menu */}
                       <div className="main_nav_menu ml-auto">
@@ -24,10 +25,8 @@ class MainNav extends Component {
                           <li><Link 
                                 to = {`/Client`}
                             >
-                                Trang chủ<i className="fas fa-chevron-down" />
+                                Home<i className="fas fa-chevron-down" />
                             </Link></li>
-                          <li><a href="blog.html">Giới thiệu<i className="fas fa-chevron-down" /></a></li>
-                          <li><a href="contact.html">Liên hệ<i className="fas fa-chevron-down" /></a></li>
                         </ul>
                       </div>
                       {/* Menu Trigger */}

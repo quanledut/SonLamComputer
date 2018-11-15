@@ -22,7 +22,6 @@ export const ComputerTypeForm = connect(
 
 export const ComputerType = connect(
     state => { 
-        console.log(state);
         return {
             todos: state.computerTypes, 
             keyword: state.searchComputerType    

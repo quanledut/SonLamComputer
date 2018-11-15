@@ -2539,6 +2539,7 @@ select option
 	background: #f3f4fd;
 	border-radius: 8px;
 	padding: 25px;
+	height:15em;
 }
 .bestsellers_slider .slick-slide > div:first-child
 {

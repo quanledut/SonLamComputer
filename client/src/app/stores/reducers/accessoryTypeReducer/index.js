@@ -20,7 +20,7 @@ const reducer = (state = initialState, action) => {
     switch (action.type) {
 
         case CONSTANTS.FIND_ALL_REQUEST_SUCCESS: {
-            state = action.data;
+            state = action.data.docs;
             return [...state]
         }
 

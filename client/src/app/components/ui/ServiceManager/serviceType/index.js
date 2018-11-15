@@ -50,7 +50,7 @@ class ServiceTypeUI extends Component {
     }
 
     render() {
-        var mapList = this.state.docs;
+        var mapList = this.props.todos;
         
         var listItem = mapList.map((item, index) => {
             return (
