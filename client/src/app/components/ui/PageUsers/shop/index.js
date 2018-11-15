@@ -110,18 +110,34 @@ class Shop extends Component {
             {
                 mapList = this.state.accessoriesNames;
             }
+
+            var {match} = this.props;
+            if(match.params.item)
+            {
+                mapList = mapList.filter((list) => {
+                    var _id = list.type._id ? list.type._id : list.type;
+                    return _id.indexOf(match.params.item) !== -1;
+                });
+            }
             
             var childItem = mapList.map((item, index) => {
+                console.log(item.description)
                 return (
                     <div className="product_item is_new" key={index}>
                         <div className="product_border" />
-                        <div className="product_image d-flex flex-column align-items-center justify-content-center"><img src={require("../../../../stylesheets/images/new_5.jpg")} alt /></div>
+                        <div className="product_image d-flex flex-column align-items-center justify-content-center">
+                            {item.image_url ? <img style={{height: '150px'}}src={item.image_url} alt />
+                            :<img src={require("../../../../stylesheets/images/single_1.jpg")} alt />}
+                        </div>
                         <div className="product_content">
                             <div className="product_price">{item.price}</div>
-                            <div className="product_name"><span><b>{item.name}</b></span></div>
-                            {/* <div className="product_name"><span>Bộ nhớ đệm: 32 MB </span></div>
-                            <div className="product_name"><span>Tốc độ vòng xoay: 7200 RPM</span></div>
-                            <div className="product_name"><span>Kích thước: 3.5 inch</span></div> */}
+                            <div className="product_name"><span><b>{item.name ? item.name : item.type.name}</b></span></div>
+                            {item.description ? 
+                                item.description.map((item_desc,index2) =>{
+                                    return(
+                                    <div key={index2} className="product_name"><span>{item_desc}</span></div>
+                                    )
+                                }): ""}
                         </div>
                         <div className="product_fav"><i className="fas fa-heart" /></div>
                         <ul className="product_marks">
@@ -149,39 +165,6 @@ class Shop extends Component {
                                 <div className="product_grid">
                                     <div className="product_grid_border" />
                                     {/* Product Item */}
-                                    {/* <div className="product_item is_new">
-                                        <div className="product_border" />
-                                        <div className="product_image d-flex flex-column align-items-center justify-content-center"><img src={require("../../../../stylesheets/images/new_5.jpg")} alt /></div>
-                                        <div className="product_content">
-                                            <div className="product_price">$225</div>
-                                            <div className="product_name"><span><b>HDD 3.5 TOSHIBA 1TB SATA 32MB CACHE 7200RPM (DT01ACA100)</b></span></div>
-                                            <div className="product_name"><span>Bộ nhớ đệm: 32 MB </span></div>
-                                            <div className="product_name"><span>Tốc độ vòng xoay: 7200 RPM</span></div>
-                                            <div className="product_name"><span>Kích thước: 3.5 inch</span></div>
-                                        </div>
-                                        <div className="product_fav"><i className="fas fa-heart" /></div>
-                                        <ul className="product_marks">
-                                            <li className="product_mark product_discount">-25%</li>
-                                            <li className="product_mark product_new">new</li>
-                                        </ul>
-                                    </div> */}
-                                    {/* Product Item */}
-                                    {/* <div className="product_item discount">
-                                        <div className="product_border" />
-                                        <div className="product_image d-flex flex-column align-items-center justify-content-center"><img src={require("../../../../stylesheets/images/featured_1.png")} alt /></div>
-                                        <div className="product_content">
-                                            <div className="product_price">$225<span>$300</span></div>
-                                            <div className="product_name"><span><b>HDD 3.5 TOSHIBA 1TB SATA 32MB CACHE 7200RPM (DT01ACA100)</b></span></div>
-                                            <div className="product_name"><span>Bộ nhớ đệm: 32 MB</span></div>
-                                            <div className="product_name"><span>Tốc độ vòng xoay: 7200 RPM</span></div>
-                                            <div className="product_name"><span>Kích thước: 3.5 inch</span></div>
-                                        </div>
-                                        <div className="product_fav"><i className="fas fa-heart" /></div>
-                                        <ul className="product_marks">
-                                            <li className="product_mark product_discount">-25%</li>
-                                            <li className="product_mark product_new">new</li>
-                                        </ul>
-                                    </div> */}
                                     {childItem}
                                 </div>  
                                 {/* Shop Page Navigation */}

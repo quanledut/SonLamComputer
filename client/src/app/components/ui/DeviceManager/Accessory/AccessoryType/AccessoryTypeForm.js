@@ -218,15 +218,15 @@ class AccessoryTypeFormUI extends Component {
                 <Col xs="12" md="9">
                         <Card>
                             <CardHeader>
-                                <strong>Thông tin loại thiết bị</strong>
+                                <strong>Thông tin loại linh kiện</strong>
                             </CardHeader>
                             <CardBody>
                                 <Form action="" method="post">
                                     <FormGroup>
-                                        <Label htmlFor="nf-username">Tên loại thiết bị</Label>
+                                        <Label htmlFor="nf-username">Tên loại linh kiện</Label>
                                         <Input onChange = {(event) => (this.isChange(event))} 
                                             value = {this.state.form.name}
-                                            type="username" id="nf-username" name="name" placeholder="Nhập tên loại thiết bị..." autoComplete="current-password" />
+                                            type="username" id="nf-username" name="name" placeholder="Nhập tên loại linh kiện..." autoComplete="current-password" />
                                          {this.state.error.name ? <FormText className="help-block"><span style={{color: "red"}}>Vui lòng nhập tên loại linh kiện trong khoảng 6-100 ký tự!</span></FormText> : ''} 
                                     </FormGroup>
                                 </Form>

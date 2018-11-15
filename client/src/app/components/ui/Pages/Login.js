@@ -208,7 +208,8 @@ validateForm() {
                           <Button onClick={this._submit} color="primary" className="px-4" disabled={!this.state.formValid}>Login</Button>
                         </Col>
                         <Col xs="6" className="text-right">
-                          <Button color="link" className="px-0">Forgot password?</Button>
+                          {/* <Button color="link" className="px-0">Forgot password?</Button> */}
+                          <span  style={{ fontStyle: 'italic', color: '#f3591e'}}>Think different!</span>
                         </Col>
                       </Row>
                     </Form>
