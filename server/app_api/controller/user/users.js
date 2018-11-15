@@ -74,7 +74,7 @@ const createUser = (req, res) => {
 				detail: err
 			}) 
 		} else {
-			sendJsonResponse(res, 201, "Success")
+			sendJsonResponse(res, 201, user)
 		}
 	})
 }

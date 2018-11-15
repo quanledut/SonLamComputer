@@ -67,7 +67,7 @@ class UserFormUI extends Component {
             selectValid: false,
             fullnameValid: false,
             phoneValid: false,
-            formValid: false
+            formValid: true
         };
 
         this.onClear = this.onClear.bind(this)
@@ -140,7 +140,7 @@ class UserFormUI extends Component {
             selectValid: false,
             fullnameValid: false,
             phoneValid: false,
-            formValid: false
+            formValid: true
         });
     }
 

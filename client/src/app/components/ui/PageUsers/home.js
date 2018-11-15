@@ -21,14 +21,6 @@ class ClientHome extends Component {
           {
             name: "Phụ kiện",
             code: "Accessories"
-          },
-          {
-            name: "Thiết bị văn phòng",
-            code: "OfficeEquipment"
-          },
-          {
-            name: "Thiết bị mạng",
-            code: "NetworkDevice"
           }
       ]
     }

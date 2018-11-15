@@ -126,7 +126,14 @@ validateField(fieldName, value) {
       break;
     case 'username':
       usernameValid = value.length >= 6 && value.length <= 50;
-      fieldValidationErrors.username = usernameValid ? '': ' Vui lòng nhập username trong khoảng 6-50 ký tự!';
+      if(!usernameValid)
+      {
+          fieldValidationErrors.username = usernameValid ? '': ' Vui lòng nhập username trong khoảng 6-50 ký tự!';
+      }else
+      {
+          usernameValid = value.match(/^[a-zA-Z0-9]+$/);
+          fieldValidationErrors.username = usernameValid ? '': ' Vui lòng không nhập ký tự đặc biệt!';
+      }
       break;
     default:
       break;

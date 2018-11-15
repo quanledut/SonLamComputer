@@ -3,7 +3,7 @@ import { ClientHome} from '../../ui/PageUsers'
 import ProductItems from '../../ui/PageUsers/homePage/ProductItems'
 import * as deviceNameActions from '../../../actions/deviceName'
 import * as computerNameActions from '../../../actions/computerName'
-import * as accessoryTypeActions from '../../../actions/accessoryType'
+import * as accessoryActions from '../../../actions/accessoryName'
 
 export const Home = connect(
     null, null
@@ -19,7 +19,7 @@ export const ProductItemUI = connect(
             dispatch(deviceNameActions.findAllRequest(query, cb));
         },
         findAllAccessories(query, cb){
-            dispatch(accessoryTypeActions.findAllRequest(query, cb));
+            dispatch(accessoryActions.findAllRequest(query, cb));
         }
     })
 )(ProductItems)

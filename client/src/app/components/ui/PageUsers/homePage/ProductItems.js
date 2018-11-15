@@ -17,43 +17,72 @@ class ProductItem extends Component {
         var {code} = this.props;
         if(code === "Laptop")
         {
-                this.props.findAllLaptop({
-                    all: true
-                }, (computerNames, err) => {
-                    console.log(computerNames, err)
-                    if (!err) this.setState({
-                        ...this.state,
-                        computerNames: computerNames.docs
-                    })
-                });
+            this.props.findAllLaptop({
+                all: true
+            }, (computerNames, err) => {
+                if (!err) this.setState({
+                    ...this.state,
+                    computerNames: computerNames.docs
+                })
+            });
         } 
         if(code === "Harware")
         {
-                this.props.findAllHarware({
-                    all: true
-                }, (deviceNames, err) => {
-                    console.log(deviceNames, err)
-                    if (!err) this.setState({
-                        ...this.state,
-                        deviceNames: deviceNames.docs
-                    })
-                });
+            this.props.findAllHarware({
+                all: true
+            }, (deviceNames, err) => {
+                if (!err) this.setState({
+                    ...this.state,
+                    deviceNames: deviceNames.docs
+                })
+            });
         } 
         if(code === "Accessories")
         {
-                this.props.findAllAccessories({
-                    all: true
-                }, (accessoriesNames, err) => {
-                    console.log(accessoriesNames, err)
-                    if (!err) this.setState({
-                        ...this.state,
-                        accessoriesNames: accessoriesNames.docs
-                    })
-                });
+            this.props.findAllAccessories({
+                all: true
+            }, (accessoriesNames, err) => {
+                if (!err) this.setState({
+                    ...this.state,
+                    accessoriesNames: accessoriesNames.docs
+                })
+            });
         } 
     }
 
     render() {
+        var mapList;
+        if(this.state.computerNames.length > 0)
+        {
+            mapList = this.state.computerNames;
+        }
+        else if(this.state.deviceNames.length > 0)
+        {
+            mapList = this.state.deviceNames;
+        }
+        else
+        {
+            mapList = this.state.accessoriesNames;
+        }
+        let listItem = [];
+
+        for (let i = 0; i < 12; i++) {
+            if(mapList[i] !== undefined)
+            {
+                listItem.push(mapList[i]);
+            }
+        }
+        var childItem = listItem.map((item, index) => {
+            console.log(item)
+            return (
+                <Items 
+                        key = {index}
+                        title = {item.name ? item.name :item.type.name}
+                        image = {item.image_url ? item.image_url : "None"}
+                        amount = {item.price ? item.price : "Đang cập nhật"}
+                />
+            )
+        });
         return (
             //{/* Best Sellers */}
             <div style={{ marginTop: 50 }}>
@@ -73,7 +102,7 @@ class ProductItem extends Component {
                                     {/* Best Sellers Slider */}
                                     <div className="bestsellers_slider slider">
                                         {/* Best Sellers Item */}
-                                        <Items/>
+                                        {childItem}
                                     </div>
                                 </div>
                                 

@@ -15,10 +15,8 @@ class Menu extends Component {
                       </div>
                       <ul className="page_menu_nav">
                         <li className="page_menu_item">
-                          <a href="/#/client">Trang chủ<i className="fa fa-angle-down" /></a>
+                          <a href="/#/client">Home<i className="fa fa-angle-down" /></a>
                         </li>
-                        <li className="page_menu_item"><a href="blog.html">Giới thiệu<i className="fa fa-angle-down" /></a></li>
-                        <li className="page_menu_item"><a href="contact.html">Liên hệ<i className="fa fa-angle-down" /></a></li>
                       </ul>
                       <div className="menu_contact">
                         <div className="menu_contact_item"><div className="menu_contact_icon"><img src={require("../../../../stylesheets/images/phone_white.png" )}alt /></div>+38 068 005 3570</div>
