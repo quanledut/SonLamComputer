@@ -15,12 +15,9 @@ import {
     Input,
     Label,
     Row,
-    InputGroupAddon,
-    InputGroup
 } from 'reactstrap';
 
 import CustomTable from '../../utils/Table'
-import { access } from 'fs';
 
 const DEFAULT_FORM = {
     _id :'',
@@ -258,10 +255,10 @@ class ServiceFormUI extends Component {
                     if (id !== key) return device
                     device[name] = value
 
-                    if (name == "type") {
+                    if (name === "type") {
                         this._findDevice(device.type)
-                    } else if (name == "name") {
-                        const currentDevice = this.state.devices.filter(i => i._id == value)[0]
+                    } else if (name === "name") {
+                        const currentDevice = this.state.devices.filter(i => i._id === value)[0]
                         return {
                             ...device,
                             price: currentDevice.price,
@@ -284,7 +281,7 @@ class ServiceFormUI extends Component {
                     if (id !== key) return accessory
                     accessory[name] = value
                 
-                    if (name == "computerName" || name == "type") {
+                    if (name === "computerName" || name === "type") {
                         if (accessory.computerName && accessory.type) {
                             this._findAccessory(
                                 accessory.computerName,
@@ -344,8 +341,8 @@ class ServiceFormUI extends Component {
             this.state.form.accessories = this.state.form.accessories.map(i => {
                 return {
                     ...i,
-                    computerName: this.state.computerNames.filter(i1 => i1._id == i.computerName)[0].name,
-                    type: this.state.accessoryTypes.filter(i1 => i1._id == i.type)[0].name
+                    computerName: this.state.computerNames.filter(i1 => i1._id === i.computerName)[0].name,
+                    type: this.state.accessoryTypes.filter(i1 => i1._id === i.type)[0].name
                 }
             })
 
@@ -508,7 +505,7 @@ class ServiceFormUI extends Component {
         // }
 
         if (name === "serviceType") {
-            let type = this.state.serviceTypes.filter((i) => i._id == value)[0]
+            let type = this.state.serviceTypes.filter((i) => i._id === value)[0]
             this.setState({
                 isSell: false,
                 isFix: false
@@ -527,7 +524,7 @@ class ServiceFormUI extends Component {
                         }
                     })
 
-                    if (this.state.deviceTypes.length == 0) {
+                    if (this.state.deviceTypes.length === 0) {
                         this._findAllDeviceTypes()
                     }
                 } else {
@@ -539,10 +536,10 @@ class ServiceFormUI extends Component {
                         }
                     })
 
-                    if (this.state.computerNames.length == 0) {
+                    if (this.state.computerNames.length === 0) {
                         this._findAllComputernames();
                     }
-                    if (this.state.accessoryTypes.length == 0) {
+                    if (this.state.accessoryTypes.length === 0) {
                         this._findAllAccessoryTypes();
                     }
 

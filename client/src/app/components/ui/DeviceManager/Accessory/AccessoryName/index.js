@@ -82,13 +82,13 @@ class AccessoryNameUI extends Component {
                     <Col>
                         <Card>
                             <CardHeader>
-                                <i className="fa fa-align-justify"></i> Danh sách thiết bị
+                                <i className="fa fa-align-justify"></i> Danh sách linh kiện
                             </CardHeader>
                             <CardBody>
                                 <Link
                                     to = {'/devices/accessory/new'}
                                     className="btn" style={{ backgroundColor: '#17a2b8' }}>
-                                    <i className="fa fa-plus text-white"> Tạo mới thiết bị </i>
+                                    <i className="fa fa-plus text-white"> Tạo mới linh kiện </i>
                                 </Link>
                                 <hr />
 
@@ -97,7 +97,7 @@ class AccessoryNameUI extends Component {
                                 <CustomTable
                                     thead = {
                                         <tr>
-                                            <th>Loại thiết bị</th>
+                                            <th>Loại linh kiện</th>
                                             <th>Tên máy tính</th>
                                             <th>Số lượng</th>
                                             <th>Giá</th>

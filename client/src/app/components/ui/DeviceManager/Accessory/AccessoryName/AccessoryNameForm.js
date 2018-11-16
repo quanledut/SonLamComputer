@@ -333,7 +333,7 @@ class AccessoryNameFormUI extends Component {
                 <Col xs="12" md="9">
                         <Card>
                             <CardHeader>
-                                <strong>Thông tin loại thiết bị sữa chữa / thay thế</strong>
+                                <strong>Thông tin linh kiện</strong>
                             </CardHeader>
                             <CardBody>
                                 <Form action="" method="post">

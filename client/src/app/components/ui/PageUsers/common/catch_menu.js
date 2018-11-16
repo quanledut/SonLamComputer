@@ -51,19 +51,19 @@ class CatchMenu extends Component {
 
         var menuItem1 = mapListcomputerTypes.map((item, index) => {
             return (
-                <li><a href="#">{item.name}<i className="fas fa-chevron-right" /></a></li>
+                <li key={index}><a href={`#/product/Laptop/${item._id}`}>{item.name}<i className="fas fa-chevron-right" /></a></li>
             )
         });
 
         var menuItem2 = mapListdeviceTypes.map((item, index) => {
             return (
-                <li><a href="#">{item.name}<i className="fas fa-chevron-right" /></a></li>
+                <li key={index}><a href={`#/product/Linh_kien/${item._id}`}>{item.name}<i className="fas fa-chevron-right" /></a></li>
             )
         });
 
         var menuItem3 = mapListaccessoriesTypes.map((item, index) => {
             return (
-                <li><a href="#">{item.name}<i className="fas fa-chevron-right" /></a></li>
+                <li key={index}><a href={`#/product/Phu_kien/${item._id}`}>{item.name}<i className="fas fa-chevron-right" /></a></li>
             )
         });
       return (
