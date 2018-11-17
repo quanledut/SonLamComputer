@@ -59,7 +59,7 @@ class UserFormUI extends Component {
             isRedirect: false,
             isEdit: false,
             isChangePassword: false,
-            formErrors: {email: '',password: '',username: '', gender:'',select:'',fullname:'',phone:''},
+            formErrors: {email: '',password: '',username: '', gender:'',select:'',fullname:'',phone:'',retype_password:''},
             emailValid: false,
             passwordValid: false,
             usernameValid: false,
@@ -67,6 +67,7 @@ class UserFormUI extends Component {
             selectValid: false,
             fullnameValid: false,
             phoneValid: false,
+            retype_passwordValid:false,
             formValid: true
         };
 
@@ -132,7 +133,7 @@ class UserFormUI extends Component {
             },      
             isDisabled:true,
             isRedirect: false,
-            formErrors: {email: '',password: '',username: '', gender:'',select:'',fullname:'',phone:''},
+            formErrors: {email: '',password: '',username: '', gender:'',select:'',fullname:'',phone:'',retype_password:''},
             emailValid: false,
             passwordValid: false,
             usernameValid: false,
@@ -140,6 +141,7 @@ class UserFormUI extends Component {
             selectValid: false,
             fullnameValid: false,
             phoneValid: false,
+            retype_passwordValid: false,
             formValid: true
         });
     }
@@ -321,10 +323,10 @@ class UserFormUI extends Component {
         let selectValid = this.state.selectValid;
         let fullnameValid = this.state.fullnameValid;
         let phoneValid = this.state.phoneValid;
+        let retype_passwordValid = this.state.retype_passwordValid;
 
         const sdt = /^\+?(?:[0-9] ?){8,14}[0-9]$/;
         const email_check = /[a-zA-Z0-9]+[.]?([a-zA-Z0-9]+)?[@][a-z]{3,9}[.][a-z]{2,5}/g;
-        const reg_username = /^[a-zA-Z0-9]+$/;
 
         switch(fieldName) {
           case 'email':
@@ -339,11 +341,16 @@ class UserFormUI extends Component {
             }
             break;
           case 'password':
-            passwordValid = value.length >6 && value.length <= 50;
+            passwordValid = value.length >5 && value.length <= 50;
             fieldValidationErrors.password = passwordValid ? '': ' Vui lòng nhập mật khẩu trong khoảng 6-50 ký tự!';
+            if(this.state.form.retype_password.length > 0)
+            {
+                this.state.form.retype_password === value ? retype_passwordValid = true: retype_passwordValid = false;
+                fieldValidationErrors.retype_password = retype_passwordValid ? '': 'Vui lòng nhập chính xác mật khẩu!';
+            }
             break;
           case 'username':
-            usernameValid = value.length >6 && value.length <= 50;
+            usernameValid = value.length >5 && value.length <= 50;
             if(!usernameValid)
             {
                 fieldValidationErrors.username = usernameValid ? '': ' Vui lòng nhập tài khoản trong khoảng 6-50 ký tự!';
@@ -373,6 +380,12 @@ class UserFormUI extends Component {
             }
             
             break;
+          case 'retype_password':
+          console.log(this.state.form.retype_password)
+          console.log(this.state.form.password)
+            value === this.state.form.password ? retype_passwordValid = true: retype_passwordValid = false;
+            fieldValidationErrors.retype_password = retype_passwordValid ? '': 'Vui lòng nhập chính xác mật khẩu!';
+            break;
           case 'select':
             selectValid = (value !== null && value !== "");
             fieldValidationErrors.select = selectValid ? '' : 'Vui lòng chọn phân quyền!';
@@ -388,14 +401,15 @@ class UserFormUI extends Component {
                         fullnameValid: fullnameValid,
                         usernameValid: usernameValid,
                         passwordValid: passwordValid,
-                        emailValid: emailValid
+                        emailValid: emailValid,
+                        retype_passwordValid: retype_passwordValid
                       }, this.validateForm);
       }
     
       validateForm() {
-        this.setState({formValid: this.state.selectValid && this.state.phoneValid && 
+        this.setState({formValid: this.state.phoneValid && 
                         this.state.genderValid && this.state.fullnameValid && this.state.usernameValid &&
-                        this.state.passwordValid && this.state.emailValid
+                        this.state.passwordValid && this.state.emailValid && this.state.retype_passwordValid
                     });
       }
 
@@ -421,6 +435,17 @@ class UserFormUI extends Component {
                 [name] : value
             }
         });
+
+        if (this._validate(name, value)) {
+            this.setState({
+                error: {
+                    ...this.state.error,
+                    [name]: true
+                }
+            })
+        } else {
+            delete this.state.error[name]
+        }
     }
 
 
@@ -512,7 +537,7 @@ class UserFormUI extends Component {
                                                 onChange = {(event) => (this.isChange(event))} 
                                                 value = {this.state.form.email}
                                                 type="email" id="nf-email" name="email" placeholder="Enter Email.." autoComplete="email" />
-                                            {this.state.error.email ? <FormText className="help-block"><span style={{color: "red"}}>Xin hãy nhập email hợp lệ</span></FormText> : ''} 
+                                            {this.state.formErrors.email ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.email}</span></FormText> : ''} 
                                         </FormGroup>
                                         
                                         {
@@ -526,8 +551,7 @@ class UserFormUI extends Component {
                                                             value = {this.state.form.password}
                                                             type="password" id="nf-password" name="password" placeholder="Enter Password.." />
                                                         {/* <FormText className="help-block">Please enter your password</FormText> */}
-                                                        {this.state.error.password ? <FormText className="help-block"><span style={{color: "red"}}>Xin hãy nhập password hợp lệ</span></FormText> : ''}  
-                                                        {this.state.error.notMatch ? <FormText className="help-block"><span style={{color: "red"}}>Xin mật khẩu và nhập lại mật khẩu không trùng khớp</span></FormText> : ''}  
+                                                        {this.state.formErrors.password ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.password}</span></FormText> : ''}  
                 
                                                     </FormGroup>
                                                     <FormGroup>
@@ -537,6 +561,7 @@ class UserFormUI extends Component {
                                                             value = {this.state.form.retype_password}
                                                             type="password" id="nf-type-password" name="retype_password" placeholder="Re-type Password.." />
                                                         {/* <FormText className="help-block">Please enter your password</FormText> */}
+                                                        {this.state.formErrors.retype_password ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.retype_password}</span></FormText> : ''}  
                                                     </FormGroup>
                                                 </FormGroup>
                                             )
@@ -548,18 +573,18 @@ class UserFormUI extends Component {
                                             <Input onChange = {(event) => (this.isChange(event))} 
                                                 value = {this.state.form.username}
                                                 type="text" id="nf-username" name="username" placeholder="Enter UserName.." autoComplete="current-password" />
-                                            {this.state.error.username ? <FormText className="help-block"><span style={{color: "red"}}>Xin hãy nhập username hợp lệ</span></FormText> : ''} 
+                                            {this.state.formErrors.username ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.username}</span></FormText> : ''} 
                                         </FormGroup>
                                         <FormGroup>
                                             <Label htmlFor="nf-fullname">Họ tên</Label>
                                             <Input onChange = {(event) => (this.isChange(event))} 
                                                 value = {this.state.form.fullname}
                                                 type="text" id="nf-fullname" name="fullname" placeholder="Enter FullName.." autoComplete="current-password" />
-                                            {this.state.error.fullname ? <FormText className="help-block"><span style={{color: "red"}}>Xin hãy nhập họ tên hợp lệ</span></FormText> : ''} 
+                                            {this.state.formErrors.fullname ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.fullname}</span></FormText> : ''} 
                                         </FormGroup>
                                         <FormGroup>
                                             <Label>Giới tính</Label>
-                                            {this.state.error.gender ? <FormText className="help-block"><span style={{color: "red"}}>Xin hãy nhập giới tính hợp lệ</span></FormText> : ''} 
+                                            {this.state.formErrors.gender ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.gender}</span></FormText> : ''} 
                                             &nbsp;
                                             <FormGroup check inline>
                                                 <Input 
@@ -598,7 +623,7 @@ class UserFormUI extends Component {
                                             <Input onChange = {(event) => (this.isChange(event))} 
                                                 value = {this.state.form.phone}
                                                 type="text" id="nf-phone" name="phone" placeholder="Enter Phone.." autoComplete="current-password" />
-                                            {this.state.error.phone ? <FormText className="help-block"><span style={{color: "red"}}>Please enter valid your phone</span></FormText> : ''} 
+                                            {this.state.formErrors.phone ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.phone}</span></FormText> : ''} 
                                         </FormGroup>
                                         {this.state.error.roles ? <FormText className="help-block"><span style={{color: "red"}}>Xin hãy nhập quyền hợp lệ</span></FormText> : ''} 
                                         <CustomTable 
@@ -627,7 +652,8 @@ class UserFormUI extends Component {
                                     </Form>
                                 </CardBody>
                                 <CardFooter>
-                                    <Button size="sm" color="primary" disabled={this.state.isDisabled} onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button>
+                                    {/* <Button size="sm" color="primary" disabled={this.state.isDisabled} onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button> */}
+                                    <Button size="sm" color="primary" disabled={!this.state.formValid} onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button>
                                     <Button size="sm" color="danger" onClick = {this.onClear}><i className="fa fa-ban"></i> Reset</Button>
                                 </CardFooter>
                             </Card>)

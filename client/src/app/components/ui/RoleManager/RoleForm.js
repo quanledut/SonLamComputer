@@ -116,6 +116,7 @@ class RoleFormUI extends Component {
 
     _isPoliciesValid() {
         let collectionNames = []
+        if(this.state.form.policies.length < 1 ) return false;
         for (let i=0; i < this.state.form.policies.length; i++) {
             let policy = this.state.form.policies[i]
             if (policy.collectionName === "None") return false
@@ -134,7 +135,7 @@ class RoleFormUI extends Component {
                 isLoading: false, 
                 isOpened: true,
                 title: "Error",
-                content: "Invalid input!"
+                content: "Vui lòng phân quyền cho các bảng!"
             })
             return;
         }
@@ -192,7 +193,7 @@ class RoleFormUI extends Component {
 
     _validate(name, value) {
         if (name === 'name') {
-            return value.length > 50
+            return value.length > 50 || value.length < 1
         } else {
             return value === "" || value === null
         }
@@ -299,6 +300,21 @@ class RoleFormUI extends Component {
               })
   
         }
+
+        if(name === 'name')
+        {
+            if(value.length > 50 || value.length < 1) 
+            {
+                this.setState({
+                    isDisabled:true
+                  })
+            }
+            else{
+                this.setState({
+                    isDisabled:false
+                  })
+            }
+        }
     }
 
 
@@ -333,7 +349,7 @@ class RoleFormUI extends Component {
                                         <Input onChange = {(event) => (this.isChange(event))} 
                                             value = {this.state.form.name}
                                             type="username" id="nf-username" name="name" placeholder="Nhập tên quyền..." autoComplete="current-password" />
-                                         {this.state.error.name ? <FormText className="help-block"><span style={{color: "red"}}>Please enter valid your name</span></FormText> : ''} 
+                                         {this.state.error.name ? <FormText className="help-block"><span style={{color: "red"}}>Vui lòng nhập tên quyền hợp lệ!</span></FormText> : ''} 
                                     </FormGroup>
                                 </Form>
 
