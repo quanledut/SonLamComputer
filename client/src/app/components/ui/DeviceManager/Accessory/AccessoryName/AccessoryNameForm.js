@@ -203,9 +203,9 @@ class AccessoryNameFormUI extends Component {
         const re = /^\$?[0-9]+(\.[0-9][0-9])?$/;
 
         switch(fieldName) {
-          case 'deviceType':
+          case 'type':
             typeValid = (value !== null && value !== "" && value !== "None");
-            fieldValidationErrors.type = typeValid ? '' : 'Vui lòng chọn loại thiết bị!';
+            fieldValidationErrors.type = typeValid ? '' : 'Vui lòng chọn loại linh kiện!';
             break;
           case 'amount':
             amountValid = value.length > 0;
@@ -221,7 +221,7 @@ class AccessoryNameFormUI extends Component {
             priceValid = value.length > 0;
             if(!priceValid)
             {
-                fieldValidationErrors.price = priceValid ? '': 'Vui lòng nhập giá thiết bị!';
+                fieldValidationErrors.price = priceValid ? '': 'Vui lòng nhập giá linh kiện!';
             }else{
                 priceValid = re.test(value);
                 fieldValidationErrors.price = priceValid ? '': 'Định dạng số không đúng!';

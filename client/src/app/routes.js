@@ -32,50 +32,50 @@ const routes = [
   { path: '/dashboard', name: 'Dashboard', component: Dashboard },
   // { path: '/users', exact: true,  name: 'Users', component: Users },
   // { path: '/users/:id', exact: true, name: 'User Details', component: User },
-  { path: '/usermanager', exact: true, name: 'User Manager', component: Users },
-  { path: '/usermanager/new', exact: true, name: 'Add New User', component: UserForm },
-  { path: '/usermanager/:id/edit/:isChangePassword', exact: true, name: 'Edit User', component: UserForm },
+  { path: '/usermanager', exact: true, name: 'Quản lý tài khoản', component: Users },
+  { path: '/usermanager/new', exact: true, name: 'Tạo mới người dùng', component: UserForm },
+  { path: '/usermanager/:id/edit/:isChangePassword', exact: true, name: 'Sửa người dùng', component: UserForm },
 
-  { path: '/roles/', exact: true, name: 'Role Manager', component: Roles },
-  { path: '/roles/new', exact: true, name: 'New Role', component: RoleForm },
-  { path: '/roles/:id/edit', exact: true, name: 'Edit Role', component: RoleForm },
+  { path: '/roles/', exact: true, name: 'Quản lý quyền', component: Roles },
+  { path: '/roles/new', exact: true, name: 'Tạo mới quyền', component: RoleForm },
+  { path: '/roles/:id/edit', exact: true, name: 'Sửa quyền', component: RoleForm },
 
-  { path: '/devices/deviceType', exact: true, name: 'Device Type', component: DeviceTypes },
-  { path: '/devices/deviceType/new', exact: true, name: 'New Device Type', component: DeviceTypeForm },
-  { path: '/devices/deviceType/:id/edit', exact: true, name: 'Edit Device Type', component: DeviceTypeForm },
+  { path: '/devices/deviceType', exact: true, name: 'Loại thiết bị', component: DeviceTypes },
+  { path: '/devices/deviceType/new', exact: true, name: 'Tạo mới loại thiết bị', component: DeviceTypeForm },
+  { path: '/devices/deviceType/:id/edit', exact: true, name: 'Sửa loại thiết bị', component: DeviceTypeForm },
 
-  { path: '/devices/accessoryType', exact: true, name: 'Accessory Type', component: AccessoryTypes },
-  { path: '/devices/accessoryType/new', exact: true, name: 'New Accessory Type', component: AccessoryTypeForm },
-  { path: '/devices/accessoryType/:id/edit', exact: true, name: 'Edit Accessory Type', component: AccessoryTypeForm },
-
-
-  { path: '/devices/computerType', exact: true, name: 'Computer Type', component: ComputerType },
-  { path: '/devices/computerType/new', exact: true, name: 'New Computer Type', component: ComputerTypeForm },
-  { path: '/devices/computerType/:id/edit', exact: true, name: 'Edit Computer Type', component: ComputerTypeForm },
-
-  { path: '/devices/computerName', exact: true, name: 'Computer Name', component: ComputerName },
-  { path: '/devices/computerName/new', exact: true, name: 'New Computer Name', component: ComputerNameForm },
-  { path: '/devices/computerName/:id/edit', exact: true, name: 'Edit Computer Name', component: ComputerNameForm },
-
-  { path: '/services/serviceType', exact: true, name: 'Service Type', component: ServiceTypes },
-  { path: '/services/serviceType/new', exact: true, name: 'New Service Type', component: ServiceTypeForm },
-  { path: '/services/serviceType/:id/edit', exact: true, name: 'Edit Service Type', component: ServiceTypeForm },
-
-  { path: '/devices/device', exact: true, name: 'Device', component: DeviceNames },
-  { path: '/devices/device/new', exact: true, name: 'New Device', component: DeviceNameForm },
-  { path: '/devices/device/:id/edit', exact: true, name: 'Edit Device', component: DeviceNameForm },
-
-  { path: '/devices/accessory', exact: true, name: 'Accessory', component: AccessoryNames },
-  { path: '/devices/accessory/new', exact: true, name: 'New Accessory', component: AccessoryNameForm },
-  { path: '/devices/accessory/:id/edit', exact: true, name: 'Edit Accessory', component: AccessoryNameForm },
+  { path: '/devices/accessoryType', exact: true, name: 'Loại linh kiện', component: AccessoryTypes },
+  { path: '/devices/accessoryType/new', exact: true, name: 'Tạo mới lại linh kiện', component: AccessoryTypeForm },
+  { path: '/devices/accessoryType/:id/edit', exact: true, name: 'Sửa loại linh kiện', component: AccessoryTypeForm },
 
 
-  { path: '/services/service', exact: true, name: 'Service', component: Services },
-  { path: '/services/service/new', exact: true, name: 'New Service', component: ServiceForm },
-  { path: '/services/service/:id/edit', exact: true, name: 'Edit Service', component: ServiceForm },
+  { path: '/devices/computerType', exact: true, name: 'Loại máy tính', component: ComputerType },
+  { path: '/devices/computerType/new', exact: true, name: 'Tạo mới loại máy tính', component: ComputerTypeForm },
+  { path: '/devices/computerType/:id/edit', exact: true, name: 'Sửa loại máy tính', component: ComputerTypeForm },
 
-  { path: '/payments', exact: true, name: 'Payment', component: Payments },
-  { path: '/payments/:id/view', exact: true, name: 'View Payment', component: PaymentForm },
+  { path: '/devices/computerName', exact: true, name: 'Máy tính', component: ComputerName },
+  { path: '/devices/computerName/new', exact: true, name: 'Tạo mới máy tính', component: ComputerNameForm },
+  { path: '/devices/computerName/:id/edit', exact: true, name: 'Sửa máy tính', component: ComputerNameForm },
+
+  { path: '/services/serviceType', exact: true, name: 'Laoij dịch vụ', component: ServiceTypes },
+  { path: '/services/serviceType/new', exact: true, name: 'Tạo mới loại dịch vụ', component: ServiceTypeForm },
+  { path: '/services/serviceType/:id/edit', exact: true, name: 'Sửa loại dịch vụ', component: ServiceTypeForm },
+
+  { path: '/devices/device', exact: true, name: 'Thiết bị', component: DeviceNames },
+  { path: '/devices/device/new', exact: true, name: 'Tạo mới thiết bị', component: DeviceNameForm },
+  { path: '/devices/device/:id/edit', exact: true, name: 'Sửa thiết bị', component: DeviceNameForm },
+
+  { path: '/devices/accessory', exact: true, name: 'Linh kiện', component: AccessoryNames },
+  { path: '/devices/accessory/new', exact: true, name: 'Tạo mới linh kiện', component: AccessoryNameForm },
+  { path: '/devices/accessory/:id/edit', exact: true, name: 'Sửa linh kiện', component: AccessoryNameForm },
+
+
+  { path: '/services/service', exact: true, name: 'Dịch vụ', component: Services },
+  { path: '/services/service/new', exact: true, name: 'Tạo mới dịch vụ', component: ServiceForm },
+  { path: '/services/service/:id/edit', exact: true, name: 'Sửa dịch vụ', component: ServiceForm },
+
+  { path: '/payments', exact: true, name: 'Thanh toán', component: Payments },
+  { path: '/payments/:id/view', exact: true, name: 'Chi tiết thanh toán', component: PaymentForm },
 ];
 
 export default routes;
