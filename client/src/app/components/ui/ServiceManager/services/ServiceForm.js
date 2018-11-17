@@ -346,6 +346,14 @@ class ServiceFormUI extends Component {
                 }
             })
 
+            this.state.form.devices = this.state.form.devices.map(i => {
+                return {
+                    ...i,
+                    name: this.state.devices.filter(i1 => i1._id === i.name)[0].name,
+                    type: this.state.deviceTypes.filter(i1 => i1._id === i.type)[0].name
+                }
+            })
+
             this.props.create(this.state.form, (res, error) => {
                 this._closeModal()
                 if (res) {
@@ -555,6 +563,17 @@ class ServiceFormUI extends Component {
             form: {
                 ...this.state.form,
                 accessories: this.state.form.accessories.filter((item, id) => id  !== i)
+            }
+        })
+    }
+
+    _deleteDevices = (event, i) => {
+        event.preventDefault();
+        this.setState({
+            tbody: this.state.tbody.filter((item, id) =>  id !== i),
+            form: {
+                ...this.state.form,
+                devices: this.state.form.devices.filter((item, id) => id  !== i)
             }
         })
     }
@@ -802,7 +821,7 @@ class ServiceFormUI extends Component {
                                                                     }
                                                                 </td>
 
-                                                                <td><Button onClick={(e) => this._deleteAccessory(e, key)}>Delete</Button></td>
+                                                                <td><Button onClick={(e) => this._deleteDevices(e, key)}>Delete</Button></td>
                                                             </tr>)
                                                         })
                                                         : []
