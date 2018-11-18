@@ -7,8 +7,8 @@ const loginApi = (username, password) =>
         .post("/users/login", {username, password})
         .then((response) => response.data)
         .catch((err) => {
-            // throw new Error(err.response.data)
-            throw new Error("Username hoặc password không hợp lệ")
+            console.log(username, password, err.response)
+            throw new Error("Error")
 
         })
 

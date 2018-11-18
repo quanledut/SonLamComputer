@@ -15,6 +15,8 @@ import { Provider } from 'react-redux';
 // import LoginPage from './app_structure/component/Login'
 import LoginScreen1 from './app_structure/component/Login/screen1'
 import LoginScreen3 from './app_structure/component/Login/screen3'
+import HomeScreen from './app_structure/component/Home/components'
+import ProductViews from './app_structure/component/Product'
 
 import store from './app_structure/stores/index'
 
@@ -54,10 +56,10 @@ const CustomDrawerContentComponent = props => (
 
 const Navigator = DrawerNavigator({
   Login1: { screen: LoginScreen1, navigationOptions: headerOptions},
-  Login3: { screen: LoginScreen3, navigationOptions: headerOptions}
-
+  Login3: { screen: LoginScreen3, navigationOptions: headerOptions},
+  Home: { screen: ProductViews, navigationOptions: headerOptions },
 }, {
-  initialRouteName: 'Login3',
+  initialRouteName: 'Home',
   contentOptions: {
     activeTintColor: '#548ff7',
     activeBackgroundColor: 'transparent',

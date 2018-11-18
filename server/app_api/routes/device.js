@@ -14,21 +14,18 @@ const route_device = (router) => {
     router.get(
         '/deviceTypes',
         auth,
-        checkPermissionForDeviceType(permission.type.READ),
         ctrDeviceType.find
     );
 
     router.get(
         '/deviceTypes/:deviceTypeId',
         auth,
-        checkPermissionForDeviceType(permission.type.READ),
         ctrDeviceType.findById
     );
 
     router.get(
         '/deviceTypes/:name',
         auth,
-        checkPermissionForDeviceType(permission.type.READ),
         ctrDeviceType.findByName
     );
 
@@ -59,14 +56,12 @@ const route_device = (router) => {
     router.get(
         '/devices',
         auth,
-        checkPermissionForDevice(permission.type.READ),
         ctrlDevice.find
     );
 
     router.get(
         '/devices/:deviceId',
         auth,
-        checkPermissionForDevice(permission.type.READ),
         ctrlDevice.findById
     );
 

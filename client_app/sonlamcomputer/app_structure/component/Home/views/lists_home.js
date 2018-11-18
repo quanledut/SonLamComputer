@@ -196,7 +196,7 @@ class Icons extends Component {
         <View style={styles.list}>
           {list2.map((l, i) => (
             <ListItem
-              leftAvatar={{ rounded: true, source: { uri: l.avatar_url } }}
+              avatar={{ rounded: true, source: { uri: l.avatar_url } }}
               key={i}
               onPress={log}
               title={l.name}
@@ -264,7 +264,7 @@ class Icons extends Component {
                 <Text style={styles.ratingText}>5 months ago</Text>
               </View>
             }
-            leftAvatar={{ source: require('../../../../assets/images/avatar1.jpg') }}
+            avatar={{ source: require('../../../../assets/images/avatar1.jpg') }}
           />
         </View>
         <View style={styles.list}>
@@ -285,7 +285,7 @@ class Icons extends Component {
         <View style={{ backgroundColor: '#ECEFF1', paddingVertical: 8 }}>
           {list2.map((l, i) => (
             <ListItem
-              leftAvatar={{ rounded: true, source: { uri: l.avatar_url } }}
+              avatar={{ rounded: true, source: { uri: l.avatar_url } }}
               key={i}
               scaleProps={{
                 friction: 90,

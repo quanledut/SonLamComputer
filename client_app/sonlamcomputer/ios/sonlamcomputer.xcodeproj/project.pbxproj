@@ -86,6 +86,12 @@
 		7EF04213B41A4FE5B1C7DB01 /* logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = A672AB3B09144158BDC710B1 /* logo.jpg */; };
 		635E4996C45540EE8AE523F3 /* logo (another copy).png in Resources */ = {isa = PBXBuildFile; fileRef = 3EF44BCA66B6440E9EAE6499 /* logo (another copy).png */; };
 		43065E62B12B4E3A855968E3 /* logo (copy).png in Resources */ = {isa = PBXBuildFile; fileRef = BDDD26D4BBDB41339B4D8DE8 /* logo (copy).png */; };
+		18269A53C59F45399F9784B7 /* ssd.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4F4644C0F3F44F1EAE535C59 /* ssd.jpg */; };
+		1366189CF86149EF8BA3C012 /* keyboard.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 42913E438AFA4B9092B29775 /* keyboard.jpg */; };
+		C382947D9FF44E3F868EF75B /* laptop.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 704E6BBBBB184158974ED5BA /* laptop.jpg */; };
+		7FA917180E494B4E98CD7623 /* mouse.jpg in Resources */ = {isa = PBXBuildFile; fileRef = D5DBF8A1C6634079AA64C87A /* mouse.jpg */; };
+		7A6EAD7175CB47ACB75EA695 /* headerbg_product.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 6B2FD390B6A2406E8D0F755B /* headerbg_product.jpg */; };
+		D218871A13B8419E86E20E7C /* hdd.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 41AF087947354D5BB141CC83 /* hdd.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -441,6 +447,12 @@
 		A672AB3B09144158BDC710B1 /* logo.jpg */ = {isa = PBXFileReference; name = "logo.jpg"; path = "../assets/images/logo.jpg"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		3EF44BCA66B6440E9EAE6499 /* logo (another copy).png */ = {isa = PBXFileReference; name = "logo (another copy).png"; path = "../assets/images/logo (another copy).png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		BDDD26D4BBDB41339B4D8DE8 /* logo (copy).png */ = {isa = PBXFileReference; name = "logo (copy).png"; path = "../assets/images/logo (copy).png"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		4F4644C0F3F44F1EAE535C59 /* ssd.jpg */ = {isa = PBXFileReference; name = "ssd.jpg"; path = "../assets/images/products/ssd.jpg"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		42913E438AFA4B9092B29775 /* keyboard.jpg */ = {isa = PBXFileReference; name = "keyboard.jpg"; path = "../assets/images/products/keyboard.jpg"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		704E6BBBBB184158974ED5BA /* laptop.jpg */ = {isa = PBXFileReference; name = "laptop.jpg"; path = "../assets/images/products/laptop.jpg"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		D5DBF8A1C6634079AA64C87A /* mouse.jpg */ = {isa = PBXFileReference; name = "mouse.jpg"; path = "../assets/images/products/mouse.jpg"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		6B2FD390B6A2406E8D0F755B /* headerbg_product.jpg */ = {isa = PBXFileReference; name = "headerbg_product.jpg"; path = "../assets/images/headerbg_product.jpg"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		41AF087947354D5BB141CC83 /* hdd.jpg */ = {isa = PBXFileReference; name = "hdd.jpg"; path = "../assets/images/products/hdd.jpg"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -755,6 +767,12 @@
 				A672AB3B09144158BDC710B1 /* logo.jpg */,
 				3EF44BCA66B6440E9EAE6499 /* logo (another copy).png */,
 				BDDD26D4BBDB41339B4D8DE8 /* logo (copy).png */,
+				4F4644C0F3F44F1EAE535C59 /* ssd.jpg */,
+				42913E438AFA4B9092B29775 /* keyboard.jpg */,
+				704E6BBBBB184158974ED5BA /* laptop.jpg */,
+				D5DBF8A1C6634079AA64C87A /* mouse.jpg */,
+				6B2FD390B6A2406E8D0F755B /* headerbg_product.jpg */,
+				41AF087947354D5BB141CC83 /* hdd.jpg */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1253,6 +1271,12 @@
 				7EF04213B41A4FE5B1C7DB01 /* logo.jpg in Resources */,
 				635E4996C45540EE8AE523F3 /* logo (another copy).png in Resources */,
 				43065E62B12B4E3A855968E3 /* logo (copy).png in Resources */,
+				18269A53C59F45399F9784B7 /* ssd.jpg in Resources */,
+				1366189CF86149EF8BA3C012 /* keyboard.jpg in Resources */,
+				C382947D9FF44E3F868EF75B /* laptop.jpg in Resources */,
+				7FA917180E494B4E98CD7623 /* mouse.jpg in Resources */,
+				7A6EAD7175CB47ACB75EA695 /* headerbg_product.jpg in Resources */,
+				D218871A13B8419E86E20E7C /* hdd.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -14,21 +14,18 @@ const route_accessory = (router) => {
     router.get(
         '/accessoryTypes',
         auth,
-        checkPermissionForAccessoryType(permission.type.READ),
         ctrAccessoryType.find
     );
 
     router.get(
         '/accessoryTypes/:accessoryTypeId',
         auth,
-        checkPermissionForAccessoryType(permission.type.READ),
         ctrAccessoryType.findById
     );
 
     router.get(
         '/accessoryTypes/:name',
         auth,
-        checkPermissionForAccessoryType(permission.type.READ),
         ctrAccessoryType.findByName
     );
 
@@ -59,14 +56,12 @@ const route_accessory = (router) => {
     router.get(
         '/accessorys',
         auth,
-        checkPermissionForAccessory(permission.type.READ),
         ctrlAccessory.find
     );
 
     router.get(
         '/accessorys/:accessoryId',
         auth,
-        checkPermissionForAccessory(permission.type.READ),
         ctrlAccessory.findById
     );
 
@@ -91,7 +86,6 @@ const route_accessory = (router) => {
         checkPermissionForAccessory(permission.type.DELETE),
         ctrlAccessory.deleteById
     )
-
 }
 
 module.exports = route_accessory
