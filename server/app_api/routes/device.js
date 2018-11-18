@@ -13,19 +13,16 @@ const route_device = (router) => {
 
     router.get(
         '/deviceTypes',
-        auth,
         ctrDeviceType.find
     );
 
     router.get(
         '/deviceTypes/:deviceTypeId',
-        auth,
         ctrDeviceType.findById
     );
 
     router.get(
         '/deviceTypes/:name',
-        auth,
         ctrDeviceType.findByName
     );
 
@@ -55,13 +52,11 @@ const route_device = (router) => {
 
     router.get(
         '/devices',
-        auth,
         ctrlDevice.find
     );
 
     router.get(
         '/devices/:deviceId',
-        auth,
         ctrlDevice.findById
     );
 
