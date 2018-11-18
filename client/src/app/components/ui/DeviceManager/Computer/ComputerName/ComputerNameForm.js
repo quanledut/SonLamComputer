@@ -57,6 +57,7 @@ class ComputerNameFormUI extends Component {
         {
             var id = match.params.id;
             this.props.getById(id, (data) => {
+                console.log(data);
                 if(data)
                     {this.setState({
                         ...this.state,
@@ -251,7 +252,7 @@ class ComputerNameFormUI extends Component {
                                         <Label htmlFor="select">Loại máy tính</Label>
                                         <Input 
                                             onChange = {(event) => (this.isChange(event))} 
-                                            value = {this.state.form.type}
+                                            value = {this.state.form.type._id}
                                             type="select" name="type" id="select">
                                             <option value="">---Chọn---</option>
                                             {

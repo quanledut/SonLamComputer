@@ -22,7 +22,7 @@ const getPrice = (number) => {
 }
 
 let deviceSchema = new mongoose.Schema({
-    name: { type: String, required: true },
+    name: { type: String, required: true, trim: true },
     type: { type: mongoose.Schema.Types.ObjectId, ref: 'DeviceType' },
     description: [String],
     image_url: String,

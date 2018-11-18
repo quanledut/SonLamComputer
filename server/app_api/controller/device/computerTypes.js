@@ -110,6 +110,7 @@ const create = (req,res) => {
         });
         return;
     }
+    console.log(req.body.name);
     ComputerType
     .findOne({name:req.body.name})
     .exec((err,ct)=>{
