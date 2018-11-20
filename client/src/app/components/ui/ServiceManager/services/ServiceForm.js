@@ -301,6 +301,26 @@ class ServiceFormUI extends Component {
     {
         event.preventDefault();
 
+        for (let name in this.state.form) {
+            this._validate(name, this.state.form[name])
+        }
+
+        var check = true;
+        for (let name in this.state.formErrors) {
+            if (this.state.formErrors[name] !== "") {
+                check = false;
+            }
+        }
+
+        if (!check) {
+            this._openModal({
+                title: "Error",
+                content: "Dữ liệu không hợp lệ. Vui lòng kiểm tra lại!",
+                isLoading: false,
+            })
+            return;
+        }
+
         if (this._checkError()) {
             this._openModal({
                 title: "Error",
@@ -309,7 +329,7 @@ class ServiceFormUI extends Component {
             })            
             return;  
         }
-
+        
         this._openModal({
             isLoading: true,
             isOpened: true,
@@ -439,41 +459,8 @@ class ServiceFormUI extends Component {
           default:
             break;
         }
-        this.setState({formErrors: fieldValidationErrors,
-                        customer_phoneValid: customer_phoneValid,
-                        customer_nameValid: customer_nameValid,
-                        serviceTypeValid: serviceTypeValid,
-                        totalPriceValid: totalPriceValid
-                      }, this.validateForm);
+        this.setState({formErrors: fieldValidationErrors});
       }
-    
-      validateForm() {
-        this.setState({formValid: this.state.customer_phoneValid && this.state.customer_nameValid && 
-                        this.state.serviceTypeValid && this.state.totalPriceValid});
-      }
-
-    // _validate(name, value) {
-    //     const re = /^\$?[0-9]+(\.[0-9][0-9])?$/;
-    //     const regex = /^\+?(?:[0-9] ?){8,14}[0-9]$/;
-    //     if (name === 'accessories') {
-    //         return !(value !== null && value !== "" && value !== "None")
-    //     }
-    //     if (name === 'serviceType') {
-    //         return !(value !== null && value !== "" && value !== "None")
-    //     }
-    //     if (name === 'date') {
-    //         return !(value !== null && value !== "")
-    //     }
-    //     if (name === 'totalPrice') {
-    //         return !(re.test(value) && (value > 0))
-    //     }
-    //     if (name === 'customer_name') {
-    //         return !(value !== null && value !== "")
-    //     }
-    //     if (name === 'customer_phone') {
-    //         return !(regex.test(value) && (value > 0))
-    //     }
-    // }
 
     isChange = (event) =>
     {
@@ -494,23 +481,7 @@ class ServiceFormUI extends Component {
             });
         }
 
-        if (this._validate(name, value)) {
-            this.setState({
-                error: {
-                    ...this.state.error,
-                    [name]: true
-                }
-            })
-        } else {
-            delete this.state.error[name]
-        }
-
-
-        // if (JSON.stringify(this.state.error) === JSON.stringify({})) {
-        //     this.setState({
-        //         isDisabled:false
-        //       })
-        // }
+        this._validate(name, value);
 
         if (name === "serviceType") {
             let type = this.state.serviceTypes.filter((i) => i._id === value)[0]
@@ -646,25 +617,6 @@ class ServiceFormUI extends Component {
                                          {this.state.formErrors.totalPrice ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.totalPrice}</span></FormText> : ''} 
                                     </FormGroup>
                                 </Form>
-                                {/* <FormGroup>
-                                    <Label htmlFor="select">Thiết bị</Label>
-                                    <Input 
-                                        onChange = {(event) => (this.isChange(event))} 
-                                        value = {this.state.form.device}
-                                        type="select" name="device" id="select">
-                                        <option value="None">---Chọn---</option>
-                                        {
-                                            this.state.accessories.map((e, id) => 
-                                                <option key={id} value={e._id}>
-                                                    Tên: {e.computerName.name} --- 
-                                                    Loại: {e.deviceType.name} --- 
-                                                    Giá: {e.price} --- 
-                                                    Thời gian bảo hành: {e.guaranteeDuration}
-                                                </option>
-                                            )
-                                        }
-                                    </Input>
-                                </FormGroup> */}
                                 <hr/>
                                 <FormGroup row>
                                     <Col md="12">
@@ -874,7 +826,7 @@ class ServiceFormUI extends Component {
                                 (!this.props.match.params.id) && 
                                 <CardFooter>
                                     {/* <Button type="submit" size="sm" color="primary" disabled={this.state.isDisabled} onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button> */}
-                                    <Button type="submit" size="sm" color="primary" disabled={!this.state.formValid} onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button>
+                                    <Button type="submit" size="sm" color="primary" onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button>
                                     <Button type="reset" size="sm" color="danger" onClick = {this.onClear}><i className="fa fa-ban"></i> Reset</Button>
                                 </CardFooter>
                             }

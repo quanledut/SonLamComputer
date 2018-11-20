@@ -61,6 +61,7 @@ export function * updated() {
     while (true) {
         const request = yield take(Actions.CONSTANTS.UPDATE_REQUEST)
         const data = request.data
+        console.log(data)
         try {
             let result = yield call(Api.updateApi, data)
             request.cb(result, null)

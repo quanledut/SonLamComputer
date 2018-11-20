@@ -29,7 +29,6 @@ class ServiceTypeFormUI extends Component {
 
         this.state = {
             form: {...DEFAULT_FORM},
-            error: {},
             modal: {
                 isOpened: false,
                 isLoading: false,
@@ -37,7 +36,11 @@ class ServiceTypeFormUI extends Component {
                 content: ""
             },      
             isDisabled:true,
-            isRedirect: false
+            isRedirect: false,
+            error: {
+                name: '',
+            },
+            nameValid: false,
         };
 
         this.onClear = this.onClear.bind(this)
@@ -64,7 +67,6 @@ class ServiceTypeFormUI extends Component {
     onClear = () =>{
         this.setState({
             form: {...DEFAULT_FORM},
-            error: {},
             modal: {
                 isOpened: false,
                 isLoading: false,
@@ -72,7 +74,11 @@ class ServiceTypeFormUI extends Component {
                 content: ""
             },      
             isDisabled:true,
-            isRedirect: false
+            isRedirect: false,
+            error: {
+                name: '',
+            },
+            nameValid: false,
         });
     }
 
@@ -106,6 +112,26 @@ class ServiceTypeFormUI extends Component {
             isOpened: true,
             title: "Loading"
         })
+
+        for (let name in this.state.form) {
+            this._validate(name, this.state.form[name])
+        }
+
+        var check = true;
+        for (let name in this.state.error) {
+            if (this.state.error[name] !== "") {
+                check = false;
+            }
+        }
+
+        if (!check) {
+            this._openModal({
+                title: "Error",
+                content: "Dữ liệu không hợp lệ. Vui lòng kiểm tra lại!",
+                isLoading: false,
+            })
+            return;
+        }
 
         let {_id} = this.state.form
         if (_id) {
@@ -151,13 +177,22 @@ class ServiceTypeFormUI extends Component {
         }
     }
 
-    _validate(name, value) {
-        if (name === 'name') {
-            return !((value.length <= 100) && (value.length >= 6))
-        } else {
-            return value === "" || value === null
+    _validate(fieldName, value) {
+        let fieldValidationErrors = this.state.error;
+        let nameValid = this.state.nameValid;
+
+        switch(fieldName) {
+          case 'name':
+            nameValid = value.length > 5 && value.length < 101;
+            fieldValidationErrors.name = nameValid ? '': 'Vui lòng nhập tên loại thiết bị trong khoảng 6-100 ký tự!';
+            break;
+          
+          default:
+            break;
         }
+        this.setState({error: fieldValidationErrors});
     }
+
 
     isChange = (event) =>
     {
@@ -170,30 +205,7 @@ class ServiceTypeFormUI extends Component {
             }
         });
 
-        if (this._validate(name, value)) {
-            this.setState({
-                error: {
-                    ...this.state.error,
-                    [name]: true
-                }
-            })
-        } else {
-            delete this.state.error[name]
-        }
-
-        if (JSON.stringify(this.state.error) === JSON.stringify({})) {
-            this.setState({
-                isDisabled:false
-              })
-  
-        }
-        
-        if(value === "" || value === null || value.length > 100 || value.length < 6)
-        {
-            this.setState({
-                isDisabled: true
-            })
-        }
+        this._validate(name, value);
     }
 
     render() {
@@ -232,7 +244,7 @@ class ServiceTypeFormUI extends Component {
                                 </Form>
                             </CardBody>
                             <CardFooter>
-                                <Button type="submit" size="sm" color="primary" disabled={this.state.isDisabled} onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button>
+                                <Button type="submit" size="sm" color="primary" onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button>
                                 <Button type="reset" size="sm" color="danger" onClick = {this.onClear}><i className="fa fa-ban"></i> Reset</Button>
                             </CardFooter>
                         </Card>

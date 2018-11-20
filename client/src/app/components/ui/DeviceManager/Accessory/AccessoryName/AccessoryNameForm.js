@@ -147,48 +147,71 @@ class AccessoryNameFormUI extends Component {
             title: "Loading"
         })
 
-        let {_id} = this.state.form
-        if (_id) {
-            this.props.update(this.state.form, (res, error) => {
-                this._closeModal()
-                if (res) {
-                    this._openModal({
-                        title: "Success",
-                        content: "Updat success",
-                        isLoading: false
-                    })
-                    this.setState({
-                        isRedirect: true
-                    })              
-                } else {
-                    this._openModal({
-                        title: "Error",
-                        content: error,
-                        isLoading: false,
-                      })              
-                }
-            })
-        } else {
-            console.log(this.state.form);
-            this.props.create(this.state.form, (res, error) => {
-                this._closeModal()
-                if (res) {
-                    this._openModal({
-                        title: "Success",
-                        content: "Create success",
-                        isLoading: false
-                    })
-                    this.setState({
-                        isRedirect: true
-                    })              
-                } else{
-                    this._openModal({
-                        title: "Error",
-                        content: error,
-                        isLoading: false,
-                      })              
-                }
-            })
+        for (let name in this.state.form) {
+            this._validate(name, this.state.form[name])
+        }
+        console.log(this.state.form)
+        var check = true;
+        for (let name in this.state.formErrors) {
+            if(this.state.formErrors[name] !== "")
+            {
+                check = false;
+            }
+        }
+
+        if(!check)
+        {
+            this._openModal({
+                title: "Thông báo",
+                content: "Dữ liệu không hợp lệ. Vui lòng kiểm tra lại!",
+                isLoading: false,
+              })    
+        }
+        else
+        {
+            let {_id} = this.state.form
+            if (_id) {
+                this.props.update(this.state.form, (res, error) => {
+                    this._closeModal()
+                    if (res) {
+                        this._openModal({
+                            title: "Success",
+                            content: "Updat success",
+                            isLoading: false
+                        })
+                        this.setState({
+                            isRedirect: true
+                        })              
+                    } else {
+                        this._openModal({
+                            title: "Error",
+                            content: error,
+                            isLoading: false,
+                        })              
+                    }
+                })
+            } else {
+                console.log(this.state.form);
+                this.props.create(this.state.form, (res, error) => {
+                    this._closeModal()
+                    if (res) {
+                        this._openModal({
+                            title: "Success",
+                            content: "Create success",
+                            isLoading: false
+                        })
+                        this.setState({
+                            isRedirect: true
+                        })              
+                    } else{
+                        this._openModal({
+                            title: "Error",
+                            content: error,
+                            isLoading: false,
+                        })              
+                    }
+                })
+            }
         }
     }
 
@@ -208,7 +231,8 @@ class AccessoryNameFormUI extends Component {
             fieldValidationErrors.type = typeValid ? '' : 'Vui lòng chọn loại linh kiện!';
             break;
           case 'amount':
-            amountValid = value.length > 0;
+          console.log(value)
+            amountValid = value > 0;
             if(!amountValid)
             {
                 fieldValidationErrors.amount = amountValid ? '': 'Vui lòng nhập số lượng!';
@@ -218,7 +242,7 @@ class AccessoryNameFormUI extends Component {
             }
             break;
           case 'price':
-            priceValid = value.length > 0;
+            priceValid = value > 0;
             if(!priceValid)
             {
                 fieldValidationErrors.price = priceValid ? '': 'Vui lòng nhập giá linh kiện!';
@@ -232,7 +256,7 @@ class AccessoryNameFormUI extends Component {
             fieldValidationErrors.computerName = computerNameValid ? '': ' Vui lòng chọn tên máy tính!';
             break;
           case 'guaranteeDuration':
-            guaranteeDurationValid = value.length > 0;
+            guaranteeDurationValid = value > 0;
             if(!guaranteeDurationValid)
             {
                 fieldValidationErrors.guaranteeDuration = guaranteeDurationValid ? '': 'Vui lòng nhập thời gian bảo hành!';
@@ -244,39 +268,9 @@ class AccessoryNameFormUI extends Component {
           default:
             break;
         }
-        this.setState({formErrors: fieldValidationErrors,
-                        guaranteeDurationValid: guaranteeDurationValid,
-                        computerNameValid: computerNameValid,
-                        priceValid: priceValid,
-                        amountValid: amountValid,
-                        typeValid: typeValid
-                      }, this.validateForm);
+        this.setState({formErrors: fieldValidationErrors});
       }
     
-      validateForm() {
-        this.setState({formValid: this.state.guaranteeDurationValid && this.state.computerNameValid && 
-                        this.state.priceValid && this.state.amountValid && this.state.typeValid});
-      }
-
-    // _validate(name, value) {
-    //     const re = /^\$?[0-9]+(\.[0-9][0-9])?$/;
-    //     if (name === 'computerName') {
-    //         return !(value !== null && value !== "")
-    //     }
-    //     if (name === 'type') {
-    //         return !(value !== null && value !== "")
-    //     }
-    //     if (name === 'price') {
-    //         return !(re.test(value)) && (value > 0)
-    //     }
-    //     if (name === 'amount') {
-    //         return !(re.test(value) && (value > 0))
-    //     }
-    //     if (name === 'guaranteeDuration') {
-    //         return !(re.test(value) && (value > 0))
-    //     }
-    // }
-
     isChange = (event) =>
     {
         const name = event.target.name;
@@ -288,27 +282,7 @@ class AccessoryNameFormUI extends Component {
             }
         });
 
-        if (this._validate(name, value)) {
-            this.setState({
-                error: {
-                    ...this.state.error,
-                    [name]: true
-                }
-            })
-        } else {
-            delete this.state.error[name]
-        }
-
-        if (JSON.stringify(this.state.error) === JSON.stringify({})) {
-            this.setState({
-                isDisabled:false
-              })
-        }
-        else{
-            this.setState({
-                isDisabled:true
-              })
-        }
+        this._validate(name, value);
     }
 
     render() {
@@ -402,7 +376,7 @@ class AccessoryNameFormUI extends Component {
                                 </Form>
                             </CardBody>
                             <CardFooter>
-                                <Button type="submit" size="sm" color="primary" disabled={!this.state.formValid} onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button>
+                                <Button type="submit" size="sm" color="primary" onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button>
                                 <Button type="reset" size="sm" color="danger" onClick = {this.onClear}><i className="fa fa-ban"></i> Reset</Button>
                             </CardFooter>
                         </Card>
