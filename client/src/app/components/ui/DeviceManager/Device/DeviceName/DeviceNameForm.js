@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Modal from './../../../utils/Modal'
-import {Redirect} from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
 import {
     Button,
@@ -19,14 +19,14 @@ import {
 } from 'reactstrap';
 
 const DEFAULT_FORM = {
-    _id :'',
-    name:'',
-    deviceType:'',
-    description:'',
-    image_url:'',
-    amount:0,
-    price:0,
-    guaranteeDuration:0
+    _id: '',
+    name: '',
+    deviceType: '',
+    description: '',
+    image_url: '',
+    amount: 0,
+    price: 0,
+    guaranteeDuration: 0
 }
 
 class DeviceNameFormUI extends Component {
@@ -35,19 +35,19 @@ class DeviceNameFormUI extends Component {
         super(props);
 
         this.state = {
-            form: {...DEFAULT_FORM},
+            form: { ...DEFAULT_FORM },
             error: {},
             modal: {
                 isOpened: false,
                 isLoading: false,
                 title: "",
                 content: ""
-            },      
+            },
             deviceTypes: [],
             computerNames: [],
-            isDisabled:true,
+            isDisabled: true,
             isRedirect: false,
-            formErrors: {name: '',deviceType: '',amount: '', price:'',guaranteeDuration:''},
+            formErrors: { name: '', deviceType: '', amount: '', price: '', guaranteeDuration: '' },
             nameValid: false,
             deviceTypeValid: false,
             amountValid: false,
@@ -62,10 +62,9 @@ class DeviceNameFormUI extends Component {
         this._closeModal = this._closeModal.bind(this)
     }
 
-    componentWillMount(){
-        var {match} = this.props;
-        if(match.params.id)
-        {
+    componentWillMount() {
+        var { match } = this.props;
+        if (match.params.id) {
             var id = match.params.id;
 
             this.props.getById(id, (data) => {
@@ -86,19 +85,19 @@ class DeviceNameFormUI extends Component {
         });
     }
 
-    onClear = () =>{
+    onClear = () => {
         this.setState({
-            form: {...DEFAULT_FORM},
+            form: { ...DEFAULT_FORM },
             error: {},
             modal: {
                 isOpened: false,
                 isLoading: false,
                 title: "",
                 content: ""
-            },      
-            isDisabled:true,
+            },
+            isDisabled: true,
             isRedirect: false,
-            formErrors: {name: '',deviceType: '',amount: '', price:'',guaranteeDuration:''},
+            formErrors: { name: '', deviceType: '', amount: '', price: '', guaranteeDuration: '' },
             nameValid: false,
             deviceTypeValid: false,
             amountValid: false,
@@ -108,30 +107,29 @@ class DeviceNameFormUI extends Component {
         });
     }
 
-    _openModal (modal) {
+    _openModal(modal) {
         this.setState({
-          modal: {
-            ...this.state.modal,
-            ...modal,
-            isOpened: true
-          }
-        })  
-    }   
-    
-    _closeModal () {
-        this.setState({
-          modal: {
-            isOpened: false,
-            isLoading: false,
-            title: "",
-            content: ""
-          }
+            modal: {
+                ...this.state.modal,
+                ...modal,
+                isOpened: true
+            }
         })
     }
 
-    onSubmitForm =(event) =>
-    {
-        
+    _closeModal() {
+        this.setState({
+            modal: {
+                isOpened: false,
+                isLoading: false,
+                title: "",
+                content: ""
+            }
+        })
+    }
+
+    onSubmitForm = (event) => {
+
         event.preventDefault();
         this._openModal({
             isLoading: true,
@@ -139,47 +137,67 @@ class DeviceNameFormUI extends Component {
             title: "Loading"
         })
 
-        let {_id} = this.state.form
-        if (_id) {
-            this.props.update(this.state.form, (res, error) => {
-                this._closeModal()
-                if (res) {
-                    this._openModal({
-                        title: "Success",
-                        content: "Updat success",
-                        isLoading: false
-                    })
-                    this.setState({
-                        isRedirect: true
-                    })              
-                } else {
-                    this._openModal({
-                        title: "Error",
-                        content: error,
-                        isLoading: false,
-                      })              
-                }
+        for (let name in this.state.form) {
+            this._validate(name, this.state.form[name])
+        }
+
+        var check = true;
+        for (let name in this.state.formErrors) {
+            if (this.state.formErrors[name] !== "") {
+                check = false;
+            }
+        }
+
+        if (!check) {
+            this._openModal({
+                title: "Error",
+                content: "Dữ liệu không hợp lệ. Vui lòng kiểm tra lại!",
+                isLoading: false,
             })
-        } else {
-            this.props.create(this.state.form, (res, error) => {
-                this._closeModal()
-                if (res) {
-                    this._openModal({
-                        title: "Success",
-                        content: "Create success",
-                        isLoading: false
-                    })
-                    this.setState({
-                        isRedirect: true
-                    })              
-                } else{
-                    this._openModal({
-                        title: "Error",
-                        content: error,
-                        isLoading: false,
-                      })              
-                }
-            })
+        }
+        else {
+            let { _id } = this.state.form
+            if (_id) {
+                this.props.update(this.state.form, (res, error) => {
+                    this._closeModal()
+                    if (res) {
+                        this._openModal({
+                            title: "Success",
+                            content: "Updat success",
+                            isLoading: false
+                        })
+                        this.setState({
+                            isRedirect: true
+                        })
+                    } else {
+                        this._openModal({
+                            title: "Error",
+                            content: error,
+                            isLoading: false,
+                        })
+                    }
+                })
+            } else {
+                this.props.create(this.state.form, (res, error) => {
+                    this._closeModal()
+                    if (res) {
+                        this._openModal({
+                            title: "Success",
+                            content: "Create success",
+                            isLoading: false
+                        })
+                        this.setState({
+                            isRedirect: true
+                        })
+                    } else {
+                        this._openModal({
+                            title: "Error",
+                            content: error,
+                            isLoading: false,
+                        })
+                    }
+                })
+            }
         }
     }
 
@@ -193,87 +211,53 @@ class DeviceNameFormUI extends Component {
 
         const re = /^\$?[0-9]+(\.[0-9][0-9])?$/;
 
-        switch(fieldName) {
-          case 'deviceType':
-            deviceTypeValid = (value !== null && value !== "");
-            fieldValidationErrors.deviceType = deviceTypeValid ? '' : 'Vui lòng chọn loại thiết bị!';
-            break;
-          case 'amount':
-            amountValid = value.length > 0;
-            if(!amountValid)
-            {
-                fieldValidationErrors.amount = amountValid ? '': 'Vui lòng nhập số lượng!';
-            }else{
-                amountValid = re.test(value);
-                fieldValidationErrors.amount = amountValid ? '': 'Định dạng số không đúng!';
-            }
-            break;
-          case 'price':
-            priceValid = value.length > 0;
-            if(!priceValid)
-            {
-                fieldValidationErrors.price = priceValid ? '': 'Vui lòng nhập giá thiết bị!';
-            }else{
-                priceValid = re.test(value);
-                fieldValidationErrors.price = priceValid ? '': 'Định dạng số không đúng!';
-            }
-            break;
-          case 'name':
-            nameValid = value.length >2 && value.length <= 100;
-            fieldValidationErrors.name = nameValid ? '': ' Vui lòng nhập tên thiết bị trong khoảng 3-100 ký tự!';
-            break;
-          case 'guaranteeDuration':
-            guaranteeDurationValid = value.length > 0;
-            if(!guaranteeDurationValid)
-            {
-                fieldValidationErrors.guaranteeDuration = guaranteeDurationValid ? '': 'Vui lòng nhập thời gian bảo hành!';
-            }else{
-                guaranteeDurationValid = re.test(value);
-                fieldValidationErrors.guaranteeDuration = guaranteeDurationValid ? '': 'Định dạng số không đúng!';
-            }
-            break;
-          default:
-            break;
+        switch (fieldName) {
+            case 'deviceType':
+                deviceTypeValid = (value !== null && value !== "");
+                fieldValidationErrors.deviceType = deviceTypeValid ? '' : 'Vui lòng chọn loại thiết bị!';
+                break;
+            case 'amount':
+                amountValid = value > 0;
+                if (!amountValid) {
+                    fieldValidationErrors.amount = amountValid ? '' : 'Vui lòng nhập số lượng!';
+                } else {
+                    amountValid = re.test(value);
+                    fieldValidationErrors.amount = amountValid ? '' : 'Định dạng số không đúng!';
+                }
+                break;
+            case 'price':
+                priceValid = value > 0;
+                if (!priceValid) {
+                    fieldValidationErrors.price = priceValid ? '' : 'Vui lòng nhập giá thiết bị!';
+                } else {
+                    priceValid = re.test(value);
+                    fieldValidationErrors.price = priceValid ? '' : 'Định dạng số không đúng!';
+                }
+                break;
+            case 'name':
+                nameValid = value.length > 2 && value.length <= 100;
+                fieldValidationErrors.name = nameValid ? '' : ' Vui lòng nhập tên thiết bị trong khoảng 3-100 ký tự!';
+                break;
+            case 'guaranteeDuration':
+                guaranteeDurationValid = value > 0;
+                if (!guaranteeDurationValid) {
+                    fieldValidationErrors.guaranteeDuration = guaranteeDurationValid ? '' : 'Vui lòng nhập thời gian bảo hành!';
+                } else {
+                    guaranteeDurationValid = re.test(value);
+                    fieldValidationErrors.guaranteeDuration = guaranteeDurationValid ? '' : 'Định dạng số không đúng!';
+                }
+                break;
+            default:
+                break;
         }
-        this.setState({formErrors: fieldValidationErrors,
-                        guaranteeDurationValid: guaranteeDurationValid,
-                        nameValid: nameValid,
-                        priceValid: priceValid,
-                        amountValid: amountValid,
-                        deviceTypeValid: deviceTypeValid
-                      }, this.validateForm);
-      }
-    
-      validateForm() {
-        this.setState({formValid: this.state.guaranteeDurationValid && this.state.nameValid && 
-                        this.state.priceValid && this.state.amountValid && this.state.deviceTypeValid});
-      }
+        this.setState({ formErrors: fieldValidationErrors });
+    }
 
-    // _validate(name, value) {
-    //     const re = /^\$?[0-9]+(\.[0-9][0-9])?$/;
-    //     if (name === 'name') {
-    //         return !(value !== null && value !== "")
-    //     }
-    //     if (name === 'deviceType') {
-    //         return !(value !== null && value !== "")
-    //     }
-    //     if (name === 'price') {
-    //         return !(re.test(value)) && (value > 0)
-    //     }
-    //     if (name === 'amount') {
-    //         return !(re.test(value) && (value > 0))
-    //     }
-    //     if (name === 'guaranteeDuration') {
-    //         return !(re.test(value) && (value > 0))
-    //     }
-    // }
-
-    isChange = (event) =>
-    {
+    isChange = (event) => {
         const name = event.target.name;
         const value = event.target.value;
 
-        if (name=="image_url") {
+        if (name == "image_url") {
             console.log(event.target.files)
             console.log(event.target.file)
             return;
@@ -283,38 +267,17 @@ class DeviceNameFormUI extends Component {
         this.setState({
             form: {
                 ...this.state.form,
-                [name] : value
+                [name]: value
             }
         });
 
-        if (this._validate(name, value)) {
-            this.setState({
-                error: {
-                    ...this.state.error,
-                    [name]: true
-                }
-            })
-        } else {
-            delete this.state.error[name]
-        }
-
-        // if (JSON.stringify(this.state.error) === JSON.stringify({})) {
-        //     this.setState({
-        //         isDisabled:false
-        //       })
-        // }
-        // else{
-        //     this.setState({
-        //         isDisabled:true
-        //       })
-        // }
+        this._validate(name, value);
     }
 
     render() {
-        if(this.state.isRedirect)
-        {
-            return(
-                <Redirect to="/devices/device"/>
+        if (this.state.isRedirect) {
+            return (
+                <Redirect to="/devices/device" />
             )
         }
         return (
@@ -329,7 +292,7 @@ class DeviceNameFormUI extends Component {
                 </Modal>
 
                 <Row>
-                <Col xs="12" md="9">
+                    <Col xs="12" md="9">
                         <Card>
                             <CardHeader>
                                 <strong>Thông tin loại thiết bị</strong>
@@ -337,61 +300,61 @@ class DeviceNameFormUI extends Component {
                             <CardBody>
                                 <Form action="" method="post">
                                     <FormGroup>
-                                            <Label htmlFor="select">Tên thiết bị</Label>
-                                            <Input onChange = {(event) => (this.isChange(event))} 
-                                            value = {this.state.form.name}
+                                        <Label htmlFor="select">Tên thiết bị</Label>
+                                        <Input onChange={(event) => (this.isChange(event))}
+                                            value={this.state.form.name}
                                             type="username" id="nf-username" name="name" placeholder="Nhập tên thiết bị..." autoComplete="current-password" />
-                                         {this.state.formErrors.name ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.name}</span></FormText> : ''} 
+                                        {this.state.formErrors.name ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.name}</span></FormText> : ''}
                                     </FormGroup>
                                     <FormGroup>
-                                            <Label htmlFor="select">Loại thiết bị</Label>
-                                            <Input 
-                                                onChange = {(event) => (this.isChange(event))} 
-                                                value = {this.state.form.deviceType}
-                                                type="select" name="deviceType" id="select">
-                                                <option value="">---Chọn---</option>
-                                                {
-                                                    this.state.deviceTypes.map((e, id) => 
-                                                        <option key={id} value={e._id}>{e.name}</option>
-                                                    )
-                                                }
-                                            </Input>
-                                            {this.state.formErrors.deviceType ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.deviceType}</span></FormText> : ''} 
+                                        <Label htmlFor="select">Loại thiết bị</Label>
+                                        <Input
+                                            onChange={(event) => (this.isChange(event))}
+                                            value={this.state.form.deviceType}
+                                            type="select" name="deviceType" id="select">
+                                            <option value="">---Chọn---</option>
+                                            {
+                                                this.state.deviceTypes.map((e, id) =>
+                                                    <option key={id} value={e._id}>{e.name}</option>
+                                                )
+                                            }
+                                        </Input>
+                                        {this.state.formErrors.deviceType ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.deviceType}</span></FormText> : ''}
                                     </FormGroup>
                                     <FormGroup>
                                         <Label htmlFor="nf-username">Mô tả</Label>
-                                        <Input onChange = {(event) => (this.isChange(event))} 
-                                            value = {this.state.form.description}
+                                        <Input onChange={(event) => (this.isChange(event))}
+                                            value={this.state.form.description}
                                             type="username" id="nf-username" name="description" placeholder="Nhập mô tả..." autoComplete="current-password" />
                                     </FormGroup>
                                     <FormGroup>
                                         <Label htmlFor="nf-username">Giá bán</Label>
-                                        <Input onChange = {(event) => (this.isChange(event))} 
-                                            value = {this.state.form.price}
+                                        <Input onChange={(event) => (this.isChange(event))}
+                                            value={this.state.form.price}
                                             type="username" id="nf-username" name="price" placeholder="Nhập giá bán..." autoComplete="current-password" />
-                                         {this.state.formErrors.price ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.price}</span></FormText> : ''} 
+                                        {this.state.formErrors.price ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.price}</span></FormText> : ''}
                                     </FormGroup>
                                     <FormGroup>
                                         <Label htmlFor="nf-username">Số lượng</Label>
-                                        <Input onChange = {(event) => (this.isChange(event))} 
-                                            value = {this.state.form.amount}
+                                        <Input onChange={(event) => (this.isChange(event))}
+                                            value={this.state.form.amount}
                                             type="username" id="nf-username" name="amount" placeholder="Nhập số tiền..." autoComplete="current-password" />
-                                         {this.state.formErrors.amount ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.amount}</span></FormText> : ''} 
+                                        {this.state.formErrors.amount ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.amount}</span></FormText> : ''}
                                     </FormGroup>
                                     <FormGroup>
                                         <Label htmlFor="nf-username">Link ảnh</Label>
-                                        <Input 
+                                        <Input
                                             // value={this.state.form.image_url}
-                                            onChange = {(event) => (this.isChange(event))} 
-                                            type="file" name="image_url" 
+                                            onChange={(event) => (this.isChange(event))}
+                                            type="file" name="image_url"
                                         />
                                         {
                                             (this.state.form.image_url) &&
-                                                (
-                                                    <Card>
-                                                        <CardImg src={this.state.form.image_url} />
-                                                    </Card>
-                                                )
+                                            (
+                                                <Card>
+                                                    <CardImg src={this.state.form.image_url} />
+                                                </Card>
+                                            )
                                         }
                                         {/* <Input onChange = {(event) => (this.isChange(event))} 
                                             value = {this.state.form.image_url}
@@ -400,17 +363,17 @@ class DeviceNameFormUI extends Component {
                                     </FormGroup>
                                     <FormGroup>
                                         <Label htmlFor="nf-username">Thời gian bảo hành</Label>
-                                        <Input onChange = {(event) => (this.isChange(event))} 
-                                            value = {this.state.form.guaranteeDuration}
+                                        <Input onChange={(event) => (this.isChange(event))}
+                                            value={this.state.form.guaranteeDuration}
                                             type="username" id="nf-username" name="guaranteeDuration" placeholder="Nhập thời gian bảo hành..." autoComplete="current-password" />
-                                         {this.state.formErrors.guaranteeDuration ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.guaranteeDuration}</span></FormText> : ''} 
+                                        {this.state.formErrors.guaranteeDuration ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.guaranteeDuration}</span></FormText> : ''}
                                     </FormGroup>
                                 </Form>
                             </CardBody>
                             <CardFooter>
                                 {/* <Button type="submit" size="sm" color="primary" disabled={this.state.isDisabled} onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button> */}
-                                <Button type="submit" size="sm" color="primary" disabled={!this.state.formValid} onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button>
-                                <Button type="reset" size="sm" color="danger" onClick = {this.onClear}><i className="fa fa-ban"></i> Reset</Button>
+                                <Button type="submit" size="sm" color="primary" onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button>
+                                <Button type="reset" size="sm" color="danger" onClick={this.onClear}><i className="fa fa-ban"></i> Reset</Button>
                             </CardFooter>
                         </Card>
                     </Col>

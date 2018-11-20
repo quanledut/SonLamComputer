@@ -31,8 +31,8 @@ class ComputerNameFormUI extends Component {
         this.state = {
             form: {...DEFAULT_FORM},
             error: {
-                name: false,
-                type: false,
+                name: '',
+                type: '',
             },
             modal: {
                 isOpened: false,
@@ -42,7 +42,9 @@ class ComputerNameFormUI extends Component {
             },      
             types: [],
             isDisabled:true,
-            isRedirect: false
+            isRedirect: false,
+            nameValid: false,
+            typeValid: false,
         };
 
         this.onClear = this.onClear.bind(this)
@@ -78,7 +80,10 @@ class ComputerNameFormUI extends Component {
     onClear = () =>{
         this.setState({
             form: {...DEFAULT_FORM},
-            error: {},
+            error: {
+                name: '',
+                type: '',
+            },
             modal: {
                 isOpened: false,
                 isLoading: false,
@@ -86,7 +91,9 @@ class ComputerNameFormUI extends Component {
                 content: ""
             },      
             isDisabled:true,
-            isRedirect: false
+            isRedirect: false,
+            nameValid: false,
+            typeValid: false,
         });
     }
 
@@ -121,60 +128,95 @@ class ComputerNameFormUI extends Component {
             title: "Loading"
         })
 
-        let {_id} = this.state.form
-        if (_id) {
-            this.props.update(this.state.form, (res, error) => {
-                this._closeModal()
-                if (res) {
-                    this._openModal({
-                        title: "Success",
-                        content: "Updat success",
-                        isLoading: false
-                    })
-                    this.setState({
-                        isRedirect: true
-                    })              
-                } else {
-                    this._openModal({
-                        title: "Error",
-                        content: error,
-                        isLoading: false,
-                      })              
-                }
-            })
-        } else {
-            this.props.create(this.state.form, (res, error) => {
-                console.log(this.state.form)
-                this._closeModal()
-                if (res) {
-                    this._openModal({
-                        title: "Success",
-                        content: "Create success",
-                        isLoading: false
-                    })
-                    this.setState({
-                        isRedirect: true
-                    })              
-                } else{
-                    this._openModal({
-                        title: "Error",
-                        content: error,
-                        isLoading: false,
-                      })              
-                }
-            })
+        console.log(this.state.form)
+        for (let name in this.state.form) {
+            this._validate(name, this.state.form[name])
+        }
+
+        var check = true;
+        for (let name in this.state.error) {
+            if(this.state.error[name] !== "")
+            {
+                check = false;
+            }
+        }
+
+        if(!check)
+        {
+            this._openModal({
+                title: "Error",
+                content: "Dữ liệu không hợp lệ. Vui lòng kiểm tra lại!",
+                isLoading: false,
+              })   
+        }
+        else
+        {
+            let {_id} = this.state.form
+            if (_id) {
+                this.props.update(this.state.form, (res, error) => {
+                    this._closeModal()
+                    if (res) {
+                        this._openModal({
+                            title: "Success",
+                            content: "Updat success",
+                            isLoading: false
+                        })
+                        this.setState({
+                            isRedirect: true
+                        })              
+                    } else {
+                        this._openModal({
+                            title: "Error",
+                            content: error,
+                            isLoading: false,
+                        })              
+                    }
+                })
+            } else {
+                this.props.create(this.state.form, (res, error) => {
+                    console.log(this.state.form)
+                    this._closeModal()
+                    if (res) {
+                        this._openModal({
+                            title: "Success",
+                            content: "Create success",
+                            isLoading: false
+                        })
+                        this.setState({
+                            isRedirect: true
+                        })              
+                    } else{
+                        this._openModal({
+                            title: "Error",
+                            content: error,
+                            isLoading: false,
+                        })              
+                    }
+                })
+            }
         }
     }
 
-    _validate(name, value) {
-        if (name === 'name') {
-            return !((value.length <= 100) && (value.length >= 6))
-        }if (name === 'type') {
-            return !(value !== "")
-        } else {
-            return value === "" || value === null
+    _validate(fieldName, value) {
+        let fieldValidationErrors = this.state.error;
+        let typeValid = this.state.typeValid;
+        let nameValid = this.state.nameValid;
+
+        switch(fieldName) {
+          case 'type':
+            typeValid = (value !== null && value !== "" && value !== "None");
+            fieldValidationErrors.type = typeValid ? '' : 'Vui lòng chọn loại máy tính!';
+            break;
+          case 'name':
+            nameValid = value.length > 5 && value.length < 101;
+            fieldValidationErrors.name = nameValid ? '': 'Vui lòng nhập tên máy tính trong khoảng 6-100 ký tự!';
+            break;
+          
+          default:
+            break;
         }
-    }
+        this.setState({error: fieldValidationErrors});
+      }
 
     isChange = (event) =>
     {
@@ -188,31 +230,7 @@ class ComputerNameFormUI extends Component {
             }
         });
 
-        if (this._validate(name, value)) {
-            this.setState({
-                error: {
-                    ...this.state.error,
-                    [name]: true
-                }
-            })
-        } else {
-            delete this.state.error[name]
-        }
-
-        if (JSON.stringify(this.state.error) === JSON.stringify({})) {
-            this.setState({
-                isDisabled:false
-              })
-  
-        }
-
-        if(value === "" || value === null || value.length > 100 || value.length < 6)
-        {
-            this.setState({
-                isDisabled: true
-            })
-        }
-        
+        this._validate(name, value);
     }
 
     render() {
@@ -246,7 +264,7 @@ class ComputerNameFormUI extends Component {
                                         <Input onChange = {(event) => (this.isChange(event))} 
                                             value = {this.state.form.name}
                                             type="username" id="nf-username" name="name" placeholder="Nhập tên máy tính..." autoComplete="current-password" />
-                                         {this.state.error.name ? <FormText className="help-block"><span style={{color: "red"}}>Vui lòng nhập tên máy tính trong khoảng 6-100 ký tự!</span></FormText> : ''} 
+                                         {this.state.error.name ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.error.name}</span></FormText> : ''} 
                                     </FormGroup>
                                     <FormGroup>
                                         <Label htmlFor="select">Loại máy tính</Label>
@@ -261,12 +279,12 @@ class ComputerNameFormUI extends Component {
                                                 )
                                             }
                                         </Input>
-                                        {this.state.error.type ? <FormText className="help-block"><span style={{color: "red"}}>Vui lòng chọn loại máy tính!</span></FormText> : ''}
+                                        {this.state.error.type ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.error.type}</span></FormText> : ''}
                                     </FormGroup>
                                 </Form>
                             </CardBody>
                             <CardFooter>
-                                <Button type="submit" size="sm" color="primary" disabled={this.state.isDisabled} onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button>
+                                <Button type="submit" size="sm" color="primary" onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button>
                                 <Button type="reset" size="sm" color="danger" onClick = {this.onClear}><i className="fa fa-ban"></i> Reset</Button>
                             </CardFooter>
                         </Card>

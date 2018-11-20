@@ -57,7 +57,7 @@ const routes = [
   { path: '/devices/computerName/new', exact: true, name: 'Tạo mới máy tính', component: ComputerNameForm },
   { path: '/devices/computerName/:id/edit', exact: true, name: 'Sửa máy tính', component: ComputerNameForm },
 
-  { path: '/services/serviceType', exact: true, name: 'Laoij dịch vụ', component: ServiceTypes },
+  { path: '/services/serviceType', exact: true, name: 'Loại dịch vụ', component: ServiceTypes },
   { path: '/services/serviceType/new', exact: true, name: 'Tạo mới loại dịch vụ', component: ServiceTypeForm },
   { path: '/services/serviceType/:id/edit', exact: true, name: 'Sửa loại dịch vụ', component: ServiceTypeForm },
 
