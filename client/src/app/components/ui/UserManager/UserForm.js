@@ -59,7 +59,7 @@ class UserFormUI extends Component {
             isRedirect: false,
             isEdit: false,
             isChangePassword: false,
-            formErrors: {email: '',password: '',username: '', gender:'',select:'',fullname:'',phone:'',retype_password:''},
+            formErrors: {email: '',password: '',username: '', gender:'',select:'',fullname:'',phone:'',retype_password:'', newPassword:''},
             emailValid: false,
             passwordValid: false,
             usernameValid: false,
@@ -67,6 +67,7 @@ class UserFormUI extends Component {
             selectValid: false,
             fullnameValid: false,
             phoneValid: false,
+            newPasswordValid: false,
             retype_passwordValid:false,
             formValid: true
         };
@@ -133,7 +134,7 @@ class UserFormUI extends Component {
             },      
             isDisabled:true,
             isRedirect: false,
-            formErrors: {email: '',password: '',username: '', gender:'',select:'',fullname:'',phone:'',retype_password:''},
+            formErrors: {email: '',password: '',username: '', gender:'',select:'',fullname:'',phone:'',retype_password:'', newPassword:''},
             emailValid: false,
             passwordValid: false,
             usernameValid: false,
@@ -141,6 +142,7 @@ class UserFormUI extends Component {
             selectValid: false,
             fullnameValid: false,
             phoneValid: false,
+            newPasswordValid: false,
             retype_passwordValid: false,
             formValid: true
         });
@@ -188,13 +190,31 @@ class UserFormUI extends Component {
                 }
             }
 
-            console.log(error);
-
+            var check = true;
+            for (let name in this.state.passwordForm) {
+                if (this.state.formErrors[name] !== "" && this.state.formErrors[name] !== undefined) {
+                    check = false;
+                }
+                console.log(this.state.formErrors[name])
+            }
+            console.log(isError)
+            
             this.setState({
                 error
             })
-    
-            return isError;    
+            if(!isError)
+            {
+                if(check)
+                {
+                    isError = false;
+                }
+                else
+                {
+                    isError = true;
+                }
+            }
+            console.log(isError)
+            return isError
         }
 
         for (let name in this.state.form) {
@@ -324,6 +344,7 @@ class UserFormUI extends Component {
         let fullnameValid = this.state.fullnameValid;
         let phoneValid = this.state.phoneValid;
         let retype_passwordValid = this.state.retype_passwordValid;
+        let newPasswordValid = this.state.newPasswordValid;
 
         const sdt = /^\+?(?:[0-9] ?){8,14}[0-9]$/;
         const email_check = /[a-zA-Z0-9]+[.]?([a-zA-Z0-9]+)?[@][a-z]{3,9}[.][a-z]{2,5}/g;
@@ -378,7 +399,6 @@ class UserFormUI extends Component {
                 phoneValid = sdt.test(value);
                 fieldValidationErrors.phone = phoneValid ? '': 'Định dạng số điện thoại không đúng!';
             }
-            
             break;
           case 'retype_password':
           console.log(this.state.form.retype_password)
@@ -391,6 +411,11 @@ class UserFormUI extends Component {
             fieldValidationErrors.select = selectValid ? '' : 'Vui lòng chọn phân quyền!';
             break;
           
+          case 'newPassword':
+            newPasswordValid = value.length >5 && value.length <= 50;
+            fieldValidationErrors.newPassword = newPasswordValid ? '': ' Vui lòng nhập mật khẩu trong khoảng 6-50 ký tự!';
+            break;
+
           default:
             break;
         }
@@ -687,7 +712,7 @@ class UserFormUI extends Component {
                                                             {/* <FormText className="help-block">Please enter your password</FormText> */}
                                                             {this.state.error.newPassword ? <FormText className="help-block"><span style={{color: "red"}}>Xin hãy nhập password hợp lệ</span></FormText> : ''}  
                                                             {this.state.error.notMatch ? <FormText className="help-block"><span style={{color: "red"}}>Nhập lại mật khẩu không trùng khớp</span></FormText> : ''}  
-
+                                                            {this.state.formErrors.newPassword ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.newPassword}</span></FormText> : ''}  
                                                         </FormGroup>
                                                         <FormGroup>
                                                             <Label htmlFor="nf-password">Nhập lại mật khẩu</Label>
