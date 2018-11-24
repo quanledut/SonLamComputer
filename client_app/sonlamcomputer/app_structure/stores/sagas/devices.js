@@ -13,7 +13,10 @@ export function * findAll() {
             request.cb(result, null)
             // yield put(Actions.findALlSuccess(result))
         } catch(err) {
-            request.cb(null, err.message)
+            console.log(error);
+            request.cb({
+                docs: []
+            }, err.message)
         }
     }
 }

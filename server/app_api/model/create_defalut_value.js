@@ -312,7 +312,7 @@ const _createAccessory = async (data, computerName, accessoryType) => {
                 computerName: computerName[i]._id,
                 type: accessoryTypeId,
                 description: "",
-                image_url: "files/images/accessory_" + FAKE_IMAGE_NAME[type] + ".jpg",
+                image_url: "/images/accessory_" + FAKE_IMAGE_NAME[type] + ".jpg",
                 amount: 100,
                 price: 0,
                 guaranteeDuration: 0

@@ -105,11 +105,12 @@ class ProductViews extends Component {
 
 
         this.find(page, itemPerPage, (data, err) => {
-            this.setState({
-                data: page === 1 ? [...data] : [...this.state.data, ...data],
-                loading: false,
-                page: page + 1
-            })       
+            if (!err)
+                this.setState({
+                    data: page === 1 ? [...data] : [...this.state.data, ...data],
+                    loading: false,
+                    page: page + 1
+                })       
             // if (err) console.log(err);
     
         })
@@ -228,7 +229,7 @@ class ProductViews extends Component {
                         </Text>
                         <View
                             onStartShouldSetResponderCapture = {() => {
-                                
+                                if (this.state.data.length == 0) return;
                                 if (this.state.scrollViewOffset === 0 && this.state.enableScrollViewScroll === false) {
                                     console.log("Disable flat list")
                                     this.setState({ 

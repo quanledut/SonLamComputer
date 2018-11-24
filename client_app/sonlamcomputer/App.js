@@ -17,7 +17,6 @@ import LoginScreen1 from './app_structure/component/Login/screen1'
 import LoginScreen3 from './app_structure/component/Login/screen3'
 import HomeScreen from './app_structure/component/Home/components'
 import ProductViews from './app_structure/component/Product'
-import ProductDetail from './app_structure/component/Product/detail'
 
 import store from './app_structure/stores/index'
 
@@ -59,7 +58,6 @@ const Navigator = DrawerNavigator({
   Login1: { screen: LoginScreen1, navigationOptions: headerOptions},
   Login3: { screen: LoginScreen3, navigationOptions: headerOptions},
   Home: { screen: ProductViews, navigationOptions: headerOptions },
-  "ProductDetail": { screen: ProductDetail, navigationOptions: headerOptions}
 }, {
   initialRouteName: 'Home',
   contentOptions: {
