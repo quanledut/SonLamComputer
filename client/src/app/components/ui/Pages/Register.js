@@ -36,13 +36,15 @@ class Register extends Component {
 
   _submit (e) {
     e.preventDefault()
-    const { username, email, password, repeatPassword } = this.state
-    this.props.submit(
-      username,
-      email,
-      password,
-      repeatPassword
-    )
+    const { username, email, password} = this.state
+    this. props.submit(username, email, password, (res, err) => {
+      if(err) {
+          console.log('register error!')
+      } else if (res) {
+          console.log('register success!')
+          this.props.history.push("/login")
+      }
+    })
   }
 
   validateField(fieldName, value) {
@@ -159,7 +161,7 @@ class Register extends Component {
                     <Button onClick={this._submit} color="success" block disabled={!this.state.formValid}>Create Account</Button>
                   </Form>
                 </CardBody>
-                <CardFooter className="p-4">
+                {/* <CardFooter className="p-4">
                   <Row>
                     <Col xs="12" sm="6">
                       <Button className="btn-facebook" block><span>facebook</span></Button>
@@ -168,7 +170,7 @@ class Register extends Component {
                       <Button className="btn-twitter" block><span>twitter</span></Button>
                     </Col>
                   </Row>
-                </CardFooter>
+                </CardFooter> */}
               </Card>
             </Col>
           </Row>
