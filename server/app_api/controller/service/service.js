@@ -103,6 +103,7 @@ const find = async (req,res) => {
 const findById = (req, res) => {
     Service
         .findById(req.params.serviceId)
+        .populate('customer')
         .exec()
         .then((service) => {
             if (!service) sendJsonResponse(res, 404, {
