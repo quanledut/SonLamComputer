@@ -6,12 +6,15 @@ let userSchema = new mongoose.Schema({
   fullname: String,
   address: String,
   phone: String,
-  gender: {type: String, default: "Khác"},
+  gender: {type: String, default: "khac"},
   roles: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Role' }],
   code: { type: String },
   loginInfo: {type: mongoose.Schema.Types.ObjectId, ref: 'LoginInfo'},
   created_time: {type: Date, default: Date.now},
 });
+
+userSchema.index({ fullname: 1, phone: 1 }, { unique: true })
+
 
 userSchema.methods.generateJwt = function() {
   var expiry = new Date();

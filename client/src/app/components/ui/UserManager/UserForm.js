@@ -24,7 +24,9 @@ const DEFAULT_FORM = {
     email :'',
     password: '',
     retype_password: '',
-    username :'',
+    loginInfo: {
+        username :'',
+    },
     gender : '',
     // address :'',
     // select:'',
@@ -59,10 +61,9 @@ class UserFormUI extends Component {
             isRedirect: false,
             isEdit: false,
             isChangePassword: false,
-            formErrors: {email: '',password: '',username: '', gender:'',select:'',fullname:'',phone:'',retype_password:'', newPassword:''},
+            formErrors: {email: '',password: '', gender:'',select:'',fullname:'',phone:'',retype_password:'', newPassword:''},
             emailValid: false,
             passwordValid: false,
-            usernameValid: false,
             genderValid: false,
             selectValid: false,
             fullnameValid: false,
@@ -134,10 +135,9 @@ class UserFormUI extends Component {
             },      
             isDisabled:true,
             isRedirect: false,
-            formErrors: {email: '',password: '',username: '', gender:'',select:'',fullname:'',phone:'',retype_password:'', newPassword:''},
+            formErrors: {email: '',password: '', gender:'',select:'',fullname:'',phone:'',retype_password:'', newPassword:''},
             emailValid: false,
             passwordValid: false,
-            usernameValid: false,
             genderValid: false,
             selectValid: false,
             fullnameValid: false,
@@ -338,7 +338,6 @@ class UserFormUI extends Component {
         let fieldValidationErrors = this.state.formErrors;
         let emailValid = this.state.emailValid;
         let passwordValid = this.state.passwordValid;
-        let usernameValid = this.state.usernameValid;
         let genderValid = this.state.genderValid;
         let selectValid = this.state.selectValid;
         let fullnameValid = this.state.fullnameValid;
@@ -368,17 +367,6 @@ class UserFormUI extends Component {
             {
                 this.state.form.retype_password === value ? retype_passwordValid = true: retype_passwordValid = false;
                 fieldValidationErrors.retype_password = retype_passwordValid ? '': 'Vui lòng nhập chính xác mật khẩu!';
-            }
-            break;
-          case 'username':
-            usernameValid = value.length >5 && value.length <= 50;
-            if(!usernameValid)
-            {
-                fieldValidationErrors.username = usernameValid ? '': ' Vui lòng nhập tài khoản trong khoảng 6-50 ký tự!';
-            }else
-            {
-                usernameValid = value.match(/^[a-zA-Z0-9]+$/);
-                fieldValidationErrors.username = usernameValid ? '': ' Vui lòng không nhập ký tự đặc biệt!';
             }
             break;
           case 'fullname':
@@ -424,7 +412,6 @@ class UserFormUI extends Component {
                         phoneValid: phoneValid,
                         genderValid: genderValid,
                         fullnameValid: fullnameValid,
-                        usernameValid: usernameValid,
                         passwordValid: passwordValid,
                         emailValid: emailValid,
                         retype_passwordValid: retype_passwordValid
@@ -433,7 +420,7 @@ class UserFormUI extends Component {
     
       validateForm() {
         this.setState({formValid: this.state.phoneValid && 
-                        this.state.genderValid && this.state.fullnameValid && this.state.usernameValid &&
+                        this.state.genderValid && this.state.fullnameValid &&
                         this.state.passwordValid && this.state.emailValid && this.state.retype_passwordValid
                     });
       }
@@ -596,9 +583,9 @@ class UserFormUI extends Component {
                                         <FormGroup>
                                             <Label htmlFor="nf-username">Username</Label>
                                             <Input onChange = {(event) => (this.isChange(event))} 
-                                                value = {this.state.form.username}
+                                                value = {this.state.form.loginInfo.username}
+                                                disabled
                                                 type="text" id="nf-username" name="username" placeholder="Enter UserName.." autoComplete="current-password" />
-                                            {this.state.formErrors.username ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.username}</span></FormText> : ''} 
                                         </FormGroup>
                                         <FormGroup>
                                             <Label htmlFor="nf-fullname">Họ tên</Label>

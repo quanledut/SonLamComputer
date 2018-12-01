@@ -4,6 +4,7 @@ const passport = require("passport");
 const UserInfo = mongoose.model("UserInfo");
 const LoginInfo = mongoose.model("LoginInfo")
 const Role = mongoose.model("Role");
+const Service = mongoose.model("Service");
 
 const { sendJsonResponse } = require ('../utils');
 
@@ -188,7 +189,9 @@ const changePassword = async (req, res) => {
 
 const find = (req, res) => {
     UserInfo
-        .find({})
+		.find({})
+		.populate('loginInfo', 'username') 
+		.populate('roles', 'name')
         .exec((err, users) => {
 			if (users) sendJsonResponse(res, 200, users);
 			else  sendJsonResponse(res, 404, {
@@ -200,7 +203,8 @@ const find = (req, res) => {
 
 const findById = (req, res) => {
     UserInfo
-        .findById(req.params.userId)
+		.findById(req.params.userId)
+		.populate('loginInfo', 'username')
         .exec((err, user) => {
             if (!user) sendJsonResponse(res, 404, {
 				msg: "Tìm kiếm thất bại",
@@ -293,13 +297,27 @@ const createClient = (req, res) => {
 }
 
 const findClient = async (req, res) => {
-	const userRole = await Role.findOne({
-		name: "user"
-	}).exec();
+	try {
+		const userRole = await Role.findOne({
+			name: "user"
+		}).exec();
+	
+		const users = await UserInfo.find({
+			roles: userRole._id
+		}).exec();	
 
-	return UserInfo.find({
-		role: userRole._id
-	}).exec();
+		const findServices = users.map((user, id) => {
+			return {
+			}
+		})
+
+		sendJsonResponse(res, 201, users);
+	} catch (err) {
+		sendJsonResponse(res, 400, {
+			msg: "Tạo khách hàng thất bại",
+			detail: err
+		});
+	}
 }
 
 

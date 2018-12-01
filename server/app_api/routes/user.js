@@ -22,8 +22,8 @@ const route_user = (router) => {
     router.put('/users/:userId/changePassword', auth, checkPermission(permission.type.UPDATE), ctrlUser.changePassword)
     router.put('/users/:userId', auth, checkPermission(permission.type.UPDATE), ctrlUser.updateById)
 
-    router.get('/clients', auth, checkPermission(permission.type.READ), ctrlUser.findClient);
-    router.post('/clients', auth, checkPermission(permission.type.CREATE), ctrlUser.createClient);
+    router.get('/customers', auth, checkPermission(permission.type.READ), ctrlUser.findClient);
+    router.post('/customers', auth, checkPermission(permission.type.CREATE), ctrlUser.createClient);
 
 }
 

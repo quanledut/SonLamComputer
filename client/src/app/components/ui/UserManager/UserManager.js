@@ -18,15 +18,21 @@ class UserManager extends Component {
     render() {
         var {keyword} = this.props;
         var userList = this.props.todos;
-        userList = userList.filter((user) => {
-            return user.username.toLowerCase().indexOf(keyword.toLowerCase()) !== -1;
-        });
+        // userList = userList.filter((user) => {
+        //     return keyword? user.loginInfo.username.toLowerCase().indexOf(keyword.toLowerCase()) !== -1;
+        // });
         var userItem = userList.map((user, index) => {
             return (
                 <tr key = {index}>
-                    <td>{user.username}</td>
+                    <td>{user.loginInfo.username}</td>
                     <td>{user.created_time}</td>
-                    <td>{user.roles.name}</td>
+                    <td>{user.roles.reduce((result, item, id) => {
+                        if (id === 0) {
+                            return item.name;
+                        } else {
+                            return result + ", " + item.name
+                        }
+                    }, "")}</td>
                     <td>
                         <div className="btn-group">
                             <Link 
@@ -43,7 +49,7 @@ class UserManager extends Component {
                             </Link>
 
                             <DeleteFrom 
-                                name={user.username} 
+                                name={user.loginInfo.username} 
                                 id={user._id}
                             />
                         </div>

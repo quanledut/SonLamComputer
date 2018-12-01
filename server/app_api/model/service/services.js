@@ -44,16 +44,12 @@ let subDeviceSchema = new mongoose.Schema({
 
 let serviceSchema = new mongoose.Schema({
     serviceType: { type: mongoose.Schema.Types.ObjectId, ref: 'ServiceType' },
-    customer_name: { type: String, required: true },
-    customer_phone: { type: String, required: true },
-    customer: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    customer: { type: mongoose.Schema.Types.ObjectId, ref: 'UseInfo', required: true },
     date: { type: Date, default: Date.now },
     accessories: [subAccessorySchema],
     devices: [subDeviceSchema],
     totalPrice: { type: Number, default: 0 },
     status: { type: Number, default: DEFAUT_STATUS.NEW },
-    date: { type: Date, default: Date.now },
-
 })
 
 serviceSchema.methods.calculatePrice = function() {

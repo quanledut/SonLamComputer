@@ -24,7 +24,7 @@ class DefaultHeader extends Component {
 
     // eslint-disable-next-line
     const { children, ...attributes } = this.props;
-
+    console.log(this.props);
     return (
       <React.Fragment>
         <AppSidebarToggler className="d-lg-none" display="md" mobile />
@@ -40,7 +40,7 @@ class DefaultHeader extends Component {
           </NavItem> */}
           <AppHeaderDropdown direction="down">
             <DropdownToggle nav>
-              <i className="d-md-down-none">Xin chào, {this.props.user.username}</i>
+              <i className="d-md-down-none">Xin chào, {this.props.user.name}</i>
               <img src={'assets/img/avatars/6.jpg'} className="img-avatar" alt="admin@bootstrapmaster.com" />
             </DropdownToggle>
             <DropdownMenu right style={{ right: 'auto' }}>
