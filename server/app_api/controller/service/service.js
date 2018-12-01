@@ -121,16 +121,14 @@ const findById = (req, res) => {
 const create = (req, res) => {
     console.log(req.body)
     if (!req.body.serviceType || 
-        !req.body.customer_name || req.body.customer_name.length == 0 ||
-        !req.body.customer_phone || req.body.customer_phone.length == 0 || 
+        !req.body.customer || req.body.customer.length == 0 ||
         (req.body.devices.length == 0) && (req.body.accessories == 0))  {
             sendJsonResponse(res, 400, {msg: "Input không hợp lệ",detail: "Invalid input"})
             return;
     }
     let service = new Service();
     service.serviceType = req.body.serviceType
-    service.customer_name = req.body.customer_name;
-    service.customer_phone = req.body.customer_phone
+    service.customer = req.body.customer;
     service.devices = req.body.devices
     service.accessories = req.body.accessories
 	service.date = req.body.date
