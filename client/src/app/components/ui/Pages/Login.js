@@ -121,14 +121,14 @@ validateField(fieldName, value) {
 
   switch(fieldName) {
     case 'password':
-      passwordValid = value.length >= 6 && value.length <= 50;
-      fieldValidationErrors.password = passwordValid ? '': 'Vui lòng nhập password trong khoảng 6-50 ký tự!';
+      passwordValid = value.length >0;
+      fieldValidationErrors.password = passwordValid ? '': 'Vui lòng nhập password!';
       break;
     case 'username':
-      usernameValid = value.length >= 6 && value.length <= 50;
+      usernameValid = value.length >0;
       if(!usernameValid)
       {
-          fieldValidationErrors.username = usernameValid ? '': ' Vui lòng nhập username trong khoảng 6-50 ký tự!';
+          fieldValidationErrors.username = usernameValid ? '': ' Vui lòng nhập username!';
       }else
       {
           usernameValid = value.match(/^[a-zA-Z0-9]+$/);

@@ -12,6 +12,7 @@ import paymentSaga from './payment'
 import accessorysSaga from './accessory';
 import accessoryTypeSaga from './accessoryType';
 import customerSaga from './customer';
+import saleorderSaga from './saleorder'
 
 export default function * root() {
     yield all([
@@ -28,5 +29,6 @@ export default function * root() {
         call(accessorysSaga),
         call(accessoryTypeSaga),
         call(customerSaga),
+        call(saleorderSaga),
     ])
 }

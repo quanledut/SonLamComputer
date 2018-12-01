@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import Modal from './../../utils/Modal'
+import Modal from './../utils/Modal'
 import { Redirect } from 'react-router-dom';
-import { CustomerFormUI } from '../../../containers/services';
+import { CustomerFormUI } from '../../containers/services';
 
 import {
     Button,
@@ -18,7 +18,7 @@ import {
     Row,
 } from 'reactstrap';
 
-import CustomTable from '../../utils/Table'
+import CustomTable from '../utils/Table'
 import Select from 'react-select';
 
 const DEFAULT_FORM = {
@@ -26,12 +26,11 @@ const DEFAULT_FORM = {
     customer_name: null,
     accessories: [],
     devices: [],
-    //serviceType: '',
     totalPrice: 0,
     status: false
 }
 
-class ServiceFormUI extends Component {
+class SaleOrderFormUI extends Component {
 
     constructor(props) {
         super(props);
@@ -50,15 +49,12 @@ class ServiceFormUI extends Component {
             accessoryTypes: [],
             deviceTypes: [],
             computerNames: [],
-            //serviceTypes: [],
             _device_id: '',
             isDisabled: true,
             isRedirect: false,
-            isSell: false,
-            isFix: true,
+            isSell: true,
             tbody: [],
             formErrors: { totalPrice: '', customer_name: '', customer_phone: '' },
-            //serviceTypeValid: false,
             totalPriceValid: false,
             customer_nameValid: false,
             formValid: false,
@@ -97,14 +93,6 @@ class ServiceFormUI extends Component {
                 })
             })
         }
-        // this.props.findAllServiceType((serviceTypes, err) => {
-        //     console.log("serviceTypes: ", serviceTypes.docs, err)
-        //     if (!err) this.setState({
-        //         ...this.state,
-        //         serviceTypes: serviceTypes.docs
-        //     })
-        // });
-
         this.props.findAllcustomer((customers, err) => {
             console.log("serviceTypes: ", customers, err)
             if (!err) this.setState({
@@ -138,7 +126,6 @@ class ServiceFormUI extends Component {
             isDisabled: true,
             isRedirect: false,
             formErrors: { totalPrice: '', customer_name: ''},
-            //serviceTypeValid: false,
             totalPriceValid: false,
             customer_nameValid: false,
             formValid: false,
@@ -449,17 +436,12 @@ class ServiceFormUI extends Component {
     _validate(fieldName, value) {
         let fieldValidationErrors = this.state.formErrors;
         let customer_nameValid = this.state.customer_nameValid;
-        //let serviceTypeValid = this.state.serviceTypeValid;
         let totalPriceValid = this.state.totalPriceValid;
 
         const re = /^\$?[0-9]+(\.[0-9][0-9])?$/;
         const regex = /^\+?(?:[0-9] ?){8,14}[0-9]$/;
 
         switch (fieldName) {
-            // case 'serviceType':
-            //     serviceTypeValid = (value !== null && value !== "" && value !== "None");
-            //     fieldValidationErrors.serviceType = serviceTypeValid ? '' : 'Vui lòng chọn loại dịch vụ!';
-            //     break;
             case 'totalPrice':
                 totalPriceValid = re.test(value);
                 fieldValidationErrors.totalPrice = totalPriceValid ? '' : 'Định dạng số không đúng!';
@@ -492,49 +474,18 @@ class ServiceFormUI extends Component {
         }
 
         this._validate(name, value);
+       
+        this.setState({
+            isSell: true,
+            form: {
+                ...this.state.form,
+                accessories: []
+            }
+        })
 
-        // if (name === "serviceType") {
-        //     let type = this.state.serviceTypes.filter((i) => i._id === value)[0]
-        //     this.setState({
-        //         isSell: false,
-        //         isFix: false
-        //     }, () => {
-        //         console.log(type, this.state)
-
-        //         if (!type) return;
-        //         type = type.name
-
-        //         if (type === "Mua Bán") {
-        //             this.setState({
-        //                 isSell: true,
-        //                 form: {
-        //                     ...this.state.form,
-        //                     accessories: []
-        //                 }
-        //             })
-
-        //             if (this.state.deviceTypes.length === 0) {
-        //                 this._findAllDeviceTypes()
-        //             }
-        //         } else {
-                    this.setState({
-                        isFix: true,
-                        form: {
-                            ...this.state.form,
-                            devices: []
-                        }
-                    })
-
-                    if (this.state.computerNames.length === 0) {
-                        this._findAllComputernames();
-                    }
-                    if (this.state.accessoryTypes.length === 0) {
-                        this._findAllAccessoryTypes();
-                    }
-
-                //}
-            //})
-        //}
+        if (this.state.deviceTypes.length === 0) {
+            this._findAllDeviceTypes()
+        }
     }
 
     _deleteAccessory = (event, i) => {
@@ -585,7 +536,7 @@ class ServiceFormUI extends Component {
     render() {
         if (this.state.isRedirect) {
             return (
-                <Redirect to="/services/service" />
+                <Redirect to="/saleorders/" />
             )
         }
 
@@ -615,7 +566,7 @@ class ServiceFormUI extends Component {
                     <Col xs="12" md="9">
                         <Card>
                             <CardHeader>
-                                <strong>Thông tin</strong>
+                                <strong>Thông tin dịch vụ</strong>
                             </CardHeader>
                             <CardBody>
                                 <Form action="" method="post">
@@ -637,22 +588,6 @@ class ServiceFormUI extends Component {
                                         </FormGroup>
                                         {this.state.formErrors.customer_name ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.customer_name}</span></FormText> : ''}
                                     </FormGroup>
-                                    {/* <FormGroup>
-                                        <Label htmlFor="select">Loại dịch vụ</Label>
-                                        <Input
-                                            disabled={(this.props.match.params.id) ? "disabled" : ""}
-                                            onChange={(event) => (this.isChange(event))}
-                                            value={this.state.form.serviceType}
-                                            type="select" name="serviceType" id="select">
-                                            <option value="None">---Chọn---</option>
-                                            {
-                                                this.state.serviceTypes.map((e, id) =>
-                                                    <option key={id} value={e._id}>{e.name}</option>
-                                                )
-                                            }
-                                        </Input>
-                                        {this.state.formErrors.serviceType ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.serviceType}</span></FormText> : ''}
-                                    </FormGroup> */}
                                     <FormGroup>
                                         <Label htmlFor="nf-username">Tổng tiền</Label>
                                         <Input onChange={(event) => (this.isChange(event))}
@@ -870,7 +805,6 @@ class ServiceFormUI extends Component {
                             {
                                 (!this.props.match.params.id) &&
                                 <CardFooter>
-                                    {/* <Button type="submit" size="sm" color="primary" disabled={this.state.isDisabled} onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button> */}
                                     <Button type="submit" size="sm" color="primary" onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button>
                                     <Button type="reset" size="sm" color="danger" onClick={this.onClear}><i className="fa fa-ban"></i> Reset</Button>
                                 </CardFooter>
@@ -883,4 +817,4 @@ class ServiceFormUI extends Component {
     }
 }
 
-export default ServiceFormUI
+export default SaleOrderFormUI
