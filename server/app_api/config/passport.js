@@ -1,29 +1,45 @@
 const LocalStrategy = require('passport-local').Strategy;
 const passport = require('passport')
 var mongoose = require('mongoose');
-var User = mongoose.model('User');
+var UserInfo = mongoose.model('UserInfo');
+var LoginInfo = mongoose.model('LoginInfo');
 
 passport.use(new LocalStrategy(function(username, password, done) {
-	User.findOne({username: username})
-		.populate('roles')
-		.exec(function (err, user) {
+	LoginInfo.findOne({username: username})
+		.exec(function (err, loginResult) {
 		if(err) {
 			return done(err);
 		}
 
-		if (!user) {
+		if (!loginResult) {
 			return done(null, false, {
 				message: "Incorrect username."
 			});
 		}
 
-		if (!user.validPassword(password)) {
+		if (!loginResult.validPassword(password)) {
 			return done(null, false, {
 				message: "Incorrect password."
 			});
 		}
 
+		UserInfo.findOne({
+			loginInfo: loginResult._id
+		}).populate('roles', 'name').exec((err, user) => {
+			if(err) {
+				return done(err);
+			}
+
+			if (!user) {
+				return done(null, false, {
+					message: "Try again later."
+				});
+			}
+	
+
+			return done(null, user);
+		})
+
 		
-		return done(null, user);
 	})
 }))

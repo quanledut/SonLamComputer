@@ -2,7 +2,8 @@ const mongoose = require( 'mongoose' );
 const fs = require('fs');
 const path = require('path');
 
-const User = mongoose.model('User');
+const UserInfo = mongoose.model('UserInfo');
+const LoginInfo = mongoose.model('LoginInfo');
 const Role = mongoose.model('Role');
 const Policy = mongoose.model('Policy');
 const DeviceType = mongoose.model('DeviceType');
@@ -95,7 +96,7 @@ const read_json = () => {
 const create_data = async () => {
     let admin;
     try {
-        admin = await User.findOne({
+        admin = await LoginInfo.findOne({
             'username': 'thanhson'
         })
     } catch(err) {
@@ -145,27 +146,38 @@ const create_role_user = async () => {
 }
 
 const create_user = async (roleId) => {
-    let user = new User();
+    let loginInfo = new LoginInfo();
+    loginInfo.username = 'user';
+    loginInfo.setPassword('user');
+    let resultCreateLogin = await loginInfo.save();
+
+    let user = new UserInfo();
     let result;
 
-	user.username = 'user';
-	user.email = 'user@user.com';
-    user.fullname = 'user';
+	user.email = 'user@gmail.com';
+    user.fullname = 'User';
     user.roles = [roleId];
-    password = user.setPassword('user');
+    user.loginInfo = resultCreateLogin._id;
+
     result = await user.save();
 
     return result
 }
+
 const create_admin = async (roleId) => {
-    let user = new User();
+    let loginInfo = new LoginInfo();
+    loginInfo.username = 'thanhson';
+    loginInfo.setPassword('thanhson');
+    let resultCreateLogin = await loginInfo.save();
+
+    let user = new UserInfo();
     let result;
 
-	user.username = 'thanhson';
 	user.email = 'son@gmail.com';
     user.fullname = 'Lê Phước Thành Sơn';
     user.roles = [roleId];
-    password = user.setPassword('thanhson');
+    user.loginInfo = resultCreateLogin._id;
+
     result = await user.save();
 
     return result

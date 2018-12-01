@@ -8,4 +8,12 @@ const loginApi = (username, password) =>
             console.log(err); throw new Error(err.response.data.msg)
         })
 
-export {loginApi}
+const registerApi = (username, email, password) => 
+    request()
+        .post("/users/register", {username, email, password})
+        .then((response) => response.data)
+        .catch((err) => {
+            console.log(err); throw new Error(err.response.data.msg)
+        })
+
+export {loginApi, registerApi}

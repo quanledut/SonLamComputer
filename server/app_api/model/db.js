@@ -61,7 +61,8 @@ process.on("SIGTERM", ()=> {
 	})
 })
 
-require("./user/users")
+require("./user/userInfo")
+require("./user/loginInfo")
 require("./user/roles")
 require("./user/policy")
 
