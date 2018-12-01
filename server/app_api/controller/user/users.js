@@ -1,54 +1,56 @@
 "use strict";
 const mongoose = require("mongoose");
 const passport = require("passport");
-const User = mongoose.model("User");
+const UserInfo = mongoose.model("UserInfo");
+const LoginInfo = mongoose.model("LoginInfo")
 const Role = mongoose.model("Role");
 
 const { sendJsonResponse } = require ('../utils');
 
-const register = (req, res)=> {
+const register = async (req, res)=> {
 	if (!req.body.username || !req.body.password || !req.body.email) {
 		res.status(400).json("Username, password, email are required");
 		return;
 	} 
 
-	Role.find({
-		"name": "user"
-	}).exec((err, role) => {
-		if (err) {
-			sendJsonResponse(res, 500, {
-				msg: "Đăng ký thất bại",
-				detail: err
-			})
-		} else {
-			let user = new User();
-			user.username = req.body.username;
-			user.email = req.body.email;
-			user.fullname = req.body.fullname;
-			user.address = req.body.address;
-			user.phone = req.body.phone;
-			user.roles = [role._id];
-			user.gender = req.body.gender
-			user.setPassword(req.body.password);
-			user.save((err)=> {
-				let token;
-				if (err) {
-					sendJsonResponse(res, 400, {
-						msg: "Đăng ký thất bại",
-						detail: err
-					});
-				} else {
-					token = user.generateJwt();
-					sendJsonResponse(res, 201, {
-						"token": token
-					});
-				}
-			});		
-		}
-	})
+	try {
+		let loginInfo = new LoginInfo();
+		loginInfo.username = req.body.username;
+		loginInfo.setPassword(req.body.password);
+	
+		const loginInfoResult = await loginInfo.save();
+
+		let userRole = await Role.find({
+			name: "user"
+		}).exec();
+
+		let user = new UserInfo();
+		
+		user.email = req.body.email;
+		user.fullname = req.body.fullname;
+		user.address = req.body.address;
+		user.phone = req.body.phone;
+		user.roles = [userRole._id];
+		user.gender = req.body.gender;
+		user.loginInfo = loginInfoResult._id;
+
+		await user.save();
+
+		let token = user.generateJwt();
+		
+		sendJsonResponse(res, 201, {
+			"token": token
+		});
+
+	} catch(err) {
+		sendJsonResponse(res, 400, {
+			msg: "Đăng ký thất bại",
+			detail: err
+		});
+	}
 }
 
-const createUser = (req, res) => {
+const createUser = async (req, res) => {
 	if (!req.body.username || !req.body.password || !req.body.email) {
 		sendJsonResponse(res, 400, {
 			msg: "Input không hợp lệ",
@@ -57,26 +59,38 @@ const createUser = (req, res) => {
 		return;
 	} 
 
-	let user = new User();
-	user.username = req.body.username;
-	user.email = req.body.email;
-	user.fullname = req.body.fullname;
-	user.address = req.body.address;
-	user.phone = req.body.phone;
-	user.roles = req.body.roles;
-	user.gender = req.body.gender
-	user.setPassword(req.body.password)
+	try {
+		let loginInfo = new LoginInfo();
+		loginInfo.username = req.body.username;
+		loginInfo.setPassword(req.body.password);
+	
+		const loginInfoResult = await loginInfo.save();
 
-	user.save((err) => {
-		if (err) {
-			sendJsonResponse(res, 400, {
-				msg: "Tạo mới thất bại",
-				detail: err
-			}) 
-		} else {
-			sendJsonResponse(res, 201, user)
-		}
-	})
+		let user = new UserInfo();
+		
+		user.email = req.body.email;
+		user.fullname = req.body.fullname;
+		user.address = req.body.address;
+		user.phone = req.body.phone;
+		user.roles = req.body.roles;
+		user.gender = req.body.gender;
+		user.loginInfo = loginInfoResult._id;
+
+		await user.save();
+
+		let token = user.generateJwt();
+		
+		sendJsonResponse(res, 201, {
+			"token": token
+		});
+
+	} catch(err) {
+		sendJsonResponse(res, 400, {
+			msg: "Đăng ký thất bại",
+			detail: err
+		});
+	}
+
 }
 
 const login = (req, res)=> {
@@ -112,7 +126,7 @@ const login = (req, res)=> {
 	})(req, res);
 }
 
-const changePassword = (req, res) => {
+const changePassword = async (req, res) => {
 	console.log("In change password");
 	if (!req.body.oldPassword) {
 		sendJsonResponse(res, 400, {
@@ -137,9 +151,11 @@ const changePassword = (req, res) => {
 	} else {
 		const currentUser = req.body.payload
 		console.log(req.body)
-		User.findById(req.body._id)
+
+		UserInfo.findById(req.body._id)
+			.populate('loginInfo')
 			.exec((err, user) => {
-				if (!user.validPassword(req.body.oldPassword)) {
+				if (!user.loginInfo.validPassword(req.body.oldPassword)) {
 					sendJsonResponse(res, 400, {
 						msg: "Mật khẩu cũ không chính xác",
 						detail: "Old password is not valid"
@@ -150,8 +166,8 @@ const changePassword = (req, res) => {
 						detail: err
 					})
 				} else {
-					user.setPassword(req.body.newPassword)
-					user.save((err) => {
+					user.loginInfo.setPassword(req.body.newPassword)
+					user.loginInfo.save((err) => {
 						let token;
 						if (err) {
 							sendJsonResponse(res, 400, {
@@ -171,7 +187,7 @@ const changePassword = (req, res) => {
 }
 
 const find = (req, res) => {
-    User
+    UserInfo
         .find({})
         .exec((err, users) => {
 			if (users) sendJsonResponse(res, 200, users);
@@ -183,7 +199,7 @@ const find = (req, res) => {
 }
 
 const findById = (req, res) => {
-    User
+    UserInfo
         .findById(req.params.userId)
         .exec((err, user) => {
             if (!user) sendJsonResponse(res, 404, {
@@ -200,14 +216,14 @@ const findById = (req, res) => {
 
 const updateById = (req, res) => {
 
-	if (!req.body.username || !req.body.email) {
+	if (!req.body.email) {
 		res.status(400).json({
 			msg: "Input không hợp lệ",
 			detail: "Username, email are required"
 		});
 		return;
 	} else {
-		User.findById(req.params.userId, (err, currentUser) => {
+		UserInfo.findById(req.params.userId, (err, currentUser) => {
 			if (err) sendJsonResponse(res, 500, {
 				msg: "Cập nhật thất bại",
 				detail: "Not found"
@@ -255,16 +271,47 @@ const updateById = (req, res) => {
 
 }
 
+const createClient = (req, res) => {
+	let user = new UserInfo();
+	user.email = req.body.email;
+	user.fullname = req.body.fullname;
+	user.address = req.body.address;
+	user.phone = req.body.phone;
+	user.roles = [role._id];
+	user.gender = req.body.gender
+	user.save((err)=> {
+		let token;
+		if (err) {
+			sendJsonResponse(res, 400, {
+				msg: "Tạo khách hàng thất bại",
+				detail: err
+			});
+		} else {
+			sendJsonResponse(res, 201, user);
+		}
+	});		
+}
+
+const findClient = async (req, res) => {
+	const userRole = await Role.findOne({
+		name: "user"
+	}).exec();
+
+	return UserInfo.find({
+		role: userRole._id
+	}).exec();
+}
 
 
 module.exports = {
 	register,
 	createUser,
-
 	login,
-
 	find,
 	findById,
 	changePassword,
-	updateById	
+	updateById,
+	createClient,
+	findClient
+
 }
