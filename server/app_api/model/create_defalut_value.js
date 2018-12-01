@@ -154,6 +154,7 @@ const create_user = async (roleId) => {
     let user = new UserInfo();
     let result;
 
+    user.code = "KH 1";
 	user.email = 'user@gmail.com';
     user.fullname = 'User';
     user.roles = [roleId];

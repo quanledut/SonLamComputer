@@ -15,15 +15,15 @@ const columns = [
         Header: "Mã khách hàng",
         //   id: "customer_no",
         //   accessor: d => d.customer_no
-        accessor: "customer_no"
+        accessor: "user.code"
     },
     {
         Header: "Tên khách hàng",
-        accessor: "fullname"
+        accessor: "user.fullname"
     },
     {
         Header: "Số điện thoại",
-        accessor: "phone"
+        accessor: "user.phone"
     },
     {
         Header: "Tổng bán",
@@ -96,6 +96,7 @@ class Customers extends Component {
         this.state = {
             activeTab: '1',
             isOpen: false,
+            customers: []
         };
     }
 
@@ -108,8 +109,20 @@ class Customers extends Component {
     }
 
     componentDidMount() {
+        const isEmpty = (obj) => {
+            return Object.keys(obj).length === 0 && obj.constructor === Object
+        }
         this.props.findAll((result, err) => {
             console.log(result, err)
+            this.setState({
+                customers: result.map(item => {
+                    item.totalSale = !isEmpty(item.services) ? item.services.reduce((sum, item1) => {
+                        return sum + item1.totalPrice
+                    }, 0) : 0;
+
+                    return item;
+                })
+            })
         });
     }
 
@@ -155,7 +168,7 @@ class Customers extends Component {
                                 <hr />
 
                                 <ReactTable
-                                    data={data}
+                                    data={this.state.customers}
                                     className="-striped -highlight"
                                     noDataText="Không có dữ liệu!"
                                     columns={columns}
@@ -196,7 +209,7 @@ class Customers extends Component {
                                                                             <Label>Mã khách hàng</Label>
                                                                         </Col>
                                                                         <Col xs="5">
-                                                                            <Label>{row.row.customer_no}</Label>
+                                                                            <Label>{row.original.user.code}</Label>
                                                                         </Col>
                                                                     </FormGroup>
                                                                 </Col>
@@ -206,7 +219,7 @@ class Customers extends Component {
                                                                             <Label>Điện thoại</Label>
                                                                         </Col>
                                                                         <Col xs="5">
-                                                                            <Label>{row.row.customer_no}</Label>
+                                                                            <Label>{row.original.user.phone}</Label>
                                                                         </Col>
                                                                     </FormGroup>
                                                                 </Col>
@@ -218,7 +231,7 @@ class Customers extends Component {
                                                                             <Label>Tên khách hàng</Label>
                                                                         </Col>
                                                                         <Col xs="5">
-                                                                            <Label>{row.row.fullname}</Label>
+                                                                            <Label>{row.original.user.fullname}</Label>
                                                                         </Col>
                                                                     </FormGroup>
                                                                 </Col>
@@ -228,29 +241,19 @@ class Customers extends Component {
                                                                             <Label>Điạ chỉ</Label>
                                                                         </Col>
                                                                         <Col xs="5">
-                                                                            <Label>{row.row.fullname}</Label>
+                                                                            <Label>{row.original.user.address}</Label>
                                                                         </Col>
                                                                     </FormGroup>
                                                                 </Col>
                                                             </FormGroup>
                                                             <FormGroup row className="my-0">
-                                                                <Col xs="5">
-                                                                    <FormGroup row className="my-0">
-                                                                        <Col xs="5">
-                                                                            <Label>Ngày sinh</Label>
-                                                                        </Col>
-                                                                        <Col xs="5">
-                                                                            <Label>{row.row.customer_no}</Label>
-                                                                        </Col>
-                                                                    </FormGroup>
-                                                                </Col>
                                                                 <Col xs="5">
                                                                     <FormGroup row className="my-0">
                                                                         <Col xs="5">
                                                                             <Label>Email</Label>
                                                                         </Col>
                                                                         <Col xs="5">
-                                                                            <Label>{row.row.fullname}</Label>
+                                                                            <Label>{row.original.user.email}</Label>
                                                                         </Col>
                                                                     </FormGroup>
                                                                 </Col>
@@ -259,20 +262,10 @@ class Customers extends Component {
                                                                 <Col xs="5">
                                                                     <FormGroup row className="my-0">
                                                                         <Col xs="5">
-                                                                            <Label>Người tạo</Label>
-                                                                        </Col>
-                                                                        <Col xs="5">
-                                                                            <Label>{row.row.customer_no}</Label>
-                                                                        </Col>
-                                                                    </FormGroup>
-                                                                </Col>
-                                                                <Col xs="5">
-                                                                    <FormGroup row className="my-0">
-                                                                        <Col xs="5">
                                                                             <Label>Ngày tạo</Label>
                                                                         </Col>
                                                                         <Col xs="5">
-                                                                            <Label>{row.row.fullname}</Label>
+                                                                            <Label>{row.original.user.created_time}</Label>
                                                                         </Col>
                                                                     </FormGroup>
                                                                 </Col>
@@ -280,18 +273,18 @@ class Customers extends Component {
                                                         </Form>
                                                         <div>
                                                             <Link
-                                                                to={`/customers/${row.row.customer_no}/edit`}
+                                                                to={`/usermanager/${row.original.user._id}/edit/0`}
                                                                 className="btn btn-primary"
                                                             >
                                                                 <i className="fa fa-edit"> Sửa </i>
                                                             </Link>
                                                             &nbsp;
-                                                            <Link
-                                                                to={`/customers/${row.row.customer_no}/edit`}
+                                                            {/* <Link
+                                                                to={`/usermanager/${row.original.user._id}/edit/0`}
                                                                 className="btn btn-success"
                                                             >
                                                                 <i className="fa fa-edit"> Ngưng hoạt động </i>
-                                                            </Link>
+                                                            </Link> */}
 
                                                             {/* <DeleteFrom 
                                                     name={user.username} 

@@ -275,14 +275,26 @@ const updateById = (req, res) => {
 
 }
 
-const createClient = (req, res) => {
+const createClient = async (req, res) => {
 	let user = new UserInfo();
+
+	let userRole = await Role.findOne({
+		name: "user"
+	}).exec();
+
+	const count = await UserInfo.count({
+		roles: userRole._id
+	}).exec();
+
 	user.email = req.body.email;
 	user.fullname = req.body.fullname;
 	user.address = req.body.address;
 	user.phone = req.body.phone;
-	user.roles = [role._id];
-	user.gender = req.body.gender
+	user.roles = [userRole._id];
+	user.gender = req.body.gender;
+	user.code = `KH ${count + 1}`;
+
+
 	user.save((err)=> {
 		let token;
 		if (err) {
@@ -306,12 +318,19 @@ const findClient = async (req, res) => {
 			roles: userRole._id
 		}).exec();	
 
-		const findServices = users.map((user, id) => {
+		const findServices = users.map(async (user, id) => {
 			return {
+				user,
+				services: Service.find({
+					customer: user._id
+				}).exec(),
 			}
-		})
+		});
 
-		sendJsonResponse(res, 201, users);
+		const result = await Promise.all(findServices);
+
+
+		sendJsonResponse(res, 201, result);
 	} catch (err) {
 		sendJsonResponse(res, 400, {
 			msg: "Tạo khách hàng thất bại",
