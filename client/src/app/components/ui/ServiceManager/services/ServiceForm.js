@@ -108,6 +108,16 @@ class ServiceFormUI extends Component {
         });
     }
 
+    componentDidUpdate() {
+        this.props.findAllcustomer((customers, err) => {
+            console.log("serviceTypes: ", customers, err)
+            if (!err) this.setState({
+                ...this.state,
+                customers: customers
+            })
+        });
+    }
+    
     onClear = () => {
         this.setState({
             form: { ...DEFAULT_FORM },
@@ -307,7 +317,7 @@ class ServiceFormUI extends Component {
 
     onSubmitForm = (event) => {
         event.preventDefault();
-
+        console.log(this.state.form)
         for (let name in this.state.form) {
             this._validate(name, this.state.form[name])
         }
@@ -342,6 +352,8 @@ class ServiceFormUI extends Component {
             isOpened: true,
             title: "Loading"
         })
+
+        this.state.form.customer = this.state.form.customer_name.value;
 
         let { _id } = this.state.form
         if (_id) {
