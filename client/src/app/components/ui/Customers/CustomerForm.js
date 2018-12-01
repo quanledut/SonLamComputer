@@ -300,16 +300,6 @@ class CustomerFormUI extends Component {
                                             {this.state.formErrors.phone ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.phone}</span></FormText> : ''} 
                                         </FormGroup>
                                         <FormGroup>
-                                            <Label htmlFor="nf-phone">Ngày sinh</Label>
-                                            <Input 
-                                                onChange = {(event) => (this.isChange(event))} 
-                                                value = {this.state.form.date}
-                                                type="date" 
-                                                id="date-input" 
-                                                name="date" 
-                                            />
-                                        </FormGroup>
-                                        <FormGroup>
                                             <Label htmlFor="nf-username">Địa chỉ</Label>
                                             <Input onChange = {(event) => (this.isChange(event))} 
                                                 value = {this.state.form.address}
