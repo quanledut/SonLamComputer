@@ -447,8 +447,8 @@ class ServiceFormUI extends Component {
                 fieldValidationErrors.totalPrice = totalPriceValid ? '' : 'Định dạng số không đúng!';
                 break;
             case 'customer_name':
-                customer_nameValid = value.length > 0;
-                fieldValidationErrors.customer_name = customer_nameValid ? '' : ' Vui lòng nhập tên khách hàng!';
+                customer_nameValid = (value !== null && value !== "" && value !== "None");
+                fieldValidationErrors.customer_name = customer_nameValid ? '' : ' Vui lòng chọn khách hàng!';
                 break;
             default:
                 break;
@@ -562,7 +562,6 @@ class ServiceFormUI extends Component {
                 ...this.state.form, customer_name:selectedOption 
             }
         });
-        console.log(`Option selected:`, selectedOption);
     };
         
     render() {
@@ -573,9 +572,9 @@ class ServiceFormUI extends Component {
         }
 
         const options = [];
-        this.state.serviceTypes.map((e, key) =>
+        this.state.customers.map((e, key) =>
             {
-                var name = e.name;
+                var name = e.fullname +', SĐT: '+e.phone;
                 var id = e._id;
                 options.push({value:id,label:name})  
             }

@@ -13,6 +13,7 @@ import * as accessoryTypeActions from '../../actions/accessoryType'
 import * as deviceTypeActions from '../../actions/deviceType'
 import * as computerTypeActions from '../../actions/computerType'
 import PopUpCustomerFormUI from '../ui/utils/popUpCustomer'
+import * as customerActions from '../../actions/customer'
 
 export const ServiceForm = connect(
     null, 
@@ -93,5 +94,9 @@ export const DeleteFrom = connect(
 
 export const CustomerFormUI = connect(
     null,
-    null
+    dispatch => ({
+        createUser(user, cb) {
+            dispatch(customerActions.createRequest(user, cb));
+        },
+    })
 )(PopUpCustomerFormUI);

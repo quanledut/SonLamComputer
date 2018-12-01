@@ -40,14 +40,5 @@ request()
         console.log(err); throw new Error(err.response.data.msg)
     });
 
-// const changePasswordApi = (data) => 
-// request()
-//     .put(`/customers/${data._id}/changePassword`, data)
-//     .then((response) => response.data)
-//     .catch((err) => {
-//         console.log(err); throw new Error(err.response.data.msg)
-//     });
-
-
 export {findAllApi, deleteApi, addApi, findByIdApi, updateApi}
   

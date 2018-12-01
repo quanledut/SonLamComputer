@@ -157,6 +157,9 @@ const create_user = async (roleId) => {
 	user.email = 'user@gmail.com';
     user.fullname = 'User';
     user.roles = [roleId];
+    user.gender = 'nam';
+    user.address = 'danang';
+    user.phone = '01233123457';
     user.loginInfo = resultCreateLogin._id;
 
     result = await user.save();
@@ -175,6 +178,9 @@ const create_admin = async (roleId) => {
 
 	user.email = 'son@gmail.com';
     user.fullname = 'Lê Phước Thành Sơn';
+    user.gender = 'nam';
+    user.address = 'danang';
+    user.phone = '01233123456';
     user.roles = [roleId];
     user.loginInfo = resultCreateLogin._id;
 

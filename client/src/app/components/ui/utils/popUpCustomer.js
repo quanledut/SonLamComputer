@@ -9,7 +9,6 @@ import {
     Card,
     CardBody,
     CardFooter,
-    CardHeader,
     Col,
     Form,
     FormGroup,
@@ -168,7 +167,11 @@ class PopUpCustomerFormUI extends Component {
                 break;
             case 'fullname':
                 fullnameValid = value.length > 0;
-                fieldValidationErrors.fullname = fullnameValid ? '' : 'Vui lòng nhập tên người dùng trong khoảng 6-50 ký tự!';
+                fieldValidationErrors.fullname = fullnameValid ? '' : 'Vui lòng nhập tên khách hàng!';
+                break;
+            case 'address':
+                addressValid = value.length > 0;
+                fieldValidationErrors.address = addressValid ? '' : 'Vui lòng nhập đại chỉ!';
                 break;
             case 'gender':
                 genderValid = (value !== null && value !== "");
@@ -210,118 +213,109 @@ class PopUpCustomerFormUI extends Component {
     render() {
         if (this.state.isRedirect) {
             return (
-                <Redirect to="/customers" />
+                <Redirect to="/services/service/new" />
             )
         }
 
         return (
             <Popup open={this.props.isOpen} modal>
                 {close => (
-                    <div className="scrollspy" id="spy" data-spy="scroll" style={{position: 'relative', height: '500px', overflow: 'auto', marginTop: '.5rem'}}>
-                    <div className="modal1">
-                        <a className="close" onClick={() => { this.onClose(); close() }}>
-                            &times;
+                    <div className="scrollspy" id="spy" data-spy="scroll" style={{ position: 'relative', height: '500px', overflow: 'auto', marginTop: '.5rem' }}>
+                        <div className="modal1">
+                            <a className="close" onClick={() => { this.onClose(); close() }}>
+                                &times;
                         </a>
-                        <div className="header"> Thông tin khách hàng </div>
-                        <div className="content" style={{textAlign:'left'}}>
-                            <Modal
-                                isOpened={this.state.modal.isOpened}
-                                isLoading={this.state.modal.isLoading}
-                                title={this.state.modal.title}
-                                content={this.state.modal.content}
-                                onOkay={this._closeModal}
-                                onCancel={this._closeModal} >
-                            </Modal>
-                            <Row>
-                                <Col xs="12">
-                                    <Card>
-                                        <CardBody>
-                                            <Form onSubmit={this.onSubmitForm}>
-                                                <FormGroup>
+                            <div className="header"> Thông tin khách hàng </div>
+                            <div className="content" style={{ textAlign: 'left' }}>
+                                <Modal
+                                    isOpened={this.state.modal.isOpened}
+                                    isLoading={this.state.modal.isLoading}
+                                    title={this.state.modal.title}
+                                    content={this.state.modal.content}
+                                    onOkay={this._closeModal}
+                                    onCancel={this._closeModal} >
+                                </Modal>
+                                <Row>
+                                    <Col xs="12">
+                                        <Card>
+                                            <CardBody>
+                                                <Form onSubmit={this.onSubmitForm}>
                                                     <FormGroup>
-                                                        <Label htmlFor="nf-customer_no">Mã khách hàng</Label>
+                                                        <FormGroup>
+                                                            <Label htmlFor="nf-customer_no">Mã khách hàng</Label>
+                                                            <Input
+                                                                onChange={(event) => (this.isChange(event))}
+                                                                value={this.state.form.customer_no}
+                                                                type="text" id="nf-customer_no" name="customer_no" placeholder="Mã mặc định"
+                                                                disabled />
+                                                        </FormGroup>
+                                                    </FormGroup>
+                                                    <FormGroup>
+                                                        <Label htmlFor="nf-fullname">Tên khách hàng</Label>
+                                                        <Input onChange={(event) => (this.isChange(event))}
+                                                            value={this.state.form.fullname}
+                                                            type="text" id="nf-fullname" name="fullname" placeholder="Nhập tên khách hàng..." autoComplete="current-customer_no" />
+                                                        {this.state.formErrors.fullname ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.fullname}</span></FormText> : ''}
+                                                    </FormGroup>
+                                                    <FormGroup>
+                                                        <Label htmlFor="nf-phone">Số điện thoại</Label>
+                                                        <Input onChange={(event) => (this.isChange(event))}
+                                                            value={this.state.form.phone}
+                                                            type="text" id="nf-phone" name="phone" placeholder="Nhập số điện thoại.." autoComplete="current-customer_no" />
+                                                        {this.state.formErrors.phone ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.phone}</span></FormText> : ''}
+                                                    </FormGroup>
+                                                    <FormGroup>
+                                                        <Label htmlFor="nf-username">Địa chỉ</Label>
+                                                        <Input onChange={(event) => (this.isChange(event))}
+                                                            value={this.state.form.address}
+                                                            type="text" id="nf-username" name="address" />
+                                                        {this.state.formErrors.address ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.address}</span></FormText> : ''}
+                                                    </FormGroup>
+                                                    <FormGroup>
+                                                        <Label htmlFor="nf-email">Email</Label>
                                                         <Input
                                                             onChange={(event) => (this.isChange(event))}
-                                                            value={this.state.form.customer_no}
-                                                            type="text" id="nf-customer_no" name="customer_no" placeholder="Mã mặc định"
-                                                            disabled />
+                                                            value={this.state.form.email}
+                                                            type="email" id="nf-email" name="email" />
+                                                        {this.state.formErrors.email ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.email}</span></FormText> : ''}
                                                     </FormGroup>
-                                                </FormGroup>
-                                                <FormGroup>
-                                                    <Label htmlFor="nf-fullname">Tên khách hàng</Label>
-                                                    <Input onChange={(event) => (this.isChange(event))}
-                                                        value={this.state.form.fullname}
-                                                        type="text" id="nf-fullname" name="fullname" placeholder="Enter FullName.." autoComplete="current-customer_no" />
-                                                    {this.state.formErrors.fullname ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.fullname}</span></FormText> : ''}
-                                                </FormGroup>
-                                                <FormGroup>
-                                                    <Label htmlFor="nf-phone">Số điện thoại</Label>
-                                                    <Input onChange={(event) => (this.isChange(event))}
-                                                        value={this.state.form.phone}
-                                                        type="text" id="nf-phone" name="phone" placeholder="Enter Phone.." autoComplete="current-customer_no" />
-                                                    {this.state.formErrors.phone ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.phone}</span></FormText> : ''}
-                                                </FormGroup>
-                                                <FormGroup>
-                                                    <Label htmlFor="nf-phone">Ngày sinh</Label>
-                                                    <Input
-                                                        onChange={(event) => (this.isChange(event))}
-                                                        value={this.state.form.date}
-                                                        type="date"
-                                                        id="date-input"
-                                                        name="date"
-                                                    />
-                                                </FormGroup>
-                                                <FormGroup>
-                                                    <Label htmlFor="nf-username">Địa chỉ</Label>
-                                                    <Input onChange={(event) => (this.isChange(event))}
-                                                        value={this.state.form.address}
-                                                        type="text" id="nf-username" name="address" />
-                                                </FormGroup>
-                                                <FormGroup>
-                                                    <Label htmlFor="nf-email">Email</Label>
-                                                    <Input
-                                                        onChange={(event) => (this.isChange(event))}
-                                                        value={this.state.form.email}
-                                                        type="email" id="nf-email" name="email" />
-                                                    {this.state.formErrors.email ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.email}</span></FormText> : ''}
-                                                </FormGroup>
-                                                <FormGroup>
-                                                    <Label>Giới tính</Label>
-                                                    {this.state.formErrors.gender ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.gender}</span></FormText> : ''}
-                                                    &nbsp;
-                                            <FormGroup check inline>
-                                                        <Input
-                                                            className="form-check-input"
-                                                            type="radio" id="inline-radio1"
-                                                            name="gender" value="nam"
-                                                            onChange={(event) => (this.isChange(event))}
-                                                            checked={this.state.form.gender === "nam"} />
-                                                        <Label className="form-check-label" check htmlFor="inline-radio2">Nam</Label>
+                                                    <FormGroup>
+                                                        <Label>Giới tính</Label>
+                                                        {this.state.formErrors.gender ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.gender}</span></FormText> : ''}
+                                                        &nbsp;
+                                                        <FormGroup check inline>
+                                                            <Input
+                                                                className="form-check-input"
+                                                                type="radio" id="inline-radio1"
+                                                                name="gender" value="nam"
+                                                                onChange={(event) => (this.isChange(event))}
+                                                                checked={this.state.form.gender === "nam"} />
+                                                            <Label className="form-check-label" check htmlFor="inline-radio2">Nam</Label>
+                                                        </FormGroup>
+                                                        <FormGroup check inline>
+                                                            <Input
+                                                                className="form-check-input"
+                                                                type="radio"
+                                                                id="inline-radio2"
+                                                                name="gender"
+                                                                value="nu"
+                                                                onChange={(event) => (this.isChange(event))}
+                                                                checked={this.state.form.gender === "nu"} />
+                                                            <Label className="form-check-label" check htmlFor="inline-radio2">Nữ</Label>
+                                                        </FormGroup>
                                                     </FormGroup>
-                                                    <FormGroup check inline>
-                                                        <Input
-                                                            className="form-check-input"
-                                                            type="radio"
-                                                            id="inline-radio2"
-                                                            name="gender"
-                                                            value="nu"
-                                                            onChange={(event) => (this.isChange(event))}
-                                                            checked={this.state.form.gender === "nu"} />
-                                                        <Label className="form-check-label" check htmlFor="inline-radio2">Nữ</Label>
-                                                    </FormGroup>
-                                                </FormGroup>
-                                            </Form>
-                                        </CardBody>
-                                        <CardFooter>
-                                            <Button size="sm" color="primary" onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button>
-                                            <Button size="sm" color="danger" onClick={this.onClear}><i className="fa fa-ban"></i> Reset</Button>
-                                            <Button size="sm" color="secondary" onClick={() => {this.onClose(); close()}}><i className="fa fa-ban"></i> Close</Button>
-                                        </CardFooter>
-                                    </Card>
-                                </Col>
-                            </Row>
+                                                </Form>
+                                            </CardBody>
+                                            <CardFooter>
+                                                <Button size="sm" color="primary" onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button>
+                                                <Button size="sm" color="danger" onClick={this.onClear}><i className="fa fa-ban"></i> Reset</Button>
+                                                <Button size="sm" color="secondary" onClick={() => { this.onClose(); close() }}><i className="fa fa-ban"></i> Close</Button>
+                                            </CardFooter>
+                                        </Card>
+                                    </Col>
+                                </Row>
+                            </div>
                         </div>
-                    </div>
                     </div>
                 )}
             </Popup>
