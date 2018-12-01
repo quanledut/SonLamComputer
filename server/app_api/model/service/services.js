@@ -44,7 +44,7 @@ let subDeviceSchema = new mongoose.Schema({
 
 let serviceSchema = new mongoose.Schema({
     serviceType: { type: mongoose.Schema.Types.ObjectId, ref: 'ServiceType' },
-    customer: { type: mongoose.Schema.Types.ObjectId, ref: 'UseInfo', required: true },
+    customer: { type: mongoose.Schema.Types.ObjectId, ref: 'UserInfo', required: true },
     date: { type: Date, default: Date.now },
     accessories: [subAccessorySchema],
     devices: [subDeviceSchema],

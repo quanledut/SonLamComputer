@@ -85,7 +85,13 @@ class ServiceFormUI extends Component {
                 console.log("Edit: ", data)
                 this.setState({
                     ...this.state,
-                    form: data,
+                    form: {
+                        ...data,
+                        customer_name: {
+                            value: data.customer._id,
+                            label: `${data.customer.fullname}, SĐT: ${data.customer.phone}`,
+                        },
+                    },
                     isFix: data.accessories.length != 0,
                     isSell: data.devices.length != 0,
                 })
