@@ -77,13 +77,9 @@ const createUser = async (req, res) => {
 		user.gender = req.body.gender;
 		user.loginInfo = loginInfoResult._id;
 
-		await user.save();
-
-		let token = user.generateJwt();
+		const result = await user.save();
 		
-		sendJsonResponse(res, 201, {
-			"token": token
-		});
+		sendJsonResponse(res, 201, result);
 
 	} catch(err) {
 		sendJsonResponse(res, 400, {
