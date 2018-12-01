@@ -16,6 +16,8 @@ import {PaymentForm, Payments} from './components/containers/payments'
 import {AccessoryTypeForm, AccessoryTypes} from './components/containers/accessorytype'
 import {AccessoryNameForm, AccessoryNames} from './components/containers/accessoryname'
 import {CustomerForm, Customers} from './components/containers/customer'
+import {SaleOrderForm, SaleOrders} from './components/containers/saleorder'
+import {ViewCustomer} from './components/containers/viewcustomer'
 
 
 function Loading() {
@@ -71,9 +73,9 @@ const routes = [
   { path: '/devices/accessory/:id/edit', exact: true, name: 'Sửa linh kiện', component: AccessoryNameForm },
 
 
-  { path: '/services/service', exact: true, name: 'Dịch vụ', component: Services },
-  { path: '/services/service/new', exact: true, name: 'Tạo mới dịch vụ', component: ServiceForm },
-  { path: '/services/service/:id/edit', exact: true, name: 'Sửa dịch vụ', component: ServiceForm },
+  { path: '/services/service', exact: true, name: 'Sửa chữa', component: Services },
+  { path: '/services/service/new', exact: true, name: 'Tạo mới', component: ServiceForm },
+  { path: '/services/service/:id/edit', exact: true, name: 'Sửa', component: ServiceForm },
 
   { path: '/payments', exact: true, name: 'Thanh toán', component: Payments },
   { path: '/payments/:id/view', exact: true, name: 'Chi tiết thanh toán', component: PaymentForm },
@@ -81,6 +83,12 @@ const routes = [
   { path: '/customers', exact: true, name: 'Khách hàng', component: Customers },
   { path: '/customers/new', exact: true, name: 'Tạo mới khách hàng', component: CustomerForm },
   { path: '/customers/:id/edit', exact: true, name: 'Sửa khách hàng', component: CustomerForm },
+
+  { path: '/saleorders', exact: true, name: 'Mua bán', component: SaleOrders },
+  { path: '/saleorders/new', exact: true, name: 'Tạo mới', component: SaleOrderForm },
+  { path: '/saleorders/:id/edit', exact: true, name: 'Sửa', component: SaleOrderForm },
+
+  { path: '/viewcustomers', exact: true, name: 'Thông tin cá nhân', component: ViewCustomer },
 ];
 
 export default routes;

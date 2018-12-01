@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import {Card, CardBody, CardHeader, Col, Row} from 'reactstrap';
 import {Link} from 'react-router-dom';
-import {DeleteFrom, SearchFrom} from '../../../containers/services';
+import {DeleteFrom, SearchFrom} from '../../containers/services';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import CustomTable from '../../utils/Table'
+import CustomTable from '../utils/Table'
 
-class ServiceUI extends Component {
+class SaleOrderUI extends Component {
 
     constructor(props) {
         super(props)
@@ -63,7 +63,7 @@ class ServiceUI extends Component {
                     <td>
                         <div className="btn-group">
                             <Link 
-                                to = {`/services/service/${item._id}/edit`}
+                                to = {`/saleorders/${item._id}/edit`}
                                 className="btn btn-primary"
                             >
                                 <i className="fa fa-edit"> Sửa </i>
@@ -88,7 +88,7 @@ class ServiceUI extends Component {
                             </CardHeader>
                             <CardBody>
                                 <Link
-                                    to = {'/services/service/new'}
+                                    to = {'/saleorders/new'}
                                     className="btn" style={{ backgroundColor: '#17a2b8' }}>
                                     <i className="fa fa-plus text-white"> Tạo mới </i>
                                 </Link>
@@ -119,4 +119,4 @@ class ServiceUI extends Component {
     }
 }
 
-export default ServiceUI
+export default SaleOrderUI

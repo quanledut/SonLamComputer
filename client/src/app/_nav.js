@@ -87,26 +87,34 @@ export default {
     //-----------------------------------------------------
     //Quản lý dịch vụ
     {
-      name: 'Quản lý dịch vụ',
-      url: '/services',
-      icon: 'fa fa-exchange',
-      children: [
-        {
-          name: 'Dịch vụ',
-          url: '/services/service',
-          icon: 'fa fa-microchip',
-        },
-        {
-          name: 'Loại dịch vụ',
-          url: '/services/serviceType',
-          icon: 'fa fa-code',
-        },
+      name: 'Quản lý sửa chữa',
+      url: '/services/service',
+      icon: 'fa fa-recycle',
+      // children: [
+      //   {
+      //     name: 'Dịch vụ',
+      //     url: '/services/service',
+      //     icon: 'fa fa-microchip',
+      //   },
+      //   {
+      //     name: 'Loại dịch vụ',
+      //     url: '/services/serviceType',
+      //     icon: 'fa fa-code',
+      //   },
         // {
         //   name: 'Lịch sử',
         //   url: '/pages',
         //   icon: 'icon-star',
         // },
-      ],
+      //],
+    },
+
+    //-----------------------------------------------------
+    //Quản lý mua bán
+    {
+      name: 'Quản lý mua bán',
+      url: '/saleorders',
+      icon: 'fa fa-cart-plus',
     },
 
     //-----------------------------------------------------
@@ -115,6 +123,14 @@ export default {
       name: 'Thanh toán',
       url: '/payments',
       icon: 'fa fa-handshake-o',
+    },
+
+    //-----------------------------------------------------
+    //Quản lý giao dịch
+    {
+      name: 'Thông tin cá nhân',
+      url: '/viewcustomers',
+      icon: 'fa fa-address-card',
     },
 
     //-----------------------------------------------------

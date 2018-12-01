@@ -24,7 +24,8 @@ import accessoryTypes from './accessoryTypeReducer/index'
 import searchAccessoryTypes from './accessoryTypeReducer/search'
 import customers from './customerReducer/listCustomer'
 import searchCustomers from './customerReducer/searchCustomer'
-
+import saleorders from './saleorderReducer/index'
+import searchSaleorders from './saleorderReducer/search'
 
 export default combineReducers({
     auth,
@@ -51,5 +52,7 @@ export default combineReducers({
     accessoryTypes,
     searchAccessoryTypes,
     customers,
-    searchCustomers
+    searchCustomers,
+    saleorders,
+    searchSaleorders
 });
