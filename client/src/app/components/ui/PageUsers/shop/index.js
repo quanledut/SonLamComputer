@@ -2,22 +2,25 @@ import React, { Component } from 'react';
 import {Redirect} from 'react-router-dom';
 import { Headers, Footer } from './../common/index'
 import { SlideHome } from './shopcomponent/'
+import Pagination from "./../../utils/Pagination";
 
 import '../../../../stylesheets/styles/shop_styles.css'
 import '../../../../stylesheets/styles/shop_responsive.css'
 
 class Shop extends Component {
+      
     constructor(props) {
         super(props);
 
         this.state = {
             form: '',
-            computerNames: [],
-            deviceNames: [],
-            accessoriesNames: [],
+            allCountries: [],
+            currentCountries: [],
+            currentPage: null,
+            totalPages: null
         };
     }
-    componentWillMount(){
+    componentDidMount(){
         var {match} = this.props;
         if(match.params.id)
         {
@@ -38,9 +41,7 @@ class Shop extends Component {
             }, (computerNames, err) => {
                 if (!err) this.setState({
                     ...this.state,
-                    computerNames: computerNames.docs,
-                    deviceNames:[],
-                    accessoriesNames:[]
+                    allCountries : computerNames.docs
                 })
             });
         }
@@ -55,9 +56,7 @@ class Shop extends Component {
             }, (deviceNames, err) => {
                 if (!err) this.setState({
                     ...this.state,
-                    deviceNames: deviceNames.docs,
-                    computerNames:[],
-                    accessoriesNames:[]
+                    allCountries : deviceNames.docs
                 })
             });
         }
@@ -72,9 +71,7 @@ class Shop extends Component {
             }, (accessoriesNames, err) => {
                 if (!err) this.setState({
                     ...this.state,
-                    accessoriesNames: accessoriesNames.docs,
-                    computerNames:[],
-                    deviceNames:[]
+                    allCountries : accessoriesNames.docs
                 })
             });
         }
@@ -89,28 +86,31 @@ class Shop extends Component {
         }
     }
 
+    onPageChanged = data => {
+        const { allCountries } = this.state;
+        console.log(allCountries)
+        const { currentPage, totalPages, pageLimit } = data;
+        const offset = (currentPage - 1) * pageLimit;
+        const currentCountries = allCountries.slice(offset, offset + pageLimit);
+        this.setState({ ...this.state, currentPage, currentCountries, totalPages });
+      };
+
     render() {
+
+        const {
+            allCountries,
+            currentCountries,
+          } = this.state;
+          const totalCountries = allCountries.length;
+
         if(!this.state.form)
         {
-            return(
-                <Redirect to="/404"/>
-            )
+            // return(
+            //     <Redirect to="/404"/>
+            // )
         }else
         {
-            var mapList;
-            if(this.state.computerNames.length > 0)
-            {
-                mapList = this.state.computerNames;
-            }
-            else if(this.state.deviceNames.length > 0)
-            {
-                mapList = this.state.deviceNames;
-            }
-            else
-            {
-                mapList = this.state.accessoriesNames;
-            }
-
+            var mapList = allCountries;
             var {match} = this.props;
             if(match.params.item)
             {
@@ -121,7 +121,6 @@ class Shop extends Component {
             }
             
             var childItem = mapList.map((item, index) => {
-                console.log(item.description)
                 return (
                     <div className="product_item is_new" key={index}>
                         <div className="product_border" />
@@ -169,7 +168,13 @@ class Shop extends Component {
                                 </div>  
                                 {/* Shop Page Navigation */}
                                 <div className="shop_page_nav d-flex flex-row">
-                                    <div className="page_prev d-flex flex-column align-items-center justify-content-center"><i className="fas fa-chevron-left" /></div>
+                                    <Pagination
+                                        totalRecords={totalCountries}
+                                        pageLimit={18}
+                                        pageNeighbours={1}
+                                        onPageChanged={this.onPageChanged}
+                                    />
+                                    {/* <div className="page_prev d-flex flex-column align-items-center justify-content-center"><i className="fas fa-chevron-left" /></div>
                                     <ul className="page_nav d-flex flex-row">
                                         <li><a href="#">1</a></li>
                                         <li><a href="#">2</a></li>
@@ -177,7 +182,7 @@ class Shop extends Component {
                                         <li><a href="#">...</a></li>
                                         <li><a href="#">21</a></li>
                                     </ul>
-                                    <div className="page_next d-flex flex-column align-items-center justify-content-center"><i className="fas fa-chevron-right" /></div>
+                                    <div className="page_next d-flex flex-column align-items-center justify-content-center"><i className="fas fa-chevron-right" /></div> */}
                                 </div>
                             </div>
                         </div>

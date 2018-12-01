@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import {Link} from 'react-router-dom';
 import Items from './Items'
 
 class ProductItem extends Component {
@@ -93,7 +94,11 @@ class ProductItem extends Component {
                                 <div className="tabs clearfix tabs-right">
                                     <div className="new_arrivals_title">{this.props.title}</div>
                                     <ul className="clearfix">
-                                        <li><span>See all >></span></li>
+                                        <Link 
+                                            to = {`${this.props.url}`}
+                                        >
+                                            <li><span>See all >></span></li>
+                                        </Link>
                                     </ul>
                                     <div className="tabs_line"><span /></div>
                                 </div>

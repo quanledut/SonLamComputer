@@ -32,6 +32,13 @@ export default {
       icon: 'fa fa-address-card',
     },
     //-----------------------------------------------------
+    //Quản lý khách hàng
+    {
+      name: 'Quản lý khách hàng',
+      url: '/customers',
+      icon: 'fa fa-tasks',
+    },
+    //-----------------------------------------------------
     //Quản lý thiết bị
     {
       name: 'Quản lý thiết bị',

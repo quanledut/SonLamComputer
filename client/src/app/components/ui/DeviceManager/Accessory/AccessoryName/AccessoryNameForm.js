@@ -15,6 +15,7 @@ import {
     Input,
     Label,
     Row,
+    CardImg,
 } from 'reactstrap';
 
 const DEFAULT_FORM = {
@@ -275,6 +276,13 @@ class AccessoryNameFormUI extends Component {
     {
         const name = event.target.name;
         const value = event.target.value;
+
+        if (name == "image_url") {
+            console.log(event.target.files)
+            console.log(event.target.file)
+            return;
+        }
+        
         this.setState({
             form: {
                 ...this.state.form,
@@ -361,11 +369,26 @@ class AccessoryNameFormUI extends Component {
                                     </FormGroup>
                                     <FormGroup>
                                         <Label htmlFor="nf-username">Link ảnh</Label>
+                                        <Input
+                                            onChange={(event) => (this.isChange(event))}
+                                            type="file" name="image_url"
+                                        />
+                                        {
+                                            (this.state.form.image_url) &&
+                                            (
+                                                <Card>
+                                                    <CardImg src={this.state.form.image_url} />
+                                                </Card>
+                                            )
+                                        }
+                                    </FormGroup>
+                                    {/* <FormGroup>
+                                        <Label htmlFor="nf-username">Link ảnh</Label>
                                         <Input onChange = {(event) => (this.isChange(event))} 
                                             value = {this.state.form.image_url}
                                             type="username" id="nf-username" name="image_url" placeholder="Nhập link ảnh..." autoComplete="current-password" />
                                          {this.state.error.image_url ? <FormText className="help-block"><span style={{color: "red"}}>Vui lòng nhập đúng định dạng!</span></FormText> : ''} 
-                                    </FormGroup>
+                                    </FormGroup> */}
                                     <FormGroup>
                                         <Label htmlFor="nf-username">Thời gian bảo hành</Label>
                                         <Input onChange = {(event) => (this.isChange(event))} 

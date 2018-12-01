@@ -12,15 +12,18 @@ class ClientHome extends Component {
       title : [
           {
             name: "Computer & Laptop",
-            code: "Laptop"
+            code: "Laptop",
+            url:"/product/Laptop"
           },
           {
             name: "Linh kiện",
-            code: "Harware"
+            code: "Harware",
+            url:"/product/Linh_kien"
           },
           {
             name: "Phụ kiện",
-            code: "Accessories"
+            code: "Accessories",
+            url:"/product/Phu_kien"
           }
       ]
     }
@@ -33,6 +36,7 @@ class ClientHome extends Component {
             key = {index}
             title = {item.name}
             code = {item.code}
+            url = {item.url}
           />
         )
     });

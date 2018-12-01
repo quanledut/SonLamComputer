@@ -12,6 +12,7 @@ import * as computerNameActions from '../../actions/computerName'
 import * as accessoryTypeActions from '../../actions/accessoryType'
 import * as deviceTypeActions from '../../actions/deviceType'
 import * as computerTypeActions from '../../actions/computerType'
+import PopUpCustomerFormUI from '../ui/utils/popUpCustomer'
 
 export const ServiceForm = connect(
     null, 
@@ -89,3 +90,8 @@ export const DeleteFrom = connect(
         }
     })
 )(PopUpDelete);
+
+export const CustomerFormUI = connect(
+    null,
+    null
+)(PopUpCustomerFormUI);
