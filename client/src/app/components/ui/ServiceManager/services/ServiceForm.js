@@ -27,7 +27,6 @@ const DEFAULT_FORM = {
     accessories: [],
     devices: [],
     serviceType: '',
-    customer_phone: '',
     totalPrice: 0,
     status: false
 }
@@ -47,6 +46,7 @@ class ServiceFormUI extends Component {
                 content: ""
             },
             devices: [],
+            customers:[],
             accessoryTypes: [],
             deviceTypes: [],
             computerNames: [],
@@ -61,7 +61,6 @@ class ServiceFormUI extends Component {
             serviceTypeValid: false,
             totalPriceValid: false,
             customer_nameValid: false,
-            customer_phoneValid: false,
             formValid: false,
             isOpen: false
         };
@@ -86,7 +85,13 @@ class ServiceFormUI extends Component {
                 console.log("Edit: ", data)
                 this.setState({
                     ...this.state,
-                    form: data,
+                    form: {
+                        ...data,
+                        customer_name: {
+                            value: data.customer._id,
+                            label: `${data.customer.fullname}, SĐT: ${data.customer.phone}`,
+                        },
+                    },
                     isFix: data.accessories.length != 0,
                     isSell: data.devices.length != 0,
                 })
@@ -99,8 +104,26 @@ class ServiceFormUI extends Component {
                 serviceTypes: serviceTypes.docs
             })
         });
+
+        this.props.findAllcustomer((customers, err) => {
+            console.log("serviceTypes: ", customers, err)
+            if (!err) this.setState({
+                ...this.state,
+                customers: customers
+            })
+        });
     }
 
+    componentDidUpdate() {
+        this.props.findAllcustomer((customers, err) => {
+            console.log("serviceTypes: ", customers, err)
+            if (!err) this.setState({
+                ...this.state,
+                customers: customers
+            })
+        });
+    }
+    
     onClear = () => {
         this.setState({
             form: { ...DEFAULT_FORM },
@@ -114,11 +137,10 @@ class ServiceFormUI extends Component {
             _device_id: '',
             isDisabled: true,
             isRedirect: false,
-            formErrors: { serviceType: '', totalPrice: '', customer_name: '', customer_phone: '' },
+            formErrors: { serviceType: '', totalPrice: '', customer_name: ''},
             serviceTypeValid: false,
             totalPriceValid: false,
             customer_nameValid: false,
-            customer_phoneValid: false,
             formValid: false,
             isOpen: false
         });
@@ -155,7 +177,6 @@ class ServiceFormUI extends Component {
             })
         })
     }
-
 
     _findAllAccessoryTypes() {
         this.props.findAllAccessoryTypes({
@@ -302,7 +323,7 @@ class ServiceFormUI extends Component {
 
     onSubmitForm = (event) => {
         event.preventDefault();
-
+        console.log(this.state.form)
         for (let name in this.state.form) {
             this._validate(name, this.state.form[name])
         }
@@ -337,6 +358,8 @@ class ServiceFormUI extends Component {
             isOpened: true,
             title: "Loading"
         })
+
+        this.state.form.customer = this.state.form.customer_name.value;
 
         let { _id } = this.state.form
         if (_id) {
@@ -426,7 +449,6 @@ class ServiceFormUI extends Component {
     _validate(fieldName, value) {
         let fieldValidationErrors = this.state.formErrors;
         let customer_nameValid = this.state.customer_nameValid;
-        let customer_phoneValid = this.state.customer_phoneValid;
         let serviceTypeValid = this.state.serviceTypeValid;
         let totalPriceValid = this.state.totalPriceValid;
 
@@ -443,18 +465,8 @@ class ServiceFormUI extends Component {
                 fieldValidationErrors.totalPrice = totalPriceValid ? '' : 'Định dạng số không đúng!';
                 break;
             case 'customer_name':
-                customer_nameValid = value.length > 0;
-                fieldValidationErrors.customer_name = customer_nameValid ? '' : ' Vui lòng nhập tên khách hàng!';
-                break;
-            case 'customer_phone':
-                customer_phoneValid = (value.length > 0);
-                if (!customer_phoneValid) {
-                    fieldValidationErrors.customer_phone = customer_phoneValid ? '' : 'Vui lòng nhập số điện thoại khách hàng!';
-                } else {
-                    customer_phoneValid = regex.test(value);
-                    fieldValidationErrors.customer_phone = customer_phoneValid ? '' : 'Định dạng số điện thoại không đúng!';
-                }
-
+                customer_nameValid = (value !== null && value !== "" && value !== "None");
+                fieldValidationErrors.customer_name = customer_nameValid ? '' : ' Vui lòng chọn khách hàng!';
                 break;
             default:
                 break;
@@ -563,10 +575,13 @@ class ServiceFormUI extends Component {
     }
 
     handleChange = (selectedOption) => {
-        this.setState({ ...this.state.form, customer_name:selectedOption });
-        console.log(`Option selected:`, selectedOption);
-      }
-
+        this.setState({ 
+            form: {
+                ...this.state.form, customer_name:selectedOption 
+            }
+        });
+    };
+        
     render() {
         if (this.state.isRedirect) {
             return (
@@ -575,14 +590,13 @@ class ServiceFormUI extends Component {
         }
 
         const options = [];
-        this.state.serviceTypes.map((e, key) =>
+        this.state.customers.map((e, key) =>
             {
-                var name = e.name;
+                var name = e.fullname +', SĐT: '+e.phone;
                 var id = e._id;
                 options.push({value:id,label:name})  
             }
         );
-        
         return (
             <div className="animated fadeIn">
                 <Modal
@@ -606,7 +620,7 @@ class ServiceFormUI extends Component {
                             <CardBody>
                                 <Form action="" method="post">
                                     <FormGroup>
-                                        <Label htmlFor="nf-username">Tên khách hàng</Label>
+                                        <Label htmlFor="nf-username">Khách hàng</Label>
                                         <FormGroup row className="my-0">
                                             <Col xs="11">
                                                 <Select
@@ -621,14 +635,6 @@ class ServiceFormUI extends Component {
 
                                         </FormGroup>
                                         {this.state.formErrors.customer_name ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.customer_name}</span></FormText> : ''}
-                                    </FormGroup>
-                                    <FormGroup>
-                                        <Label htmlFor="nf-username">Số điện thoại</Label>
-                                        <Input onChange={(event) => (this.isChange(event))}
-                                            disabled={(this.props.match.params.id) ? "disabled" : ""}
-                                            value={this.state.form.customer_phone}
-                                            type="username" id="nf-username" name="customer_phone" placeholder="Nhập mã số điện thoại..." />
-                                        {this.state.formErrors.customer_phone ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.customer_phone}</span></FormText> : ''}
                                     </FormGroup>
                                     <FormGroup>
                                         <Label htmlFor="select">Loại dịch vụ</Label>
