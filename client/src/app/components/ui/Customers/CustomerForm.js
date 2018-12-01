@@ -162,7 +162,7 @@ class CustomerFormUI extends Component {
                 }
             })
         } else {
-            this.props.createUser(this.state.form, (res, error) => {
+            this.props.create(this.state.form, (res, error) => {
                 this._closeModal()
                 if (res) {
                     this._openModal({
