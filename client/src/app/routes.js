@@ -15,6 +15,7 @@ import {ServiceForm, Services} from './components/containers/services'
 import {PaymentForm, Payments} from './components/containers/payments'
 import {AccessoryTypeForm, AccessoryTypes} from './components/containers/accessorytype'
 import {AccessoryNameForm, AccessoryNames} from './components/containers/accessoryname'
+import {CustomerForm, Customers} from './components/containers/customer'
 
 
 function Loading() {
@@ -76,6 +77,10 @@ const routes = [
 
   { path: '/payments', exact: true, name: 'Thanh toán', component: Payments },
   { path: '/payments/:id/view', exact: true, name: 'Chi tiết thanh toán', component: PaymentForm },
+
+  { path: '/customers', exact: true, name: 'Khách hàng', component: Customers },
+  { path: '/customers/new', exact: true, name: 'Tạo mới khách hàng', component: CustomerForm },
+  { path: '/customers/:id/edit', exact: true, name: 'Sửa khách hàng', component: CustomerForm },
 ];
 
 export default routes;
