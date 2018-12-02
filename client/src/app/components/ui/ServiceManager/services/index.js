@@ -53,11 +53,25 @@ class ServiceUI extends Component {
         var mapList = this.props.todos;
         
         var listItem = mapList.map((item, index) => {
+            const date = new Date(item.date);
             return (
                 <tr key = {index}>
-                    <td>{item.customer}</td>
-                    <td>{item.serviceType.name}</td>
-                    <td>{item.date}</td>
+                    <td>{item.staff.fullname}</td>
+                    <td>{item.customer.fullname}</td>
+                    <td>{item.customer.phone}</td>
+                    <td>{item.accessories.reduce((array, item) => {
+                        if (array.indexOf(item.computerSeries) == -1) {
+                            array.push(item.computerSeries)
+                        }
+                        return array
+                    }, []).map(i =>  <a>{i}</a>)}</td>
+                    <td>{item.accessories.reduce((array, item) => {
+                        if (array.indexOf(item.type) == -1) {
+                            array.push(item.type)
+                        }
+                        return array
+                    }, []).map(i =>  <a>{i}</a>)}</td>
+                    <td>{`${date.getDay() + 1}-${date.getMonth() + 1}-${date.getFullYear()}`}</td>
                     <td>{item.totalPrice}</td>
 
                     <td>
@@ -99,8 +113,11 @@ class ServiceUI extends Component {
                                 <CustomTable
                                     thead = {
                                         <tr>
-                                            <th>Tên khách hàng</th>
-                                            <th>Loại dịch vụ</th>
+                                            <th>Người bán</th>
+                                            <th>Khách hàng</th>
+                                            <th>SDT</th>
+                                            <th>Series máy</th>
+                                            <th>Loại linh kiện</th>
                                             <th>Ngày dịch vụ</th>
                                             <th>Tổng tiền</th>
                                             <th style={{ width: '20%' }}>Hành động</th>

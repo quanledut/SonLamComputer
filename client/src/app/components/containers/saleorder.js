@@ -4,7 +4,6 @@ import SaleOrderUI from '../ui/SaleOrderManager/index'
 import Search from '../ui/utils/Search'
 import PopUpDelete from '../ui/utils/PopUpDelete'
 import * as deviceNameActions from '../../actions/deviceName'
-import * as userActions from '../../actions/user'
 import * as saleorderActions from '../../actions/saleorder'
 import * as accessoryNameActions from '../../actions/accessoryName'
 import * as computerNameActions from '../../actions/computerName'
@@ -45,10 +44,10 @@ export const SaleOrderForm = connect(
             dispatch(deviceTypeActions.findAllRequest(query, cb))
         },
         findAllcustomer(cb){
-            dispatch(userActions.findAllRequest(cb));
+            dispatch(customerActions.findAllRequest(cb));
         },
         findCustomerByID(id,cb){
-            dispatch(userActions.findByIdRequest(id,cb));
+            dispatch(customerActions.findByIdRequest(id,cb));
         },
         findDeviceByID(id,cb){
             dispatch(deviceNameActions.findByIdRequest(id,cb));

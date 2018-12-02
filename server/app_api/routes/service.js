@@ -17,32 +17,61 @@ const route_service = (router) => {
 
     //For services
     router.get(
-        '/services',
+        '/serviceFix',
         auth,
         checkPermissionForService(permission.type.READ),
-        ctrlService.find
+        ctrlService.findFix
     )
 
     router.get(
-        '/services/:serviceId',
+        '/serviceFix/:serviceId',
         auth,
         checkPermissionForService(permission.type.READ),
         ctrlService.findById
     )
 
     router.post(
-        '/services',
+        '/serviceFix',
         auth,
         checkPermissionForService(permission.type.CREATE),
-        ctrlService.create
+        ctrlService.createFix
     )
     
     router.delete(
-        '/services/:serviceId',
+        '/serviceFix/:serviceId',
         auth,
         checkPermissionForService(permission.type.DELETE),
         ctrlService.deleteById
     )
+
+    router.get(
+        '/serviceSell',
+        auth,
+        checkPermissionForService(permission.type.READ),
+        ctrlService.findSell
+    )
+
+    router.get(
+        '/serviceSell/:serviceId',
+        auth,
+        checkPermissionForService(permission.type.READ),
+        ctrlService.findById
+    )
+
+    router.post(
+        '/serviceSell',
+        auth,
+        checkPermissionForService(permission.type.CREATE),
+        ctrlService.createSell
+    )
+    
+    router.delete(
+        '/serviceSell/:serviceId',
+        auth,
+        checkPermissionForService(permission.type.DELETE),
+        ctrlService.deleteById
+    )
+
 
 
     //For serviceTypes

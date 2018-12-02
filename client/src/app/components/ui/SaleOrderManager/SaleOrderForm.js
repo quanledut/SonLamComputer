@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Modal from './../utils/Modal'
 import { Redirect } from 'react-router-dom';
 import { CustomerFormUI } from '../../containers/services';
+import { getCurrentUser } from '../../../utils';
 
 import {
     Button,
@@ -24,6 +25,10 @@ import Select from 'react-select';
 const DEFAULT_FORM = {
     _id: '',
     customer_name: null,
+    staff: {
+        _id: '',
+        fullname: '',
+    },
     accessories: [],
     devices: [],
     totalPrice: 0,
@@ -46,13 +51,10 @@ class SaleOrderFormUI extends Component {
             },
             devices: [],
             customers:[],
-            accessoryTypes: [],
             deviceTypes: [],
-            computerNames: [],
             _device_id: '',
             isDisabled: true,
             isRedirect: false,
-            isSell: true,
             tbody: [],
             formErrors: { totalPrice: '', customer_name: '', customer_phone: '' },
             totalPriceValid: false,
@@ -66,9 +68,7 @@ class SaleOrderFormUI extends Component {
         this._openModal = this._openModal.bind(this)
         this._closeModal = this._closeModal.bind(this)
 
-        this._addAccessory = this._addAccessory.bind(this)
         this._addDevice = this._addDevice.bind(this)
-        this._handleAccessories = this._handleAccessories.bind(this)
         this._handleDevices = this._handleDevices.bind(this)
     }
 
@@ -83,23 +83,40 @@ class SaleOrderFormUI extends Component {
                     ...this.state,
                     form: {
                         ...data,
+                        staff: {
+                            _id: data.staff._id,
+                            fullname: data.staff.fullname,
+                        },
                         customer_name: {
                             value: data.customer._id,
                             label: `${data.customer.fullname}, SĐT: ${data.customer.phone}`,
                         },
                     },
-                    isFix: data.accessories.length != 0,
-                    isSell: data.devices.length != 0,
                 })
             })
         }
-        this.props.findAllcustomer((customers, err) => {
-            console.log("serviceTypes: ", customers, err)
-            if (!err) this.setState({
-                ...this.state,
-                customers: customers
-            })
-        });
+        else {
+            this.props.findAllcustomer((customers, err) => {
+                console.log("serviceTypes: ", customers, err)
+                const currentUser = getCurrentUser();
+                console.log(currentUser)
+                if (!err) this.setState({
+                    ...this.state,
+                    customers: customers.map(i => i.user),
+                    form: {
+                        ...this.state.form,
+                        staff: {
+                            _id: currentUser._id,
+                            fullname: currentUser.fullname,
+                        }
+                    }
+                })
+            });
+    
+            this._findAllDeviceTypes();
+    
+        }
+
     }
 
     componentDidUpdate() {
@@ -154,28 +171,6 @@ class SaleOrderFormUI extends Component {
         })
     }
 
-    _findAllComputernames() {
-        this.props.findAllComputername({
-            all: true
-        }, (computerNames, err) => {
-            if (!err) this.setState({
-                ...this.state,
-                computerNames: computerNames.docs
-            })
-        })
-    }
-
-    _findAllAccessoryTypes() {
-        this.props.findAllAccessoryTypes({
-            all: true
-        }, (accessoryTypes, err) => {
-            if (!err) this.setState({
-                ...this.state,
-                accessoryTypes: accessoryTypes.docs
-            })
-        })
-    }
-
     _findAllDeviceTypes() {
         this.props.findAllDeviceTypes({
             all: true,
@@ -196,46 +191,6 @@ class SaleOrderFormUI extends Component {
                 ...this.state,
                 devices: devices.docs
             })
-        })
-    }
-
-    _findAccessory(computerName, accessoryType, key) {
-        this.props.findAllaccessories({
-            computerName,
-            type: accessoryType,
-            all: true
-        }, (accessories, err) => {
-            const currentAccessoriesState = this.state.form.accessories
-            if (!err) currentAccessoriesState[key] = {
-                ...currentAccessoriesState[key],
-                price: accessories.docs[0].price,
-                guaranteeDuration: accessories.docs[0].guaranteeDuration
-            }
-
-            this.setState({
-                ...this.state,
-                form: {
-                    ...this.state.form,
-                    accessories: currentAccessoriesState
-                }
-            })
-        });
-    }
-
-    _addAccessory(event) {
-        const key = this.state.tbody.length
-        event.preventDefault()
-        this.setState({
-            form: {
-                ...this.state.form,
-                accessories: [
-                    ...this.state.form.accessories,
-                    {
-                        computerName: "None",
-                        type: "None"
-                    }
-                ]
-            }
         })
     }
 
@@ -278,31 +233,6 @@ class SaleOrderFormUI extends Component {
                     }
 
                     return device
-                })
-            }
-        })
-    }
-
-    _handleAccessories = (e, key) => {
-        const { name, value } = e.target
-        this.setState({
-            form: {
-                ...this.state.form,
-                accessories: this.state.form.accessories.map((accessory, id) => {
-                    if (id !== key) return accessory
-                    accessory[name] = value
-
-                    if (name === "computerName" || name === "type") {
-                        if (accessory.computerName && accessory.type) {
-                            this._findAccessory(
-                                accessory.computerName,
-                                accessory.type,
-                                key
-                            )
-                        }
-                    }
-
-                    return accessory
                 })
             }
         })
@@ -476,28 +406,13 @@ class SaleOrderFormUI extends Component {
         this._validate(name, value);
        
         this.setState({
-            isSell: true,
             form: {
                 ...this.state.form,
                 accessories: []
             }
         })
-
-        if (this.state.deviceTypes.length === 0) {
-            this._findAllDeviceTypes()
-        }
     }
 
-    _deleteAccessory = (event, i) => {
-        event.preventDefault();
-        this.setState({
-            tbody: this.state.tbody.filter((item, id) => id !== i),
-            form: {
-                ...this.state.form,
-                accessories: this.state.form.accessories.filter((item, id) => id !== i)
-            }
-        })
-    }
 
     _deleteDevices = (event, i) => {
         event.preventDefault();
@@ -571,6 +486,14 @@ class SaleOrderFormUI extends Component {
                             <CardBody>
                                 <Form action="" method="post">
                                     <FormGroup>
+                                            <Label htmlFor="nf-username">Nhân viên</Label>
+                                            <Input onChange={(event) => (this.isChange(event))}
+                                                        disabled
+                                                        value={this.state.form.staff.fullname}
+                                                        type="fullname" id="nf-username" name="totalPrice" placeholder="Nhan vien" autoComplete="current-password" />
+                                                    {this.state.formErrors.totalPrice ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.totalPrice}</span></FormText> : ''}
+                                    </FormGroup>
+                                    <FormGroup>
                                         <Label htmlFor="nf-username">Khách hàng</Label>
                                         <FormGroup row className="my-0">
                                             <Col xs="11">
@@ -588,51 +511,28 @@ class SaleOrderFormUI extends Component {
                                         </FormGroup>
                                         {this.state.formErrors.customer_name ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.customer_name}</span></FormText> : ''}
                                     </FormGroup>
-                                    <FormGroup>
-                                        <Label htmlFor="nf-username">Tổng tiền</Label>
-                                        <Input onChange={(event) => (this.isChange(event))}
-                                            disabled={(this.props.match.params.id) ? "disabled" : ""}
-                                            value={this.state.form.totalPrice}
-                                            type="username" id="nf-username" name="totalPrice" placeholder="Nhập tổng tiền..." autoComplete="current-password" />
-                                        {this.state.formErrors.totalPrice ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.totalPrice}</span></FormText> : ''}
-                                    </FormGroup>
+                                    {
+                                        (this.props.match.params.id) 
+                                        && (
+                                            <FormGroup>
+                                                <Label htmlFor="nf-username">Tổng tiền</Label>
+                                                <Input onChange={(event) => (this.isChange(event))}
+                                                    disabled={(this.props.match.params.id) ? "disabled" : ""}
+                                                    value={this.state.form.totalPrice}
+                                                    type="username" id="nf-username" name="totalPrice" placeholder="Nhập tổng tiền..." autoComplete="current-password" />
+                                                {this.state.formErrors.totalPrice ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.totalPrice}</span></FormText> : ''}
+                                            </FormGroup>
+                                        )
+                                    }
                                 </Form>
                                 <hr />
                                 <FormGroup row>
                                     <Col md="12">
-                                        {
-                                            ((!this.state.isFix && !this.state.isSell) &&
-                                                <FormText className="help-block"><span style={{ color: "red" }}>Vui lòng loại dịch vụ!</span></FormText>
-                                            )
-                                        }
-                                        {
-                                            (this.state.isSell) &&
-                                            <Label htmlFor="select">Thiết bị mua bán</Label>
-                                        }
-                                        {
-                                            (this.state.isFix) &&
-                                            <Label htmlFor="select">Linh kiện sữa chữa / thay thế</Label>
-                                        }
+                                        <Label htmlFor="select">Thiết bị mua bán</Label>
                                     </Col>
                                 </FormGroup>
                                 <CustomTable
                                     thead={
-                                        (this.state.isFix)
-                                            ? (<tr>
-                                                <th>Tên máy tính</th>
-                                                <th>Loại linh kiện</th>
-                                                <th>Giá tiền</th>
-                                                <th style={{ width: '20%' }}>Thời gian bảo hành</th>
-                                                <th style={{ width: '15%' }}>
-                                                    {
-                                                        (!this.props.match.params.id) &&
-                                                        <Button onClick={this._addAccessory}><i className="fa fa-plus"></i></Button>
-
-                                                    }
-                                                </th>
-                                            </tr>)
-                                            : (this.state.isSell) ?
-                                                (
                                                     <tr>
                                                         <th>Tên thiết bị</th>
                                                         <th>Loại thiết bị</th>
@@ -645,160 +545,85 @@ class SaleOrderFormUI extends Component {
                                                             }
                                                         </th>
                                                     </tr>
-                                                )
-                                                : {}
                                     }
 
                                     tbody={
                                         (!this.props.match.params.id)
-                                            ? (this.state.isFix)
-                                                ? this.state.form.accessories.map((item, key) => {
-                                                    return (
-                                                        <tr key={key}>
-                                                            <td>
-                                                                <Input value={item.computerName} onChange={(e) => this._handleAccessories(e, key)} type="select" name="computerName" id="exampleSelect">
-                                                                    <option value="None">Hãy chọn loại máy tính</option>
-                                                                    {this.state.computerNames.map((i1, id) => <option key={id} value={i1._id}>{i1.name}</option>)}
-                                                                </Input>
-                                                            </td>
-                                                            <td>
-                                                                <Input value={item.type} onChange={(e) => this._handleAccessories(e, key)} type="select" name="type" id="exampleSelect">
-                                                                    <option value="None">Hãy chọn loại thiết bị</option>
-                                                                    {this.state.accessoryTypes.map((i1, id) => <option key={id} value={i1._id}>{i1.name}</option>)}
-                                                                </Input>
-                                                            </td>
-                                                            <td>
-                                                                {
-                                                                    (!item.type || !item.computerName || item.computerName == "None" || item.type == "None") &&
-                                                                    <p>Xin hãy chọn loại thiết bị và loại máy tính</p>
+                                            ? this.state.form.devices.map((item, key) => {
+                                                return (<tr key={key}>
+                                                    <td>
+                                                        <Input value={item.type} onChange={(e) => this._handleDevices(e, key)} type="select" name="type" id="exampleSelect">
+                                                            <option value="None">Hãy chọn loại thiết bị</option>
+                                                            {this.state.deviceTypes.map((i1, id) => <option key={id} value={i1._id}>{i1.name}</option>)}
+                                                        </Input>
+                                                    </td>
+                                                    <td>
+                                                        {
+                                                            (!item.type || item.type == "None") &&
+                                                            <p>Xin hãy chọn loại thiết</p>
 
-                                                                }
+                                                        }
 
-                                                                {
-                                                                    (item.type && item.computerName && item.type != "None" && item.computerName != "None") &&
-                                                                    <Input value={item.price} onChange={(e) => this._handleAccessories(e, key)} type="text" name="price" id="exampleSelect">
-                                                                    </Input>
+                                                        {
+                                                            (item.type && item.type != "None") &&
+                                                            <Input value={item.name} onChange={(e) => this._handleDevices(e, key)} type="select" name="name" id="exampleSelect">
+                                                                <option value="None">Hãy chọn thiết bị</option>
+                                                                {this.state.devices.map((i1, id) => <option key={id} value={i1._id}>{i1.name}</option>)}
+                                                            </Input>
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        {
+                                                            (!item.name || item.name == "None") &&
+                                                            <p>Xin hãy chọn thiết bị</p>
 
-                                                                }
-                                                            </td>
-                                                            <td>
-                                                                {
-                                                                    (!item.type || !item.computerName || item.computerName == "None" || item.type == "None") &&
-                                                                    <p>Xin hãy chọn loại thiết bị và loại máy tính</p>
+                                                        }
 
-                                                                }
+                                                        {
+                                                            (item.name && item.name != "None") &&
+                                                            <Input value={item.price} onChange={(e) => this._handleDevices(e, key)} type="text" name="price" id="exampleSelect">
+                                                            </Input>
 
-                                                                {
-                                                                    (item.type && item.computerName && item.type != "None" && item.computerName != "None") &&
-                                                                    <Input value={item.guaranteeDuration} onChange={(e) => this._handleAccessories(e, key)} type="text" name="guaranteeDuration" id="exampleSelect">
-                                                                    </Input>
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        {
+                                                            (!item.name || item.name == "None") &&
+                                                            <p>Xin hãy chọn thiết bị</p>
 
-                                                                }
-                                                            </td>
+                                                        }
 
-                                                            <td><Button onClick={(e) => this._deleteAccessory(e, key)}>Delete</Button></td>
-                                                        </tr>
-                                                    )
-                                                })
-                                                : (this.state.isSell)
-                                                    ? this.state.form.devices.map((item, key) => {
-                                                        return (<tr key={key}>
-                                                            <td>
-                                                                <Input value={item.type} onChange={(e) => this._handleDevices(e, key)} type="select" name="type" id="exampleSelect">
-                                                                    <option value="None">Hãy chọn loại thiết bị</option>
-                                                                    {this.state.deviceTypes.map((i1, id) => <option key={id} value={i1._id}>{i1.name}</option>)}
-                                                                </Input>
-                                                            </td>
-                                                            <td>
-                                                                {
-                                                                    (!item.type || item.type == "None") &&
-                                                                    <p>Xin hãy chọn loại thiết</p>
+                                                        {
+                                                            (item.name && item.name != "None") &&
+                                                            <Input value={item.guaranteeDuration} onChange={(e) => this._handleDevices(e, key)} type="text" name="guaranteeDuration" id="exampleSelect">
+                                                            </Input>
 
-                                                                }
+                                                        }
+                                                    </td>
 
-                                                                {
-                                                                    (item.type && item.type != "None") &&
-                                                                    <Input value={item.name} onChange={(e) => this._handleDevices(e, key)} type="select" name="name" id="exampleSelect">
-                                                                        <option value="None">Hãy chọn thiết bị</option>
-                                                                        {this.state.devices.map((i1, id) => <option key={id} value={i1._id}>{i1.name}</option>)}
-                                                                    </Input>
-                                                                }
-                                                            </td>
-                                                            <td>
-                                                                {
-                                                                    (!item.name || item.name == "None") &&
-                                                                    <p>Xin hãy chọn thiết bị</p>
+                                                    <td><Button onClick={(e) => this._deleteDevices(e, key)}>Delete</Button></td>
+                                                </tr>)
+                                            })
+                                            : this.state.form.devices.map((item, key) => {
+                                                return (<tr key={key}>
+                                                    <td>
+                                                        {item.type}
+                                                    </td>
+                                                    <td>
+                                                        {item.name}
+                                                    </td>
+                                                    <td>
+                                                        {item.price}
+                                                    </td>
+                                                    <td>
+                                                        {item.guaranteeDuration}
+                                                    </td>
+                                                    <td></td>
 
-                                                                }
-
-                                                                {
-                                                                    (item.name && item.name != "None") &&
-                                                                    <Input value={item.price} onChange={(e) => this._handleDevices(e, key)} type="text" name="price" id="exampleSelect">
-                                                                    </Input>
-
-                                                                }
-                                                            </td>
-                                                            <td>
-                                                                {
-                                                                    (!item.name || item.name == "None") &&
-                                                                    <p>Xin hãy chọn thiết bị</p>
-
-                                                                }
-
-                                                                {
-                                                                    (item.name && item.name != "None") &&
-                                                                    <Input value={item.guaranteeDuration} onChange={(e) => this._handleDevices(e, key)} type="text" name="guaranteeDuration" id="exampleSelect">
-                                                                    </Input>
-
-                                                                }
-                                                            </td>
-
-                                                            <td><Button onClick={(e) => this._deleteDevices(e, key)}>Delete</Button></td>
-                                                        </tr>)
-                                                    })
-                                                    : []
-
-                                            : (this.state.isFix)
-                                                ? this.state.form.accessories.map((item, key) => {
-                                                    return (<tr key={key}>
-                                                        <td>
-                                                            {item.computerName}
-                                                        </td>
-                                                        <td>
-                                                            {item.type}
-                                                        </td>
-                                                        <td>
-                                                            {item.price}
-                                                        </td>
-                                                        <td>
-                                                            {item.guaranteeDuration}
-                                                        </td>
-                                                        <td></td>
-
-                                                    </tr>)
-                                                })
-                                                : this.state.form.devices.map((item, key) => {
-                                                    return (<tr key={key}>
-                                                        <td>
-                                                            {item.type}
-                                                        </td>
-                                                        <td>
-                                                            {item.name}
-                                                        </td>
-                                                        <td>
-                                                            {item.price}
-                                                        </td>
-                                                        <td>
-                                                            {item.guaranteeDuration}
-                                                        </td>
-                                                        <td></td>
-
-                                                    </tr>)
-                                                })
+                                                </tr>)
+                                            })
                                     }
                                     hasPagination={false}
-
-                                    isShow={this.state.isFix || this.state.isSell}
                                 />
                                 {this.state.error.roles ? <FormText className="help-block"><span style={{ color: "red" }}>Vui lòng chọn thiết bị!</span></FormText> : ''}
                             </CardBody>

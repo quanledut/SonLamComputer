@@ -7,6 +7,6 @@ require('./accessory')(router)
 require('./role')(router)
 require('./service')(router)
 require('./user')(router)
-require('./computer')(router)
+// require('./computer')(router)
 
 module.exports = router;

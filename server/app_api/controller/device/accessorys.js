@@ -7,13 +7,6 @@ const createAggregate = (stringQuery) => {
     let aggreagte = Accessory
     .aggregate()
     .lookup({
-        from: 'computernames',
-        localField: 'computerName',
-        foreignField: '_id',
-        as: 'computerName'
-    })
-    .unwind('$computerName')
-    .lookup({
         from: 'accessorytypes',
         localField: 'type',
         foreignField: '_id',
@@ -25,11 +18,6 @@ const createAggregate = (stringQuery) => {
     if (stringQuery) {
         aggreagte = aggreagte.match({
             $or: [
-                {
-                    'computerName.name': {
-                        $regex: stringQuery, $options:"$i"
-                    }
-                },
                 {
                     'type.name': {
                         $regex: stringQuery, $options:"$i"
@@ -53,14 +41,12 @@ const find = async (req,res) => {
         //     .populate('serviceType')
         //     .exec()
         let {all, ...query} = req.query
-        if (query.computerName) query.computerName = mongoose.Types.ObjectId(query.computerName)
         if (query.type) query.type = mongoose.Types.ObjectId(query.type)
         if (all) {
             const accessory = await Accessory
                 .find({
                     ...query
                 })
-                .populate('computerName')
                 .populate('type')
                 .exec()
                 
@@ -101,7 +87,6 @@ const find = async (req,res) => {
 const findById = (req,res) => {
     Accessory
     .findById(req.params.accessoryId)
-    .populate('computerName')
     .populate('accessoryType')
     .populate('serviceType')
     .exec()
@@ -138,7 +123,7 @@ const findByName = (req,res) =>{
 
 const create = (req,res) => {
     Accessory
-    .findOne({computerName:req.body.computerName, type: req.body.type})
+    .findOne({type: req.body.type})
     .exec((err,ct)=>{
         if(ct){
             sendJsonResponse(res,500, {
@@ -149,7 +134,6 @@ const create = (req,res) => {
         }
         else{
             Accessory.create({
-                computerName: req.body.computerName,
                 type: req.body.type,
                 description: req.body.description,
                 image_url: req.body.image_url,

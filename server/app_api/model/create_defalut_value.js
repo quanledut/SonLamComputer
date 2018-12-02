@@ -10,8 +10,8 @@ const DeviceType = mongoose.model('DeviceType');
 const Device = mongoose.model('Device');
 const AccessoryType = mongoose.model('AccessoryType');
 const Accessory = mongoose.model('Accessory');
-const ComputerType = mongoose.model('ComputerType');
-const ComputerName = mongoose.model('ComputerName');
+// const ComputerType = mongoose.model('ComputerType');
+// const ComputerName = mongoose.model('ComputerName');
 const ServiceType = mongoose.model('ServiceType');
 
 const DATA = {
@@ -19,9 +19,9 @@ const DATA = {
 }
 
 const FAKE_IMAGE_NAME = {
-    "Bàn Phím": "keyboard",
-    "Màn Hình": "monitor",
-    "Pin": "battery",
+    "Bàn Phím": "accessory_keyboard",
+    "Màn Hình": "accessory_monitor",
+    "Pin": "accessory_battery",
 
 }
 
@@ -226,19 +226,19 @@ const create_other_data = async (data) => {
 
     await DeviceType.remove({})
     await Device.remove({})
-    await ComputerType.remove({})
-    await ComputerName.remove({})
+    // await ComputerType.remove({})
+    // await ComputerName.remove({})
     await ServiceType.remove({})
     await Accessory.remove({})
     await AccessoryType.remove({})
 
-    let computers = await _createComputer(data)
+    // let computers = await _createComputer(data)
     let deviceTypes = await _createDeviceType(data)
     let serviceTypes = await _createServiceType(data)
     let accessoryType = await _createAccessoryType(accessoryData)
     
     await _createDevice(data,deviceTypes);
-    await _createAccessory(accessoryData, computers, accessoryType)
+    await _createAccessory(accessoryData, [], accessoryType)
 
     return 
 }
@@ -326,18 +326,15 @@ const _createDevice = async (data, deviceTypes) => {
 const _createAccessory = async (data, computerName, accessoryType) => {
     for (let type in data) {
         const accessoryTypeId = accessoryType.filter(i => i.name == type)[0].id
-        for (let i = 0; i < computerName.length; i++) {
-            await Accessory.create({
-                computerName: computerName[i]._id,
-                type: accessoryTypeId,
-                description: "",
-                image_url: "/images/accessory_" + FAKE_IMAGE_NAME[type] + ".jpg",
-                amount: 100,
-                price: 0,
-                guaranteeDuration: 0
-            })
-        }
-    }
+        await Accessory.create({
+            type: accessoryTypeId,
+            description: "",
+            image_url: "/images/accessory_" + FAKE_IMAGE_NAME[type] + ".jpg",
+            amount: 100,
+            price: 0,
+            guaranteeDuration: 0
+        })
+}
 
 }
 

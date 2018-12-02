@@ -19,7 +19,7 @@ import navigation from '../../../_nav';
 import routes from '../../../routes';
 import DefaultFooter from './DefaultFooter';
 import DefaultHeader from './DefaultHeader';
-import { isLoggedIn } from '../../../utils/index';
+import { isLoggedIn, getCurrentUser } from '../../../utils/index';
 
 class DefaultLayout extends Component {
   constructor(props){
@@ -38,7 +38,7 @@ class DefaultLayout extends Component {
     }
     else
     {
-      var users = JSON.parse(localStorage.getItem("currentUser"));
+      var users = getCurrentUser();
       console.log(users)
       this.setState({
         user:users

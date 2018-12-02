@@ -2,7 +2,7 @@ import request from '../utils/request'
 
 const findAll = (query) => 
     request()
-        .get("/services", {
+        .get("/serviceSell", {
             params: {
                 ...query
             }
@@ -14,7 +14,7 @@ const findAll = (query) =>
 
 const deleteApi = (id) => 
     request()
-        .delete(`/services/${id}`)
+        .delete(`/serviceSell/${id}`)
         .then((response) => response.data)
         .catch((err) => {
             throw new Error(err.response.data.msg)
@@ -22,7 +22,7 @@ const deleteApi = (id) =>
 
 const addApi = (data) => 
 request()
-    .post("/services",data)
+    .post("/serviceSell",data)
     .then((response) => response.data)
     .catch((err) => {
         if (err.response) throw new Error(err.response.data.msg)
@@ -31,7 +31,7 @@ request()
 
 const findByIdApi = (id) => 
 request()
-    .get(`/services/${id}`)
+    .get(`/serviceSell/${id}`)
     .then((response) => response.data)
     .catch((err) => {
         throw new Error(err.response.data.msg)
@@ -39,7 +39,7 @@ request()
 
 const updateApi = (data) => 
 request()
-    .put(`/services/${data._id}`, data)
+    .put(`/serviceSell/${data._id}`, data)
     .then((response) => response.data)
     .catch((err) => {
         throw new Error(err.response.data.msg)

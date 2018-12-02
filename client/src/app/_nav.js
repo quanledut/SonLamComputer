@@ -45,16 +45,16 @@ export default {
       url: '/devices',
       icon: 'fa fa-laptop',
       children: [
-        {
-          name: 'Máy tính',
-          url: '/devices/computerName',
-          icon: 'fa fa-desktop',
-        },
-        {
-          name: 'Loại máy tính',
-          url: '/devices/computerType',
-          icon: 'icon-star',
-        },
+        // {
+        //   name: 'Máy tính',
+        //   url: '/devices/computerName',
+        //   icon: 'fa fa-desktop',
+        // },
+        // {
+        //   name: 'Loại máy tính',
+        //   url: '/devices/computerType',
+        //   icon: 'icon-star',
+        // },
         {
           name: 'Thiết bị',
           url: '/devices/device',

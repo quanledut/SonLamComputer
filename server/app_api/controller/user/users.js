@@ -317,8 +317,8 @@ const findClient = async (req, res) => {
 		const findServices = users.map(async (user, id) => {
 			return {
 				user,
-				services: Service.find({
-					customer: user._id
+				services: await Service.find({
+					customer: mongoose.Types.ObjectId(user.id)
 				}).exec(),
 			}
 		});

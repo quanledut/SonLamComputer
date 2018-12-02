@@ -23,7 +23,7 @@ userSchema.methods.generateJwt = function() {
     _id: this._id,
     username: this.username,
     email: this.email,
-    name: this.fullname,
+    fullname: this.fullname,
     roles: this.roles,
     exp: parseInt(expiry.getTime() / 1000),
   }, process.env.JWT_SECRET); // DO NOT KEEP YOUR SECRET IN THE CODE!

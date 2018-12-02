@@ -7,9 +7,6 @@ import {UserForm, Users } from './components/containers/user'
 import {RoleForm, Roles} from './components/containers/roles'
 
 import {DeviceTypeForm, DeviceTypes} from './components/containers/devicetype'
-import {ComputerTypeForm, ComputerType} from './components/containers/computertype'
-import {ComputerNameForm, ComputerName} from './components/containers/computername'
-import {ServiceTypeForm, ServiceTypes} from './components/containers/servicetype'
 import {DeviceNameForm, DeviceNames} from './components/containers/devicename'
 import {ServiceForm, Services} from './components/containers/services'
 import {PaymentForm, Payments} from './components/containers/payments'
@@ -52,17 +49,17 @@ const routes = [
   { path: '/devices/accessoryType/:id/edit', exact: true, name: 'Sửa loại linh kiện', component: AccessoryTypeForm },
 
 
-  { path: '/devices/computerType', exact: true, name: 'Loại máy tính', component: ComputerType },
-  { path: '/devices/computerType/new', exact: true, name: 'Tạo mới loại máy tính', component: ComputerTypeForm },
-  { path: '/devices/computerType/:id/edit', exact: true, name: 'Sửa loại máy tính', component: ComputerTypeForm },
+  // { path: '/devices/computerType', exact: true, name: 'Loại máy tính', component: ComputerType },
+  // { path: '/devices/computerType/new', exact: true, name: 'Tạo mới loại máy tính', component: ComputerTypeForm },
+  // { path: '/devices/computerType/:id/edit', exact: true, name: 'Sửa loại máy tính', component: ComputerTypeForm },
 
-  { path: '/devices/computerName', exact: true, name: 'Máy tính', component: ComputerName },
-  { path: '/devices/computerName/new', exact: true, name: 'Tạo mới máy tính', component: ComputerNameForm },
-  { path: '/devices/computerName/:id/edit', exact: true, name: 'Sửa máy tính', component: ComputerNameForm },
+  // { path: '/devices/computerName', exact: true, name: 'Máy tính', component: ComputerName },
+  // { path: '/devices/computerName/new', exact: true, name: 'Tạo mới máy tính', component: ComputerNameForm },
+  // { path: '/devices/computerName/:id/edit', exact: true, name: 'Sửa máy tính', component: ComputerNameForm },
 
-  { path: '/services/serviceType', exact: true, name: 'Loại dịch vụ', component: ServiceTypes },
-  { path: '/services/serviceType/new', exact: true, name: 'Tạo mới loại dịch vụ', component: ServiceTypeForm },
-  { path: '/services/serviceType/:id/edit', exact: true, name: 'Sửa loại dịch vụ', component: ServiceTypeForm },
+  // { path: '/services/serviceType', exact: true, name: 'Loại dịch vụ', component: ServiceTypes },
+  // { path: '/services/serviceType/new', exact: true, name: 'Tạo mới loại dịch vụ', component: ServiceTypeForm },
+  // { path: '/services/serviceType/:id/edit', exact: true, name: 'Sửa loại dịch vụ', component: ServiceTypeForm },
 
   { path: '/devices/device', exact: true, name: 'Thiết bị', component: DeviceNames },
   { path: '/devices/device/new', exact: true, name: 'Tạo mới thiết bị', component: DeviceNameForm },
