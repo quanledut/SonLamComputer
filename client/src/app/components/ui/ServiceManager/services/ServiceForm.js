@@ -132,13 +132,13 @@ class ServiceFormUI extends Component {
     }
 
     componentDidUpdate() {
-        // this.props.findAllcustomer((customers, err) => {
-        //     console.log("serviceTypes: ", customers, err)
-        //     if (!err) this.setState({
-        //         ...this.state,
-        //         customers: customers
-        //     })
-        // });
+        this.props.findAllcustomer((customers, err) => {
+            console.log("serviceTypes: ", customers, err)
+            if (!err) this.setState({
+                ...this.state,
+                customers: customers.map(i => i.user),
+            })
+        });
     }
     
     onClear = () => {
@@ -605,6 +605,7 @@ class ServiceFormUI extends Component {
                 <CustomerFormUI
                     isOpen={this.state.isOpen}
                     isClose={() => this.onClose()}
+                    link = {"/services/service/new"}
                 />
                 <Row>
                     <Col xs="12" md="9">

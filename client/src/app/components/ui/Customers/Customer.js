@@ -34,59 +34,25 @@ const columns = [
 const columns2 = [
     {
         Header: "Mã hóa đơn",
-        //   id: "customer_no",
-        //   accessor: d => d.customer_no
-        accessor: "saleorder_no"
+        accessor: "_id"
     },
     {
         Header: "Thời gian",
-        accessor: "saleOrderDate"
+        accessor: "date"
     },
     {
         Header: "Loại",
-        accessor:'saleOrderType'
+        accessor:'serviceType.name'
     },
     {
         Header: "Người bán",
-        accessor: "employeeSale"
+        accessor: "staff.fullname"
     },
     {
         Header: "Tổng bán",
-        accessor: "totalSale"
+        accessor: "totalPrice"
     },
 ];
-
-const data = [
-    {
-        customer_no: 'KH-00001.18',
-        fullname: 'Nguyễn Khánh Huy',
-        phone: '0354522248',
-        totalSale: '100.000.000đ'
-    },
-    {
-        customer_no: 'KH-00002.18',
-        fullname: 'Huy',
-        phone: '0354522248',
-        totalSale: '100.000.000đ'
-    }
-]
-
-const data2 = [
-    {
-        saleorder_no: 'ĐBH-00001.18',
-        saleOrderDate: '20/11/2018',
-        saleOrderType:'Mua bán',
-        employeeSale: 'Lê Phước Thành Sơn',
-        totalSale: '100.000.000đ'
-    },
-    {
-        saleorder_no: 'ĐBH-00002.18',
-        saleOrderDate: '21/11/2018',
-        saleOrderType:'Sửa chữa',
-        employeeSale: 'Nguyễn Khánh Huy',
-        totalSale: '100.000.000đ'
-    }
-]
 
 class Customers extends Component {
     constructor(props) {
@@ -96,7 +62,9 @@ class Customers extends Component {
         this.state = {
             activeTab: '1',
             isOpen: false,
-            customers: []
+            customers: [],
+            services:[],
+            rowInfo : {}
         };
     }
 
@@ -121,16 +89,17 @@ class Customers extends Component {
                     }, 0) : 0;
 
                     return item;
-                })
+                }),
             })
         });
     }
 
     showPopUp = (state) => {
-        console.log(state)
+        console.log('rowInfo',state)
         this.setState({
             ...this.state,
-            isOpen : true
+            isOpen : true,
+            rowInfo : state.original
         }
         )
     }
@@ -149,6 +118,7 @@ class Customers extends Component {
             <SaleOrder 
                 isOpen = {this.state.isOpen}
                 isClose = {() => this.onClose()}
+                info = {this.state.rowInfo}
             />
                 <Row>
                     <Col>
@@ -177,6 +147,7 @@ class Customers extends Component {
                                     //showPagination={false}
                                     SubComponent={row => {
                                         console.log(row)
+                                        console.log('aaaa',row.original.services)
                                         return (
                                             <div style={{ padding: "20px" }}>
                                                 <Nav tabs>
@@ -200,7 +171,6 @@ class Customers extends Component {
                                                 </Nav>
                                                 <TabContent activeTab={this.state.activeTab}>
                                                     <TabPane tabId="1">
-
                                                         <Form>
                                                             <FormGroup row className="my-0">
                                                                 <Col xs="5">
@@ -285,16 +255,11 @@ class Customers extends Component {
                                                             >
                                                                 <i className="fa fa-edit"> Ngưng hoạt động </i>
                                                             </Link> */}
-
-                                                            {/* <DeleteFrom 
-                                                    name={user.username} 
-                                                    id={user._id}
-                                                    /> */}
                                                         </div>
                                                     </TabPane>
                                                     <TabPane tabId="2">
                                                         <ReactTable
-                                                            data={data2}
+                                                            data={row.original.services}
                                                             className="-striped -highlight"
                                                             noDataText="Không có dữ liệu!"
                                                             columns={columns2}

@@ -124,7 +124,7 @@ class SaleOrderFormUI extends Component {
             console.log("serviceTypes: ", customers, err)
             if (!err) this.setState({
                 ...this.state,
-                customers: customers
+                customers: customers.map(i => i.user),
             })
         });
     }
@@ -447,7 +447,7 @@ class SaleOrderFormUI extends Component {
             }
         });
     };
-        
+
     render() {
         if (this.state.isRedirect) {
             return (
@@ -476,6 +476,7 @@ class SaleOrderFormUI extends Component {
                 <CustomerFormUI
                     isOpen={this.state.isOpen}
                     isClose={() => this.onClose()}
+                    link={'/saleorders/new'}
                 />
                 <Row>
                     <Col xs="12" md="9">

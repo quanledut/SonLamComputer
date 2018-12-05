@@ -211,12 +211,6 @@ class PopUpCustomerFormUI extends Component {
     }
 
     render() {
-        if (this.state.isRedirect) {
-            return (
-                <Redirect to="/services/service/new" />
-            )
-        }
-
         return (
             <Popup open={this.props.isOpen} modal>
                 {close => (
@@ -232,8 +226,8 @@ class PopUpCustomerFormUI extends Component {
                                     isLoading={this.state.modal.isLoading}
                                     title={this.state.modal.title}
                                     content={this.state.modal.content}
-                                    onOkay={this._closeModal}
-                                    onCancel={this._closeModal} >
+                                    onOkay={this.state.isRedirect ? ()=>{this._closeModal();this.onClear();close();this.onClose()} : ()=>{this._closeModal()}}
+                                    onCancel={this.state.isRedirect ? ()=>{this._closeModal();this.onClear();close();this.onClose()} : ()=>{this._closeModal()}} >
                                 </Modal>
                                 <Row>
                                     <Col xs="12">
