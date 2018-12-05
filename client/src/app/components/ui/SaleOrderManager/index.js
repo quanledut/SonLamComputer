@@ -51,7 +51,6 @@ class SaleOrderUI extends Component {
 
     render() {
         var mapList = this.props.todos;
-        
         var listItem = mapList.map((item, index) => {
             const date = new Date(item.date);
             return (

@@ -28,7 +28,8 @@ class DefaultLayout extends Component {
       user: {
         name:'',
         _id:'',
-        username:''
+        username:'',
+        fullname:''
       }
     }
   }

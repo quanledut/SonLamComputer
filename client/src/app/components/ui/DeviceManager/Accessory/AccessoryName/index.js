@@ -43,7 +43,7 @@ class AccessoryNameUI extends Component {
                 ...this.state,
                 ...result
             })
-            // console.log(result)
+            console.log(result)
         });
 
     }
@@ -54,7 +54,7 @@ class AccessoryNameUI extends Component {
             return (
                 <tr key = {index}>
                     <td>{item.type.name}</td>
-                    <td>{item.computerName.name}</td>
+                    <td></td>
                     <td>{item.amount}</td>
                     <td>{item.price}</td>
                     <td>{item.guaranteeDuration}</td>

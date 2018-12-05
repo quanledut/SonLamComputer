@@ -319,7 +319,10 @@ const findClient = async (req, res) => {
 				user,
 				services: await Service.find({
 					customer: mongoose.Types.ObjectId(user.id)
-				}).exec(),
+				}).populate('customer')
+				.populate('serviceType')
+				.populate('staff')
+				.exec(),
 			}
 		});
 
