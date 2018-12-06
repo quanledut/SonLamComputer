@@ -173,68 +173,68 @@ class Customers extends Component {
                                                     <TabPane tabId="1">
                                                         <Form>
                                                             <FormGroup row className="my-0">
-                                                                <Col xs="5">
+                                                                <Col xs="6">
                                                                     <FormGroup row className="my-0">
-                                                                        <Col xs="5">
+                                                                        <Col xs="4">
                                                                             <Label>Mã khách hàng</Label>
                                                                         </Col>
-                                                                        <Col xs="5">
+                                                                        <Col xs="8">
                                                                             <Label>{row.original.user.code}</Label>
                                                                         </Col>
                                                                     </FormGroup>
                                                                 </Col>
-                                                                <Col xs="5">
+                                                                <Col xs="6">
                                                                     <FormGroup row className="my-0">
-                                                                        <Col xs="5">
+                                                                        <Col xs="4">
                                                                             <Label>Điện thoại</Label>
                                                                         </Col>
-                                                                        <Col xs="5">
+                                                                        <Col xs="8">
                                                                             <Label>{row.original.user.phone}</Label>
                                                                         </Col>
                                                                     </FormGroup>
                                                                 </Col>
                                                             </FormGroup>
                                                             <FormGroup row className="my-0">
-                                                                <Col xs="5">
+                                                                <Col xs="6">
                                                                     <FormGroup row className="my-0">
-                                                                        <Col xs="5">
+                                                                        <Col xs="4">
                                                                             <Label>Tên khách hàng</Label>
                                                                         </Col>
-                                                                        <Col xs="5">
+                                                                        <Col xs="8">
                                                                             <Label>{row.original.user.fullname}</Label>
                                                                         </Col>
                                                                     </FormGroup>
                                                                 </Col>
-                                                                <Col xs="5">
+                                                                <Col xs="6">
                                                                     <FormGroup row className="my-0">
-                                                                        <Col xs="5">
+                                                                        <Col xs="4">
                                                                             <Label>Điạ chỉ</Label>
                                                                         </Col>
-                                                                        <Col xs="5">
+                                                                        <Col xs="8">
                                                                             <Label>{row.original.user.address}</Label>
                                                                         </Col>
                                                                     </FormGroup>
                                                                 </Col>
                                                             </FormGroup>
                                                             <FormGroup row className="my-0">
-                                                                <Col xs="5">
+                                                                <Col xs="6">
                                                                     <FormGroup row className="my-0">
-                                                                        <Col xs="5">
+                                                                        <Col xs="4">
                                                                             <Label>Email</Label>
                                                                         </Col>
-                                                                        <Col xs="5">
+                                                                        <Col xs="8">
                                                                             <Label>{row.original.user.email}</Label>
                                                                         </Col>
                                                                     </FormGroup>
                                                                 </Col>
                                                             </FormGroup>
                                                             <FormGroup row className="my-0">
-                                                                <Col xs="5">
+                                                                <Col xs="6">
                                                                     <FormGroup row className="my-0">
-                                                                        <Col xs="5">
+                                                                        <Col xs="4">
                                                                             <Label>Ngày tạo</Label>
                                                                         </Col>
-                                                                        <Col xs="5">
+                                                                        <Col xs="8">
                                                                             <Label>{row.original.user.created_time}</Label>
                                                                         </Col>
                                                                     </FormGroup>

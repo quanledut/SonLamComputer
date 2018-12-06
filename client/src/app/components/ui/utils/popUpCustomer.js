@@ -212,7 +212,7 @@ class PopUpCustomerFormUI extends Component {
 
     render() {
         return (
-            <Popup open={this.props.isOpen} modal>
+            <Popup open={this.props.isOpen} closeOnDocumentClick onClose={() => {this.onClose()}} modal>
                 {close => (
                     <div className="scrollspy" id="spy" data-spy="scroll" style={{ position: 'relative', height: '500px', overflow: 'auto', marginTop: '.5rem' }}>
                         <div className="modal1">
