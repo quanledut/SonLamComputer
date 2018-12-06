@@ -76,9 +76,9 @@ class PopUpSaleOrder extends Component {
         }
         
         return (
-            <Popup open={this.props.isOpen} modal>
+            <Popup open={this.props.isOpen} closeOnDocumentClick onClose={() => {this.onClose()}} modal>
                 {close => (
-                    <div className="scrollspy" id="spy" data-spy="scroll" style={{ position: 'relative',height: '500px', overflow: 'auto', marginTop: '.5rem' }}>
+                    <div className="scrollspy" id="spy" data-spy="scroll" style={{ position: 'relative',height: '35em', overflow: 'auto', marginTop: '.5rem' }}>
                         <div className="modal1">
                             <a className="close" onClick={() => { this.onClose(); close() }}>
                                 &times;
@@ -89,20 +89,20 @@ class PopUpSaleOrder extends Component {
                                     <FormGroup row className="my-0">
                                         <Col xs="6">
                                             <FormGroup row className="my-0">
-                                                <Col xs="5">
-                                                    <Label>Mã khách hàng</Label>
+                                                <Col xs="4">
+                                                    <Label>Mã KH</Label>
                                                 </Col>
-                                                <Col xs="5">
+                                                <Col xs="8">
                                                     <Label>{this.props.info.customer.code}</Label>
                                                 </Col>
                                             </FormGroup>
                                         </Col>
                                         <Col xs="6">
                                             <FormGroup row className="my-0">
-                                                <Col xs="5">
+                                                <Col xs="4">
                                                     <Label>Điện thoại</Label>
                                                 </Col>
-                                                <Col xs="5">
+                                                <Col xs="8">
                                                     <Label>{this.props.info.customer.phone}</Label>
                                                 </Col>
                                             </FormGroup>
@@ -111,20 +111,20 @@ class PopUpSaleOrder extends Component {
                                     <FormGroup row className="my-0">
                                         <Col xs="6">
                                             <FormGroup row className="my-0">
-                                                <Col xs="5">
+                                                <Col xs="4">
                                                     <Label>Tên KH</Label>
                                                 </Col>
-                                                <Col xs="5">
+                                                <Col xs="8">
                                                     <Label>{this.props.info.customer.fullname}</Label>
                                                 </Col>
                                             </FormGroup>
                                         </Col>
                                         <Col xs="6">
                                             <FormGroup row className="my-0">
-                                                <Col xs="5">
+                                                <Col xs="4">
                                                     <Label>Điạ chỉ</Label>
                                                 </Col>
-                                                <Col xs="5">
+                                                <Col xs="8">
                                                     <Label>{this.props.info.customer.address}</Label>
                                                 </Col>
                                             </FormGroup>
@@ -133,20 +133,20 @@ class PopUpSaleOrder extends Component {
                                     <FormGroup row className="my-0">
                                         <Col xs="6">
                                             <FormGroup row className="my-0">
-                                                <Col xs="5">
+                                                <Col xs="4">
                                                     <Label>Giới tính</Label>
                                                 </Col>
-                                                <Col xs="5">
+                                                <Col xs="8">
                                                     <Label>{this.props.info.customer.gender}</Label>
                                                 </Col>
                                             </FormGroup>
                                         </Col>
                                         <Col xs="6">
                                             <FormGroup row className="my-0">
-                                                <Col xs="5">
+                                                <Col xs="4">
                                                     <Label>Email</Label>
                                                 </Col>
-                                                <Col xs="5">
+                                                <Col xs="8">
                                                     <Label>{this.props.info.customer.email}</Label>
                                                 </Col>
                                             </FormGroup>
@@ -155,20 +155,20 @@ class PopUpSaleOrder extends Component {
                                     <FormGroup row className="my-0">
                                         <Col xs="6">
                                             <FormGroup row className="my-0">
-                                                <Col xs="5">
+                                                <Col xs="4">
                                                     <Label>Người tạo</Label>
                                                 </Col>
-                                                <Col xs="5">
+                                                <Col xs="8">
                                                     <Label>{this.props.info.staff.fullname}</Label>
                                                 </Col>
                                             </FormGroup>
                                         </Col>
                                         <Col xs="6">
                                             <FormGroup row className="my-0">
-                                                <Col xs="5">
+                                                <Col xs="4">
                                                     <Label>Ngày tạo</Label>
                                                 </Col>
-                                                <Col xs="5">
+                                                <Col xs="8">
                                                     <Label>{this.props.info.date}</Label>
                                                 </Col>
                                             </FormGroup>

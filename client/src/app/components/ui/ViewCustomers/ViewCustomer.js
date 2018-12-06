@@ -2,13 +2,12 @@ import React, { Component } from 'react';
 import { Card, CardBody, CardHeader, Col, Row, Nav, NavItem, NavLink, TabPane, TabContent, Form, FormGroup, Label, Input } from 'reactstrap';
 import { DeleteFrom, SaleOrder } from '../../containers/customer';
 import { Link } from 'react-router-dom';
-import { SearchFrom } from './../../containers/user';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import CustomTable from '../utils/Table';
 import ReactTable from "react-table";
 import "react-table/react-table.css";
 import classnames from 'classnames';
+import { getCurrentUser } from '../../../utils';
 
 const columns = [
     {
@@ -121,16 +120,17 @@ class Customers extends Component {
         //         })
         //     })
         // });
-        var users = JSON.parse(localStorage.getItem("currentUser"));
-        this.props.getById(users._id, (data) => {
-            console.log("Data: ", data)
-            if (data) {
-                this.setState({
-                    ...this.state,
-                    form: data
-                })
-            }
-        })
+        const currentUser = getCurrentUser();
+        console.log("Current user",currentUser)
+        // this.props.getById(users._id, (data) => {
+        //     console.log("Data: ", data)
+        //     if (data) {
+        //         this.setState({
+        //             ...this.state,
+        //             form: data
+        //         })
+        //     }
+        // })
     }
 
     showPopUp = (state) => {
@@ -152,10 +152,10 @@ class Customers extends Component {
     render() {
         return (
             <div className="animated fadeIn">
-                <SaleOrder
+                {/* <SaleOrder
                     isOpen={this.state.isOpen}
                     isClose={() => this.onClose()}
-                />
+                /> */}
                 <Row>
                     <Col>
                         <Card>
