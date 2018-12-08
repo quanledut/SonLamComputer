@@ -47,6 +47,7 @@ const DEFAULT_PASSWORD_FORM = {
 class UserFormUI extends Component {
     constructor(props) {
         super(props);
+        console.log(this.props)
 
         this.state = {
             form: {...DEFAULT_FORM},
@@ -63,14 +64,14 @@ class UserFormUI extends Component {
             isEdit: false,
             isChangePassword: false,
             formErrors: {email: '',password: '', gender:'',select:'',fullname:'',phone:'',retype_password:'', newPassword:''},
-            emailValid: false,
-            passwordValid: false,
-            genderValid: false,
-            selectValid: false,
-            fullnameValid: false,
-            phoneValid: false,
-            newPasswordValid: false,
-            retype_passwordValid:false,
+            emailValid: true,
+            passwordValid: true,
+            genderValid: true,
+            selectValid: true,
+            fullnameValid: true,
+            phoneValid: true,
+            newPasswordValid: true,
+            retype_passwordValid:true,
             formValid: true
         };
 
@@ -114,13 +115,16 @@ class UserFormUI extends Component {
             })
         }
 
-        this.props.findAllRoles((roles, err) => {
-            console.log(roles, err)
-            if (!err) this.setState({
-                ...this.state,
-                roles
-            })
-        })
+        if (!this.props.isSelfEdit) {
+            this.props.findAllRoles((roles, err) => {
+                console.log(roles, err)
+                if (!err) this.setState({
+                    ...this.state,
+                    roles
+                })
+            })    
+        }
+
     }
 
     onClear = () =>{
@@ -460,6 +464,7 @@ class UserFormUI extends Component {
         } else {
             delete this.state.error[name]
         }
+        console.log(this.state);
     }
 
 
@@ -648,30 +653,36 @@ class UserFormUI extends Component {
                                                 type="text" id="nf-phone" name="phone" placeholder="Enter Phone.." autoComplete="current-password" />
                                             {this.state.formErrors.phone ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.phone}</span></FormText> : ''} 
                                         </FormGroup>
-                                        {this.state.error.roles ? <FormText className="help-block"><span style={{color: "red"}}>Xin hãy nhập quyền hợp lệ</span></FormText> : ''} 
-                                        <CustomTable 
-                                            thead = {
-                                                <tr>
-                                                    <th>Quyền</th>
-                                                    <td><Button onClick={this._addRole}><i className="fa fa-plus"></i></Button></td>
-                                                </tr>
-                                            }
-    
-                                            tbody = {this.state.form.roles.map((item, key) => {
-                                                return (
-                                                    <tr key={key}>
-                                                        <td>
-                                                            <Input value={item} onChange={(e) => this._handleRole(e, key)} type="select" name="collectionName" id="exampleSelect">
-                                                                <option value="None">Hãy chọn quyền</option>
-                                                                {this.state.roles.map((r, id)=> <option key={id} value={r._id}>{r.name}</option>)}
-                                                            </Input>
-                                                        </td>
-                                                        <td><Button onClick={(e) => this._deleteRole(e, key)}>Delete</Button></td>
-                                                    </tr>
-                                                )
-                                            })}
-                                            hasPagination = {false}
-                                    />
+                                        {
+                                            (!this.props.isSelfEdit) &&
+                                            <FormGroup>
+                                            {this.state.error.roles ? <FormText className="help-block"><span style={{color: "red"}}>Xin hãy nhập quyền hợp lệ</span></FormText> : ''} 
+                                                <CustomTable 
+                                                    thead = {
+                                                        <tr>
+                                                            <th>Quyền</th>
+                                                            <td><Button onClick={this._addRole}><i className="fa fa-plus"></i></Button></td>
+                                                        </tr>
+                                                    }
+            
+                                                    tbody = {this.state.form.roles.map((item, key) => {
+                                                        return (
+                                                            <tr key={key}>
+                                                                <td>
+                                                                    <Input value={item} onChange={(e) => this._handleRole(e, key)} type="select" name="collectionName" id="exampleSelect">
+                                                                        <option value="None">Hãy chọn quyền</option>
+                                                                        {this.state.roles.map((r, id)=> <option key={id} value={r._id}>{r.name}</option>)}
+                                                                    </Input>
+                                                                </td>
+                                                                <td><Button onClick={(e) => this._deleteRole(e, key)}>Delete</Button></td>
+                                                            </tr>
+                                                        )
+                                                    })}
+                                                    hasPagination = {false}
+                                                />
+                                            </FormGroup>
+                                        }
+                                       
                                     </Form>
                                 </CardBody>
                                 <CardFooter>

@@ -81,14 +81,15 @@ class DefaultLayout extends Component {
             <Container fluid>
               <Switch>
                 { isLoggedIn() ? routerLink.map((route, idx) => {
-                    return route.component ? (<Route key={idx} path={route.path} exact={route.exact} name={route.name} render={props => (
-                        <route.component {...props} />
+                    const {path, exact, name, component, ...remainning} = route;
+                    return route.component ? (<Route key={idx} path={path} exact={exact} name={name} render={props => (
+                        <route.component {...props}  {...remainning} />
                       )} />)
                       : (null);
                   },
                 ) : (null)}
-                {/* { isLoggedIn() ? isUser ? <Redirect from="/" to="/viewcustomers" /> : <Redirect from="/" to="/dashboard" /> 
-                : <Redirect to="/login" />} */}
+                { isLoggedIn() ? isUser ? <Redirect from="/" to="/viewcustomers" /> : <Redirect from="/" to="/dashboard" /> 
+                : <Redirect to="/login" />}
               </Switch>
             </Container>
           </main>

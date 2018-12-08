@@ -9,7 +9,7 @@ const Service = mongoose.model("Service");
 const { sendJsonResponse } = require ('../utils');
 
 const register = async (req, res)=> {
-	if (!req.body.username || !req.body.password || !req.body.email) {
+	if (!req.body.username || !req.body.password || !req.body.email || !req.body.fullname || !user.roles) {
 		res.status(400).json("Username, password, email are required");
 		return;
 	} 
@@ -21,7 +21,7 @@ const register = async (req, res)=> {
 	
 		const loginInfoResult = await loginInfo.save();
 
-		let userRole = await Role.find({
+		let userRole = await Role.findOne({
 			name: "user"
 		}).exec();
 

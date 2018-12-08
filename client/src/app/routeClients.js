@@ -13,7 +13,7 @@ function Loading() {
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
   { path: '/', exact: true, name: 'Home', component: DefaultLayout },
-  { path: '/usermanager/:id/edit/:isChangePass', name: 'Sửa khách hàng', component: UserForm },
+  { path: '/usermanager/:id/edit/:isChangePass', name: 'Sửa khách hàng', component: UserForm, isSelfEdit: true },
 
   { path: '/viewcustomers', exact: true, name: 'Thông tin cá nhân', component: ViewCustomer },
 ];
