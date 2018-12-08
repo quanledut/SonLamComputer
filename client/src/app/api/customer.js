@@ -40,5 +40,13 @@ request()
         console.log(err); throw new Error(err.response.data.msg)
     });
 
-export {findAllApi, deleteApi, addApi, findByIdApi, updateApi}
+const getCurrentUserApi = () => 
+    request()
+        .get("/currentInfo")
+        .then((response) => response.data)
+        .catch((err) => {
+            console.log(err); throw new Error(err.response.data.msg)
+        });
+
+export {findAllApi, deleteApi, addApi, findByIdApi, updateApi, getCurrentUserApi}
   

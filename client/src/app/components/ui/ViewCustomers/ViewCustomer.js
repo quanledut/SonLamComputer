@@ -31,23 +31,23 @@ const columns = [
 const columns2 = [
     {
         Header: "Mã hóa đơn",
-        accessor: "saleorder_no"
+        accessor: "_id"
     },
     {
         Header: "Thời gian",
-        accessor: "saleOrderDate"
+        accessor: "date"
     },
     {
         Header: "Loại",
-        accessor: 'saleOrderType'
+        accessor: 'serviceType.name'
     },
     {
         Header: "Người bán",
-        accessor: "employeeSale"
+        accessor: "staff.fullname"
     },
     {
         Header: "Tổng bán",
-        accessor: "totalSale"
+        accessor: "totalPrice"
     },
 ];
 
@@ -92,7 +92,17 @@ class Customers extends Component {
             activeTab: '1',
             isOpen: false,
             customers: [],
-            form: {}
+            form: {
+                user: {
+                    code: '',
+                    fullname: '',
+                    created_time: '',
+                    address: '',
+                    phone: '',
+                },
+                services: [],
+            },
+            rowInfo: {},
         };
     }
 
@@ -108,36 +118,25 @@ class Customers extends Component {
         const isEmpty = (obj) => {
             return Object.keys(obj).length === 0 && obj.constructor === Object
         }
-        // this.props.findAll((result, err) => {
-        //     console.log(result, err)
-        //     this.setState({
-        //         customers: result.map(item => {
-        //             item.totalSale = !isEmpty(item.services) ? item.services.reduce((sum, item1) => {
-        //                 return sum + item1.totalPrice
-        //             }, 0) : 0;
 
-        //             return item;
-        //         })
-        //     })
-        // });
         const currentUser = getCurrentUser();
-        console.log("Current user",currentUser)
-        // this.props.getById(users._id, (data) => {
-        //     console.log("Data: ", data)
-        //     if (data) {
-        //         this.setState({
-        //             ...this.state,
-        //             form: data
-        //         })
-        //     }
-        // })
+        this.props.getCurrentInfo((data, err) => {
+            console.log("Data: ", data)
+            if (data) {
+                this.setState({
+                    ...this.state,
+                    form: data[0]
+                })
+            }
+        })
     }
 
     showPopUp = (state) => {
-        console.log(state)
+        console.log('rowInfo', state)
         this.setState({
             ...this.state,
-            isOpen: true
+            isOpen: true,
+            rowInfo: state.original
         }
         )
     }
@@ -152,10 +151,11 @@ class Customers extends Component {
     render() {
         return (
             <div className="animated fadeIn">
-                {/* <SaleOrder
+                <SaleOrder
                     isOpen={this.state.isOpen}
                     isClose={() => this.onClose()}
-                /> */}
+                    info={this.state.rowInfo}
+                />
                 <Row>
                     <Col>
                         <Card>
@@ -186,69 +186,69 @@ class Customers extends Component {
                                     <TabPane tabId="1">
                                         <Form>
                                             <FormGroup row className="my-0">
-                                                <Col xs="5">
+                                                <Col xs="6">
                                                     <FormGroup row className="my-0">
                                                         <Col xs="5">
                                                             <Label>Mã khách hàng</Label>
                                                         </Col>
-                                                        <Col xs="5">
-                                                            <Label>{this.state.form.code}</Label>
+                                                        <Col xs="7">
+                                                            <Label>{this.state.form.user.code}</Label>
                                                         </Col>
                                                     </FormGroup>
                                                 </Col>
-                                                <Col xs="5">
+                                                <Col xs="6">
                                                     <FormGroup row className="my-0">
                                                         <Col xs="5">
                                                             <Label>Điện thoại</Label>
                                                         </Col>
-                                                        <Col xs="5">
-                                                            <Label>{this.state.form.phone}</Label>
+                                                        <Col xs="7">
+                                                            <Label>{this.state.form.user.phone}</Label>
                                                         </Col>
                                                     </FormGroup>
                                                 </Col>
                                             </FormGroup>
                                             <FormGroup row className="my-0">
-                                                <Col xs="5">
+                                                <Col xs="6">
                                                     <FormGroup row className="my-0">
                                                         <Col xs="5">
                                                             <Label>Tên khách hàng</Label>
                                                         </Col>
-                                                        <Col xs="5">
-                                                            <Label>{this.state.form.fullname}</Label>
+                                                        <Col xs="7">
+                                                            <Label>{this.state.form.user.fullname}</Label>
                                                         </Col>
                                                     </FormGroup>
                                                 </Col>
-                                                <Col xs="5">
+                                                <Col xs="6">
                                                     <FormGroup row className="my-0">
                                                         <Col xs="5">
                                                             <Label>Điạ chỉ</Label>
                                                         </Col>
-                                                        <Col xs="5">
-                                                            <Label>{this.state.form.address}</Label>
+                                                        <Col xs="7">
+                                                            <Label>{this.state.form.user.address}</Label>
                                                         </Col>
                                                     </FormGroup>
                                                 </Col>
                                             </FormGroup>
                                             <FormGroup row className="my-0">
-                                                <Col xs="5">
+                                                <Col xs="6">
                                                     <FormGroup row className="my-0">
                                                         <Col xs="5">
                                                             <Label>Email</Label>
                                                         </Col>
-                                                        <Col xs="5">
-                                                            <Label>{this.state.form.email}</Label>
+                                                        <Col xs="7">
+                                                            <Label>{this.state.form.user.email}</Label>
                                                         </Col>
                                                     </FormGroup>
                                                 </Col>
                                             </FormGroup>
                                             <FormGroup row className="my-0">
-                                                <Col xs="5">
+                                                <Col xs="6">
                                                     <FormGroup row className="my-0">
                                                         <Col xs="5">
                                                             <Label>Ngày tạo</Label>
                                                         </Col>
-                                                        <Col xs="5">
-                                                            <Label>{this.state.form.created_time}</Label>
+                                                        <Col xs="7">
+                                                            <Label>{this.state.form.user.created_time}</Label>
                                                         </Col>
                                                     </FormGroup>
                                                 </Col>
@@ -256,7 +256,7 @@ class Customers extends Component {
                                         </Form>
                                         <div>
                                             <Link
-                                                to={`/usermanager/${this.state.form._id}/edit/0`}
+                                                to={`/usermanager/${this.state.form.user._id}/edit/0`}
                                                 className="btn btn-primary"
                                             >
                                                 <i className="fa fa-edit"> Sửa </i>
@@ -265,7 +265,7 @@ class Customers extends Component {
                                     </TabPane>
                                     <TabPane tabId="2">
                                         <ReactTable
-                                            data={data2}
+                                            data={this.state.form.services}
                                             className="-striped -highlight"
                                             noDataText="Không có dữ liệu!"
                                             columns={columns2}

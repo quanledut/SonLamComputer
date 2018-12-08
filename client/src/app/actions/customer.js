@@ -18,6 +18,9 @@ const FIND_BY_ID_REQUEST = _PREFIX + "_FIND_BY_ID_REQUEST";
 
 const SEARCH_REQUEST = _PREFIX + "_SEARCH_REQUEST_REQUEST";
 
+const FIND_ALL_CURRENT_USER_REQUEST = _PREFIX + "_FIND_ALL_CURRENT_USER_REQUEST"
+const FIND_ALL_CURRENT_USER_REQUEST_SUCCESS = FIND_ALL_CURRENT_USER_REQUEST + "_SUCCESS"
+
 export const CONSTANTS = {
     FIND_ALL_REQUEST,
     FIND_ALL_REQUEST_SUCCESS,
@@ -36,6 +39,9 @@ export const CONSTANTS = {
 
     FIND_BY_ID_REQUEST,
     SEARCH_REQUEST,
+
+    FIND_ALL_CURRENT_USER_REQUEST,
+    FIND_ALL_CURRENT_USER_REQUEST_SUCCESS
 }
 
 export function findAllRequest(cb) {
@@ -88,4 +94,12 @@ export function findByIdRequest(id, cb) {
 //---------------------------------------------------------------------
 export function searchRequest(keyword) {
     return {type: CONSTANTS.SEARCH_REQUEST, keyword}
+}
+
+export function findCurrentUserInfo(cb) {
+    return {type: CONSTANTS.FIND_ALL_CURRENT_USER_REQUEST, cb}
+}
+
+export function findCurrentUserInfoSuccess(data) {
+    return {type: CONSTANTS.FIND_ALL_CURRENT_USER_REQUEST_SUCCESS, data}
 }

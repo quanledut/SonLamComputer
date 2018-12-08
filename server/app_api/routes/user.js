@@ -11,7 +11,7 @@ const checkPermissionForCollection = permission.checkPermissionForCollection;
 const ctrlUser = require('../controller/user/users');
 
 const route_user = (router) => {
-    const checkPermission = checkPermissionForCollection("UserInfo")
+    const checkPermission = checkPermissionForCollection("UserInfo", 'userId')
     /* User Api */
     router.post('/users/register', ctrlUser.register);
     router.post('/users/login', ctrlUser.login);
@@ -24,6 +24,8 @@ const route_user = (router) => {
 
     router.get('/customers', auth, checkPermission(permission.type.READ), ctrlUser.findClient);
     router.post('/customers', auth, checkPermission(permission.type.CREATE), ctrlUser.createClient);
+
+    router.get('/currentInfo', auth, ctrlUser.getCurrentInfo);
 
 }
 
