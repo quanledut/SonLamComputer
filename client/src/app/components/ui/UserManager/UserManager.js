@@ -24,7 +24,7 @@ class UserManager extends Component {
         var userItem = userList.map((user, index) => {
             return (
                 <tr key = {index}>
-                    <td>{user.loginInfo.username}</td>
+                    <td>{user.fullname}</td>
                     <td>{user.created_time}</td>
                     <td>{user.roles.reduce((result, item, id) => {
                         if (id === 0) {
@@ -49,7 +49,7 @@ class UserManager extends Component {
                             </Link>
 
                             <DeleteFrom 
-                                name={user.loginInfo.username} 
+                                name={user.fullname} 
                                 id={user._id}
                             />
                         </div>
