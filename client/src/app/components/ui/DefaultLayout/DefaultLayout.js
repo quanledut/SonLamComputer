@@ -29,7 +29,8 @@ class DefaultLayout extends Component {
         name:'',
         _id:'',
         username:'',
-        fullname:''
+        fullname:'',
+        roles: []
       }
     }
   }
@@ -48,6 +49,23 @@ class DefaultLayout extends Component {
   }
 
   render() {
+    var isUser = false;
+    var routerLink = routes.filter((router) => {
+      return router.path === '/viewcustomers' ? router: null
+    });
+    var navigationLinkItems = navigation.items.filter((item) => {
+      return item.url === '/viewcustomers' ? item: null
+    })
+    var navigationLinks = {items : navigationLinkItems};
+    isUser = this.state.user.roles.reduce((isUser, item) => 
+      {if(isUser) return true; if(item.name === 'user') return true},false);
+    console.log('isuser', isUser)
+    if(!isUser)
+    {
+      routerLink = routes;
+      navigationLinks = navigation;
+    }
+    console.log('userLink', routerLink)
     return (
       <div className="app">
         <AppHeader fixed>
@@ -57,22 +75,22 @@ class DefaultLayout extends Component {
           <AppSidebar fixed display="lg">
             <AppSidebarHeader/>
             <AppSidebarForm />
-            <AppSidebarNav navConfig={navigation} {...this.props} />
+            <AppSidebarNav navConfig={navigationLinks} {...this.props} />
             <AppSidebarFooter />
             <AppSidebarMinimizer />
           </AppSidebar>
           <main className="main">
-            <AppBreadcrumb appRoutes={routes}/>
+            <AppBreadcrumb appRoutes={routerLink}/>
             <Container fluid>
               <Switch>
-                { isLoggedIn() ? routes.map((route, idx) => {
+                { isLoggedIn() ? routerLink.map((route, idx) => {
                     return route.component ? (<Route key={idx} path={route.path} exact={route.exact} name={route.name} render={props => (
                         <route.component {...props} />
                       )} />)
                       : (null);
                   },
                 ) : (null)}
-                { isLoggedIn() ? <Redirect from="/" to="/dashboard" /> 
+                { isLoggedIn() ? isUser ? <Redirect to="/viewcustomers" /> : <Redirect from="/" to="/dashboard" /> 
                 : <Redirect to="/login" />}
               </Switch>
             </Container>
