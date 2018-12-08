@@ -1,0 +1,8 @@
+export const CHECK_LOGIN = 'CHECK_LOGIN'
+export const REQUEST_LOGIN = 'REQUEST_LOGIN'
+export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
+export const LOGIN_FAILED = 'LOGIN_FAILED'
+export const IS_LOGGED_IN = 'IS_LOGGED_IN'
+export const IS_NOT_LOGGED_IN = 'IS_NOT_LOGGED_IN'
+export const REQUEST_LOGOUT = 'REQUEST_LOGOUT'
+export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS'
