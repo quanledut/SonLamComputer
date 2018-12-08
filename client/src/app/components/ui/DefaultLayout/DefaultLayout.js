@@ -15,8 +15,10 @@ import {
 } from '@coreui/react';
 // sidebar nav config
 import navigation from '../../../_nav';
+import navigationClient from '../../../_navClient';
 // routes config
 import routes from '../../../routes';
+import routeClients from '../../../routeClients';
 import DefaultFooter from './DefaultFooter';
 import DefaultHeader from './DefaultHeader';
 import { isLoggedIn, getCurrentUser } from '../../../utils/index';
@@ -50,13 +52,8 @@ class DefaultLayout extends Component {
 
   render() {
     var isUser = false;
-    var routerLink = routes.filter((router) => {
-      return router.path === '/viewcustomers' ? router: null
-    });
-    var navigationLinkItems = navigation.items.filter((item) => {
-      return item.url === '/viewcustomers' ? item: null
-    })
-    var navigationLinks = {items : navigationLinkItems};
+    var routerLink = routeClients;
+    var navigationLinks = navigationClient;
     isUser = this.state.user.roles.reduce((isUser, item) => 
       {if(isUser) return true; if(item.name === 'user') return true},false);
     console.log('isuser', isUser)
@@ -90,8 +87,8 @@ class DefaultLayout extends Component {
                       : (null);
                   },
                 ) : (null)}
-                { isLoggedIn() ? isUser ? <Redirect to="/viewcustomers" /> : <Redirect from="/" to="/dashboard" /> 
-                : <Redirect to="/login" />}
+                {/* { isLoggedIn() ? isUser ? <Redirect from="/" to="/viewcustomers" /> : <Redirect from="/" to="/dashboard" /> 
+                : <Redirect to="/login" />} */}
               </Switch>
             </Container>
           </main>

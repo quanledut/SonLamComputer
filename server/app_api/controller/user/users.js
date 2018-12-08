@@ -329,13 +329,35 @@ const findClient = async (req, res) => {
 		const result = await Promise.all(findServices);
 
 
-		sendJsonResponse(res, 201, result);
+		sendJsonResponse(res, 200, result);
 	} catch (err) {
 		sendJsonResponse(res, 400, {
-			msg: "Tạo khách hàng thất bại",
+			msg: "Tim kiem thất bại",
 			detail: err
 		});
 	}
+}
+
+const getCurrentInfo = async (req, res) => {
+	const id = req.payload._id;
+	try {
+		const userInfo = await UserInfo.findById(id).exec();
+		const service = await Service.find({
+			customer: mongoose.Types.ObjectId(id)
+		}).populate('customer').populate('staff').populate('serviceType').exec();
+
+		
+		sendJsonResponse(res, 200, [{
+			user: userInfo,
+			services: service
+		}]);
+	} catch (err) {
+		sendJsonResponse(res, 400, {
+			msg: "Tim kiem thất bại",
+			detail: err
+		});
+	}
+
 }
 
 
@@ -348,6 +370,7 @@ module.exports = {
 	changePassword,
 	updateById,
 	createClient,
-	findClient
+	findClient,
+	getCurrentInfo
 
 }

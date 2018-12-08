@@ -27,6 +27,7 @@ const DEFAULT_FORM = {
     loginInfo: {
         username :'',
     },
+    username: '',
     gender : '',
     // address :'',
     // select:'',
@@ -441,6 +442,7 @@ class UserFormUI extends Component {
     {
         const name = event.target.name;
         const value = event.target.value;
+
         this.setState({
             form: {
                 ...this.state.form,
@@ -513,6 +515,8 @@ class UserFormUI extends Component {
     }
 
     render() {
+        console.log(this.props);
+        const {id} = this.props.match.params;
         if(this.state.isRedirect)
         {
             return(
@@ -551,42 +555,49 @@ class UserFormUI extends Component {
                                                 type="email" id="nf-email" name="email" placeholder="Enter Email.." autoComplete="email" />
                                             {this.state.formErrors.email ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.email}</span></FormText> : ''} 
                                         </FormGroup>
-                                        
                                         {
-                                            !this.state.isEdit && 
-                                            (
-                                                <FormGroup>
+                                            (!id || this.state.form.loginInfo)
+                                            &&
+                                            <FormGroup>
+                                            {
+                                                !this.state.isEdit && 
+                                                (
                                                     <FormGroup>
-                                                        <Label htmlFor="nf-password">Password</Label>
-                                                        <Input 
-                                                            onChange = {(event) => (this.isChange(event))} 
-                                                            value = {this.state.form.password}
-                                                            type="password" id="nf-password" name="password" placeholder="Enter Password.." />
-                                                        {/* <FormText className="help-block">Please enter your password</FormText> */}
-                                                        {this.state.formErrors.password ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.password}</span></FormText> : ''}  
-                
+                                                        <FormGroup>
+                                                            <Label htmlFor="nf-password">Password</Label>
+                                                            <Input 
+                                                                onChange = {(event) => (this.isChange(event))} 
+                                                                value = {this.state.form.password}
+                                                                type="password" id="nf-password" name="password" placeholder="Enter Password.." />
+                                                            {/* <FormText className="help-block">Please enter your password</FormText> */}
+                                                            {this.state.formErrors.password ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.password}</span></FormText> : ''}  
+                    
+                                                        </FormGroup>
+                                                        <FormGroup>
+                                                            <Label htmlFor="nf-password">Nhập lại Password</Label>
+                                                            <Input 
+                                                                onChange = {(event) => (this.isChange(event))} 
+                                                                value = {this.state.form.retype_password}
+                                                                type="password" id="nf-type-password" name="retype_password" placeholder="Re-type Password.." />
+                                                            {/* <FormText className="help-block">Please enter your password</FormText> */}
+                                                            {this.state.formErrors.retype_password ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.retype_password}</span></FormText> : ''}  
+                                                        </FormGroup>
                                                     </FormGroup>
-                                                    <FormGroup>
-                                                        <Label htmlFor="nf-password">Nhập lại Password</Label>
-                                                        <Input 
-                                                            onChange = {(event) => (this.isChange(event))} 
-                                                            value = {this.state.form.retype_password}
-                                                            type="password" id="nf-type-password" name="retype_password" placeholder="Re-type Password.." />
-                                                        {/* <FormText className="help-block">Please enter your password</FormText> */}
-                                                        {this.state.formErrors.retype_password ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.retype_password}</span></FormText> : ''}  
-                                                    </FormGroup>
-                                                </FormGroup>
-                                            )
-                                        }
+                                                )
+                                            }
 
-    
-                                        <FormGroup>
-                                            <Label htmlFor="nf-username">Username</Label>
-                                            <Input onChange = {(event) => (this.isChange(event))} 
-                                                value = {this.state.form.loginInfo.username}
-                                                disabled
-                                                type="text" id="nf-username" name="username" placeholder="Enter UserName.." autoComplete="current-password" />
+        
+                                            <FormGroup>
+                                                <Label htmlFor="nf-username">Username</Label>
+                                                <Input onChange = {(event) => (this.isChange(event))} 
+                                                    value = {(this.state.form.loginInfo.username.length) ? this.state.form.loginInfo.username : this.state.form.username}
+                                                    {...((id) ? {disabled: true} : {})}
+                                                    type="text" id="nf-username" name="username" placeholder="Enter UserName.." autoComplete="current-password" />
+                                            </FormGroup>
                                         </FormGroup>
+                                        }
+                                        
+                                        
                                         <FormGroup>
                                             <Label htmlFor="nf-fullname">Họ tên</Label>
                                             <Input onChange = {(event) => (this.isChange(event))} 

@@ -71,6 +71,19 @@ export function * updated() {
     }
 }
 
+export function * getCurrentInfo() {
+    while (true) {
+        const request = yield take(Actions.CONSTANTS.FIND_ALL_CURRENT_USER_REQUEST)
+        try {
+            let result = yield call(Api.getCurrentUserApi)
+            request.cb(result, null)
+            yield put(Actions.findCurrentUserInfoSuccess(result))
+        } catch(err) {
+            request.cb(null, err.message)
+        }
+    }
+}
+
 // export function * changePassword() {
 //     while (true) {
 //         const request = yield take(Actions.CONSTANTS.CHANGE_PASSWORD_REQUEST)
@@ -92,4 +105,5 @@ export default function * root () {
     yield fork(findById)
     yield fork(updated)
     //yield fork(changePassword)
+    yield fork(getCurrentInfo)
 }

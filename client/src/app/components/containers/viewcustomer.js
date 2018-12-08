@@ -10,12 +10,9 @@ export const ViewCustomer = connect(
         }
     }, 
     dispatch => ({
-        findAll : (cb) => {
-            dispatch(Actions.findAllRequest(cb))
+        getCurrentInfo : (cb) => {
+            dispatch(Actions.findCurrentUserInfo(cb))
         },
-        getById(id, cb) {
-            dispatch(Actions.findByIdRequest(id, cb));
-        }
     })
 )(ViewCustomerUI);
 
