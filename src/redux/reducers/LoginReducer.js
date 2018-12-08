@@ -5,7 +5,7 @@ const defaultState = {
     err:''
 }
 
-export default LoginReducer = (state,action) => {
+export default LoginReducer = (state = defaultState,action) => {
     switch(action.type)
         {
             case LoginActionType.CHECK_LOGIN:
@@ -21,6 +21,21 @@ export default LoginReducer = (state,action) => {
                 return{
                     ...state,
                     err: action.err
+                }
+            case LoginActionType.IS_LOGGED_IN:
+                return{
+                    ...state,
+                    token: action.token
+                }
+            case LoginActionType.IS_NOT_LOGGED_IN:
+                return{
+                    ...state,
+                    token:''
+                }
+            case LoginActionType.LOGOUT_SUCCESS:
+                return{
+                    ...state,
+                    token:''
                 }
             default:
                 return state

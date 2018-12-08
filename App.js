@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import {Platform, StyleSheet, Text, View, AsyncStorage} from 'react-native';
 import {Provider,connect} from 'react-redux'
 import {applyMiddleware,createStore} from 'redux'
 import {addNavToReducer} from './src/redux/reducers/index'
@@ -7,30 +7,39 @@ import createSagaMiddleWare from 'redux-saga'
 import {StackNavigator,createAppContainer,createStackNavigator} from 'react-navigation'
 import {ScreenConfig} from './src/navigations/ScreenConfig'
 import RootSagas from './src/redux/sagas/RootSagas'
+import NavigationService from './src/navigations/NavigationService'
+import RootReducer from './src/redux/reducers/index'
+
+const TopLevelNavigator = createStackNavigator(
+  ScreenConfig,
+  {navigationOptions:{header: null},
+  initialRouteName:'ChartScreen'})
+const AppContainer = createAppContainer(TopLevelNavigator)
 
 sagaMiddleWare = createSagaMiddleWare()
+const store = createStore(RootReducer,applyMiddleware(sagaMiddleWare))
 sagaMiddleWare.run(RootSagas)
 
-const navReducer = (state = {nav:{}}, action) => {
-    const newNavState = Navigation.router.getStateForAction(action,state)
-    return {nav:newNavState || state}
-}
-AppReducers = addNavToReducer(navReducer)
-const store = createStore(AppReducers,applyMiddleware(sagaMiddleWare))
 type Props = {};
-const NavigationOption = StackNavigator(ScreenConfig)
-const Navigation = createAppContainer(NavigationOption)
-const NavigationContainer = connect()(Navigation)
 
 export default class App extends Component<Props> {
   render() {
     return (
-      <Provider store = {this.store}>
-          <NavigationContainer>
-
-          </NavigationContainer>
+      <Provider store = {store}>
+        <AppContainer
+        ref = {appContainer => {NavigationService.setTopLevelNavigator(appContainer)}}
+        />
       </Provider>
     );
+  }
+
+  componentWillMount(){
+      AsyncStorage.getItem('token').then((token, err) => {
+        console.log(token, err);
+        if(!token) NavigationService.navigate('Login',{})
+        else NavigationService.navigate('Home',token)
+  
+      })
   }
 }
 

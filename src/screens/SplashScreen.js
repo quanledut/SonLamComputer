@@ -1,5 +1,5 @@
 import React,{Component} from 'react'
-import {View,StyleSheet} from 'react-native'
+import {View,StyleSheet,Text} from 'react-native'
 import {connect} from 'react-redux'
 
 class SplassComponent extends Component{
@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
     container:{
         flex:1,
         justifyContent:'center',
-        alignItem:'center'
+        alignItems:'center'
     },
     title:{
         fontSize:40,
