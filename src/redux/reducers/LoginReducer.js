@@ -2,38 +2,41 @@ import * as LoginActionType from '../actions/LoginActionType'
 
 const defaultState = {
     token:'',
-    err:''
+    status:'not login'
 }
 
 export default LoginReducer = (state = defaultState,action) => {
     switch(action.type)
         {
             case LoginActionType.CHECK_LOGIN:
-                return{
+                return {
                     state
                 }
             case LoginActionType.LOGIN_SUCCESS: 
-                return{
+                console.log('reducer login success')
+                return {
                     ...state,
-                    token: action.token
+                    token: action.token,
+                    status: 'Login success'
                 }
             case LoginActionType.LOGIN_FAILED:
-                return{
+                return {
                     ...state,
-                    err: action.err
+                    token:'',
+                    status: 'Login failed'
                 }
             case LoginActionType.IS_LOGGED_IN:
-                return{
+                return {
                     ...state,
                     token: action.token
                 }
             case LoginActionType.IS_NOT_LOGGED_IN:
-                return{
+                return {
                     ...state,
                     token:''
                 }
             case LoginActionType.LOGOUT_SUCCESS:
-                return{
+                return {
                     ...state,
                     token:''
                 }

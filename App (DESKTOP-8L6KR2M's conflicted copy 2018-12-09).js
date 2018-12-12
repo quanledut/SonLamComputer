@@ -6,42 +6,14 @@ import {addNavToReducer} from './src/redux/reducers/index'
 import createSagaMiddleWare from 'redux-saga'
 import {StackNavigator,createAppContainer,createStackNavigator} from 'react-navigation'
 import {ScreenConfig} from './src/navigations/ScreenConfig'
-import SplashScreen from './src/screens/SplashScreen'
-import LoginScreen from './src/screens/LoginScreen'
-import ChartScreen from './src/screens/ChartScreen'
-import HomeScreen from './src/screens/HomeScreen'
 import RootSagas from './src/redux/sagas/RootSagas'
 import NavigationService from './src/navigations/NavigationService'
 import RootReducer from './src/redux/reducers/index'
 
 const TopLevelNavigator = createStackNavigator(
-  {
-    SplashScreen: {
-      screen : SplashScreen,
-      navigationOptions:{
-          header:null
-      }
-  },
-  LoginScreen: {
-      screen : LoginScreen,
-      navigationOptions:{
-          header:null
-      }
-  },
-  ChartScreen: {
-      screen: ChartScreen,
-      navigationOptions:{
-          header:null
-      }
-  },
-  HomeScreen: {
-    screen: HomeScreen,
-    navigationOptions:{
-      header:null
-    }
-  }
-  },
-  {initialRouteName:'SplashScreen'})
+  ScreenConfig,
+  {navigationOptions:{header: null},
+  initialRouteName:'SplashScreen'})
 const AppContainer = createAppContainer(TopLevelNavigator)
 
 sagaMiddleWare = createSagaMiddleWare()
@@ -55,12 +27,19 @@ export default class App extends Component<Props> {
     return (
       <Provider store = {store}>
         <AppContainer
-        // ref={navigatorRef => {
-        //   NavigationService.setTopLevelNavigator(navigatorRef);
-        // }}
+        ref = {appContainer => {NavigationService.setTopLevelNavigator(appContainer)}}
         />
-      </Provider> 
+      </Provider>
     );
+  }
+
+  componentWillMount(){
+      AsyncStorage.getItem('token').then((token, err) => {
+        console.log(token, err);
+        if(!token) NavigationService.navigate('Login',{})
+        else NavigationService.navigate('Home',token)
+  
+      })
   }
 }
 

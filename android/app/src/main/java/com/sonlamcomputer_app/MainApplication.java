@@ -3,6 +3,7 @@ package com.sonlamcomputer_app;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.oblador.vectoricons.VectorIconsPackage;
 import com.github.wuxudong.rncharts.MPAndroidChartPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.airbnb.android.react.lottie.LottiePackage;
@@ -26,6 +27,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new VectorIconsPackage(),
             new MPAndroidChartPackage(),
             new RNGestureHandlerPackage(),
             new LottiePackage()

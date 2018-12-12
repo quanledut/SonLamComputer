@@ -1,4 +1,4 @@
-const loginUrl = ''
+const loginUrl = 'http://18.216.184.198/api/users/login'
 
 function* postLogin(username, password){
     const response = yield fetch(loginUrl,{
@@ -11,7 +11,6 @@ function* postLogin(username, password){
             password: password
         })
     })
-    console.log(JSON.stringify(response))
     return yield response
 }
 

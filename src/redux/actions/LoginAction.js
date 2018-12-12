@@ -6,11 +6,12 @@ export const checkLogin = () => {
     }
 }
 
-export const requestLogin = (username, password) => {
+export const requestLogin = (username, password,remember) => {
     return{
         type: LoginActionType.REQUEST_LOGIN,
         username,
-        password
+        password,
+        remember
     }
 }
 
