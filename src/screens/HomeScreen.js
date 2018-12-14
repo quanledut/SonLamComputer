@@ -1,55 +1,62 @@
-import React from 'react';
-import { Text, View, Picker } from 'react-native';
+import React,{Component} from 'react';
+import { Text, View, Picker, AsyncStorage} from 'react-native';
 import { createBottomTabNavigator, createAppContainer } from 'react-navigation';
-import {Icon} from 'react-native-elements'
-
-class HomeScreen extends React.Component {
-  render() {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <Text>Home!</Text>
-      </View>
-    );
-  }
-}
-
-class SettingsScreen extends React.Component {
-    constructor(props){
-        super(props)
-        this.state ={
-            menu:''
-        }
-    }
-  render() {
-    return (
-        <View>
-            <View>
-            <Icon
-                name={'dots-three-vertical'}
-                type={'entypo'}
-                size={20}
-                color='#FFF'
-            />
-            <Picker
-            selectedValue={this.state.menu}
-            onValueChange={(itemValue, itemIndex) => this.setState({menu:itemValue})}
-            mode="dropdown">
-            <Picker.Item label="Add Note" value="addnote" />
-            <Picker.Item label="Share" value="share" />
-            <Picker.Item label="Vault" value="vault" />
-            </Picker>
-        </View>
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                <Text>Settings!</Text>
-            </View>
-        </View>
-    );
-  }
-}
+import {Avatar} from 'react-native-elements'
+import {MenuProvider} from 'react-native-popup-menu'
+import {Menu,MenuOption,MenuOptions,MenuTrigger} from 'react-native-popup-menu'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import ProductScreen from './ProductScreen'
+import RevenueScreen from './RevenueScreen'
+import OrderScreen from './OrderScreen'
+import Header from './layouts/Header'
 
 const TabNavigator = createBottomTabNavigator({
-  Home: HomeScreen,
-  Settings: SettingsScreen,
+  Product: {
+      screen: ProductScreen,
+      navigationOptions: () => ({
+        tabBarIcon: () => (
+            <MaterialIcons
+                name='account-balance'
+                // type='ionicon'
+                color='#517fa4'
+                size = {22}
+            />
+        )
+      })
+  },
+  Order: {
+    screen: OrderScreen,
+    navigationOptions: () => ({
+      tabBarIcon: () => (
+          <MaterialIcons
+              name='add-shopping-cart'
+              // type='ionicon'
+              color='#517fa4'
+              size = {22}
+          />
+      )
+    })
+},
+  Revenue: {
+    screen: RevenueScreen,
+    navigationOptions: () => ({
+      tabBarIcon: () => (
+          <MaterialIcons
+              name='trending-up'
+              // type='ionicon'
+              color='#517fa4'
+              size = {25}
+          />
+      )
+    }),
+},
 });
 
-export default createAppContainer(TabNavigator);
+const HomeContainer = createAppContainer(TabNavigator);
+export default class HomeScreen extends Component{
+    render(){
+        return(
+            <HomeContainer/>
+        )
+    }
+}

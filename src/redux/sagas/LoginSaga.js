@@ -4,22 +4,23 @@ import {API} from './API'
 import {AsyncStorage} from 'react-native'
 import NavigationService from '../../navigations/NavigationService'
 
-function* postLogin(actions) {
+function* postLogin(action) {
     try{
-        const response = yield API.postLogin(actions.username,actions.password, actions.remember)
+        console.log('Saga post login')
+        const response = yield API.postLogin(action.username,action.password, action.remember)
         if(response.status == '200'){
-            if (actions.remember) AsyncStorage.setItem('token',JSON.parse(response._bodyInit).token)
-            put({
+            token = yield JSON.parse(response._bodyInit).token
+            if (action.remember) yield AsyncStorage.setItem('token',token)
+            yield put({
                 type: LoginActionType.LOGIN_SUCCESS,
                 token: response.token
             })
-            NavigationService.navigate('ChartScreen')
+            console.log('Navigation to Home')
+            yield NavigationService.navigate('HomeScreen',token)
         }
-        if(response.status == 401){
-            put({
+        else {
+            yield put({
                 type: LoginActionType.LOGIN_FAILED,
-                msg: response.msg,
-                err: response.detail.message
             })
             console.log('Login failed')
         }

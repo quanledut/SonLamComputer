@@ -35,7 +35,6 @@ export default class App extends Component<Props> {
 
   componentWillMount(){
       AsyncStorage.getItem('token').then((token, err) => {
-        console.log(token, err);
         if(!token) NavigationService.navigate('Login',{})
         else NavigationService.navigate('Home',token)
   

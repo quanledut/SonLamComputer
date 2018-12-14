@@ -1,11 +1,11 @@
 import React,{Component} from 'react'
-// import {Icon} from 'react-native-elements' 
-import {View,TextInput,StyleSheet,Image,ImageBackground,Dimensions,TouchableWithoutFeedback,Keyboard,} from 'react-native'
+import {Icon} from 'react-native-elements' 
+import {View,TextInput,StyleSheet,Image,Text,ImageBackground,Dimensions,TouchableWithoutFeedback,Keyboard,Button} from 'react-native'
 import {connect} from 'react-redux'
 import NavigationService from '../navigations/NavigationService'
 import * as LoginAction from '../redux/actions/LoginAction'
-import { Button, ThemeProvider, Input, CheckBox, Text } from 'react-native-elements';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { ThemeProvider, Input, CheckBox } from 'react-native-elements';
+//import Icon from 'react-native-vector-icons/FontAwesome';
 const {width: SCREEN_WIDTH, height: SCREEN_HEIGHT} = Dimensions.get('window')
 class LoginComponent extends Component{
     constructor(props){
@@ -18,6 +18,15 @@ class LoginComponent extends Component{
             remember: false
         }
     }
+
+    // componentDidMount(){
+    //     console.log('Login state: '+this.props.loginSuccess)
+    //     if(this.props.loginSuccess == 'Login success') 
+    //         setTimeout(()=>{
+    //             NavigationService.navigate('HomeScreen')
+    //         },1000)
+    // }
+
     render(){
         return(
             <View style={styles.container}>
@@ -27,7 +36,7 @@ class LoginComponent extends Component{
                     source = {require('../utils/images/LoginBackground.jpg')}
                     >
                         <View>
-                        <Text h1 style = {styles.header}>SƠN LÂM</Text>
+                        <Text style = {styles.header}>SƠN LÂM COMPUTER</Text>
                         </View>
 
                         <Input
@@ -36,7 +45,8 @@ class LoginComponent extends Component{
                                 <Icon
                                 name='user'
                                 type='evilicon'
-                                color='rgba(8, 54, 127, 0.8)'
+                                //color='rgba(8, 54, 127, 0.8)'
+                                color = 'white'
                                 size = {SCREEN_WIDTH/15}
                                 />
                             }
@@ -53,8 +63,9 @@ class LoginComponent extends Component{
                             secureTextEntry = {true}
                             leftIcon={
                                 <Icon
-                                name='password'
-                                color='rgba(8, 54, 127, 0.8)'
+                                name='fingerprint'
+                                // color='rgba(8, 54, 127, 0.8)'
+                                color = 'white'
                                 size = {SCREEN_WIDTH/15}
                                 />
                             }
@@ -77,9 +88,7 @@ class LoginComponent extends Component{
                             }}
                             containerStyle = {{backgroundColor:'rgba(0,0,0,0)', borderWidth: 0}}
                         />
-                        <Text>
-                            {this.props.loginSucess}
-                        </Text>
+                        <Text style = {[this.props.loginSuccess == 'Login success'?{color:'green'}:{color:'red'},{fontSize:15}]}>{this.props.loginSuccess}</Text>
                         <Button onPress = {this._onLogin}
                             icon={{
                                 name: 'arrow-right',
@@ -95,6 +104,7 @@ class LoginComponent extends Component{
         )
     }
     _onLogin = () => {
+
         this.props._onLogin(this.state.username, this.state.password, this.state.remember)
     }
 }
@@ -107,7 +117,9 @@ const styles = StyleSheet.create({
         width:'100%'
     },
     header:{
-
+        fontSize: 30,
+        fontWeight:'bold',
+        color: '#d61518'
     },
     backgroundImage:{
         flex: 1,
@@ -131,7 +143,7 @@ const styles = StyleSheet.create({
 
 mapStateToProps = (state,action) => {
     return{
-        loginSucess: state.LoginReducer.status,
+        loginSuccess: state.LoginReducer.loginSuccess
     }
 }
 

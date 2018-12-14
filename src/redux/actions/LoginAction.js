@@ -7,6 +7,7 @@ export const checkLogin = () => {
 }
 
 export const requestLogin = (username, password,remember) => {
+    console.log('Action request login')
     return{
         type: LoginActionType.REQUEST_LOGIN,
         username,

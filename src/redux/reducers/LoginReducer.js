@@ -2,7 +2,7 @@ import * as LoginActionType from '../actions/LoginActionType'
 
 const defaultState = {
     token:'',
-    status:'not login'
+    loginSuccess: ''
 }
 
 export default LoginReducer = (state = defaultState,action) => {
@@ -17,13 +17,13 @@ export default LoginReducer = (state = defaultState,action) => {
                 return {
                     ...state,
                     token: action.token,
-                    status: 'Login success'
+                    loginSuccess: 'Login success'
                 }
             case LoginActionType.LOGIN_FAILED:
                 return {
                     ...state,
                     token:'',
-                    status: 'Login failed'
+                    loginSuccess: 'Login failed'
                 }
             case LoginActionType.IS_LOGGED_IN:
                 return {

@@ -10,13 +10,14 @@ import SplashScreen from './src/screens/SplashScreen'
 import LoginScreen from './src/screens/LoginScreen'
 import ChartScreen from './src/screens/ChartScreen'
 import HomeScreen from './src/screens/HomeScreen'
+import ProductDetail from './src/screens/ProductDetails'
 import RootSagas from './src/redux/sagas/RootSagas'
 import NavigationService from './src/navigations/NavigationService'
 import RootReducer from './src/redux/reducers/index'
 
 const TopLevelNavigator = createStackNavigator(
   {
-    SplashScreen: {
+  SplashScreen: {
       screen : SplashScreen,
       navigationOptions:{
           header:null
@@ -33,6 +34,12 @@ const TopLevelNavigator = createStackNavigator(
       navigationOptions:{
           header:null
       }
+  },
+  ProductDetailScreen: {
+    screen: ProductDetail,
+    navigationOptions:{
+        header:null
+    }
   },
   HomeScreen: {
     screen: HomeScreen,
