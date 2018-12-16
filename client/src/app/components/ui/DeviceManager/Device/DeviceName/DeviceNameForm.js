@@ -21,7 +21,7 @@ import {
 const DEFAULT_FORM = {
     _id: '',
     name: '',
-    deviceType: '',
+    type: '',
     description: '',
     image_url: '',
     amount: 0,
@@ -216,7 +216,7 @@ class DeviceNameFormUI extends Component {
         const re = /^\$?[0-9]+(\.[0-9][0-9])?$/;
 
         switch (fieldName) {
-            case 'deviceType':
+            case 'type':
                 deviceTypeValid = (value !== null && value !== "");
                 fieldValidationErrors.deviceType = deviceTypeValid ? '' : 'Vui lòng chọn loại thiết bị!';
                 break;
@@ -318,8 +318,8 @@ class DeviceNameFormUI extends Component {
                                         <Label htmlFor="select">Loại thiết bị</Label>
                                         <Input
                                             onChange={(event) => (this.isChange(event))}
-                                            value={this.state.form.deviceType}
-                                            type="select" name="deviceType" id="select">
+                                            value={this.state.form.type}
+                                            type="select" name="type" id="select">
                                             <option value="">---Chọn---</option>
                                             {
                                                 this.state.deviceTypes.map((e, id) =>
@@ -335,17 +335,21 @@ class DeviceNameFormUI extends Component {
                                             value={this.state.form.description}
                                             type="username" id="nf-username" name="description" placeholder="Nhập mô tả..." autoComplete="current-password" />
                                     </FormGroup>
-                                    <FormGroup>
-                                        <Label htmlFor="nf-username">Giá nhập</Label>
-                                        <Input onChange = {(event) => (this.isChange(event))} 
-                                            value = {this.state.form.inputPrice}
-                                            type="username" id="nf-username" name="inputPrice" placeholder="Nhập giá vôn..." autoComplete="current-password" />
-                                         {this.state.formErrors.inputPrice ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.inputPrice}</span></FormText> : ''} 
-                                    </FormGroup>
+                                    {(this.props.match.params.id) ? ''
+                                    :
+                                        <FormGroup>
+                                            <Label htmlFor="nf-username">Giá nhập</Label>
+                                            <Input onChange = {(event) => (this.isChange(event))} 
+                                                value = {this.state.form.inputPrice}
+                                                type="username" id="nf-username" name="inputPrice" placeholder="Nhập giá vôn..." autoComplete="current-password" />
+                                            {this.state.formErrors.inputPrice ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.inputPrice}</span></FormText> : ''} 
+                                        </FormGroup> 
+                                    }
                                     <FormGroup>
                                         <Label htmlFor="nf-username">Giá bán</Label>
                                         <Input onChange={(event) => (this.isChange(event))}
                                             value={this.state.form.price}
+                                            disabled = {(this.props.match.params.id) ? true : false}
                                             type="username" id="nf-username" name="price" placeholder="Nhập giá bán..." autoComplete="current-password" />
                                         {this.state.formErrors.price ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.price}</span></FormText> : ''}
                                     </FormGroup>

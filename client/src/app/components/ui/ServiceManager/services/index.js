@@ -83,7 +83,7 @@ class ServiceUI extends Component {
                                 <i className="fa fa-edit"> Xem chi tiết </i>
                             </Link>
                             <DeleteFrom 
-                                name={item.customer_name} 
+                                name='đơn hàng này'
                                 id={item._id}
                             />
                         </div>

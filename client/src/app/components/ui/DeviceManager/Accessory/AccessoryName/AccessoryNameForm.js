@@ -20,7 +20,6 @@ import {
 
 const DEFAULT_FORM = {
     _id: '',
-    computerName: '',
     type: '',
     description: '',
     image_url: '',
@@ -45,15 +44,13 @@ class AccessoryNameFormUI extends Component {
                 content: ""
             },
             types: [],
-            computerNames: [],
             isDisabled: true,
             isRedirect: false,
-            formErrors: { computerName: '', type: '', amount: '', price: '', guaranteeDuration: '', inputPrice: '' },
-            computerNameValid: false,
+            formErrors: { type: '', amount: '', price: '', guaranteeDuration: '', inputPrice: '' },
             typeValid: false,
             amountValid: false,
             priceValid: false,
-            inputPriceValid:false,
+            inputPriceValid: false,
             guaranteeDurationValid: false,
             formValid: false
         };
@@ -76,15 +73,6 @@ class AccessoryNameFormUI extends Component {
                 })
             })
         }
-        this.props.findAllComputerName({
-            all: true
-        }, (computerNames, err) => {
-            console.log(computerNames, err)
-            if (!err) this.setState({
-                ...this.state,
-                computerNames: computerNames.docs
-            })
-        });
         this.props.findAllaccessoryType({
             all: true
         }, (types, err) => {
@@ -108,8 +96,7 @@ class AccessoryNameFormUI extends Component {
             },
             isDisabled: true,
             isRedirect: false,
-            formErrors: { computerName: '', type: '', amount: '', price: '', guaranteeDuration: '', inputPrice:'' },
-            computerNameValid: false,
+            formErrors: { type: '', amount: '', price: '', guaranteeDuration: '', inputPrice: '' },
             typeValid: false,
             amountValid: false,
             priceValid: false,
@@ -216,7 +203,6 @@ class AccessoryNameFormUI extends Component {
 
     _validate(fieldName, value) {
         let fieldValidationErrors = this.state.formErrors;
-        let computerNameValid = this.state.computerNameValid;
         let typeValid = this.state.typeValid;
         let amountValid = this.state.amountValid;
         let priceValid = this.state.priceValid;
@@ -252,10 +238,6 @@ class AccessoryNameFormUI extends Component {
                     priceValid = re.test(value);
                     fieldValidationErrors.price = priceValid ? '' : 'Định dạng số không đúng!';
                 }
-                break;
-            case 'computerName':
-                computerNameValid = (value !== null && value !== "" && value !== "None");
-                fieldValidationErrors.computerName = computerNameValid ? '' : ' Vui lòng chọn tên máy tính!';
                 break;
             case 'guaranteeDuration':
                 guaranteeDurationValid = value > 0;
@@ -318,19 +300,6 @@ class AccessoryNameFormUI extends Component {
                             <CardBody>
                                 <Form action="" method="post">
                                     <FormGroup>
-                                        <Label htmlFor="select">Tên máy tính</Label>
-                                        <Input
-                                            onChange={(event) => (this.isChange(event))}
-                                            value={this.state.form.computerName}
-                                            type="select" name="computerName" id="select">
-                                            <option value="None">---Chọn---</option>
-                                            {this.state.computerNames.map((e, id) =>
-                                                <option key={id} value={e._id}>{e.name}</option>
-                                            )}
-                                        </Input>
-                                        {this.state.formErrors.computerName ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.computerName}</span></FormText> : ''}
-                                    </FormGroup>
-                                    <FormGroup>
                                         <Label htmlFor="select">Loại linh kiện</Label>
                                         <Input
                                             onChange={(event) => (this.isChange(event))}
@@ -351,17 +320,21 @@ class AccessoryNameFormUI extends Component {
                                             value={this.state.form.description}
                                             type="username" id="nf-username" name="description" placeholder="Nhập mô tả..." autoComplete="current-password" />
                                     </FormGroup>
-                                    <FormGroup>
-                                        <Label htmlFor="nf-username">Giá nhập</Label>
-                                        <Input onChange={(event) => (this.isChange(event))}
-                                            value={this.state.form.inputPrice}
-                                            type="username" id="nf-username" name="inputPrice" placeholder="Nhập giá vốn..." autoComplete="current-password" />
-                                        {this.state.formErrors.inputPrice ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.inputPrice}</span></FormText> : ''}
-                                    </FormGroup>
+                                    {(this.props.match.params.id) ? '' :
+                                        <FormGroup>
+                                            <Label htmlFor="nf-username">Giá nhập</Label>
+                                            <Input onChange={(event) => (this.isChange(event))}
+                                                value={this.state.form.inputPrice}
+                                                type="username" id="nf-username" name="inputPrice" placeholder="Nhập giá vốn..." autoComplete="current-password" />
+                                            {this.state.formErrors.inputPrice ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.inputPrice}</span></FormText> : ''}
+                                        </FormGroup>
+                                    }
+
                                     <FormGroup>
                                         <Label htmlFor="nf-username">Giá bán</Label>
                                         <Input onChange={(event) => (this.isChange(event))}
                                             value={this.state.form.price}
+                                            disabled={(this.props.match.params.id) ? true : false}
                                             type="username" id="nf-username" name="price" placeholder="Nhập giá bán..." autoComplete="current-password" />
                                         {this.state.formErrors.price ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.price}</span></FormText> : ''}
                                     </FormGroup>

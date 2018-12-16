@@ -121,7 +121,7 @@ const create = async (req,res) => {
 
         if (prevDevice) {
 
-            prevDevice.amount = prevDevice.amount + req.body.amount;
+            prevDevice.amount = prevDevice.amount + parseInt(req.body.amount);
             prevDevice.price = req.body.price;
             prevDevice.guaranteeDuration = req.body.guaranteeDuration;
 

@@ -64,30 +64,7 @@ const read_json = () => {
                 data['SSD'] = content
                 break;
             case 'laps':
-                const lapTypes = {};
-
-                for (let i = 0; i < content.length; i++) {
-                    const lap = content[i]
-                    let lapName = new RegExp(createRegexComputerName(lap.lap_type)).exec(lap.name)
-                    if (lapName == null) continue
-
-                    lapName = lapName[0]
-                        .replace(/\s+/g, " ")
-                        .replace(/\s*[-(].*/g, "").toUpperCase()
-                    // console.log(lapName)
-                    if (!lapTypes.hasOwnProperty(lap.lap_type)) {
-                        lapTypes[lap.lap_type] = {};
-                    }
-
-                    if (!lapTypes[lap.lap_type].hasOwnProperty(lapName)) {
-                        lapTypes[lap.lap_type][lapName] = []
-                    }
-
-                    lapTypes[lap.lap_type][lapName].push(content)
-                    // console.log(lapName)
-                }
-
-                data["LapTop"] = lapTypes;
+                data["LapTop"] = content;
 
                 break;
         }
@@ -242,8 +219,6 @@ const create_other_data = async (data) => {
     
     await _createDevice(data,deviceTypes);
     await _createAccessory(accessoryData, [], accessoryType)
-
-    return 
 }
 
 const _createServiceType = async () => {
