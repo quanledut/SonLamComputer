@@ -390,6 +390,7 @@ class ServiceFormUI extends Component {
             this.state.form.accessories = this.state.form.accessories.map(i => {
                 return {
                     ...i,
+                    accessoryId:this.state.accessoryTypes.filter(i1 => i1._id === i.type)[0]._id,
                     type: this.state.accessoryTypes.filter(i1 => i1._id === i.type)[0].name
                 }
             })
