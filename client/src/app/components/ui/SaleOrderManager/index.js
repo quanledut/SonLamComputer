@@ -44,7 +44,7 @@ class SaleOrderUI extends Component {
                 ...this.state,
                 ...result
             })
-            console.log(result)
+            console.log(result);
         });
 
     }
@@ -67,7 +67,7 @@ class SaleOrderUI extends Component {
                                 to = {`/saleorders/${item._id}/edit`}
                                 className="btn btn-primary"
                             >
-                                <i className="fa fa-edit"> Sửa </i>
+                                <i className="fa fa-edit"> Xem chi tiết </i>
                             </Link>
                             <DeleteFrom 
                                 name={item.customer_name} 
