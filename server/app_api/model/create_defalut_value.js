@@ -8,8 +8,11 @@ const Role = mongoose.model('Role');
 const Policy = mongoose.model('Policy');
 const DeviceType = mongoose.model('DeviceType');
 const Device = mongoose.model('Device');
+const HistoryDevice = mongoose.model('HistoryInputDevice');
 const AccessoryType = mongoose.model('AccessoryType');
 const Accessory = mongoose.model('Accessory');
+const HistoryAccessory = mongoose.model('HistoryInputAccessory');
+
 // const ComputerType = mongoose.model('ComputerType');
 // const ComputerName = mongoose.model('ComputerName');
 const ServiceType = mongoose.model('ServiceType');
@@ -310,7 +313,7 @@ const _createDevice = async (data, deviceTypes) => {
         const deviceTypeId = deviceTypes.filter(i => i.name == type)[0].id
         for (let i = 0; i < data[type].length; i++) {
             const deviceData = data[type][i];
-            await Device.create({
+            const device = await Device.create({
                 name: deviceData.name,
                 type: deviceTypeId,
                 description: deviceData.spec,
@@ -318,6 +321,12 @@ const _createDevice = async (data, deviceTypes) => {
                 amount: 100,
                 price: deviceData.price,
                 guaranteeDuration: 0
+            });
+
+            await HistoryDevice.create({
+                device: device._id,
+                amount: 100,
+                price: deviceData.price - 200000 > 0 ? deviceData.price - 200000 : deviceData.price
             })
         }
     }
@@ -326,15 +335,21 @@ const _createDevice = async (data, deviceTypes) => {
 const _createAccessory = async (data, computerName, accessoryType) => {
     for (let type in data) {
         const accessoryTypeId = accessoryType.filter(i => i.name == type)[0].id
-        await Accessory.create({
+        const accessory = await Accessory.create({
             type: accessoryTypeId,
             description: "",
             image_url: "/images/accessory_" + FAKE_IMAGE_NAME[type] + ".jpg",
             amount: 100,
-            price: 0,
+            price: 200000,
             guaranteeDuration: 0
-        })
-}
+        });
+
+        await HistoryAccessory.create({
+            accessory: accessory._id,
+            amount: 100,
+            price: 100000
+        });
+    }
 
 }
 

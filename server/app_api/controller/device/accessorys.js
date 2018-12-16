@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Accessory = mongoose.model('Accessory');
+const HistoryAccessory = mongoose.model('HistoryInputAccessory');
 const {sendJsonResponse} = require('../utils');
 const {createPaginationQueryByAggregate} = require('../../helpers/paginationHelper')
 
@@ -121,34 +122,61 @@ const findByName = (req,res) =>{
     )
 }
 
-const create = (req,res) => {
-    Accessory
-    .findOne({type: req.body.type})
-    .exec((err,ct)=>{
-        if(ct){
-            sendJsonResponse(res,500, {
-                msg: 'Linh kiện đã tồn tại',
-                detail: 'Accessory is existed'
+const create = async (req,res) => {
+    try {
+        let prevAccessory = await Accessory
+        .findOne({type: new mongoose.Types.ObjectId(req.body.type)})
+        .exec();
+    
+        if (prevAccessory) {
+            prevAccessory.amount = req.body.amount + prevAccessory.amount;
+            prevAccessory.price = req.body.price;
+            prevAccessory.guaranteeDuration = req.body.guaranteeDuration;
+    
+            if (req.body.description) {
+                prevAccessory.description = req.body.description;    
+            }
+
+            if (req.body.image_url) {
+                prevAccessory.image_url = req.body.image_url;    
+            }
+
+            const result = await prevAccessory.save();
+
+            await HistoryAccessory.create({
+                accessory: prevAccessory._id,
+                amount: req.body.amount,
+                inputPrice: req.body.inputPrice,
             });
-            return;
-        }
-        else{
-            Accessory.create({
+
+            sendJsonResponse(res,201,result)
+
+        } else {
+            const result = await Accessory.create({
                 type: req.body.type,
                 description: req.body.description,
                 image_url: req.body.image_url,
                 amount: req.body.amount,
                 price: req.body.price,
                 guaranteeDuration: req.body.guaranteeDuration
-            }, (err, accessory) => {
-                if(err) sendJsonResponse(res,500, {
-                    msg: "Tạo mới thất bại",
-                    detail: err
-                });
-                else sendJsonResponse(res,200,accessory);
-            })
-        }
-    });
+            });
+
+            await HistoryAccessory.create({
+                accessory: result._id,
+                amount: req.body.amount,
+                inputPrice: req.body.inputPrice,
+            });
+
+            sendJsonResponse(res,201,result)
+        } 
+    } catch(err) {
+        sendJsonResponse(res,500, {
+            msg: "Nhap hang thất bại",
+            detail: err
+        });
+    }
+
+    
 }
 
 // const updateById = (req,res) => {
