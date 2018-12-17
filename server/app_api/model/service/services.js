@@ -26,17 +26,21 @@ const getPrice = (number) => {
 }
 
 let subAccessorySchema = new mongoose.Schema({
+    accessoryId: { type: mongoose.Schema.Types.ObjectId },
     computerSeries: String,
     type: String,
     guaranteeDuration: Number, 
+    // price: {type: Number, set: setPrice, get: getPrice},
     price: {type: Number, set: setPrice},
     date: { type: Date, default: Date.now }
 })
 
 let subDeviceSchema = new mongoose.Schema({
+    deviceId: { type: mongoose.Schema.Types.ObjectId },
     name: String,
     type: String,
     guaranteeDuration: Number, 
+    // price: {type: Number, set: setPrice, get: getPrice},
     price: {type: Number, set: setPrice},
     date: { type: Date, default: Date.now }
 })

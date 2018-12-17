@@ -62,11 +62,11 @@ const routes = [
   // { path: '/services/serviceType/:id/edit', exact: true, name: 'Sửa loại dịch vụ', component: ServiceTypeForm },
 
   { path: '/devices/device', exact: true, name: 'Thiết bị', component: DeviceNames },
-  { path: '/devices/device/new', exact: true, name: 'Tạo mới thiết bị', component: DeviceNameForm },
+  { path: '/devices/device/new', exact: true, name: 'Nhập thiết bị', component: DeviceNameForm },
   { path: '/devices/device/:id/edit', exact: true, name: 'Sửa thiết bị', component: DeviceNameForm },
 
   { path: '/devices/accessory', exact: true, name: 'Linh kiện', component: AccessoryNames },
-  { path: '/devices/accessory/new', exact: true, name: 'Tạo mới linh kiện', component: AccessoryNameForm },
+  { path: '/devices/accessory/new', exact: true, name: 'Nhập linh kiện', component: AccessoryNameForm },
   { path: '/devices/accessory/:id/edit', exact: true, name: 'Sửa linh kiện', component: AccessoryNameForm },
 
 

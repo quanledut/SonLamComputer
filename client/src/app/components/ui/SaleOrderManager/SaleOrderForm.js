@@ -49,7 +49,7 @@ class SaleOrderFormUI extends Component {
                 title: "",
                 content: ""
             },
-            devices: [],
+            devices: {},
             customers:[],
             deviceTypes: [],
             _device_id: '',
@@ -186,11 +186,18 @@ class SaleOrderFormUI extends Component {
         this.props.findAllDevices({
             type,
             all: true
-        }, (devices, err) => {
-            this.setState({
+        }, (res, err) => {
+            /*this.setState({
                 ...this.state,
-                devices: devices.docs
-            })
+                devices: {
+                    ...this.state.devices,
+                    [type]: res
+                }
+            }, () => {
+                console.log(this.state);
+            })*/
+            this.state.devices[type] = res.docs;
+            console.log(this.state, res.docs);
         })
     }
 
@@ -224,7 +231,7 @@ class SaleOrderFormUI extends Component {
                     if (name === "type") {
                         this._findDevice(device.type)
                     } else if (name === "name") {
-                        const currentDevice = this.state.devices.filter(i => i._id === value)[0]
+                        const currentDevice = this.state.devices[device.type].filter(i => i._id === value)[0]
                         return {
                             ...device,
                             price: currentDevice.price,
@@ -307,12 +314,14 @@ class SaleOrderFormUI extends Component {
                     type: this.state.accessoryTypes.filter(i1 => i1._id === i.type)[0].name
                 }
             })
-
+            
             this.state.form.devices = this.state.form.devices.map(i => {
+                const type = this.state.deviceTypes.filter(i1 => i1._id === i.type)[0].name;
                 return {
                     ...i,
-                    name: this.state.devices.filter(i1 => i1._id === i.name)[0].name,
-                    type: this.state.deviceTypes.filter(i1 => i1._id === i.type)[0].name
+                    deviceId:this.state.devices[i.type].filter(i1 => i1._id === i.name)[0]._id,
+                    name: this.state.devices[i.type].filter(i1 => i1._id === i.name)[0].name,
+                    type
                 }
             })
 
@@ -535,8 +544,8 @@ class SaleOrderFormUI extends Component {
                                 <CustomTable
                                     thead={
                                                     <tr>
-                                                        <th>Tên thiết bị</th>
                                                         <th>Loại thiết bị</th>
+                                                        <th>Tên thiết bị</th>
                                                         <th>Giá tiền</th>
                                                         <th style={{ width: '20%' }}>Thời gian bảo hành</th>
                                                         <th style={{ width: '15%' }}>
@@ -551,6 +560,7 @@ class SaleOrderFormUI extends Component {
                                     tbody={
                                         (!this.props.match.params.id)
                                             ? this.state.form.devices.map((item, key) => {
+                                                console.log(this.state, item);
                                                 return (<tr key={key}>
                                                     <td>
                                                         <Input value={item.type} onChange={(e) => this._handleDevices(e, key)} type="select" name="type" id="exampleSelect">
@@ -569,7 +579,7 @@ class SaleOrderFormUI extends Component {
                                                             (item.type && item.type != "None") &&
                                                             <Input value={item.name} onChange={(e) => this._handleDevices(e, key)} type="select" name="name" id="exampleSelect">
                                                                 <option value="None">Hãy chọn thiết bị</option>
-                                                                {this.state.devices.map((i1, id) => <option key={id} value={i1._id}>{i1.name}</option>)}
+                                                                {this.state.devices[item.type] ? this.state.devices[item.type].map((i1, id) => <option key={id} value={i1._id}>{i1.name}</option>) : []}
                                                             </Input>
                                                         }
                                                     </td>
