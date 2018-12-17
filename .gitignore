@@ -78,5 +78,3 @@ db_data/
 *.wt
 
 package-lock.json
-
-client/build/
