@@ -1,105 +1,121 @@
 const mongoose = require('mongoose');
-const Device = mongoose.model('Device');
-const Accessory = mongoose.model('Accessory');
+const HistoryDevice = mongoose.model('HistoryInputDevice');
+const HistoryAccessory = mongoose.model('HistoryInputAccessory');
+
 const Service = mongoose.model('Service');
 const ServiceType = mongoose.model('ServiceType');
+
 const _ = require('lodash');
 const {sendJsonResponse} = require('../utils');
 const {createPaginationQueryByAggregate} = require('../../helpers/paginationHelper')
 
 const line = async (req, res) => {
     try {
-        const deviceCount = Device.aggregate([
+        const inputDeviceHistory = HistoryDevice.aggregate([
+            {
+                $project: {
+                    money: {
+                        $multiply: ['$amount', '$price']
+                    },
+                    createdAt: '$createdAt',
+                }
+            },
             {
                 $group: {
                     _id: {
                         year: { $year: '$createdAt' }
                     },
-                    count: {
-                        $sum: 1,
+                    money: { 
+                        $sum: '$money'
                     }
                 }
             }
-        ]).exec();
+        ])
 
-        const accessoryCount = Accessory.aggregate([
+        const inputAccessoryHistory = HistoryAccessory.aggregate([
+            {
+                $project: {
+                    money: {
+                        $multiply: ['$amount', '$price']
+                    },
+                    createdAt: '$createdAt',
+                }
+            },
             {
                 $group: {
                     _id: {
                         year: { $year: '$createdAt' }
                     },
-                    count: {
-                        $sum: 1,
+                    money: { 
+                        $sum: '$money'
                     }
                 }
             }
-        ]).exec();
+        ]);
 
-        const serviceFixCount = Service.aggregate([
+        const serviceFixHistory = Service.aggregate([
             {
                 $lookup: {
-                    from: ServiceType.model.name,
-                    localField: 'serviceType',
+                    from: 'servicetypes',
+                    localField: 'type',
                     foreignField: '_id',
-                    as: 'serviceType',
+                    as: 'type'            
                 }
-            }, {
-                $unwind: '$serviceType',
-            }, {
+            }, 
+            { $unwind: '$type' },
+            {
                 $match: {
-                    'serviceType.name': 'Sữa chữa'
+                    'type.name': 'Sữa chữa'
                 }
-            }, {
+            },
+            {
                 $group: {
                     _id: {
-                        year: { $year: '$createdAt' },
-                        serviceType: '$serviceType.name'
+                        year: { $year: '$createdAt' }
                     },
-                    count: {
-                        $sum: 1,
+                    money: {
+                        $sum: '$totalPrice'
                     }
                 }
-
             }
-        ]).exec();
+        ]);
 
-        const serviceSellCount = Service.aggregate([
+        const serviceSellHistory = Service.aggregate([
             {
                 $lookup: {
-                    from: ServiceType.model.name,
-                    localField: 'serviceType',
+                    from: 'servicetypes',
+                    localField: 'type',
                     foreignField: '_id',
-                    as: 'serviceType',
+                    as: 'type'            
                 }
-            }, {
-                $unwind: '$serviceType',
-            }, {
+            }, 
+            { $unwind: '$type' },
+            {
                 $match: {
-                    'serviceType.name': 'Mua Bán'
+                    'type.name': 'Mua Bán'
                 }
-            }, {
+            },
+            {
                 $group: {
                     _id: {
-                        year: { $year: '$createdAt' },
-                        serviceType: '$serviceType.name'
+                        year: { $year: '$createdAt' }
                     },
-                    count: {
-                        $sum: 1,
+                    money: {
+                        $sum: '$totalPrice'
                     }
                 }
-
             }
-        ]).exec();
+        ]);
 
-        const result = await Promise.all([deviceCount, accessoryCount, serviceSellCount, serviceFixCount]);
+        const result = await Promise.all([inputDeviceHistory, inputAccessoryHistory, serviceSellHistory, serviceFixHistory]);
 
-        const [reportDevice, reportAccessory, reportServiceSell, reposrtServiceFix] = result;
+        const [outMoneySell, outMoneyFix, inMoneySell, inMoneyFix] = result;
 
         const year = (_.uniqBy([
-            ...reportDevice,
-            ...reportAccessory,
-            ...reportServiceSell,
-            ...reposrtServiceFix,
+            ...outMoneySell,
+            ...outMoneyFix,
+            ...inMoneySell,
+            ...inMoneyFix,
         ], '_id.year')).map(i => i._id.year);
 
 
@@ -108,36 +124,61 @@ const line = async (req, res) => {
                 title: 'Thống kê nhiều năm',
                 detail: {
                     time_value_list: year.map(item => '' + item),
-                    legend_list: ['Thiết bị', 'Linh kiện', 'Mua bán', 'Sửa chữa'],
+                    legend_list: ['Tiền ra mua bán', ' Tiền ra sữa chữa', 'Tiền vào mua bán', 'Tiền vào sữa sữa', 'Tổng tiền ra', 'Tổng tiền vào'],
                     dataset: {
-                        'Thiết bị': year.reduce((obj, y) => {
-                            const rp = reportDevice.find(i => i._id.year === y);
+                        'Tiền ra mua bán': year.reduce((obj, y) => {
+                            const rp = outMoneySell.find(i => i._id.year === y);
+                            if (rp) obj[y] = rp.money;
+                            else obj[y] = 0;
+
+                            return obj;
+                        }, {}),
+                        'Tiền ra sữa chữa': year.reduce((obj, y) => {
+                            const rp = outMoneyFix.find(i => i._id.year === y);
                             if (rp) obj[y] = rp.count;
                             else obj[y] = 0;
 
                             return obj;
                         }, {}),
-                        'Linh kiện': year.reduce((obj, y) => {
-                            const rp = reportAccessory.find(i => i._id.year === y);
+                        'Tiền vào mua bán': year.reduce((obj, y) => {
+                            const rp = inMoneySell.find(i => i._id.year === y);
                             if (rp) obj[y] = rp.count;
                             else obj[y] = 0;
 
                             return obj;
                         }, {}),
-                        'Mua bán': year.reduce((obj, y) => {
-                            const rp = reportServiceSell.find(i => i._id.year === y);
-                            if (rp) obj[y] = rp.count;
+                        'Tiền vào sữa sữa': year.reduce((obj, y) => {
+                            const rp = inMoneyFix.find(i => i._id.year === y);
+                            if (rp) obj[y] = rp.money;
                             else obj[y] = 0;
 
                             return obj;
                         }, {}),
-                        'Sửa chữa': year.reduce((obj, y) => {
-                            const rp = reposrtServiceFix.find(i => i._id.year === y);
-                            if (rp) obj[y] = rp.count;
+                        'Tổng tiền ra': year.reduce((obj, y) => {
+                            const rp1 = outMoneySell.find(i => i._id.year === y);
+                            const rp2 = outMoneyFix.find(i => i._id.year === y);
+
+                            if (rp1) obj[y] = rp1.money;
                             else obj[y] = 0;
+
+                            if (rp2) obj[y] += rp2.money;
+                            else obj[y] += 0;
+
+                            return obj;
+                        }, {}),
+                        'Tổng tiền vào': year.reduce((obj, y) => {
+                            const rp1 = inMoneySell.find(i => i._id.year === y);
+                            const rp2 = inMoneyFix.find(i => i._id.year === y);
+
+                            if (rp1) obj[y] = rp1.money;
+                            else obj[y] = 0;
+
+                            if (rp2) obj[y] += rp2.money;
+                            else obj[y] += 0;
 
                             return obj;
                         }, {})
+
                     }
                 }
             }
