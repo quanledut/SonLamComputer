@@ -80,10 +80,10 @@ class ServiceUI extends Component {
                                 to = {`/services/service/${item._id}/edit`}
                                 className="btn btn-primary"
                             >
-                                <i className="fa fa-edit"> Sửa </i>
+                                <i className="fa fa-edit"> Xem chi tiết </i>
                             </Link>
                             <DeleteFrom 
-                                name={item.customer_name} 
+                                name='đơn hàng này'
                                 id={item._id}
                             />
                         </div>

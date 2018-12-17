@@ -68,7 +68,7 @@ const findById = (req,res) => {
     .then((deviceType) => {
         if(deviceType) sendJsonResponse(res,200,deviceType)
         else sendJsonResponse(res,404, {
-            msg: 'Tìm kiếm thất bại',
+            msg: 'Tìm kiếm thất bại',   
             detail: 'Not found'
         });
     })

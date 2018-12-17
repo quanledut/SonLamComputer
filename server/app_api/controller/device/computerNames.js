@@ -102,7 +102,7 @@ const create = (req,res) => {
         return;
     }
     ComputerName
-    .findOne({name:req.body.name, type: req.body.type})
+    .findOne({name:req.body.name, type: new mongoose.Types.ObjectId(req.body.type)})
     .exec((err,computerName) => {
         if(computerName){
             sendJsonResponse(res,500, {

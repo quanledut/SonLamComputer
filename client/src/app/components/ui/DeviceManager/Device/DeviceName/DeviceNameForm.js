@@ -21,12 +21,13 @@ import {
 const DEFAULT_FORM = {
     _id: '',
     name: '',
-    deviceType: '',
+    type: '',
     description: '',
     image_url: '',
     amount: 0,
     price: 0,
-    guaranteeDuration: 0
+    guaranteeDuration: 0,
+    inputPrice:0
 }
 
 class DeviceNameFormUI extends Component {
@@ -47,11 +48,12 @@ class DeviceNameFormUI extends Component {
             computerNames: [],
             isDisabled: true,
             isRedirect: false,
-            formErrors: { name: '', deviceType: '', amount: '', price: '', guaranteeDuration: '' },
+            formErrors: { name: '', deviceType: '', amount: '', price: '', guaranteeDuration: '', inputPrice:'' },
             nameValid: false,
             deviceTypeValid: false,
             amountValid: false,
             priceValid: false,
+            inputPriceValid: false,
             guaranteeDurationValid: false,
             formValid: false
         };
@@ -97,10 +99,11 @@ class DeviceNameFormUI extends Component {
             },
             isDisabled: true,
             isRedirect: false,
-            formErrors: { name: '', deviceType: '', amount: '', price: '', guaranteeDuration: '' },
+            formErrors: { name: '', deviceType: '', amount: '', price: '', guaranteeDuration: '', inputPrice:'' },
             nameValid: false,
             deviceTypeValid: false,
             amountValid: false,
+            inputPriceValid: false,
             priceValid: false,
             guaranteeDurationValid: false,
             formValid: false
@@ -207,12 +210,13 @@ class DeviceNameFormUI extends Component {
         let deviceTypeValid = this.state.deviceTypeValid;
         let amountValid = this.state.amountValid;
         let priceValid = this.state.priceValid;
+        let inputPriceValid = this.state.inputPriceValid;
         let guaranteeDurationValid = this.state.guaranteeDurationValid;
 
         const re = /^\$?[0-9]+(\.[0-9][0-9])?$/;
 
         switch (fieldName) {
-            case 'deviceType':
+            case 'type':
                 deviceTypeValid = (value !== null && value !== "");
                 fieldValidationErrors.deviceType = deviceTypeValid ? '' : 'Vui lòng chọn loại thiết bị!';
                 break;
@@ -224,6 +228,10 @@ class DeviceNameFormUI extends Component {
                     amountValid = re.test(value);
                     fieldValidationErrors.amount = amountValid ? '' : 'Định dạng số không đúng!';
                 }
+                break;
+            case 'inputPrice':
+                inputPriceValid = re.test(value);
+                fieldValidationErrors.inputPrice = inputPriceValid ? '' : 'Định dạng số không đúng!';
                 break;
             case 'price':
                 priceValid = value > 0;
@@ -310,8 +318,8 @@ class DeviceNameFormUI extends Component {
                                         <Label htmlFor="select">Loại thiết bị</Label>
                                         <Input
                                             onChange={(event) => (this.isChange(event))}
-                                            value={this.state.form.deviceType}
-                                            type="select" name="deviceType" id="select">
+                                            value={this.state.form.type}
+                                            type="select" name="type" id="select">
                                             <option value="">---Chọn---</option>
                                             {
                                                 this.state.deviceTypes.map((e, id) =>
@@ -327,10 +335,21 @@ class DeviceNameFormUI extends Component {
                                             value={this.state.form.description}
                                             type="username" id="nf-username" name="description" placeholder="Nhập mô tả..." autoComplete="current-password" />
                                     </FormGroup>
+                                    {(this.props.match.params.id) ? ''
+                                    :
+                                        <FormGroup>
+                                            <Label htmlFor="nf-username">Giá nhập</Label>
+                                            <Input onChange = {(event) => (this.isChange(event))} 
+                                                value = {this.state.form.inputPrice}
+                                                type="username" id="nf-username" name="inputPrice" placeholder="Nhập giá vôn..." autoComplete="current-password" />
+                                            {this.state.formErrors.inputPrice ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.inputPrice}</span></FormText> : ''} 
+                                        </FormGroup> 
+                                    }
                                     <FormGroup>
                                         <Label htmlFor="nf-username">Giá bán</Label>
                                         <Input onChange={(event) => (this.isChange(event))}
                                             value={this.state.form.price}
+                                            disabled = {(this.props.match.params.id) ? true : false}
                                             type="username" id="nf-username" name="price" placeholder="Nhập giá bán..." autoComplete="current-password" />
                                         {this.state.formErrors.price ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.price}</span></FormText> : ''}
                                     </FormGroup>

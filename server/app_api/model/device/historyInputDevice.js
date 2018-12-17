@@ -21,15 +21,12 @@ const getPrice = (number) => {
     return str
 }
 
-let accessorySchema = new mongoose.Schema({
-    type: { type: mongoose.Schema.Types.ObjectId, ref: 'AccessoryType' },
-    description: String,
-    image_url: String,
-    amount: Number,
+let accessoryTypeSchema = new mongoose.Schema({
+    device: { type: mongoose.Schema.Types.ObjectId, ref: 'Device', required: true },
+    amount: { type: Number, required: true },
     price: {type: Number, get: getPrice, set: setPrice},
-    guaranteeDuration: { type: Number, default: 0 }
 }, {
     timestamps: true,
 })
 
-mongoose.model('Accessory', accessorySchema)
+mongoose.model('HistoryInputDevice', accessoryTypeSchema)

@@ -73,6 +73,8 @@ require("./device/devices")
 require("./device/storageHistories")
 require("./device/accessoriesTypes")
 require("./device/accessories")
+require("./device/historyInputDevice")
+require("./device/historyInputAccessory")
 
 require("./service/serviceTypes")
 require("./service/services")

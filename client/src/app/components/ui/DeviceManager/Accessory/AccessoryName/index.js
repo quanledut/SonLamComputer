@@ -54,7 +54,6 @@ class AccessoryNameUI extends Component {
             return (
                 <tr key = {index}>
                     <td>{item.type.name}</td>
-                    <td></td>
                     <td>{item.amount}</td>
                     <td>{item.price}</td>
                     <td>{item.guaranteeDuration}</td>
@@ -88,7 +87,7 @@ class AccessoryNameUI extends Component {
                                 <Link
                                     to = {'/devices/accessory/new'}
                                     className="btn" style={{ backgroundColor: '#17a2b8' }}>
-                                    <i className="fa fa-plus text-white"> Tạo mới linh kiện </i>
+                                    <i className="fa fa-plus text-white"> Nhập linh kiện </i>
                                 </Link>
                                 <hr />
 
@@ -98,7 +97,6 @@ class AccessoryNameUI extends Component {
                                     thead = {
                                         <tr>
                                             <th>Loại linh kiện</th>
-                                            <th>Tên máy tính</th>
                                             <th>Số lượng</th>
                                             <th>Giá</th>
                                             <th>Thời hạn bảo hành</th>
