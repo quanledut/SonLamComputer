@@ -7,7 +7,6 @@ class SplassComponent extends Component{
     componentDidMount(){
        setTimeout(()=>{
          AsyncStorage.getItem('token').then((token,err) => {
-            console.log('Token:' + token)
             if(token) { 
             NavigationService.navigate('HomeScreen', {token:token})}
             else NavigationService.navigate('LoginScreen')

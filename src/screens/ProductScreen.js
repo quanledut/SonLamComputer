@@ -1,8 +1,9 @@
 import React,{Component} from 'react';
-import { Text, View, Picker, AsyncStorage, FlatList, Dimensions,StyleSheet,Image,TouchableOpacity} from 'react-native';
+import { Text, View, Picker, AsyncStorage, FlatList, Dimensions,StyleSheet,Image,TouchableOpacity,ImageBackground} from 'react-native';
 import {connect} from 'react-redux'
 import * as base_64 from 'base-64'
 import {getAllDevices} from '../redux/actions/DeviceAction'
+import {getDeviceType} from '../redux/actions/DeviceTypeAction'
 import Header from './layouts/Header'
 import {MenuProvider} from 'react-native-popup-menu'
 import NavigationService from '../navigations/NavigationService';
@@ -14,33 +15,33 @@ class ProductComponent extends Component{
         this.state = {
             username : '',
             role: '',
-            productType:[
-                {
-                    id: "5bf98bca4d707738e296951e",
-                    name: "HDD",
-                    v: 0
-                },
-                {
-                    id: "5bf98bca4d707738e296951f",
-                    name: "Bàn Phím",
-                    v: 0
-                },
-                {
-                    id: "5bf98bca4d707738e2969520",
-                    name: "LapTop",
-                    v: 0
-                },
-                {
-                    id: "5bf98bca4d707738e2969521",
-                    name: "Chuột",
-                    v: 0
-                },
-                {
-                    id: "5bf98bca4d707738e2969522",
-                    name: "SSD",
-                    v: 0
-                }
-            ]
+            // productType:[
+            //     {
+            //         id: "5bf98bca4d707738e296951e",
+            //         name: "HDD",
+            //         v: 0
+            //     },
+            //     {
+            //         id: "5bf98bca4d707738e296951f",
+            //         name: "Bàn Phím",
+            //         v: 0
+            //     },
+            //     {
+            //         id: "5bf98bca4d707738e2969520",
+            //         name: "LapTop",
+            //         v: 0
+            //     },
+            //     {
+            //         id: "5bf98bca4d707738e2969521",
+            //         name: "Chuột",
+            //         v: 0
+            //     },
+            //     {
+            //         id: "5bf98bca4d707738e2969522",
+            //         name: "SSD",
+            //         v: 0
+            //     }
+            // ]
         }
     }
 
@@ -51,12 +52,13 @@ class ProductComponent extends Component{
             username: user.username,
             role: user.username
         })
-        await this.props._getDevices(token);
+        await [this.props._getDevices(token), this.props._getDeviceType(token)]
     }
 
     componentDidMount(){
-        // console.log('Product Type: ' +this.state.productType)
+        
     }
+
     render(){
         return(
             <MenuProvider>
@@ -67,7 +69,7 @@ class ProductComponent extends Component{
                     />
                     <View style = {styles.productTypeList}>
                         <FlatList
-                        data = {this.state.productType}
+                        data = {this.props.productType}
                         keyExtractor = {(item)=>item.id}
                         renderItem = {this._renderProductTypeItem}
                         horizontal = {true}
@@ -82,7 +84,7 @@ class ProductComponent extends Component{
                             numColumns = {1}
                             renderItem = {this._renderItem}
                             keyExtractor = {(item) => item._id}
-                            
+                            // onEndReached = {() =>this.props.loadMore()}
                         />
                     </View>
                 </View>
@@ -99,21 +101,28 @@ class ProductComponent extends Component{
     }
     _renderItem = ({item,index}) => {
         return(
-            <TouchableOpacity style = {[{width:Size.width, height: 200},index%2==0?{backgroundColor:'#bfc2cc'}:{}]}
+            <TouchableOpacity style = {[{width:Size.width, height: 250, flex:1, paddingHorizontal:10, paddingVertical: 10, borderBottomColor: 'black',borderBottomWidth:1}]}
             onPress = {()=>{NavigationService.navigate('ProductDetailScreen',{item:item})}}
             >
                 <View style = {{flex:4, flexDirection:'row',justifyContent:'center'}}>
-                    <Image
-                    source = {{uri:base_image_url+item.image_url}}
-                    style = {{width:150, height:150}}
+                        {/* <Image
+                        source = {{uri:base_image_url+item.image_url}}
+                        style = {{width:'100%', height:'100%'}}
+                        /> */}
+                    <ImageBackground
+                        source = {{uri:base_image_url+item.image_url}}
+                        style = {{flex:1}}
                     />
-                    <View style = {{flexDirection:'column'}}>
+                    <View style = {{flexDirection:'column', flex:1, justifyContent: 'center'}}>
                         <Text style = {{color: '#323835', marginLeft:10}}>Type: {item.type.name}</Text>
                         <Text style = {{color: '#323835', marginLeft:10}}>Price: {item.price} VND</Text>
                         <Text style = {{color: '#323835', marginLeft:10}}>Warranty: {item.guaranteeDuration}</Text>
                     </View>
                 </View>
-                <Text style = {{flex:1,fontWeight:'bold',}}>{item.name}</Text>
+                <View style = {{flex:1, paddingTop: 10}}>
+                    <Text style = {{flex:1,fontWeight:'bold',}}>{item.name}</Text>
+                </View>
+                
             </TouchableOpacity>
         )
     }
@@ -123,7 +132,8 @@ const styles = StyleSheet.create({
     productList:{
         flex:7,
         justifyContent:'space-between',
-        alignItems:'center'
+        alignItems:'center',
+        backgroundColor:'rgb(240, 240, 240)',
     },
     container:{
         flex:1,
@@ -140,7 +150,8 @@ const styles = StyleSheet.create({
 
 mapStateToProps = (state,action) => {
     return{
-        devices: state.DeviceReducer.devices
+        devices: state.DeviceReducer.devices,
+        productType: state.DeviceTypeReducer.deviceType
     }
 }
 
@@ -148,6 +159,9 @@ mapDispatchToProps = (dispatch,action) => {
     return{
        _getDevices:(token) => {
            dispatch(getAllDevices(token))
+       },
+       _getDeviceType:(token) => {
+           dispatch(getDeviceType(token))
        }
     }
 }

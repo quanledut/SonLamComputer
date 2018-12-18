@@ -13,7 +13,6 @@ export default LoginReducer = (state = defaultState,action) => {
                     state
                 }
             case LoginActionType.LOGIN_SUCCESS: 
-                console.log('reducer login success')
                 return {
                     ...state,
                     token: action.token,

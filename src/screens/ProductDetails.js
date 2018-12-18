@@ -8,7 +8,7 @@ const Size = Dimensions.get('window')
 export default class ProductDetail extends Component{
     render(){
         const item = this.props.navigation.state.params && this.props.navigation.state.params.item || {}
-        console.log('Item:' + JSON.stringify(item))
+        //console.log('Item:' + JSON.stringify(item))
         return(
             <MenuProvider>
                 <Header title = 'Product Details' username = 'thanhson'/>

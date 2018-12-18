@@ -44,11 +44,10 @@ const TopLevelNavigator = createStackNavigator(
   HomeScreen: {
     screen: HomeScreen,
     navigationOptions:{
-      header:null
-    }
-  }
+      header:null}}
   },
-  {initialRouteName:'SplashScreen'})
+  {initialRouteName:'SplashScreen',
+  navigationOptions:{header:null}})
 const AppContainer = createAppContainer(TopLevelNavigator)
 
 sagaMiddleWare = createSagaMiddleWare()
@@ -62,9 +61,6 @@ export default class App extends Component<Props> {
     return (
       <Provider store = {store}>
         <AppContainer
-        // ref={navigatorRef => {
-        //   NavigationService.setTopLevelNavigator(navigatorRef);
-        // }}
         />
       </Provider> 
     );

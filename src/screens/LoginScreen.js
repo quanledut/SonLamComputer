@@ -19,14 +19,6 @@ class LoginComponent extends Component{
         }
     }
 
-    // componentDidMount(){
-    //     console.log('Login state: '+this.props.loginSuccess)
-    //     if(this.props.loginSuccess == 'Login success') 
-    //         setTimeout(()=>{
-    //             NavigationService.navigate('HomeScreen')
-    //         },1000)
-    // }
-
     render(){
         return(
             <View style={styles.container}>
@@ -77,7 +69,7 @@ class LoginComponent extends Component{
                                 passwordError: text === '' ? 'Password is required' : ''
                             })}
                         />
-                        <CheckBox
+                        {/* <CheckBox
                             center
                             title='Remember me'
                             checked={this.state.remember}
@@ -87,7 +79,7 @@ class LoginComponent extends Component{
                                 })
                             }}
                             containerStyle = {{backgroundColor:'rgba(0,0,0,0)', borderWidth: 0}}
-                        />
+                        /> */}
                         <Text style = {[this.props.loginSuccess == 'Login success'?{color:'green'}:{color:'red'},{fontSize:15}]}>{this.props.loginSuccess}</Text>
                         <Button onPress = {this._onLogin}
                             icon={{
@@ -150,7 +142,7 @@ mapStateToProps = (state,action) => {
 mapDispatchToProps = (dispatch,action) => {
     return{
         _onLogin: (username, password,remember) => {
-            dispatch(LoginAction.requestLogin(username,password,remember))
+            dispatch(LoginAction.requestLogin(username,password,true))
         }
     }
 }

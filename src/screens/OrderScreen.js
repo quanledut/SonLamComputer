@@ -133,7 +133,6 @@ class OrderComponent extends Component{
     }
 
     componentDidMount(){
-        // console.log(this.props.devices)
     }
     render(){
         return(
@@ -180,8 +179,8 @@ class OrderComponent extends Component{
                 <View style = {{flex:4, flexDirection:'row',justifyContent:'center'}}>
                     <Text style = {{flex:1}}>{item.name}</Text>
                     <Text style = {{flex:2}}>{item.product}</Text>
-                    <Text style = {{flex:0.4}}>{item.price}</Text>
-                    <Text style = {{flex:0.3}}>{item.warranty}</Text>
+                    <Text style = {{flex:0.7}}>{item.price}</Text>
+                    <Text style = {{flex:0.5}}>{item.warranty}</Text>
                 </View>
             </TouchableOpacity>
         )

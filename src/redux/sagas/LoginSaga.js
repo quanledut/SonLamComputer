@@ -6,7 +6,6 @@ import NavigationService from '../../navigations/NavigationService'
 
 function* postLogin(action) {
     try{
-        console.log('Saga post login')
         const response = yield API.postLogin(action.username,action.password, action.remember)
         if(response.status == '200'){
             token = yield JSON.parse(response._bodyInit).token
@@ -15,14 +14,12 @@ function* postLogin(action) {
                 type: LoginActionType.LOGIN_SUCCESS,
                 token: response.token
             })
-            console.log('Navigation to Home')
             yield NavigationService.navigate('HomeScreen',token)
         }
         else {
             yield put({
                 type: LoginActionType.LOGIN_FAILED,
             })
-            console.log('Login failed')
         }
     }
     catch(err){
