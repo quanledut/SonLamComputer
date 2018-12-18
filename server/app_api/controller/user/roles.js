@@ -15,7 +15,6 @@ const find = (req, res) => {
 const findById = (req, res) => {
     Role
         .findById(req.params.roleId)
-        .populate('users')
         .populate('policies')
         .exec((err, role) => {
             if (!role) sendJsonResponse(res, 404, {
@@ -41,7 +40,7 @@ const create = async (req, res) => {
                 isCreate: policy.isCreate,
                 isRead: policy.isRead,
                 isUpdate: policy.isUpdate,
-                isDelete: policy.isDelete                
+                isDelete: policy.isDelete
             })
         }
         console.log("Done")

@@ -1,6 +1,6 @@
 import request from '../utils/request'
 
-const loginApi = (username, password) => 
+const loginApi = (username, password) =>
     request({
         'Content-Type': 'application/json'
     })

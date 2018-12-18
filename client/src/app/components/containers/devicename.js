@@ -8,7 +8,7 @@ import * as computerNameActions from '../../actions/computerName'
 import * as deviceTypeActions from '../../actions/deviceType'
 
 export const DeviceNameForm = connect(
-    null, 
+    null,
     dispatch => ({
         create(deviceName, cb) {
             dispatch(deviceNameActions.createRequest(deviceName, cb));
@@ -18,6 +18,12 @@ export const DeviceNameForm = connect(
         },
         getById(id, cb) {
             dispatch(deviceNameActions.findByIdRequest(id, cb));
+        },
+        getImportById(id, cb) {
+            dispatch(deviceNameActions.findImportByIdRequest(id, cb));
+        },
+        getExportById(id, cb) {
+            dispatch(deviceNameActions.findExportByIdRequest(id, cb));
         },
         findAllComputerName(query, cb){
             dispatch(computerNameActions.findAllRequest(query, cb));
@@ -29,10 +35,10 @@ export const DeviceNameForm = connect(
 )(DeviceNameFormUI);
 
 export const DeviceNames = connect(
-    state => { 
+    state => {
         return {
-            todos: state.devices, 
-            keyword: state.searchDevices 
+            todos: state.devices,
+            keyword: state.searchDevices
         }
     },
     dispatch => ({

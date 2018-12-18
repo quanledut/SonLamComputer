@@ -38,7 +38,7 @@ class RoleFormUI extends Component {
                 isLoading: false,
                 title: "",
                 content: ""
-            },      
+            },
             roles: [],
             isDisabled:true,
             isRedirect: false,
@@ -68,7 +68,7 @@ class RoleFormUI extends Component {
                     form: data
                 })
             })
-        } 
+        }
             this.props.findCollectionNames((data, error) => {
                 this.setState({
                     collections: data.collections,
@@ -87,7 +87,7 @@ class RoleFormUI extends Component {
                 isLoading: false,
                 title: "",
                 content: ""
-            },      
+            },
             isDisabled:true,
             isRedirect: false
         });
@@ -100,9 +100,9 @@ class RoleFormUI extends Component {
             ...modal,
             isOpened: true
           }
-        })  
-    }   
-    
+        })
+    }
+
     _closeModal () {
         this.setState({
           modal: {
@@ -121,18 +121,18 @@ class RoleFormUI extends Component {
             let policy = this.state.form.policies[i]
             if (policy.collectionName === "None") return false
             if (collectionNames.indexOf(policy.collectionName) !== -1) return false
-            collectionNames.push(policy.collectionName) 
+            collectionNames.push(policy.collectionName)
         }
         return true
     }
 
     onSubmitForm = (event) =>
-    { 
+    {
         event.preventDefault();
 
         if (!this._isPoliciesValid()) {
             this._openModal({
-                isLoading: false, 
+                isLoading: false,
                 isOpened: true,
                 title: "Error",
                 content: "Vui lòng phân quyền cho các bảng!"
@@ -159,13 +159,13 @@ class RoleFormUI extends Component {
                     })
                     this.setState({
                         isRedirect: true
-                    })              
+                    })
                 } else {
                     this._openModal({
                         title: "Error",
                         content: error,
                         isLoading: false,
-                      })              
+                      })
                 }
             })
         } else {
@@ -179,13 +179,13 @@ class RoleFormUI extends Component {
                     })
                     this.setState({
                         isRedirect: true
-                    })              
+                    })
                 } else{
                     this._openModal({
                         title: "Error",
                         content: error,
                         isLoading: false,
-                      })              
+                      })
                 }
             })
         }
@@ -223,7 +223,7 @@ class RoleFormUI extends Component {
                         policy[e.target.name] = !policy[e.target.name]
                         return policy
                     }
-                        
+
                 })
             }
         })
@@ -242,7 +242,7 @@ class RoleFormUI extends Component {
                         ...this.state.permissions.reduce((obj, i) => {
                             obj[i] = false
                             return obj
-                        }, {}) 
+                        }, {})
                     }
                 ]
             }
@@ -258,7 +258,7 @@ class RoleFormUI extends Component {
         //                 </Input>
         //             </td>
         //             {
-        //                 this.state.permissions.map((item, id) => 
+        //                 this.state.permissions.map((item, id) =>
         //                     <td key={id}>
         //                         <FormGroup check>
         //                             <Input onChange={(e) => this._handlePolicies(e, key)} type="checkbox" name={item} checked={this.state.form.policies[key][item]}/>
@@ -266,7 +266,7 @@ class RoleFormUI extends Component {
         //                     </td>)
         //             }
         //             <td><Button onClick={(e) => this._deletePolicy(e, key)}>Delete</Button></td>
-        //         </tr>                
+        //         </tr>
         //     ]
         // })
     }
@@ -298,12 +298,12 @@ class RoleFormUI extends Component {
             this.setState({
                 isDisabled:false
               })
-  
+
         }
 
         if(name === 'name')
         {
-            if(value.length > 50 || value.length < 1) 
+            if(value.length > 50 || value.length < 1)
             {
                 this.setState({
                     isDisabled:true
@@ -346,15 +346,15 @@ class RoleFormUI extends Component {
                                 <Form action="" method="post">
                                     <FormGroup>
                                         <Label htmlFor="nf-username">Tên quyền</Label>
-                                        <Input onChange = {(event) => (this.isChange(event))} 
+                                        <Input onChange = {(event) => (this.isChange(event))}
                                             value = {this.state.form.name}
                                             type="username" id="nf-username" name="name" placeholder="Nhập tên quyền..." autoComplete="current-password" />
-                                         {this.state.error.name ? <FormText className="help-block"><span style={{color: "red"}}>Vui lòng nhập tên quyền hợp lệ!</span></FormText> : ''} 
+                                         {this.state.error.name ? <FormText className="help-block"><span style={{color: "red"}}>Vui lòng nhập tên quyền hợp lệ!</span></FormText> : ''}
                                     </FormGroup>
                                 </Form>
 
                             </CardBody>
-                            <CustomTable 
+                            <CustomTable
                                     thead = {
                                         <tr>
                                             <th>Tên bảng</th>
@@ -373,12 +373,22 @@ class RoleFormUI extends Component {
                                                     </Input>
                                                 </td>
                                                 {
-                                                    this.state.permissions.map((permission, id) => 
+                                                    this.state.permissions.map((permission, id) => {
+                                                      let disabled = false;
+                                                      if (permission == 'isRead' && (item.collectionName == 'Device' || item.collectionName == 'DeviceType')) {
+                                                        item[permission] = true;
+                                                        disabled = true;
+                                                      }
+
+                                                      return (
                                                         <td key={id}>
-                                                            <FormGroup check>
-                                                                <Input onChange={(e) => this._handlePolicies(e, key)} type="checkbox" name={permission} checked={item[permission]}/>
-                                                            </FormGroup>
-                                                        </td>)
+                                                          <FormGroup check>
+                                                              <Input onChange={(e) => this._handlePolicies(e, key)} type="checkbox" name={permission} checked={item[permission]} disabled={disabled ? true : false}/>
+                                                          </FormGroup>
+                                                        </td>
+                                                      )
+                                                    }
+                                                  )
                                                 }
                                                 <td><Button onClick={(e) => this._deletePolicy(e, key)}>Delete</Button></td>
                                             </tr>

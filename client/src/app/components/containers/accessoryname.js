@@ -8,7 +8,7 @@ import * as computerNameActions from '../../actions/computerName'
 import * as accessoryTypeActions from '../../actions/accessoryType'
 
 export const AccessoryNameForm = connect(
-    null, 
+    null,
     dispatch => ({
         create(accessoryName, cb) {
             dispatch(accessoryNameActions.createRequest(accessoryName, cb));
@@ -18,6 +18,12 @@ export const AccessoryNameForm = connect(
         },
         getById(id, cb) {
             dispatch(accessoryNameActions.findByIdRequest(id, cb));
+        },
+        getImportById(id, cb) {
+          dispatch(accessoryNameActions.findImportByIdRequest(id, cb));
+        },
+        getExportById(id, cb) {
+            dispatch(accessoryNameActions.findExportByIdRequest(id, cb));
         },
         findAllComputerName(query, cb){
             dispatch(computerNameActions.findAllRequest(query, cb));
@@ -29,10 +35,10 @@ export const AccessoryNameForm = connect(
 )(AccessoryNameFormUI);
 
 export const AccessoryNames = connect(
-    state => { 
+    state => {
         return {
-            todos: state.accessorys, 
-            keyword: state.searchAccessorys 
+            todos: state.accessorys,
+            keyword: state.searchAccessorys
         }
     },
     dispatch => ({

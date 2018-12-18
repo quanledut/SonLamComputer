@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Modal from '../../../utils/Modal'
 import { Redirect } from 'react-router-dom';
+import CustomTable from '../../../utils/Table';
 
 import {
     Button,
@@ -44,6 +45,8 @@ class AccessoryNameFormUI extends Component {
                 content: ""
             },
             types: [],
+            import: [],
+            export: [],
             isDisabled: true,
             isRedirect: false,
             formErrors: { type: '', amount: '', price: '', guaranteeDuration: '', inputPrice: '' },
@@ -82,6 +85,21 @@ class AccessoryNameFormUI extends Component {
                 types: types.docs
             })
         });
+
+        this.props.getImportById(id, (data) => {
+          this.setState({
+            ...this.state,
+            import: data
+          })
+        })
+
+        this.props.getExportById(id, (data) => {
+          this.setState({
+            ...this.state,
+            export: data
+          })
+        })
+
     }
 
     onClear = () => {
@@ -345,7 +363,7 @@ class AccessoryNameFormUI extends Component {
                                             type="username" id="nf-username" name="amount" placeholder="Nhập số tiền..." autoComplete="current-password" />
                                         {this.state.formErrors.amount ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.amount}</span></FormText> : ''}
                                     </FormGroup>
-                                    <FormGroup>
+                                    {/* <FormGroup>
                                         <Label htmlFor="nf-username">Link ảnh</Label>
                                         <Input
                                             onChange={(event) => (this.isChange(event))}
@@ -359,13 +377,13 @@ class AccessoryNameFormUI extends Component {
                                                 </Card>
                                             )
                                         }
-                                    </FormGroup>
+                                    </FormGroup> */}
                                     {/* <FormGroup>
                                         <Label htmlFor="nf-username">Link ảnh</Label>
-                                        <Input onChange = {(event) => (this.isChange(event))} 
+                                        <Input onChange = {(event) => (this.isChange(event))}
                                             value = {this.state.form.image_url}
                                             type="username" id="nf-username" name="image_url" placeholder="Nhập link ảnh..." autoComplete="current-password" />
-                                         {this.state.error.image_url ? <FormText className="help-block"><span style={{color: "red"}}>Vui lòng nhập đúng định dạng!</span></FormText> : ''} 
+                                         {this.state.error.image_url ? <FormText className="help-block"><span style={{color: "red"}}>Vui lòng nhập đúng định dạng!</span></FormText> : ''}
                                     </FormGroup> */}
                                     <FormGroup>
                                         <Label htmlFor="nf-username">Thời gian bảo hành</Label>
@@ -374,6 +392,73 @@ class AccessoryNameFormUI extends Component {
                                             type="username" id="nf-username" name="guaranteeDuration" placeholder="Nhập thời gian bảo hành..." autoComplete="current-password" />
                                         {this.state.formErrors.guaranteeDuration ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.guaranteeDuration}</span></FormText> : ''}
                                     </FormGroup>
+                                    {
+                                  (this.props.match.params.id) && (
+                                    <div>
+                                      <Label htmlFor="select">Lịch sử nhập kho</Label>
+                                      <CustomTable
+                                        thead = {
+                                            <tr>
+                                                <th>Ngày nhập</th>
+                                                <th>Số lượng</th>
+                                                <th>Giá nhập</th>
+                                            </tr>
+                                        }
+
+                                        tbody = {this.state.import.map((item, key) => {
+                                          return (
+                                            <tr key>
+                                              <td>
+                                                <a>{item.createdAt}</a>
+                                              </td>
+                                              <td>
+                                                <a>{item.amount}</a>
+                                              </td>
+                                              <td>
+                                                <a>{item.price}</a>
+                                              </td>
+                                            </tr>
+                                          )
+                                        })}
+
+                                        hasPagination = {false} />
+                                    </div>
+                                  )
+                                }
+
+                                {
+                                  (this.props.match.params.id) && (
+                                    <div>
+                                      <Label htmlFor="select">Lịch sử xuất kho</Label>
+                                        <CustomTable
+                                          thead = {
+                                              <tr>
+                                                  <th>Ngày nhập</th>
+                                                  <th>Số lượng</th>
+                                                  <th>Giá bán</th>
+                                              </tr>
+                                          }
+
+                                          tbody = {this.state.export.map((item, key) => {
+                                            return (
+                                              <tr key>
+                                                <td>
+                                                  <a>{item.createdAt}</a>
+                                                </td>
+                                                <td>
+                                                  <a>{item.amount}</a>
+                                                </td>
+                                                <td>
+                                                  <a>{item.price}</a>
+                                                </td>
+                                              </tr>
+                                            )
+                                          })}
+
+                                          hasPagination = {false} />
+                                    </div>
+                                  )
+                                }
                                 </Form>
                             </CardBody>
                             <CardFooter>

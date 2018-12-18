@@ -1,8 +1,12 @@
 const mongoose = require('mongoose');
 const Accessory = mongoose.model('Accessory');
 const HistoryAccessory = mongoose.model('HistoryInputAccessory');
+const Service = mongoose.model('Service');
+
 const {sendJsonResponse} = require('../utils');
 const {createPaginationQueryByAggregate} = require('../../helpers/paginationHelper')
+
+const permission = require('../permission');
 
 const createAggregate = (stringQuery) => {
     let aggreagte = Accessory
@@ -50,20 +54,20 @@ const find = async (req,res) => {
                 })
                 .populate('type')
                 .exec()
-                
+
             sendJsonResponse(res,200,{
                 docs: accessory,
-        
+
             });
 
             return;
         }
-        
-    
-    
+
+
+
         const {page, pages, limit, skip, total} = await createPaginationQueryByAggregate(createAggregate(req.query.string), req.query)
-    
-        
+
+
         const accessory = await createAggregate(req.query.string)
             .skip(skip)
             .limit(limit)
@@ -104,6 +108,52 @@ const findById = (req,res) => {
     }));
 }
 
+const historyImport = (req, res) => {
+  HistoryAccessory.find({
+    accessory: req.params.accessoryId
+  }).exec().then((history) => {
+    sendJsonResponse(res, 200, history)
+  }).catch((err) => sendJsonResponse(res, 200, {}))
+}
+
+const historyExport = (req, res) => {
+  if (!req.payload || !req.payload.roles) {
+    sendJsonResponse(res, 200, {});
+  }
+
+  const checkPermissionForAccessory = permission.checkPermissionForCollection('Accessory');
+  if (!checkPermissionForAccessory(permission.type.READ)) {
+    sendJsonResponse(res, 200, {});
+  }
+
+  Service.find({
+    "accessories.accessoryId": req.params.accessoryId
+  }).exec().then((services) => {
+    const result = services.map((service) => {
+      const history = service.accessories.reduce((obj, item) => {
+        if (item.accessoryId == req.params.accessoryId) {
+          obj.amount++;
+          obj.price = item.price
+        }
+        return obj;
+      }, {
+        amount: 0,
+        price: 0,
+      });
+
+      history.createdAt = service.date;
+      history.serviceId = service._id;
+
+      return history;
+    });
+
+    sendJsonResponse(res, 200, result);
+
+  }).catch(err => {
+    sendJsonResponse(res, 200, {});
+  })
+}
+
 const findByName = (req,res) =>{
     Accessory
     .find({name:req.params.name})
@@ -127,18 +177,18 @@ const create = async (req,res) => {
         let prevAccessory = await Accessory
         .findOne({type: new mongoose.Types.ObjectId(req.body.type)})
         .exec();
-    
+
         if (prevAccessory) {
             prevAccessory.amount = req.body.amount + parseInt(prevAccessory.amount);
             prevAccessory.price = req.body.price;
             prevAccessory.guaranteeDuration = req.body.guaranteeDuration;
-    
+
             if (req.body.description) {
-                prevAccessory.description = req.body.description;    
+                prevAccessory.description = req.body.description;
             }
 
             if (req.body.image_url) {
-                prevAccessory.image_url = req.body.image_url;    
+                prevAccessory.image_url = req.body.image_url;
             }
 
             const result = await prevAccessory.save();
@@ -168,7 +218,7 @@ const create = async (req,res) => {
             });
 
             sendJsonResponse(res,201,result)
-        } 
+        }
     } catch(err) {
         sendJsonResponse(res,500, {
             msg: "Nhap hang thất bại",
@@ -176,7 +226,7 @@ const create = async (req,res) => {
         });
     }
 
-    
+
 }
 
 // const updateById = (req,res) => {
@@ -204,7 +254,7 @@ const updateById = (req, res) => {
             req.params.accessoryId,
             {
                 ...req.body
-            }, 
+            },
             {
                 new: true
             },
@@ -235,5 +285,7 @@ module.exports = {
     findByName,
     create,
     updateById,
-    deleteById
+    deleteById,
+    historyImport,
+    historyExport
 }

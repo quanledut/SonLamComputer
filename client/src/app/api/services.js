@@ -1,6 +1,8 @@
 import request from '../utils/request'
+import { handleUnauthorized } from '../utils/handleAuthError'
 
-const findAll = (query) => 
+
+const findAll = (query) =>
     request()
         .get("/serviceFix", {
             params: {
@@ -12,7 +14,7 @@ const findAll = (query) =>
             throw new Error(err.response.data.msg)
         });
 
-const deleteApi = (id) => 
+const deleteApi = (id) =>
     request()
         .delete(`/serviceFix/${id}`)
         .then((response) => response.data)
@@ -20,7 +22,7 @@ const deleteApi = (id) =>
             throw new Error(err.response.data.msg)
         });
 
-const addApi = (data) => 
+const addApi = (data) =>
 request()
     .post("/serviceFix",data)
     .then((response) => response.data)
@@ -29,7 +31,7 @@ request()
         else throw new Error(err)
     });
 
-const findByIdApi = (id) => 
+const findByIdApi = (id) =>
 request()
     .get(`/serviceFix/${id}`)
     .then((response) => response.data)
@@ -37,12 +39,12 @@ request()
         throw new Error(err.response.data.msg)
     });
 
-const updateApi = (data) => 
+const updateApi = (data) =>
 request()
     .put(`/serviceFix/${data._id}`, data)
     .then((response) => response.data)
     .catch((err) => {
         throw new Error(err.response.data.msg)
     });
-                    
+
 export {findAll, deleteApi, addApi, findByIdApi, updateApi}

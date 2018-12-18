@@ -125,9 +125,9 @@ class ServiceFormUI extends Component {
                     }
                 })
             });
-    
+
             this._findAllAccessoryTypes();
-    
+
         }
     }
 
@@ -140,7 +140,7 @@ class ServiceFormUI extends Component {
             })
         });
     }
-    
+
     onClear = () => {
         this.setState({
             form: { ...DEFAULT_FORM },
@@ -225,6 +225,7 @@ class ServiceFormUI extends Component {
         }, (accessories, err) => {
             const currentAccessoriesState = this.state.form.accessories
             if (!err) currentAccessoriesState[key] = {
+                accessoryId: accessories.docs[0]._id,
                 ...currentAccessoriesState[key],
                 price: accessories.docs[0].price,
                 guaranteeDuration: accessories.docs[0].guaranteeDuration
@@ -390,7 +391,7 @@ class ServiceFormUI extends Component {
             this.state.form.accessories = this.state.form.accessories.map(i => {
                 return {
                     ...i,
-                    accessoryId:this.state.accessoryTypes.filter(i1 => i1._id === i.type)[0]._id,
+                    // accessoryId:this.state.accessories.filter(i1 => i1._id === i.type)[0]._id,
                     type: this.state.accessoryTypes.filter(i1 => i1._id === i.type)[0].name
                 }
             })
@@ -571,13 +572,13 @@ class ServiceFormUI extends Component {
     }
 
     handleChange = (selectedOption) => {
-        this.setState({ 
+        this.setState({
             form: {
-                ...this.state.form, customer_name:selectedOption 
+                ...this.state.form, customer_name:selectedOption
             }
         });
     };
-        
+
     render() {
         if (this.state.isRedirect) {
             return (
@@ -590,7 +591,7 @@ class ServiceFormUI extends Component {
             {
                 var name = e.fullname +', SĐT: '+e.phone;
                 var id = e._id;
-                options.push({value:id,label:name})  
+                options.push({value:id,label:name})
             }
         );
         return (
@@ -659,7 +660,7 @@ class ServiceFormUI extends Component {
                                         {this.state.formErrors.serviceType ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.serviceType}</span></FormText> : ''}
                                     </FormGroup> */}
                                     {
-                                        (this.props.match.params.id) 
+                                        (this.props.match.params.id)
                                         && (
                                             <FormGroup>
                                                 <Label htmlFor="nf-username">Tổng tiền</Label>

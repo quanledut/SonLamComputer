@@ -1,8 +1,11 @@
 const mongoose = require('mongoose');
 const Device = mongoose.model('Device');
 const HistoryDevice = mongoose.model('HistoryInputDevice');
+const Service = mongoose.model('Service');
 const {sendJsonResponse} = require('../utils');
 const {createPaginationQueryByAggregate} = require('../../helpers/paginationHelper')
+
+const permission = require('../permission');
 
 const createAggregate = (stringQuery) => {
     let aggreagte = Device
@@ -51,20 +54,20 @@ const find = async (req,res) => {
                 .find(query)
                 .populate('deviceType')
                 .exec()
-                
+
             sendJsonResponse(res,200,{
                 docs: device,
-        
+
             });
 
             return;
         }
-        
-    
-    
+
+
+
         const {page, pages, limit, skip, total} = await createPaginationQueryByAggregate(createAggregate(req.query.string), req.query)
-    
-        
+
+
         const device = await createAggregate(req.query.string)
             .skip(skip)
             .limit(limit)
@@ -111,6 +114,50 @@ const findByName = (req,res) =>{
     }
     ,(err) => sendJsonResponse(res,500,{             msg: "Tìm kiếm thất bại",             detail: err         })
     )
+}
+
+const historyImport = (req, res) => {
+  HistoryDevice.find({
+    device: req.params.deviceId
+  }).exec().then((history) => {
+    sendJsonResponse(res, 200, history)
+  }).catch((err) => sendJsonResponse(res, 200, {}))
+}
+
+const historyExport = (req, res) => {
+  if (!req.payload || !req.payload.roles) {
+    sendJsonResponse(res, 200, {});
+  }
+
+  const checkPermissionForService = permission.checkPermissionForCollection('Service');
+  if (!checkPermissionForService(permission.type.READ)) {
+    sendJsonResponse(res, 200, {});
+  }
+
+  Service.find({
+    "devices.deviceId": req.params.deviceId
+  }).exec().then((services) => {
+    const result = services.map((service) => {
+      const history = service.devices.reduce((obj, item) => {
+        if (item.deviceId == req.params.deviceId) {
+          obj.amount++;
+          obj.price = item.price
+        }
+        return obj;
+      }, {
+        amount: 0,
+        price: 0,
+      });
+
+      history.createdAt = service.date;
+      history.serviceId = service._id;
+
+      return history;
+    });
+
+    sendJsonResponse(res, 200, result);
+
+  })
 }
 
 const create = async (req,res) => {
@@ -191,7 +238,7 @@ const updateById = (req, res) => {
             req.params.deviceId,
             {
                 ...req.body
-            }, 
+            },
             {
                 new: true
             },
@@ -216,5 +263,7 @@ module.exports = {
     findByName,
     create,
     updateById,
-    deleteById
+    deleteById,
+    historyImport,
+    historyExport
 }

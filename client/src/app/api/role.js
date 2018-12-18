@@ -1,51 +1,65 @@
 import request from '../utils/request'
+import { handleUnauthorized } from '../utils/handleAuthError'
 
-const findCollectionNames = () => 
+
+const findCollectionNames = () =>
     request()
         .get('/roles/collectionNames')
         .then((response) => response.data)
         .catch((err) => {
+                      handleUnauthorized(err, () => {
             console.log(err); throw new Error(err.response.data.msg)
+          })
         })
 
-const findAll = () => 
+const findAll = () =>
     request()
         .get("/roles")
         .then((response) => response.data)
         .catch((err) => {
+                      handleUnauthorized(err, () => {
             console.log(err); throw new Error(err.response.data.msg)
+          })
         });
 
-const deleteApi = (id) => 
+const deleteApi = (id) =>
     request()
         .delete(`/roles/${id}`)
         .then((response) => response.data)
         .catch((err) => {
+                      handleUnauthorized(err, () => {
             console.log(err); throw new Error(err.response.data.msg)
+          })
         });
 
-const addApi = (data) => 
+const addApi = (data) =>
 request()
     .post("/roles",data)
     .then((response) => response.data)
     .catch((err) => {
-        console.log(err); throw new Error(err.response.data.msg)
+                  handleUnauthorized(err, () => {
+            console.log(err); throw new Error(err.response.data.msg)
+          })
     });
 
-const findByIdApi = (id) => 
+const findByIdApi = (id) =>
 request()
     .get(`/roles/${id}`)
     .then((response) => response.data)
     .catch((err) => {
-        console.log(err); throw new Error(err.response.data.msg)
+                  handleUnauthorized(err, () => {
+            console.log(err); throw new Error(err.response.data.msg)
+          })
     });
 
-const updateApi = (data) => 
+const updateApi = (data) =>
 request()
     .put(`/roles/${data._id}`, data)
     .then((response) => response.data)
     .catch((err) => {
-        console.log(err); throw new Error(err.response.data.msg)
+                  handleUnauthorized(err, () => {
+            console.log(err); throw new Error(err.response.data.msg)
+          })
     });
-        
+
 export {findAll, deleteApi, addApi, findByIdApi, updateApi, findCollectionNames}
