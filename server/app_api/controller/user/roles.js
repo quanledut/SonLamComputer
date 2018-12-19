@@ -97,7 +97,15 @@ const deleteById = (req, res) => {
 
 const getCollectionNames = (req, res) => {
     sendJsonResponse(res, 200, {
-        collections: Object.keys(mongoose.connection.models),
+        collections: Object.keys(mongoose.connection.models).filter(item => {
+            return item != 'Role' && 
+                item != 'UserInfo' && 
+                item != 'LoginInfo' &&
+                item != 'Role' && 
+                item != 'Policy' &&
+                item != 'HistoryInputDevice' &&
+                item != 'HistoryInputAccessory'
+        }),
         permissions: DEFAULT_PERMISSION_NAMES
 
     })
