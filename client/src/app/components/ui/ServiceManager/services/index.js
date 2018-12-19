@@ -66,13 +66,13 @@ class ServiceUI extends Component {
                             array.push(item.computerSeries)
                         }
                         return array
-                    }, []).map(i =>  <a>{i}</a>)}</td>
+                    }, []).join(', ')}</td>
                     <td>{item.accessories.reduce((array, item) => {
                         if (array.indexOf(item.type) == -1) {
                             array.push(item.type)
                         }
                         return array
-                    }, []).map(i =>  <a>{i}</a>)}</td>
+                    }, []).join(', ')}</td>
                     <td>{`${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`}</td>
                     <td>{item.formatTotalPrice}</td>
 
@@ -115,14 +115,14 @@ class ServiceUI extends Component {
                                 <CustomTable
                                     thead = {
                                         <tr>
-                                            <th>Người bán</th>
+                                            <th style={{ width: '10%' }}>Người bán</th>
                                             <th>Khách hàng</th>
                                             <th>SDT</th>
                                             <th>Series May</th>
                                             <th>Loại</th>
                                             <th>Ngày DV</th>
                                             <th>Tổng tiền</th>
-                                            <th style={{ width: '20%' }}>Hành động</th>
+                                            <th>Hành động</th>
                                         </tr>
                                     }
 
