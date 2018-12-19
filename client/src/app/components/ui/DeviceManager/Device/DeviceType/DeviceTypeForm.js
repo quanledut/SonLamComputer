@@ -178,16 +178,16 @@ class DeviceTypeFormUI extends Component {
         let fieldValidationErrors = this.state.error;
         let nameValid = this.state.nameValid;
 
-        switch(fieldName) {
-          case 'name':
-            nameValid = value.length > 5 && value.length < 101;
-            fieldValidationErrors.name = nameValid ? '': 'Vui lòng nhập tên loại thiết bị trong khoảng 6-100 ký tự!';
-            break;
-          
-          default:
-            break;
+        switch (fieldName) {
+            case 'name':
+                nameValid = value.length > 5 && value.length < 101;
+                fieldValidationErrors.name = nameValid ? '' : 'Vui lòng nhập tên loại thiết bị trong khoảng 6-100 ký tự!';
+                break;
+
+            default:
+                break;
         }
-        this.setState({error: fieldValidationErrors});
+        this.setState({ error: fieldValidationErrors });
     }
 
     isChange = (event) => {
@@ -235,12 +235,10 @@ class DeviceTypeFormUI extends Component {
                                             type="username" id="nf-username" name="name" placeholder="Nhập tên loại thiết bị..." autoComplete="current-password" />
                                         {this.state.error.name ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.error.name}</span></FormText> : ''}
                                     </FormGroup>
+                                    <Button type="submit" size="sm" color="primary" onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button>
+                                    <Button type="reset" size="sm" color="danger" onClick={this.onClear}><i className="fa fa-ban"></i> Reset</Button>
                                 </Form>
                             </CardBody>
-                            <CardFooter>
-                                <Button type="submit" size="sm" color="primary" onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button>
-                                <Button type="reset" size="sm" color="danger" onClick={this.onClear}><i className="fa fa-ban"></i> Reset</Button>
-                            </CardFooter>
                         </Card>
                     </Col>
                 </Row>

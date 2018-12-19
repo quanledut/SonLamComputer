@@ -179,7 +179,7 @@ const create = async (req,res) => {
         .exec();
 
         if (prevAccessory) {
-            prevAccessory.amount = req.body.amount + parseInt(prevAccessory.amount);
+            prevAccessory.amount = parseInt(req.body.amount) + parseInt(prevAccessory.amount);
             prevAccessory.price = req.body.price;
             prevAccessory.guaranteeDuration = req.body.guaranteeDuration;
 

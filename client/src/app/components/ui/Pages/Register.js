@@ -265,7 +265,7 @@ class Register extends Component {
                     <InputGroup className="mb-4">
                       <FormErrors formErrors={this.state.formErrors} />
                     </InputGroup>
-                    <Button onClick={this._submit} color="success" block disabled={!this.state.formValid}>Create Account</Button>
+                    <Button type="submit" onClick={this._submit} color="success" block disabled={!this.state.formValid}>Create Account</Button>
                   </Form>
                 </CardBody>
                 {/* <CardFooter className="p-4">

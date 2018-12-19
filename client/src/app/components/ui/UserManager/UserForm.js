@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Redirect} from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import Modal from '../utils/Modal'
 import * as notifications from '../../../constants/Notifications'
 import CustomTable from '../utils/Table'
@@ -21,14 +21,14 @@ import {
 
 const DEFAULT_FORM = {
     _id: '',
-    email :'',
+    email: '',
     password: '',
     retype_password: '',
     loginInfo: {
-        username :'',
+        username: '',
     },
     username: '',
-    gender : '',
+    gender: '',
     // address :'',
     // select:'',
     phone: '',
@@ -50,20 +50,20 @@ class UserFormUI extends Component {
         console.log(this.props)
 
         this.state = {
-            form: {...DEFAULT_FORM},
-            passwordForm: {...DEFAULT_PASSWORD_FORM},
+            form: { ...DEFAULT_FORM },
+            passwordForm: { ...DEFAULT_PASSWORD_FORM },
             error: {},
             modal: {
                 isOpened: false,
                 isLoading: false,
                 title: "",
                 content: ""
-            },      
+            },
             roles: [],
             isRedirect: false,
             isEdit: false,
             isChangePassword: false,
-            formErrors: {email: '',password: '', gender:'',select:'',fullname:'',phone:'',retype_password:'', newPassword:''},
+            formErrors: { email: '', password: '', gender: '', select: '', fullname: '', phone: '', retype_password: '', newPassword: '' },
             emailValid: true,
             passwordValid: true,
             genderValid: true,
@@ -71,7 +71,7 @@ class UserFormUI extends Component {
             fullnameValid: true,
             phoneValid: true,
             newPasswordValid: true,
-            retype_passwordValid:true,
+            retype_passwordValid: true,
             formValid: true
         };
 
@@ -84,11 +84,10 @@ class UserFormUI extends Component {
         this._deleteRole = this._deleteRole.bind(this)
     }
 
-    componentWillMount(){
-        var {match} = this.props;
+    componentWillMount() {
+        var { match } = this.props;
         console.log(match.params);
-        if(match.params.id)
-        {
+        if (match.params.id) {
             var id = match.params.id;
 
             this.props.getUserById(id, (data) => {
@@ -99,10 +98,10 @@ class UserFormUI extends Component {
                 })
             })
 
-    
+
         }
 
-        if(match.params.isChangePassword === "1") {
+        if (match.params.isChangePassword === "1") {
             this.setState({
                 ...this.state,
                 passwordForm: {
@@ -122,25 +121,25 @@ class UserFormUI extends Component {
                     ...this.state,
                     roles
                 })
-            })    
+            })
         }
 
     }
 
-    onClear = () =>{
+    onClear = () => {
         this.setState({
-            form: {...DEFAULT_FORM},
-            passwordForm: {...DEFAULT_PASSWORD_FORM},
+            form: { ...DEFAULT_FORM },
+            passwordForm: { ...DEFAULT_PASSWORD_FORM },
             error: {},
             modal: {
                 isOpened: false,
                 isLoading: false,
                 title: "",
                 content: ""
-            },      
-            isDisabled:true,
+            },
+            isDisabled: true,
             isRedirect: false,
-            formErrors: {email: '',password: '', gender:'',select:'',fullname:'',phone:'',retype_password:'', newPassword:''},
+            formErrors: { email: '', password: '', gender: '', select: '', fullname: '', phone: '', retype_password: '', newPassword: '' },
             emailValid: false,
             passwordValid: false,
             genderValid: false,
@@ -153,27 +152,27 @@ class UserFormUI extends Component {
         });
     }
 
-    _openModal (modal) {
+    _openModal(modal) {
         this.setState({
-          modal: {
-            ...this.state.modal,
-            ...modal,
-            isOpened: true
-          }
-        })  
-    }   
-    
-    _closeModal () {
-        this.setState({
-          modal: {
-            isOpened: false,
-            isLoading: false,
-            title: "",
-            content: ""
-          }
+            modal: {
+                ...this.state.modal,
+                ...modal,
+                isOpened: true
+            }
         })
     }
-      
+
+    _closeModal() {
+        this.setState({
+            modal: {
+                isOpened: false,
+                isLoading: false,
+                title: "",
+                content: ""
+            }
+        })
+    }
+
     _checkError() {
         let isError = false;
         let error = {};
@@ -203,18 +202,15 @@ class UserFormUI extends Component {
                 console.log(this.state.formErrors[name])
             }
             console.log(isError)
-            
+
             this.setState({
                 error
             })
-            if(!isError)
-            {
-                if(check)
-                {
+            if (!isError) {
+                if (check) {
                     isError = false;
                 }
-                else
-                {
+                else {
                     isError = true;
                 }
             }
@@ -235,11 +231,11 @@ class UserFormUI extends Component {
                     if (isNone) return isNone;
                     if (item === "None") return true;
                 }, false) || this.state.form.roles.length === 0;
-                                
+
                 if (isRolesEmpty) {
                     isError = true
                     error.roles = true
-                }        
+                }
             } else {
                 if (this._validate(name, this.state.form[name])) {
                     error[name] = true
@@ -257,16 +253,15 @@ class UserFormUI extends Component {
         return isError;
     }
 
-    onSubmitForm =(event) =>
-    {
+    onSubmitForm = (event) => {
         event.preventDefault();
         if (this._checkError()) {
             this._openModal({
                 title: "Error",
                 content: "Xin hãy nhập dữ liệu hợp lệ",
                 isLoading: false,
-            })            
-            return;  
+            })
+            return;
         }
 
         this._openModal({
@@ -275,7 +270,7 @@ class UserFormUI extends Component {
             title: "Loading"
         })
 
-        let {_id} = this.state.form
+        let { _id } = this.state.form
         if (_id && !this.state.isChangePassword) {
             this.props.updateUser(this.state.form, (res, error) => {
                 this._closeModal()
@@ -287,13 +282,13 @@ class UserFormUI extends Component {
                     })
                     this.setState({
                         isRedirect: true
-                    })              
+                    })
                 } else {
                     this._openModal({
                         title: "Error",
                         content: error,
                         isLoading: false,
-                      })              
+                    })
                 }
             })
         } else if (this.state.isChangePassword) {
@@ -307,15 +302,15 @@ class UserFormUI extends Component {
                     })
                     this.setState({
                         isRedirect: true
-                    })              
-                } else{
+                    })
+                } else {
                     this._openModal({
                         title: "Error",
                         content: error,
                         isLoading: false,
-                      })              
+                    })
                 }
-            })            
+            })
         } else {
             this.props.createUser(this.state.form, (res, error) => {
                 this._closeModal()
@@ -327,13 +322,13 @@ class UserFormUI extends Component {
                     })
                     this.setState({
                         isRedirect: true
-                    })              
-                } else{
+                    })
+                } else {
                     this._openModal({
                         title: "Error",
                         content: error,
                         isLoading: false,
-                      })              
+                    })
                 }
             })
         }
@@ -353,82 +348,79 @@ class UserFormUI extends Component {
         const sdt = /^\+?(?:[0-9] ?){8,14}[0-9]$/;
         const email_check = /[a-zA-Z0-9]+[.]?([a-zA-Z0-9]+)?[@][a-z]{3,9}[.][a-z]{2,5}/g;
 
-        switch(fieldName) {
-          case 'email':
-            emailValid = value.length >0;
-            if(!emailValid)
-            {
-                fieldValidationErrors.email = emailValid ? '': ' Vui lòng nhập email!';
-            }else
-            {
-                emailValid = email_check.test(value);
-                fieldValidationErrors.email = emailValid ? '': ' Vui lòng nhập đúng định dạng email!';
-            }
-            break;
-          case 'password':
-            passwordValid = value.length >5 && value.length <= 50;
-            fieldValidationErrors.password = passwordValid ? '': ' Vui lòng nhập mật khẩu trong khoảng 6-50 ký tự!';
-            if(this.state.form.retype_password.length > 0)
-            {
-                this.state.form.retype_password === value ? retype_passwordValid = true: retype_passwordValid = false;
-                fieldValidationErrors.retype_password = retype_passwordValid ? '': 'Vui lòng nhập chính xác mật khẩu!';
-            }
-            break;
-          case 'fullname':
-            fullnameValid = value.length > 6 && value.length <= 50;
-            fieldValidationErrors.fullname = fullnameValid ? '': 'Vui lòng nhập tên người dùng trong khoảng 6-50 ký tự!';
-            break;
-          case 'gender':
-            genderValid = (value !== null && value !== "");
-            fieldValidationErrors.gender = genderValid ? '' : 'Vui lòng chọn giới tính!';
-            break;
-          case 'phone':
-            phoneValid = (value.length > 0);
-            if(!phoneValid)
-            {
-                fieldValidationErrors.phone = phoneValid ? '': 'Vui lòng nhập số điện thoại!';
-            }else
-            {
-                phoneValid = sdt.test(value);
-                fieldValidationErrors.phone = phoneValid ? '': 'Định dạng số điện thoại không đúng!';
-            }
-            break;
-          case 'retype_password':
-          console.log(this.state.form.retype_password)
-          console.log(this.state.form.password)
-            value === this.state.form.password ? retype_passwordValid = true: retype_passwordValid = false;
-            fieldValidationErrors.retype_password = retype_passwordValid ? '': 'Vui lòng nhập chính xác mật khẩu!';
-            break;
-          case 'select':
-            selectValid = (value !== null && value !== "");
-            fieldValidationErrors.select = selectValid ? '' : 'Vui lòng chọn phân quyền!';
-            break;
-          
-          case 'newPassword':
-            newPasswordValid = value.length >5 && value.length <= 50;
-            fieldValidationErrors.newPassword = newPasswordValid ? '': ' Vui lòng nhập mật khẩu trong khoảng 6-50 ký tự!';
-            break;
+        switch (fieldName) {
+            case 'email':
+                emailValid = value.length > 0;
+                if (!emailValid) {
+                    fieldValidationErrors.email = emailValid ? '' : ' Vui lòng nhập email!';
+                } else {
+                    emailValid = email_check.test(value);
+                    fieldValidationErrors.email = emailValid ? '' : ' Vui lòng nhập đúng định dạng email!';
+                }
+                break;
+            case 'password':
+                passwordValid = value.length > 5 && value.length <= 50;
+                fieldValidationErrors.password = passwordValid ? '' : ' Vui lòng nhập mật khẩu trong khoảng 6-50 ký tự!';
+                if (this.state.form.retype_password.length > 0) {
+                    this.state.form.retype_password === value ? retype_passwordValid = true : retype_passwordValid = false;
+                    fieldValidationErrors.retype_password = retype_passwordValid ? '' : 'Vui lòng nhập chính xác mật khẩu!';
+                }
+                break;
+            case 'fullname':
+                fullnameValid = value.length > 6 && value.length <= 50;
+                fieldValidationErrors.fullname = fullnameValid ? '' : 'Vui lòng nhập tên người dùng trong khoảng 6-50 ký tự!';
+                break;
+            case 'gender':
+                genderValid = (value !== null && value !== "");
+                fieldValidationErrors.gender = genderValid ? '' : 'Vui lòng chọn giới tính!';
+                break;
+            case 'phone':
+                phoneValid = (value.length > 0);
+                if (!phoneValid) {
+                    fieldValidationErrors.phone = phoneValid ? '' : 'Vui lòng nhập số điện thoại!';
+                } else {
+                    phoneValid = sdt.test(value);
+                    fieldValidationErrors.phone = phoneValid ? '' : 'Định dạng số điện thoại không đúng!';
+                }
+                break;
+            case 'retype_password':
+                console.log(this.state.form.retype_password)
+                console.log(this.state.form.password)
+                value === this.state.form.password ? retype_passwordValid = true : retype_passwordValid = false;
+                fieldValidationErrors.retype_password = retype_passwordValid ? '' : 'Vui lòng nhập chính xác mật khẩu!';
+                break;
+            case 'select':
+                selectValid = (value !== null && value !== "");
+                fieldValidationErrors.select = selectValid ? '' : 'Vui lòng chọn phân quyền!';
+                break;
 
-          default:
-            break;
+            case 'newPassword':
+                newPasswordValid = value.length > 5 && value.length <= 50;
+                fieldValidationErrors.newPassword = newPasswordValid ? '' : ' Vui lòng nhập mật khẩu trong khoảng 6-50 ký tự!';
+                break;
+
+            default:
+                break;
         }
-        this.setState({formErrors: fieldValidationErrors,
-                        selectValid: selectValid,
-                        phoneValid: phoneValid,
-                        genderValid: genderValid,
-                        fullnameValid: fullnameValid,
-                        passwordValid: passwordValid,
-                        emailValid: emailValid,
-                        retype_passwordValid: retype_passwordValid
-                      }, this.validateForm);
-      }
-    
-      validateForm() {
-        this.setState({formValid: this.state.phoneValid && 
-                        this.state.genderValid && this.state.fullnameValid &&
-                        this.state.passwordValid && this.state.emailValid && this.state.retype_passwordValid
-                    });
-      }
+        this.setState({
+            formErrors: fieldValidationErrors,
+            selectValid: selectValid,
+            phoneValid: phoneValid,
+            genderValid: genderValid,
+            fullnameValid: fullnameValid,
+            passwordValid: passwordValid,
+            emailValid: emailValid,
+            retype_passwordValid: retype_passwordValid
+        }, this.validateForm);
+    }
+
+    validateForm() {
+        this.setState({
+            formValid: this.state.phoneValid &&
+                this.state.genderValid && this.state.fullnameValid &&
+                this.state.passwordValid && this.state.emailValid && this.state.retype_passwordValid
+        });
+    }
 
     // _validate(name, value) {
     //     if (name === 'email') {
@@ -442,15 +434,14 @@ class UserFormUI extends Component {
     // }
 
 
-    isChange = (event) =>
-    {
+    isChange = (event) => {
         const name = event.target.name;
         const value = event.target.value;
 
         this.setState({
             form: {
                 ...this.state.form,
-                [name] : value
+                [name]: value
             }
         });
 
@@ -474,7 +465,7 @@ class UserFormUI extends Component {
         this.setState({
             passwordForm: {
                 ...this.state.passwordForm,
-                [name] : value
+                [name]: value
             }
         });
 
@@ -513,7 +504,7 @@ class UserFormUI extends Component {
         this.setState({
             form: {
                 ...this.state.form,
-                roles: this.state.form.roles.filter((item, id) => id  !== i)
+                roles: this.state.form.roles.filter((item, id) => id !== i)
             }
         })
 
@@ -521,17 +512,16 @@ class UserFormUI extends Component {
 
     render() {
         console.log(this.props);
-        const {id} = this.props.match.params;
-        if(this.state.isRedirect)
-        {
-            return(
-                <Redirect to="/usermanager"/>
+        const { id } = this.props.match.params;
+        if (this.state.isRedirect) {
+            return (
+                <Redirect to="/usermanager" />
             )
         }
-        
-        
+
+
         return (
-            
+
             <div className="animated fadeIn">
                 <Modal
                     isOpened={this.state.modal.isOpened}
@@ -554,194 +544,188 @@ class UserFormUI extends Component {
                                     <Form onSubmit={this.onSubmitForm}>
                                         <FormGroup>
                                             <Label htmlFor="nf-email">Email</Label>
-                                            <Input 
-                                                onChange = {(event) => (this.isChange(event))} 
-                                                value = {this.state.form.email}
+                                            <Input
+                                                onChange={(event) => (this.isChange(event))}
+                                                value={this.state.form.email}
                                                 type="email" id="nf-email" name="email" placeholder="Enter Email.." autoComplete="email" />
-                                            {this.state.formErrors.email ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.email}</span></FormText> : ''} 
+                                            {this.state.formErrors.email ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.email}</span></FormText> : ''}
                                         </FormGroup>
                                         {
                                             (!id || this.state.form.loginInfo)
                                             &&
                                             <FormGroup>
-                                            {
-                                                !this.state.isEdit && 
-                                                (
-                                                    <FormGroup>
+                                                {
+                                                    !this.state.isEdit &&
+                                                    (
                                                         <FormGroup>
-                                                            <Label htmlFor="nf-password">Password</Label>
-                                                            <Input 
-                                                                onChange = {(event) => (this.isChange(event))} 
-                                                                value = {this.state.form.password}
-                                                                type="password" id="nf-password" name="password" placeholder="Enter Password.." />
-                                                            {/* <FormText className="help-block">Please enter your password</FormText> */}
-                                                            {this.state.formErrors.password ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.password}</span></FormText> : ''}  
-                    
-                                                        </FormGroup>
-                                                        <FormGroup>
-                                                            <Label htmlFor="nf-password">Nhập lại Password</Label>
-                                                            <Input 
-                                                                onChange = {(event) => (this.isChange(event))} 
-                                                                value = {this.state.form.retype_password}
-                                                                type="password" id="nf-type-password" name="retype_password" placeholder="Re-type Password.." />
-                                                            {/* <FormText className="help-block">Please enter your password</FormText> */}
-                                                            {this.state.formErrors.retype_password ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.retype_password}</span></FormText> : ''}  
-                                                        </FormGroup>
-                                                    </FormGroup>
-                                                )
-                                            }
+                                                            <FormGroup>
+                                                                <Label htmlFor="nf-password">Password</Label>
+                                                                <Input
+                                                                    onChange={(event) => (this.isChange(event))}
+                                                                    value={this.state.form.password}
+                                                                    type="password" id="nf-password" name="password" placeholder="Enter Password.." />
+                                                                {/* <FormText className="help-block">Please enter your password</FormText> */}
+                                                                {this.state.formErrors.password ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.password}</span></FormText> : ''}
 
-        
-                                            <FormGroup>
-                                                <Label htmlFor="nf-username">Username</Label>
-                                                <Input onChange = {(event) => (this.isChange(event))} 
-                                                    value = {(this.state.form.loginInfo.username.length) ? this.state.form.loginInfo.username : this.state.form.username}
-                                                    {...((id) ? {disabled: true} : {})}
-                                                    type="text" id="nf-username" name="username" placeholder="Enter UserName.." autoComplete="current-password" />
+                                                            </FormGroup>
+                                                            <FormGroup>
+                                                                <Label htmlFor="nf-password">Nhập lại Password</Label>
+                                                                <Input
+                                                                    onChange={(event) => (this.isChange(event))}
+                                                                    value={this.state.form.retype_password}
+                                                                    type="password" id="nf-type-password" name="retype_password" placeholder="Re-type Password.." />
+                                                                {/* <FormText className="help-block">Please enter your password</FormText> */}
+                                                                {this.state.formErrors.retype_password ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.retype_password}</span></FormText> : ''}
+                                                            </FormGroup>
+                                                        </FormGroup>
+                                                    )
+                                                }
+
+
+                                                <FormGroup>
+                                                    <Label htmlFor="nf-username">Username</Label>
+                                                    <Input onChange={(event) => (this.isChange(event))}
+                                                        value={(this.state.form.loginInfo.username.length) ? this.state.form.loginInfo.username : this.state.form.username}
+                                                        {...((id) ? { disabled: true } : {})}
+                                                        type="text" id="nf-username" name="username" placeholder="Enter UserName.." autoComplete="current-password" />
+                                                </FormGroup>
                                             </FormGroup>
-                                        </FormGroup>
                                         }
-                                        
-                                        
+
+
                                         <FormGroup>
                                             <Label htmlFor="nf-fullname">Họ tên</Label>
-                                            <Input onChange = {(event) => (this.isChange(event))} 
-                                                value = {this.state.form.fullname}
+                                            <Input onChange={(event) => (this.isChange(event))}
+                                                value={this.state.form.fullname}
                                                 type="text" id="nf-fullname" name="fullname" placeholder="Enter FullName.." autoComplete="current-password" />
-                                            {this.state.formErrors.fullname ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.fullname}</span></FormText> : ''} 
+                                            {this.state.formErrors.fullname ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.fullname}</span></FormText> : ''}
                                         </FormGroup>
                                         <FormGroup>
                                             <Label>Giới tính</Label>
-                                            {this.state.formErrors.gender ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.gender}</span></FormText> : ''} 
+                                            {this.state.formErrors.gender ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.gender}</span></FormText> : ''}
                                             &nbsp;
                                             <FormGroup check inline>
-                                                <Input 
-                                                    className="form-check-input" 
-                                                    type="radio" id="inline-radio1" 
-                                                    name="gender" value="nam" 
-                                                    onChange = {(event) => (this.isChange(event))} 
-                                                    checked={this.state.form.gender === "nam"}/>
+                                                <Input
+                                                    className="form-check-input"
+                                                    type="radio" id="inline-radio1"
+                                                    name="gender" value="nam"
+                                                    onChange={(event) => (this.isChange(event))}
+                                                    checked={this.state.form.gender === "nam"} />
                                                 <Label className="form-check-label" check htmlFor="inline-radio2">Nam</Label>
                                             </FormGroup>
                                             <FormGroup check inline>
-                                                <Input 
-                                                    className="form-check-input" 
-                                                    type="radio" 
-                                                    id="inline-radio2" 
-                                                    name="gender" 
-                                                    value="nu" 
-                                                    onChange = {(event) => (this.isChange(event))} 
-                                                    checked={this.state.form.gender === "nu"}/>
+                                                <Input
+                                                    className="form-check-input"
+                                                    type="radio"
+                                                    id="inline-radio2"
+                                                    name="gender"
+                                                    value="nu"
+                                                    onChange={(event) => (this.isChange(event))}
+                                                    checked={this.state.form.gender === "nu"} />
                                                 <Label className="form-check-label" check htmlFor="inline-radio2">Nữ</Label>
                                             </FormGroup>
                                             <FormGroup check inline>
-                                                <Input 
-                                                    className="form-check-input" 
-                                                    type="radio" 
-                                                    id="inline-radio3" 
-                                                    name="gender" 
-                                                    value="khac" 
-                                                    onChange = {(event) => (this.isChange(event))} 
-                                                    checked={this.state.gender === "khac"}/>
+                                                <Input
+                                                    className="form-check-input"
+                                                    type="radio"
+                                                    id="inline-radio3"
+                                                    name="gender"
+                                                    value="khac"
+                                                    onChange={(event) => (this.isChange(event))}
+                                                    checked={this.state.gender === "khac"} />
                                                 <Label className="form-check-label" check htmlFor="inline-radio3">Khác</Label>
                                             </FormGroup>
                                         </FormGroup>
                                         <FormGroup>
                                             <Label htmlFor="nf-phone">Số điện thoại</Label>
-                                            <Input onChange = {(event) => (this.isChange(event))} 
-                                                value = {this.state.form.phone}
+                                            <Input onChange={(event) => (this.isChange(event))}
+                                                value={this.state.form.phone}
                                                 type="text" id="nf-phone" name="phone" placeholder="Enter Phone.." autoComplete="current-password" />
-                                            {this.state.formErrors.phone ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.phone}</span></FormText> : ''} 
+                                            {this.state.formErrors.phone ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.phone}</span></FormText> : ''}
                                         </FormGroup>
                                         {
                                             (!this.props.isSelfEdit) &&
                                             <FormGroup>
-                                            {this.state.error.roles ? <FormText className="help-block"><span style={{color: "red"}}>Xin hãy nhập quyền hợp lệ</span></FormText> : ''} 
-                                                <CustomTable 
-                                                    thead = {
+                                                {this.state.error.roles ? <FormText className="help-block"><span style={{ color: "red" }}>Xin hãy nhập quyền hợp lệ</span></FormText> : ''}
+                                                <CustomTable
+                                                    thead={
                                                         <tr>
                                                             <th>Quyền</th>
                                                             <td><Button onClick={this._addRole}><i className="fa fa-plus"></i></Button></td>
                                                         </tr>
                                                     }
-            
-                                                    tbody = {this.state.form.roles.map((item, key) => {
+
+                                                    tbody={this.state.form.roles.map((item, key) => {
                                                         return (
                                                             <tr key={key}>
                                                                 <td>
                                                                     <Input value={item} onChange={(e) => this._handleRole(e, key)} type="select" name="collectionName" id="exampleSelect">
                                                                         <option value="None">Hãy chọn quyền</option>
-                                                                        {this.state.roles.map((r, id)=> <option key={id} value={r._id}>{r.name}</option>)}
+                                                                        {this.state.roles.map((r, id) => <option key={id} value={r._id}>{r.name}</option>)}
                                                                     </Input>
                                                                 </td>
                                                                 <td><Button onClick={(e) => this._deleteRole(e, key)}>Delete</Button></td>
                                                             </tr>
                                                         )
                                                     })}
-                                                    hasPagination = {false}
+                                                    hasPagination={false}
                                                 />
                                             </FormGroup>
                                         }
-                                       
+                                        <Button size="sm" color="primary" type="submit" disabled={!this.state.formValid} onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button>
+                                        <Button size="sm" color="danger" onClick={this.onClear}><i className="fa fa-ban"></i> Reset</Button>
                                     </Form>
                                 </CardBody>
-                                <CardFooter>
-                                    {/* <Button size="sm" color="primary" disabled={this.state.isDisabled} onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button> */}
-                                    <Button size="sm" color="primary" disabled={!this.state.formValid} onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button>
-                                    <Button size="sm" color="danger" onClick = {this.onClear}><i className="fa fa-ban"></i> Reset</Button>
-                                </CardFooter>
                             </Card>)
                         }
                         {
-                            this.state.isChangePassword && 
-                            
-                                (<Card>
-                                    <CardHeader>
-                                        <strong>Sửa mật khẩu</strong>
-                                    </CardHeader>
-                                    <CardBody>
-                                        <Form onSubmit={this.onChangePassword}>
+                            this.state.isChangePassword &&
+
+                            (<Card>
+                                <CardHeader>
+                                    <strong>Sửa mật khẩu</strong>
+                                </CardHeader>
+                                <CardBody>
+                                    <Form onSubmit={this.onChangePassword}>
+                                        <FormGroup>
                                             <FormGroup>
-                                                        <FormGroup>
-                                                            <Label htmlFor="nf-password">Mật khẩu cũ</Label>
-                                                            <Input 
-                                                                onChange = {(event) => (this.onChangePassword(event))} 
-                                                                value = {this.state.passwordForm.oldPassword}
-                                                                type="password" id="nf-password" name="oldPassword" placeholder="Old Password.." />
-                                                            {/* <FormText className="help-block">Please enter your password</FormText> */}
-                                                            {this.state.error.oldPassword ? <FormText className="help-block"><span style={{color: "red"}}>Xin hãy nhập password hợp lệ</span></FormText> : ''}  
-                    
-                                                        </FormGroup>
-                                                        <FormGroup>
-                                                            <Label htmlFor="nf-password">Mật khẩu mới</Label>
-                                                            <Input 
-                                                                onChange = {(event) => (this.onChangePassword(event))} 
-                                                                value = {this.state.passwordForm.newPassword}
-                                                                type="password" id="nf-type-password" name="newPassword" placeholder="New Password.." />
-                                                            {/* <FormText className="help-block">Please enter your password</FormText> */}
-                                                            {this.state.error.newPassword ? <FormText className="help-block"><span style={{color: "red"}}>Xin hãy nhập password hợp lệ</span></FormText> : ''}  
-                                                            {this.state.error.notMatch ? <FormText className="help-block"><span style={{color: "red"}}>Nhập lại mật khẩu không trùng khớp</span></FormText> : ''}  
-                                                            {this.state.formErrors.newPassword ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.newPassword}</span></FormText> : ''}  
-                                                        </FormGroup>
-                                                        <FormGroup>
-                                                            <Label htmlFor="nf-password">Nhập lại mật khẩu</Label>
-                                                            <Input 
-                                                                onChange = {(event) => (this.onChangePassword(event))} 
-                                                                value = {this.state.passwordForm.confirmPassword}
-                                                                type="password" id="nf-type-password" name="confirmPassword" placeholder="Confirm Password.." />
-                                                            {/* <FormText className="help-block">Please enter your password</FormText> */}
-                                                        </FormGroup>
+                                                <Label htmlFor="nf-password">Mật khẩu cũ</Label>
+                                                <Input
+                                                    onChange={(event) => (this.onChangePassword(event))}
+                                                    value={this.state.passwordForm.oldPassword}
+                                                    type="password" id="nf-password" name="oldPassword" placeholder="Old Password.." />
+                                                {/* <FormText className="help-block">Please enter your password</FormText> */}
+                                                {this.state.error.oldPassword ? <FormText className="help-block"><span style={{ color: "red" }}>Xin hãy nhập password hợp lệ</span></FormText> : ''}
+
                                             </FormGroup>
-                                        </Form>
-                                    </CardBody>
-                                    <CardFooter>
-                                        <Button size="sm" color="primary" onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button>
-                                        <Button size="sm" color="danger" onClick = {this.onClear}><i className="fa fa-ban"></i> Reset</Button>
-                                    </CardFooter>
-                                </Card>)
-                            
+                                            <FormGroup>
+                                                <Label htmlFor="nf-password">Mật khẩu mới</Label>
+                                                <Input
+                                                    onChange={(event) => (this.onChangePassword(event))}
+                                                    value={this.state.passwordForm.newPassword}
+                                                    type="password" id="nf-type-password" name="newPassword" placeholder="New Password.." />
+                                                {/* <FormText className="help-block">Please enter your password</FormText> */}
+                                                {this.state.error.newPassword ? <FormText className="help-block"><span style={{ color: "red" }}>Xin hãy nhập password hợp lệ</span></FormText> : ''}
+                                                {this.state.error.notMatch ? <FormText className="help-block"><span style={{ color: "red" }}>Nhập lại mật khẩu không trùng khớp</span></FormText> : ''}
+                                                {this.state.formErrors.newPassword ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.newPassword}</span></FormText> : ''}
+                                            </FormGroup>
+                                            <FormGroup>
+                                                <Label htmlFor="nf-password">Nhập lại mật khẩu</Label>
+                                                <Input
+                                                    onChange={(event) => (this.onChangePassword(event))}
+                                                    value={this.state.passwordForm.confirmPassword}
+                                                    type="password" id="nf-type-password" name="confirmPassword" placeholder="Confirm Password.." />
+                                                {/* <FormText className="help-block">Please enter your password</FormText> */}
+                                            </FormGroup>
+                                        </FormGroup>
+                                        <Button type="submit" size="sm" color="primary" onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button>
+                                        <Button size="sm" color="danger" onClick={this.onClear}><i className="fa fa-ban"></i> Reset</Button>
+                                    </Form>
+                                </CardBody>
+                            </Card>)
+
                         }
-                        
+
                     </Col>
                 </Row>
             </div>

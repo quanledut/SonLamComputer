@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Modal from './../utils/Modal'
-import {Redirect} from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 
 import CustomTable from '../utils/Table'
 
@@ -20,8 +20,8 @@ import {
 } from 'reactstrap';
 
 const DEFAULT_FORM = {
-    _id :'',
-    name :'',
+    _id: '',
+    name: '',
     policies: []
 }
 
@@ -31,7 +31,7 @@ class RoleFormUI extends Component {
         super(props);
 
         this.state = {
-            form: {...DEFAULT_FORM},
+            form: { ...DEFAULT_FORM },
             error: {},
             modal: {
                 isOpened: false,
@@ -40,7 +40,7 @@ class RoleFormUI extends Component {
                 content: ""
             },
             roles: [],
-            isDisabled:true,
+            isDisabled: true,
             isRedirect: false,
             collections: [],
             permissions: [],
@@ -54,10 +54,9 @@ class RoleFormUI extends Component {
         this._deletePolicy = this._deletePolicy.bind(this)
     }
 
-    componentWillMount(){
-        var {match} = this.props;
-        if(match.params.id)
-        {
+    componentWillMount() {
+        var { match } = this.props;
+        if (match.params.id) {
             var id = match.params.id;
 
             this.props.findById(id, (data) => {
@@ -69,18 +68,18 @@ class RoleFormUI extends Component {
                 })
             })
         }
-            this.props.findCollectionNames((data, error) => {
-                this.setState({
-                    collections: data.collections,
-                    permissions: data.permissions
-                })
-
+        this.props.findCollectionNames((data, error) => {
+            this.setState({
+                collections: data.collections,
+                permissions: data.permissions
             })
+
+        })
     }
 
-    onClear = () =>{
+    onClear = () => {
         this.setState({
-            form: {...DEFAULT_FORM},
+            form: { ...DEFAULT_FORM },
             error: {},
             modal: {
                 isOpened: false,
@@ -88,36 +87,36 @@ class RoleFormUI extends Component {
                 title: "",
                 content: ""
             },
-            isDisabled:true,
+            isDisabled: true,
             isRedirect: false
         });
     }
 
-    _openModal (modal) {
+    _openModal(modal) {
         this.setState({
-          modal: {
-            ...this.state.modal,
-            ...modal,
-            isOpened: true
-          }
+            modal: {
+                ...this.state.modal,
+                ...modal,
+                isOpened: true
+            }
         })
     }
 
-    _closeModal () {
+    _closeModal() {
         this.setState({
-          modal: {
-            isOpened: false,
-            isLoading: false,
-            title: "",
-            content: ""
-          }
+            modal: {
+                isOpened: false,
+                isLoading: false,
+                title: "",
+                content: ""
+            }
         })
     }
 
     _isPoliciesValid() {
         let collectionNames = []
-        if(this.state.form.policies.length < 1 ) return false;
-        for (let i=0; i < this.state.form.policies.length; i++) {
+        if (this.state.form.policies.length < 1) return false;
+        for (let i = 0; i < this.state.form.policies.length; i++) {
             let policy = this.state.form.policies[i]
             if (policy.collectionName === "None") return false
             if (collectionNames.indexOf(policy.collectionName) !== -1) return false
@@ -126,8 +125,7 @@ class RoleFormUI extends Component {
         return true
     }
 
-    onSubmitForm = (event) =>
-    {
+    onSubmitForm = (event) => {
         event.preventDefault();
 
         if (!this._isPoliciesValid()) {
@@ -146,7 +144,7 @@ class RoleFormUI extends Component {
             title: "Loading"
         })
 
-        var {match} = this.props;
+        var { match } = this.props;
         if (match.params.id) {
             console.log(this.state.form)
             this.props.update(this.state.form, (res, error) => {
@@ -165,7 +163,7 @@ class RoleFormUI extends Component {
                         title: "Error",
                         content: error,
                         isLoading: false,
-                      })
+                    })
                 }
             })
         } else {
@@ -180,12 +178,12 @@ class RoleFormUI extends Component {
                     this.setState({
                         isRedirect: true
                     })
-                } else{
+                } else {
                     this._openModal({
                         title: "Error",
                         content: error,
                         isLoading: false,
-                      })
+                    })
                 }
             })
         }
@@ -202,10 +200,10 @@ class RoleFormUI extends Component {
     _deletePolicy = (event, i) => {
         event.preventDefault();
         this.setState({
-            tbody: this.state.tbody.filter((item, id) =>  id !== i),
+            tbody: this.state.tbody.filter((item, id) => id !== i),
             form: {
                 ...this.state.form,
-                policies: this.state.form.policies.filter((item, id) => id  !== i)
+                policies: this.state.form.policies.filter((item, id) => id !== i)
             }
         })
     }
@@ -271,15 +269,14 @@ class RoleFormUI extends Component {
         // })
     }
 
-    isChange = (event) =>
-    {
+    isChange = (event) => {
         const name = event.target.name;
         const value = event.target.value;
         console.log(name, value)
         this.setState({
             form: {
                 ...this.state.form,
-                [name] : value
+                [name]: value
             }
         });
 
@@ -296,33 +293,30 @@ class RoleFormUI extends Component {
 
         if (JSON.stringify(this.state.error) === JSON.stringify({})) {
             this.setState({
-                isDisabled:false
-              })
+                isDisabled: false
+            })
 
         }
 
-        if(name === 'name')
-        {
-            if(value.length > 50 || value.length < 1)
-            {
+        if (name === 'name') {
+            if (value.length > 50 || value.length < 1) {
                 this.setState({
-                    isDisabled:true
-                  })
+                    isDisabled: true
+                })
             }
-            else{
+            else {
                 this.setState({
-                    isDisabled:false
-                  })
+                    isDisabled: false
+                })
             }
         }
     }
 
 
     render() {
-        if(this.state.isRedirect)
-        {
-            return(
-                <Redirect to="/roles"/>
+        if (this.state.isRedirect) {
+            return (
+                <Redirect to="/roles" />
             )
         }
         return (
@@ -337,7 +331,7 @@ class RoleFormUI extends Component {
                 </Modal>
 
                 <Row>
-                <Col xs="12" md="9">
+                    <Col xs="12" md="9">
                         <Card>
                             <CardHeader>
                                 <strong>Thông tin quyền</strong>
@@ -346,61 +340,57 @@ class RoleFormUI extends Component {
                                 <Form action="" method="post">
                                     <FormGroup>
                                         <Label htmlFor="nf-username">Tên quyền</Label>
-                                        <Input onChange = {(event) => (this.isChange(event))}
-                                            value = {this.state.form.name}
+                                        <Input onChange={(event) => (this.isChange(event))}
+                                            value={this.state.form.name}
                                             type="username" id="nf-username" name="name" placeholder="Nhập tên quyền..." autoComplete="current-password" />
-                                         {this.state.error.name ? <FormText className="help-block"><span style={{color: "red"}}>Vui lòng nhập tên quyền hợp lệ!</span></FormText> : ''}
+                                        {this.state.error.name ? <FormText className="help-block"><span style={{ color: "red" }}>Vui lòng nhập tên quyền hợp lệ!</span></FormText> : ''}
                                     </FormGroup>
-                                </Form>
-
-                            </CardBody>
-                            <CustomTable
-                                    thead = {
-                                        <tr>
-                                            <th>Tên bảng</th>
-                                            {this.state.permissions.map((item, id) => <th key={id}>{item}</th>)}
-                                            <td><Button onClick={this._addPolicy}><i className="fa fa-plus"></i></Button></td>
-                                        </tr>
-                                    }
-
-                                    tbody = {this.state.form.policies.map((item, key) => {
-                                        return (
-                                            <tr key={key}>
-                                                <td>
-                                                    <Input value={item.collectionName} onChange={(e) => this._handlePolicies(e, key)} type="select" name="collectionName" id="exampleSelect">
-                                                        <option value="None">Hãy chọn bảng</option>
-                                                        {this.state.collections.map((item, id)=> <option key={id} value={item}>{item}</option>)}
-                                                    </Input>
-                                                </td>
-                                                {
-                                                    this.state.permissions.map((permission, id) => {
-                                                      let disabled = false;
-                                                      if (permission == 'isRead' && (item.collectionName == 'Device' || item.collectionName == 'DeviceType')) {
-                                                        item[permission] = true;
-                                                        disabled = true;
-                                                      }
-
-                                                      return (
-                                                        <td key={id}>
-                                                          <FormGroup check>
-                                                              <Input onChange={(e) => this._handlePolicies(e, key)} type="checkbox" name={permission} checked={item[permission]} disabled={disabled ? true : false}/>
-                                                          </FormGroup>
-                                                        </td>
-                                                      )
-                                                    }
-                                                  )
-                                                }
-                                                <td><Button onClick={(e) => this._deletePolicy(e, key)}>Delete</Button></td>
+                                    <CustomTable
+                                        thead={
+                                            <tr>
+                                                <th>Tên bảng</th>
+                                                {this.state.permissions.map((item, id) => <th key={id}>{item}</th>)}
+                                                <td><Button onClick={this._addPolicy}><i className="fa fa-plus"></i></Button></td>
                                             </tr>
-                                        )
-                                    })}
-                                    hasPagination = {false}
-                            />
+                                        }
 
-                            <CardFooter>
-                                <Button type="submit" size="sm" color="primary" disabled={this.state.isDisabled} onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button>
-                                <Button type="reset" size="sm" color="danger" onClick = {this.onClear}><i className="fa fa-ban"></i> Reset</Button>
-                            </CardFooter>
+                                        tbody={this.state.form.policies.map((item, key) => {
+                                            return (
+                                                <tr key={key}>
+                                                    <td>
+                                                        <Input value={item.collectionName} onChange={(e) => this._handlePolicies(e, key)} type="select" name="collectionName" id="exampleSelect">
+                                                            <option value="None">Hãy chọn bảng</option>
+                                                            {this.state.collections.map((item, id) => <option key={id} value={item}>{item}</option>)}
+                                                        </Input>
+                                                    </td>
+                                                    {
+                                                        this.state.permissions.map((permission, id) => {
+                                                            let disabled = false;
+                                                            if (permission == 'isRead' && (item.collectionName == 'Device' || item.collectionName == 'DeviceType')) {
+                                                                item[permission] = true;
+                                                                disabled = true;
+                                                            }
+
+                                                            return (
+                                                                <td key={id}>
+                                                                    <FormGroup check>
+                                                                        <Input onChange={(e) => this._handlePolicies(e, key)} type="checkbox" name={permission} checked={item[permission]} disabled={disabled ? true : false} />
+                                                                    </FormGroup>
+                                                                </td>
+                                                            )
+                                                        }
+                                                        )
+                                                    }
+                                                    <td><Button onClick={(e) => this._deletePolicy(e, key)}>Delete</Button></td>
+                                                </tr>
+                                            )
+                                        })}
+                                        hasPagination={false}
+                                    />
+                                    <Button type="submit" size="sm" color="primary" disabled={this.state.isDisabled} onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button>
+                                    <Button type="reset" size="sm" color="danger" onClick={this.onClear}><i className="fa fa-ban"></i> Reset</Button>
+                                </Form>
+                            </CardBody>
                         </Card>
                     </Col>
                 </Row>

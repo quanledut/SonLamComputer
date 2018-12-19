@@ -119,10 +119,10 @@ export default {
 
     //-----------------------------------------------------
     //Quản lý giao dịch
-    {
-      name: 'Thanh toán',
-      url: '/payments',
-      icon: 'fa fa-handshake-o',
-    },
+    // {
+    //   name: 'Thanh toán',
+    //   url: '/payments',
+    //   icon: 'fa fa-handshake-o',
+    // },
   ],
 };

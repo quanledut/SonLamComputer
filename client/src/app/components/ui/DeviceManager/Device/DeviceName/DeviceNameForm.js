@@ -18,6 +18,7 @@ import {
     Row,
 } from 'reactstrap';
 import CustomTable from '../../../utils/Table';
+import Creatable from 'react-select/lib/Creatable';
 
 const DEFAULT_FORM = {
     _id: '',
@@ -28,7 +29,7 @@ const DEFAULT_FORM = {
     amount: 0,
     price: 0,
     guaranteeDuration: 0,
-    inputPrice:0
+    inputPrice: 0
 }
 
 class DeviceNameFormUI extends Component {
@@ -48,10 +49,12 @@ class DeviceNameFormUI extends Component {
             import: [],
             export: [],
             deviceTypes: [],
+            devices: [],
             computerNames: [],
+            custom_name: null,
             isDisabled: true,
             isRedirect: false,
-            formErrors: { name: '', deviceType: '', amount: '', price: '', guaranteeDuration: '', inputPrice:'' },
+            formErrors: { name: '', deviceType: '', amount: '', price: '', guaranteeDuration: '', inputPrice: '' },
             nameValid: false,
             deviceTypeValid: false,
             amountValid: false,
@@ -75,24 +78,38 @@ class DeviceNameFormUI extends Component {
             this.props.getById(id, (data) => {
                 this.setState({
                     ...this.state,
-                    form: data
+                    form: data,
+                    custom_name: {
+                        value: data._id,
+                        label: data.name
+                    }
                 })
             });
 
             this.props.getImportById(id, (data) => {
-              this.setState({
-                ...this.state,
-                import: data
-              })
+                this.setState({
+                    ...this.state,
+                    import: data
+                })
             })
 
             this.props.getExportById(id, (data) => {
-              this.setState({
-                ...this.state,
-                export: data
-              })
+                this.setState({
+                    ...this.state,
+                    export: data
+                })
             })
         }
+
+        this.props.findAlldevices({
+            all: true
+        }, (devices, err) => {
+            if (!err) this.setState({
+                ...this.state,
+                devices: devices.docs
+            })
+        });
+
         this.props.findAlldeviceType({
             all: true
         }, (deviceTypes, err) => {
@@ -116,7 +133,7 @@ class DeviceNameFormUI extends Component {
             },
             isDisabled: true,
             isRedirect: false,
-            formErrors: { name: '', deviceType: '', amount: '', price: '', guaranteeDuration: '', inputPrice:'' },
+            formErrors: { name: '', deviceType: '', amount: '', price: '', guaranteeDuration: '', inputPrice: '' },
             nameValid: false,
             deviceTypeValid: false,
             amountValid: false,
@@ -299,12 +316,33 @@ class DeviceNameFormUI extends Component {
         this._validate(name, value);
     }
 
+    handleChange = (selectedOption) => {
+        let label = '';
+        if (selectedOption) {
+            label = selectedOption.label;
+        }
+        this.setState({
+            form: {
+                ...this.state.form, name: label
+            },
+            custom_name: selectedOption
+        });
+    };
+
     render() {
         if (this.state.isRedirect) {
             return (
                 <Redirect to="/devices/device" />
             )
         }
+
+        const options = [];
+        this.state.devices.map((e, key) => {
+            var name = e.name;
+            var id = e._id;
+            options.push({ value: id, label: name })
+        }
+        );
         return (
             <div className="animated fadeIn">
                 <Modal
@@ -326,11 +364,22 @@ class DeviceNameFormUI extends Component {
                                 <Form action="" method="post">
                                     <FormGroup>
                                         <Label htmlFor="select">Tên thiết bị</Label>
+                                        <Creatable
+                                            isClearable
+                                            value={this.state.custom_name}
+                                            onChange={this.handleChange}
+                                            options={options}
+                                            name="name"
+                                        />
+                                        {this.state.formErrors.name ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.name}</span></FormText> : ''}
+                                    </FormGroup>
+                                    {/* <FormGroup>
+                                        <Label htmlFor="select">Tên thiết bị</Label>
                                         <Input onChange={(event) => (this.isChange(event))}
                                             value={this.state.form.name}
                                             type="username" id="nf-username" name="name" placeholder="Nhập tên thiết bị..." autoComplete="current-password" />
                                         {this.state.formErrors.name ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.name}</span></FormText> : ''}
-                                    </FormGroup>
+                                    </FormGroup> */}
                                     <FormGroup>
                                         <Label htmlFor="select">Loại thiết bị</Label>
                                         <Input
@@ -353,13 +402,13 @@ class DeviceNameFormUI extends Component {
                                             type="username" id="nf-username" name="description" placeholder="Nhập mô tả..." autoComplete="current-password" />
                                     </FormGroup>
                                     {(this.props.match.params.id) ? ''
-                                    :
+                                        :
                                         <FormGroup>
                                             <Label htmlFor="nf-username">Giá nhập</Label>
-                                            <Input onChange = {(event) => (this.isChange(event))}
-                                                value = {this.state.form.inputPrice}
+                                            <Input onChange={(event) => (this.isChange(event))}
+                                                value={this.state.form.inputPrice}
                                                 type="username" id="nf-username" name="inputPrice" placeholder="Nhập giá vôn..." autoComplete="current-password" />
-                                            {this.state.formErrors.inputPrice ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.inputPrice}</span></FormText> : ''}
+                                            {this.state.formErrors.inputPrice ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.inputPrice}</span></FormText> : ''}
                                         </FormGroup>
                                     }
                                     <FormGroup>
@@ -374,7 +423,7 @@ class DeviceNameFormUI extends Component {
                                         <Label htmlFor="nf-username">Số lượng</Label>
                                         <Input onChange={(event) => (this.isChange(event))}
                                             value={this.state.form.amount}
-                                            disabled = {(this.props.match.params.id) ? true : false}
+                                            disabled={(this.props.match.params.id) ? true : false}
                                             type="username" id="nf-username" name="amount" placeholder="Nhập số tiền..." autoComplete="current-password" />
                                         {this.state.formErrors.amount ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.amount}</span></FormText> : ''}
                                     </FormGroup>
@@ -405,85 +454,81 @@ class DeviceNameFormUI extends Component {
                                             type="username" id="nf-username" name="guaranteeDuration" placeholder="Nhập thời gian bảo hành..." autoComplete="current-password" />
                                         {this.state.formErrors.guaranteeDuration ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.guaranteeDuration}</span></FormText> : ''}
                                     </FormGroup>
+                                    {
+                                        (this.props.match.params.id) && (
+                                            <div>
+                                                <Label htmlFor="select">Lịch sử nhập kho</Label>
+                                                <CustomTable
+                                                    thead={
+                                                        <tr>
+                                                            <th>Ngày nhập</th>
+                                                            <th>Số lượng</th>
+                                                            <th>Giá nhập</th>
+                                                        </tr>
+                                                    }
+
+                                                    tbody={this.state.import.map((item, key) => {
+                                                        return (
+                                                            <tr key>
+                                                                <td>
+                                                                    <a>{item.createdAt}</a>
+                                                                </td>
+                                                                <td>
+                                                                    <a>{item.amount}</a>
+                                                                </td>
+                                                                <td>
+                                                                    <a>{item.price}</a>
+                                                                </td>
+                                                            </tr>
+                                                        )
+                                                    })}
+
+                                                    hasPagination={false} />
+                                            </div>
+                                        )
+                                    }
+
+                                    {
+                                        (this.props.match.params.id) && (
+                                            <div>
+                                                <Label htmlFor="select">Lịch sử xuất kho</Label>
+                                                <CustomTable
+                                                    thead={
+                                                        <tr>
+                                                            <th>Ngày nhập</th>
+                                                            <th>Số lượng</th>
+                                                            <th>Giá bán</th>
+                                                        </tr>
+                                                    }
+
+                                                    tbody={this.state.export.map((item, key) => {
+                                                        return (
+                                                            <tr key>
+                                                                <td>
+                                                                    <a>{item.createdAt}</a>
+                                                                </td>
+                                                                <td>
+                                                                    <a>{item.amount}</a>
+                                                                </td>
+                                                                <td>
+                                                                    <a>{item.price}</a>
+                                                                </td>
+                                                            </tr>
+                                                        )
+                                                    })}
+
+                                                    hasPagination={false} />
+                                            </div>
+                                        )
+                                    }
+                                    <Button type="submit" size="sm" color="primary" onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button>
+                                    <Button type="reset" size="sm" color="danger" onClick={this.onClear}><i className="fa fa-ban"></i> Reset</Button>
                                 </Form>
-                                {
-                                  (this.props.match.params.id) && (
-                                    <div>
-                                      <Label htmlFor="select">Lịch sử nhập kho</Label>
-                                      <CustomTable
-                                        thead = {
-                                            <tr>
-                                                <th>Ngày nhập</th>
-                                                <th>Số lượng</th>
-                                                <th>Giá nhập</th>
-                                            </tr>
-                                        }
-
-                                        tbody = {this.state.import.map((item, key) => {
-                                          return (
-                                            <tr key>
-                                              <td>
-                                                <a>{item.createdAt}</a>
-                                              </td>
-                                              <td>
-                                                <a>{item.amount}</a>
-                                              </td>
-                                              <td>
-                                                <a>{item.price}</a>
-                                              </td>
-                                            </tr>
-                                          )
-                                        })}
-
-                                        hasPagination = {false} />
-                                    </div>
-                                  )
-                                }
-
-                                {
-                                  (this.props.match.params.id) && (
-                                    <div>
-                                      <Label htmlFor="select">Lịch sử xuất kho</Label>
-                                        <CustomTable
-                                          thead = {
-                                              <tr>
-                                                  <th>Ngày nhập</th>
-                                                  <th>Số lượng</th>
-                                                  <th>Giá bán</th>
-                                              </tr>
-                                          }
-
-                                          tbody = {this.state.export.map((item, key) => {
-                                            return (
-                                              <tr key>
-                                                <td>
-                                                  <a>{item.createdAt}</a>
-                                                </td>
-                                                <td>
-                                                  <a>{item.amount}</a>
-                                                </td>
-                                                <td>
-                                                  <a>{item.price}</a>
-                                                </td>
-                                              </tr>
-                                            )
-                                          })}
-
-                                          hasPagination = {false} />
-                                    </div>
-                                  )
-                                }
                             </CardBody>
-                            <CardFooter>
-                                {/* <Button type="submit" size="sm" color="primary" disabled={this.state.isDisabled} onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button> */}
-                                <Button type="submit" size="sm" color="primary" onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button>
-                                <Button type="reset" size="sm" color="danger" onClick={this.onClear}><i className="fa fa-ban"></i> Reset</Button>
-                            </CardFooter>
                         </Card>
-
                     </Col>
                 </Row>
-            </div>
+            </div >
         );
     }
 }

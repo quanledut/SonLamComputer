@@ -52,7 +52,7 @@ class ServiceFormUI extends Component {
                 content: ""
             },
             accessories: {},
-            customers:[],
+            customers: [],
             accessoryTypes: [],
             deviceTypes: [],
             //serviceTypes: [],
@@ -155,7 +155,7 @@ class ServiceFormUI extends Component {
             _device_id: '',
             isDisabled: true,
             isRedirect: false,
-            formErrors: { totalPrice: '', customer_name: ''},
+            formErrors: { totalPrice: '', customer_name: '' },
             //serviceTypeValid: false,
             totalPriceValid: false,
             customer_nameValid: false,
@@ -195,7 +195,7 @@ class ServiceFormUI extends Component {
             })
         })
     }
-    
+
 
     _findAllDeviceTypes() {
         this.props.findAllDeviceTypes({
@@ -469,14 +469,14 @@ class ServiceFormUI extends Component {
         //                 this._findAllDeviceTypes()
         //             }
         //         } else {
-                    this.setState({
-                        form: {
-                            ...this.state.form,
-                            devices: []
-                        }
-                    })
-                //}
-            //})
+        this.setState({
+            form: {
+                ...this.state.form,
+                devices: []
+            }
+        })
+        //}
+        //})
         //}
     }
 
@@ -520,7 +520,7 @@ class ServiceFormUI extends Component {
     handleChange = (selectedOption) => {
         this.setState({
             form: {
-                ...this.state.form, customer_name:selectedOption
+                ...this.state.form, customer_name: selectedOption
             }
         });
     };
@@ -533,12 +533,11 @@ class ServiceFormUI extends Component {
         }
 
         const options = [];
-        this.state.customers.map((e, key) =>
-            {
-                var name = e.fullname +', SĐT: '+e.phone;
-                var id = e._id;
-                options.push({value:id,label:name})
-            }
+        this.state.customers.map((e, key) => {
+            var name = e.fullname + ', SĐT: ' + e.phone;
+            var id = e._id;
+            options.push({ value: id, label: name })
+        }
         );
         return (
             <div className="animated fadeIn">
@@ -553,7 +552,7 @@ class ServiceFormUI extends Component {
                 <CustomerFormUI
                     isOpen={this.state.isOpen}
                     isClose={() => this.onClose()}
-                    link = {"/services/service/new"}
+                    link={"/services/service/new"}
                 />
                 <Row>
                     <Col xs="12" md="9">
@@ -563,15 +562,15 @@ class ServiceFormUI extends Component {
                             </CardHeader>
                             <CardBody>
                                 <Form action="" method="post">
-                                        <FormGroup>
-                                            <Label htmlFor="nf-username">Nhân viên</Label>
-                                            <Input onChange={(event) => (this.isChange(event))}
-                                                        disabled
-                                                        value={this.state.form.staff.fullname}
-                                                        type="fullname" id="nf-username" name="totalPrice" placeholder="Nhan vien" autoComplete="current-password" />
-                                                    {this.state.formErrors.totalPrice ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.totalPrice}</span></FormText> : ''}
-                                        </FormGroup>
-                                        <FormGroup>
+                                    <FormGroup>
+                                        <Label htmlFor="nf-username">Nhân viên</Label>
+                                        <Input onChange={(event) => (this.isChange(event))}
+                                            disabled
+                                            value={this.state.form.staff.fullname}
+                                            type="fullname" id="nf-username" name="totalPrice" placeholder="Nhan vien" autoComplete="current-password" />
+                                        {this.state.formErrors.totalPrice ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.totalPrice}</span></FormText> : ''}
+                                    </FormGroup>
+                                    <FormGroup>
                                         <Label htmlFor="nf-username">Khách hàng</Label>
                                         <FormGroup row className="my-0">
                                             <Col xs="11">
@@ -618,15 +617,14 @@ class ServiceFormUI extends Component {
                                             </FormGroup>
                                         )
                                     }
-                                </Form>
-                                <hr />
-                                <FormGroup row>
-                                    <Col md="12">
+                                    <hr />
+                                    <FormGroup row>
+                                        <Col md="12">
                                             <Label htmlFor="select">Linh kiện sữa chữa / thay thế</Label>
-                                    </Col>
-                                </FormGroup>
-                                <CustomTable
-                                    thead=
+                                        </Col>
+                                    </FormGroup>
+                                    <CustomTable
+                                        thead=
                                         {
                                             (!this.props.match.params.id) ?
                                                 (<tr>
@@ -655,10 +653,10 @@ class ServiceFormUI extends Component {
                                                         Hạn bảo hành
                                                     </th>
                                                 </tr>)
-                                    }
+                                        }
 
-                                    tbody={
-                                        (!this.props.match.params.id)
+                                        tbody={
+                                            (!this.props.match.params.id)
                                                 ? this.state.form.accessories.map((item, key) => {
                                                     return (
                                                         <tr key={key}>
@@ -675,20 +673,20 @@ class ServiceFormUI extends Component {
                                                                 </Input>
                                                             </td>
                                                             <td>
-                                                            {
-                                                                (!item.type || item.type == "None") &&
-                                                                <p>Xin hãy chọn loại thiết bị</p>
+                                                                {
+                                                                    (!item.type || item.type == "None") &&
+                                                                    <p>Xin hãy chọn loại thiết bị</p>
 
-                                                            }
+                                                                }
 
-                                                            {
-                                                                (item.type && item.type != "None") &&
-                                                                <Input value={item.name} onChange={(e) => this._handleAccessories(e, key)} type="select" name="name" id="exampleSelect">
-                                                                    <option value="None">Hãy chọn thiết bị</option>
-                                                                    {this.state.accessories[item.type] ? this.state.accessories[item.type].map((i1, id) => <option key={id} value={i1._id}>{i1.name}</option>) : []}
-                                                                </Input>
-                                                            }
-                                                             </td>
+                                                                {
+                                                                    (item.type && item.type != "None") &&
+                                                                    <Input value={item.name} onChange={(e) => this._handleAccessories(e, key)} type="select" name="name" id="exampleSelect">
+                                                                        <option value="None">Hãy chọn thiết bị</option>
+                                                                        {this.state.accessories[item.type] ? this.state.accessories[item.type].map((i1, id) => <option key={id} value={i1._id}>{i1.name}</option>) : []}
+                                                                    </Input>
+                                                                }
+                                                            </td>
 
                                                             <td>
                                                                 {
@@ -747,27 +745,27 @@ class ServiceFormUI extends Component {
                                                             {`${item.guaranteeDuration}`}
                                                         </td>
                                                         <td>
-                                                        <td>
-                                                            {`${expiredDate.getDate()}-${expiredDate.getMonth() + 1}-${expiredDate.getFullYear()}`}</td>
+                                                            <td>
+                                                                {`${expiredDate.getDate()}-${expiredDate.getMonth() + 1}-${expiredDate.getFullYear()}`}</td>
 
                                                         </td>
 
                                                     </tr>)
                                                 })
 
+                                        }
+                                        hasPagination={false}
+                                    />
+                                    {this.state.error.roles ? <FormText className="help-block"><span style={{ color: "red" }}>Vui lòng chọn thiết bị!</span></FormText> : ''}
+                                    {
+                                        (!this.props.match.params.id) &&
+                                        <div>
+                                            <Button type="submit" size="sm" color="primary" onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button>
+                                            <Button type="reset" size="sm" color="danger" onClick={this.onClear}><i className="fa fa-ban"></i> Reset</Button>
+                                        </div>
                                     }
-                                    hasPagination={false}
-                                />
-                                {this.state.error.roles ? <FormText className="help-block"><span style={{ color: "red" }}>Vui lòng chọn thiết bị!</span></FormText> : ''}
+                                </Form>
                             </CardBody>
-                            {
-                                (!this.props.match.params.id) &&
-                                <CardFooter>
-                                    {/* <Button type="submit" size="sm" color="primary" disabled={this.state.isDisabled} onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button> */}
-                                    <Button type="submit" size="sm" color="primary" onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button>
-                                    <Button type="reset" size="sm" color="danger" onClick={this.onClear}><i className="fa fa-ban"></i> Reset</Button>
-                                </CardFooter>
-                            }
                         </Card>
                     </Col>
                 </Row>

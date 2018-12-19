@@ -235,12 +235,10 @@ class AccessoryTypeFormUI extends Component {
                                             type="username" id="nf-username" name="name" placeholder="Nhập tên loại linh kiện..." autoComplete="current-password" />
                                         {this.state.error.name ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.error.name}</span></FormText> : ''}
                                     </FormGroup>
+                                    <Button type="submit" size="sm" color="primary" onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button>
+                                    <Button type="reset" size="sm" color="danger" onClick={this.onClear}><i className="fa fa-ban"></i> Reset</Button>
                                 </Form>
                             </CardBody>
-                            <CardFooter>
-                                <Button type="submit" size="sm" color="primary" onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button>
-                                <Button type="reset" size="sm" color="danger" onClick={this.onClear}><i className="fa fa-ban"></i> Reset</Button>
-                            </CardFooter>
                         </Card>
                     </Col>
                 </Row>
