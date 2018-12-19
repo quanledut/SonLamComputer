@@ -51,15 +51,18 @@ let subDeviceSchema = new mongoose.Schema({
     // price: {type: Number, set: setPrice, get: getPrice},
     price: {type: Number, set: setPrice},
     date: { type: Date, default: Date.now }
+}, {
+    toJSON: { virtuals: true },
+    toJSON: { virtuals: true }
 });
 
 
-// subDeviceSchema.virtual('formatPrice').get(function() {
-//     return getPrice(this.price)
-// });
+subDeviceSchema.virtual('formatPrice').get(function() {
+    return getPrice(this.price)
+});
 
-subDeviceSchema.set('toObject', {virtuals: true})
-subDeviceSchema.set('toJson', {virtuals: true})
+// subDeviceSchema.set('toObject', {virtuals: true})
+// subDeviceSchema.set('toJson', {virtuals: true})
 
 let serviceSchema = new mongoose.Schema({
     serviceType: { type: mongoose.Schema.Types.ObjectId, ref: 'ServiceType' },
