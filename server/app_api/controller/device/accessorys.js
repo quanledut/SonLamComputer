@@ -175,7 +175,7 @@ const findByName = (req,res) =>{
 const create = async (req,res) => {
     try {
         let prevAccessory = await Accessory
-        .findOne({type: new mongoose.Types.ObjectId(req.body.type)})
+        .findOne({name: req.body.name, type: new mongoose.Types.ObjectId(req.body.type)})
         .exec();
 
         if (prevAccessory) {
@@ -203,6 +203,7 @@ const create = async (req,res) => {
 
         } else {
             const result = await Accessory.create({
+                name: req.body.name,
                 type: req.body.type,
                 description: req.body.description,
                 image_url: req.body.image_url,

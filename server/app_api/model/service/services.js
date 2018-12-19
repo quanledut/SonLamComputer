@@ -29,6 +29,7 @@ let subAccessorySchema = new mongoose.Schema({
     accessoryId: { type: mongoose.Schema.Types.ObjectId },
     computerSeries: String,
     computerName: String,
+    name: String,
     type: String,
     guaranteeDuration: {type: Number, default: 0}, 
     // price: {type: Number, set: setPrice, get: getPrice},

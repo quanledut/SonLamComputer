@@ -53,6 +53,7 @@ class AccessoryNameUI extends Component {
         var listItem = mapList.map((item, index) => {
             return (
                 <tr key = {index}>
+                    <td>{item.name}</td>
                     <td>{item.type.name}</td>
                     <td>{item.amount}</td>
                     <td>{item.price}</td>
@@ -96,6 +97,7 @@ class AccessoryNameUI extends Component {
                                 <CustomTable
                                     thead = {
                                         <tr>
+                                            <th>Tên linh kiện</th>
                                             <th>Loại linh kiện</th>
                                             <th>Số lượng</th>
                                             <th>Giá</th>

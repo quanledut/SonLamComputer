@@ -21,6 +21,7 @@ import {
 
 const DEFAULT_FORM = {
     _id: '',
+    name: '',
     type: '',
     description: '',
     image_url: '',
@@ -114,7 +115,8 @@ class AccessoryNameFormUI extends Component {
             },
             isDisabled: true,
             isRedirect: false,
-            formErrors: { type: '', amount: '', price: '', guaranteeDuration: '', inputPrice: '' },
+            formErrors: { name: '', type: '', amount: '', price: '', guaranteeDuration: '', inputPrice: '' },
+            nameValid: false,
             typeValid: false,
             amountValid: false,
             priceValid: false,
@@ -221,6 +223,7 @@ class AccessoryNameFormUI extends Component {
 
     _validate(fieldName, value) {
         let fieldValidationErrors = this.state.formErrors;
+        let nameValid = this.state.nameValid;
         let typeValid = this.state.typeValid;
         let amountValid = this.state.amountValid;
         let priceValid = this.state.priceValid;
@@ -233,6 +236,10 @@ class AccessoryNameFormUI extends Component {
             case 'type':
                 typeValid = (value !== null && value !== "" && value !== "None");
                 fieldValidationErrors.type = typeValid ? '' : 'Vui lòng chọn loại linh kiện!';
+                break;
+            case 'name':
+                nameValid = value.length > 2 && value.length <= 100;
+                fieldValidationErrors.name = nameValid ? '' : ' Vui lòng nhập tên linh kiện trong khoảng 3-100 ký tự!';
                 break;
             case 'amount':
                 console.log(value)
@@ -317,6 +324,13 @@ class AccessoryNameFormUI extends Component {
                             </CardHeader>
                             <CardBody>
                                 <Form action="" method="post">
+                                <FormGroup>
+                                        <Label htmlFor="select">Tên linh kiện</Label>
+                                        <Input onChange={(event) => (this.isChange(event))}
+                                            value={this.state.form.name}
+                                            type="username" id="nf-username" name="name" placeholder="Nhập tên linh kiện..." autoComplete="current-password" />
+                                        {this.state.formErrors.name ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.name}</span></FormText> : ''}
+                                    </FormGroup>
                                     <FormGroup>
                                         <Label htmlFor="select">Loại linh kiện</Label>
                                         <Input
