@@ -1,7 +1,11 @@
 const mongoose = require('mongoose');
 const Device = mongoose.model('Device');
+const HistoryDevice = mongoose.model('HistoryInputDevice');
+const Service = mongoose.model('Service');
 const {sendJsonResponse} = require('../utils');
 const {createPaginationQueryByAggregate} = require('../../helpers/paginationHelper')
+
+const permission = require('../permission');
 
 const createAggregate = (stringQuery) => {
     let aggreagte = Device
@@ -50,20 +54,20 @@ const find = async (req,res) => {
                 .find(query)
                 .populate('deviceType')
                 .exec()
-                
+
             sendJsonResponse(res,200,{
                 docs: device,
-        
+
             });
 
             return;
         }
-        
-    
-    
+
+
+
         const {page, pages, limit, skip, total} = await createPaginationQueryByAggregate(createAggregate(req.query.string), req.query)
-    
-        
+
+
         const device = await createAggregate(req.query.string)
             .skip(skip)
             .limit(limit)
@@ -112,35 +116,99 @@ const findByName = (req,res) =>{
     )
 }
 
-const create = (req,res) => {
-    Device
-    .findOne({name:req.body.name, type: req.body.deviceType})
-    .exec((err,ct)=>{
-        if(ct){
-            sendJsonResponse(res,500, {
-                msg: "Thiết bị đã tồn tại",
-                detail: "Device existed"
-            });
-            return;
+const historyImport = (req, res) => {
+  HistoryDevice.find({
+    device: req.params.deviceId
+  }).exec().then((history) => {
+    sendJsonResponse(res, 200, history)
+  }).catch((err) => sendJsonResponse(res, 200, {}))
+}
+
+const historyExport = (req, res) => {
+  if (!req.payload || !req.payload.roles) {
+    sendJsonResponse(res, 200, {});
+  }
+
+  const checkPermissionForService = permission.checkPermissionForCollection('Service');
+  if (!checkPermissionForService(permission.type.READ)) {
+    sendJsonResponse(res, 200, {});
+  }
+
+  Service.find({
+    "devices.deviceId": req.params.deviceId
+  }).exec().then((services) => {
+    const result = services.map((service) => {
+      const history = service.devices.reduce((obj, item) => {
+        if (item.deviceId == req.params.deviceId) {
+          obj.amount++;
+          obj.price = item.price
         }
-        else{
-            Device.create({
+        return obj;
+      }, {
+        amount: 0,
+        price: 0,
+      });
+
+      history.createdAt = service.date;
+      history.serviceId = service._id;
+
+      return history;
+    });
+
+    sendJsonResponse(res, 200, result);
+
+  })
+}
+
+const create = async (req,res) => {
+    try {
+        let prevDevice = await Device
+            .findOne({name:req.body.name, type: new mongoose.Types.ObjectId(req.body.type)})
+            .exec();
+
+        if (prevDevice) {
+
+            prevDevice.amount = prevDevice.amount + parseInt(req.body.amount);
+            prevDevice.price = req.body.price;
+            prevDevice.guaranteeDuration = req.body.guaranteeDuration;
+
+            if (req.body.image_url) prevDevice.image_url = req.body.image_url;
+
+            const result = await prevDevice.save();
+
+            await HistoryDevice.create({
+                device: result._id,
+                amount: req.body.amount,
+                price: req.body.inputPrice
+            });
+
+            sendJsonResponse(res, 201, result)
+        } else {
+            const result = await Device.create({
                 name: req.body.name,
-                type: req.body.deviceType,
+                type: req.body.type,
                 description: req.body.description,
                 image_url: req.body.image_url,
                 amount: req.body.amount,
                 price: req.body.price,
                 guaranteeDuration: req.body.guaranteeDuration
-            }, (err, device) => {
-                if(err) sendJsonResponse(res,500, {
-                    msg: "Tạo mới thất bại",
-                    detail: err
-                });
-                else sendJsonResponse(res,200,device);
-            })        
+            });
+
+            await HistoryDevice.create({
+                device: result._id,
+                amount: req.body.amount,
+                price: req.body.inputPrice
+            });
+
+            sendJsonResponse(res,201,result);
         }
-    });
+    } catch(err) {
+        if(err) sendJsonResponse(res,500, {
+            msg: "Nhap hang thất bại",
+            detail: err
+        });
+
+    }
 
 
 }
@@ -170,7 +238,7 @@ const updateById = (req, res) => {
             req.params.deviceId,
             {
                 ...req.body
-            }, 
+            },
             {
                 new: true
             },
@@ -195,5 +263,7 @@ module.exports = {
     findByName,
     create,
     updateById,
-    deleteById
+    deleteById,
+    historyImport,
+    historyExport
 }

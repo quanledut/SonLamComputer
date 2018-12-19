@@ -22,7 +22,7 @@ import routeClients from '../../../routeClients';
 import DefaultFooter from './DefaultFooter';
 import DefaultHeader from './DefaultHeader';
 import { isLoggedIn, getCurrentUser } from '../../../utils/index';
-
+import * as UnAuthorizedErrorHandler from '../../../utils/handleAuthError';
 class DefaultLayout extends Component {
   constructor(props){
     super(props);
@@ -42,6 +42,7 @@ class DefaultLayout extends Component {
     }
     else
     {
+      UnAuthorizedErrorHandler.setHistory(this.props.history);
       var users = getCurrentUser();
       console.log(users)
       this.setState({
@@ -54,7 +55,7 @@ class DefaultLayout extends Component {
     var isUser = false;
     var routerLink = routeClients;
     var navigationLinks = navigationClient;
-    isUser = this.state.user.roles.reduce((isUser, item) => 
+    isUser = this.state.user.roles.reduce((isUser, item) =>
       {if(isUser) return true; if(item.name === 'user') return true},false);
     console.log('isuser', isUser)
     if(!isUser)
@@ -88,7 +89,7 @@ class DefaultLayout extends Component {
                       : (null);
                   },
                 ) : (null)}
-                { isLoggedIn() ? isUser ? <Redirect from="/" to="/viewcustomers" /> : <Redirect from="/" to="/dashboard" /> 
+                { isLoggedIn() ? isUser ? <Redirect from="/" to="/viewcustomers" /> : <Redirect from="/" to="/dashboard" />
                 : <Redirect to="/login" />}
               </Switch>
             </Container>

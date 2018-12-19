@@ -33,7 +33,8 @@ const DEFAULT_FORM = {
     devices: [],
     //serviceType: '',
     totalPrice: 0,
-    status: false
+    status: false,
+    date: null,
 }
 
 class ServiceFormUI extends Component {
@@ -50,7 +51,7 @@ class ServiceFormUI extends Component {
                 title: "",
                 content: ""
             },
-            devices: [],
+            accessories: {},
             customers:[],
             accessoryTypes: [],
             deviceTypes: [],
@@ -73,9 +74,9 @@ class ServiceFormUI extends Component {
         this._closeModal = this._closeModal.bind(this)
 
         this._addAccessory = this._addAccessory.bind(this)
-        this._addDevice = this._addDevice.bind(this)
         this._handleAccessories = this._handleAccessories.bind(this)
-        this._handleDevices = this._handleDevices.bind(this)
+        this._findAccessory = this._findAccessory.bind(this)
+        this.onSubmitForm = this.onSubmitForm.bind(this)
     }
 
     componentWillMount() {
@@ -125,9 +126,9 @@ class ServiceFormUI extends Component {
                     }
                 })
             });
-    
+
             this._findAllAccessoryTypes();
-    
+
         }
     }
 
@@ -140,7 +141,7 @@ class ServiceFormUI extends Component {
             })
         });
     }
-    
+
     onClear = () => {
         this.setState({
             form: { ...DEFAULT_FORM },
@@ -194,6 +195,7 @@ class ServiceFormUI extends Component {
             })
         })
     }
+    
 
     _findAllDeviceTypes() {
         this.props.findAllDeviceTypes({
@@ -206,37 +208,20 @@ class ServiceFormUI extends Component {
         })
     }
 
-    _findDevice(type) {
-        this.props.findAllDevices({
+    _findAccessory(type) {
+        this.props.findAllaccessories({
             type,
             all: true
-        }, (devices, err) => {
-            this.setState({
-                ...this.state,
-                devices: devices.docs
-            })
-        })
-    }
-
-    _findAccessory(accessoryType, key) {
-        this.props.findAllaccessories({
-            type: accessoryType,
-            all: true
         }, (accessories, err) => {
-            const currentAccessoriesState = this.state.form.accessories
-            if (!err) currentAccessoriesState[key] = {
-                ...currentAccessoriesState[key],
-                price: accessories.docs[0].price,
-                guaranteeDuration: accessories.docs[0].guaranteeDuration
-            }
-
-            this.setState({
-                ...this.state,
-                form: {
-                    ...this.state.form,
-                    accessories: currentAccessoriesState
-                }
-            })
+            this.state.accessories[type] = accessories.docs;
+            console.log("Done", this.state);
+            // this.setState({
+            //     ...this.state,
+            //     form: {
+            //         ...this.state.form,
+            //         accessories: currentAccessoriesState
+            //     }
+            // })
         });
     }
 
@@ -249,56 +234,15 @@ class ServiceFormUI extends Component {
                 accessories: [
                     ...this.state.form.accessories,
                     {
-                        type: "None"
-                    }
-                ]
-            }
-        })
-    }
-
-    _addDevice(event) {
-        event.preventDefault()
-        this.setState({
-            form: {
-                ...this.state.form,
-                devices: [
-                    ...this.state.form.devices,
-                    {
                         name: "None",
                         type: "None"
                     }
                 ]
             }
-        }, () => {
-            console.log(this.state)
         })
     }
 
-    _handleDevices = (e, key) => {
-        const { name, value } = e.target
-        this.setState({
-            form: {
-                ...this.state.form,
-                devices: this.state.form.devices.map((device, id) => {
-                    if (id !== key) return device
-                    device[name] = value
 
-                    if (name === "type") {
-                        this._findDevice(device.type)
-                    } else if (name === "name") {
-                        const currentDevice = this.state.devices.filter(i => i._id === value)[0]
-                        return {
-                            ...device,
-                            price: currentDevice.price,
-                            guaranteeDuration: currentDevice.guaranteeDuration
-                        }
-                    }
-
-                    return device
-                })
-            }
-        })
-    }
 
     _handleAccessories = (e, key) => {
         const { name, value } = e.target
@@ -310,16 +254,16 @@ class ServiceFormUI extends Component {
                     accessory[name] = value
 
                     if (name === "type") {
-                        if (accessory.type) {
-                            console.log("hi");
-                            this._findAccessory(
-                                accessory.type,
-                                key
-                            )
+                        this._findAccessory(accessory.type);
+                    } else if (name === "name") {
+                        const currentAccessory = this.state.accessories[accessory.type].filter(i => i._id === value)[0]
+                        return {
+                            ...accessory,
+                            price: currentAccessory.price,
+                            guaranteeDuration: currentAccessory.guaranteeDuration
                         }
                     }
-
-                    return accessory
+                    return accessory;
                 })
             }
         })
@@ -390,6 +334,8 @@ class ServiceFormUI extends Component {
             this.state.form.accessories = this.state.form.accessories.map(i => {
                 return {
                     ...i,
+                    name: this.state.accessories[i.type].filter(i1 => i1._id === i.name)[0].name,
+                    // accessoryId:this.state.accessories.filter(i1 => i1._id === i.type)[0]._id,
                     type: this.state.accessoryTypes.filter(i1 => i1._id === i.type)[0].name
                 }
             })
@@ -434,7 +380,9 @@ class ServiceFormUI extends Component {
         }, false) || this.state.form.devices.length === 0
             && (this.state.form.accessories.reduce((isNone2, item2) => {
                 if (isNone2) return isNone2;
+                if (!item2.computerName) return true;
                 if (!item2.computerSeries) return true;
+                if (item2.name === "None") return true;
                 if (item2.type === "None") return true
             }, false) || this.state.form.accessories.length === 0);
 
@@ -570,13 +518,13 @@ class ServiceFormUI extends Component {
     }
 
     handleChange = (selectedOption) => {
-        this.setState({ 
+        this.setState({
             form: {
-                ...this.state.form, customer_name:selectedOption 
+                ...this.state.form, customer_name:selectedOption
             }
         });
     };
-        
+
     render() {
         if (this.state.isRedirect) {
             return (
@@ -589,7 +537,7 @@ class ServiceFormUI extends Component {
             {
                 var name = e.fullname +', SĐT: '+e.phone;
                 var id = e._id;
-                options.push({value:id,label:name})  
+                options.push({value:id,label:name})
             }
         );
         return (
@@ -658,7 +606,7 @@ class ServiceFormUI extends Component {
                                         {this.state.formErrors.serviceType ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.serviceType}</span></FormText> : ''}
                                     </FormGroup> */}
                                     {
-                                        (this.props.match.params.id) 
+                                        (this.props.match.params.id)
                                         && (
                                             <FormGroup>
                                                 <Label htmlFor="nf-username">Tổng tiền</Label>
@@ -678,20 +626,35 @@ class ServiceFormUI extends Component {
                                     </Col>
                                 </FormGroup>
                                 <CustomTable
-                                    thead={
-                                            <tr>
-                                                <th>Số series máy</th>
-                                                <th>Loại linh kiện</th>
-                                                <th>Giá tiền</th>
-                                                <th style={{ width: '20%' }}>Thời gian bảo hành</th>
-                                                <th style={{ width: '15%' }}>
-                                                    {
-                                                        (!this.props.match.params.id) &&
-                                                        <Button onClick={this._addAccessory}><i className="fa fa-plus"></i></Button>
+                                    thead=
+                                        {
+                                            (!this.props.match.params.id) ?
+                                                (<tr>
+                                                    <th>Tên máy</th>
+                                                    <th>Số series máy</th>
+                                                    <th>Loại linh kiện</th>
+                                                    <th>Tên linh kiện</th>
+                                                    <th>Giá tiền</th>
+                                                    <th style={{ width: '10%' }}>Thời gian bảo hành</th>
+                                                    <th style={{ width: '10%' }}>
+                                                        {
+                                                            (!this.props.match.params.id) &&
+                                                            <Button onClick={this._addAccessory}><i className="fa fa-plus"></i></Button>
 
-                                                    }
-                                                </th>
-                                            </tr>
+                                                        }
+                                                    </th>
+                                                </tr>)
+                                                : (<tr>
+                                                    <th>Tên máy</th>
+                                                    <th>Số series máy</th>
+                                                    <th>Loại linh kiện</th>
+                                                    <th>Tên linh kiện</th>
+                                                    <th>Giá tiền</th>
+                                                    <th style={{ width: '10%' }}>Thời gian bảo hành</th>
+                                                    <th>
+                                                        Hạn bảo hành
+                                                    </th>
+                                                </tr>)
                                     }
 
                                     tbody={
@@ -699,6 +662,9 @@ class ServiceFormUI extends Component {
                                                 ? this.state.form.accessories.map((item, key) => {
                                                     return (
                                                         <tr key={key}>
+                                                            <td>
+                                                                <Input value={item.computerName} onChange={(e) => this._handleAccessories(e, key)} type="text" name="computerName" id="exampleSelect" />
+                                                            </td>
                                                             <td>
                                                                 <Input value={item.computerSeries} onChange={(e) => this._handleAccessories(e, key)} type="text" name="computerSeries" id="exampleSelect" />
                                                             </td>
@@ -709,26 +675,42 @@ class ServiceFormUI extends Component {
                                                                 </Input>
                                                             </td>
                                                             <td>
+                                                            {
+                                                                (!item.type || item.type == "None") &&
+                                                                <p>Xin hãy chọn loại thiết bị</p>
+
+                                                            }
+
+                                                            {
+                                                                (item.type && item.type != "None") &&
+                                                                <Input value={item.name} onChange={(e) => this._handleAccessories(e, key)} type="select" name="name" id="exampleSelect">
+                                                                    <option value="None">Hãy chọn thiết bị</option>
+                                                                    {this.state.accessories[item.type] ? this.state.accessories[item.type].map((i1, id) => <option key={id} value={i1._id}>{i1.name}</option>) : []}
+                                                                </Input>
+                                                            }
+                                                             </td>
+
+                                                            <td>
                                                                 {
-                                                                    (!item.type || item.type == "None") &&
+                                                                    (!item.name || item.name == "None") &&
                                                                     <p>Xin hãy chọn loại thiết bị</p>
                                                                 }
 
                                                                 {
-                                                                    (item.type && item.type != "None") &&
+                                                                    (item.name && item.name != "None") &&
                                                                     <Input value={item.price} onChange={(e) => this._handleAccessories(e, key)} type="text" name="price" id="exampleSelect">
                                                                     </Input>
                                                                 }
                                                             </td>
                                                             <td>
                                                                 {
-                                                                    (!item.type || item.type == "None") &&
+                                                                    (!item.name || item.name == "None") &&
                                                                     <p>Xin hãy chọn loại thiết bị</p>
 
                                                                 }
 
                                                                 {
-                                                                    (item.type && item.type != "None") &&
+                                                                    (item.name && item.name != "None") &&
                                                                     <Input value={item.guaranteeDuration} onChange={(e) => this._handleAccessories(e, key)} type="text" name="guaranteeDuration" id="exampleSelect">
                                                                     </Input>
 
@@ -742,7 +724,12 @@ class ServiceFormUI extends Component {
 
 
                                                 : this.state.form.accessories.map((item, key) => {
+                                                    const expiredDate = new Date(this.state.form.date);
+                                                    expiredDate.setMonth(expiredDate.getMonth() + item.guaranteeDuration);
                                                     return (<tr key={key}>
+                                                        <td>
+                                                            {item.computerName}
+                                                        </td>
                                                         <td>
                                                             {item.computerSeries}
                                                         </td>
@@ -750,12 +737,20 @@ class ServiceFormUI extends Component {
                                                             {item.type}
                                                         </td>
                                                         <td>
-                                                            {item.price}
+                                                            {item.name}
+                                                        </td>
+
+                                                        <td>
+                                                            {item.formatPrice}
                                                         </td>
                                                         <td>
-                                                            {item.guaranteeDuration}
+                                                            {`${item.guaranteeDuration}`}
                                                         </td>
-                                                        <td></td>
+                                                        <td>
+                                                        <td>
+                                                            {`${expiredDate.getDate()}-${expiredDate.getMonth() + 1}-${expiredDate.getFullYear()}`}</td>
+
+                                                        </td>
 
                                                     </tr>)
                                                 })

@@ -22,12 +22,15 @@ const getPrice = (number) => {
 }
 
 let accessorySchema = new mongoose.Schema({
+    name: { type: String, required: true },
     type: { type: mongoose.Schema.Types.ObjectId, ref: 'AccessoryType' },
     description: String,
     image_url: String,
     amount: Number,
     price: {type: Number, get: getPrice, set: setPrice},
-    guaranteeDuration: Number
+    guaranteeDuration: { type: Number, default: 0 }
+}, {
+    timestamps: true,
 })
 
 mongoose.model('Accessory', accessorySchema)

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {Card, CardBody, CardHeader, Col, Row} from 'reactstrap';
 import {Link} from 'react-router-dom';
-import {DeleteFrom, SearchFrom} from '../../containers/services';
+import {DeleteFrom, SearchFrom} from '../../containers/saleorder';
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import CustomTable from '../utils/Table'
@@ -44,7 +44,7 @@ class SaleOrderUI extends Component {
                 ...this.state,
                 ...result
             })
-            console.log(result)
+            console.log(result);
         });
 
     }
@@ -58,8 +58,8 @@ class SaleOrderUI extends Component {
                     <td>{item.staff.fullname}</td>
                     <td>{item.customer.fullname}</td>
                     <td>{item.customer.phone}</td>
-                    <td>{`${date.getDay() + 1}-${date.getMonth() + 1}-${date.getFullYear()}`}</td>
-                    <td>{item.totalPrice}</td>
+                    <td>{`${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`}</td>
+                    <td>{item.formatTotalPrice}</td>
 
                     <td>
                         <div className="btn-group">
@@ -67,10 +67,10 @@ class SaleOrderUI extends Component {
                                 to = {`/saleorders/${item._id}/edit`}
                                 className="btn btn-primary"
                             >
-                                <i className="fa fa-edit"> Sửa </i>
+                                <i className="fa fa-edit"> Xem chi tiết </i>
                             </Link>
                             <DeleteFrom 
-                                name={item.customer_name} 
+                                name= 'đơn hàng này'
                                 id={item._id}
                             />
                         </div>

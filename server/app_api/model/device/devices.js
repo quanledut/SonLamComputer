@@ -28,7 +28,9 @@ let deviceSchema = new mongoose.Schema({
     image_url: String,
     amount: Number,
     price: {type: Number, get: getPrice, set: setPrice},
-    guaranteeDuration: Number
+    guaranteeDuration: { type: Number, default: 0 }
+}, {
+    timestamps: true,
 })
 
 deviceSchema.index({ type: 1, name: 1 }, { unique: true })

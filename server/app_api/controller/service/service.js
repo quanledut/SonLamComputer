@@ -1,8 +1,11 @@
 const mongoose = require("mongoose");
 const { sendJsonResponse } = require ('../utils');
+const { getPrice } = require('../../model/service/services');
 
 const Service = mongoose.model('Service');
 const ServiceType = mongoose.model('ServiceType');
+const Device = mongoose.model('Device');
+const Accessory = mongoose.model('Accessory');
 
 const {createPaginationQueryByAggregate} = require('../../helpers/paginationHelper')
 
@@ -48,6 +51,11 @@ const createAggregateForServiceType = (serviceTypeId) => (stringQuery) => {
                         $regex: stringQuery, $options:"$i"
                     }
                 },
+                {
+                    'accessories.computerSeries': {
+                        $regex: stringQuery, $options:"$i"
+                    }
+                }
             ]
         })
     }
@@ -98,7 +106,7 @@ const find = async (req,res) => {
         const {page, pages, limit, skip, total} = await createPaginationQueryByAggregate(createAggregate(req.query.string), req.query)
     
         
-        const docs = await createAggregate(req.query.string)
+        let docs = await createAggregate(req.query.string)
             .skip(skip)
             .limit(limit)
 
@@ -153,9 +161,14 @@ const findFix = async (req,res) => {
         const {page, pages, limit, skip, total} = await createPaginationQueryByAggregate(createAggregate(req.query.string,sellType._id), req.query)
     
         
-        const docs = await createAggregate(req.query.string)
+        let docs = await createAggregate(req.query.string)
             .skip(skip)
             .limit(limit)
+
+            docs = docs.map(item => {
+                item.formatTotalPrice = getPrice(item.totalPrice);
+                return item;
+            });    
 
         sendJsonResponse(res,200,{
             docs,
@@ -207,9 +220,14 @@ const findSell = async (req,res) => {
         const {page, pages, limit, skip, total} = await createPaginationQueryByAggregate(createAggregate(req.query.string), req.query)
     
         
-        const docs = await createAggregate(req.query.string)
+        let docs = await createAggregate(req.query.string)
             .skip(skip)
             .limit(limit)
+
+            docs = docs.map(item => {
+                item.formatTotalPrice = getPrice(item.totalPrice);
+                return item;
+            });    
 
         sendJsonResponse(res,200,{
             docs,
@@ -236,7 +254,20 @@ const findById = (req, res) => {
                 msg: "Tìm kiếm thất bại",
                 detail: "Not found"
             });
-            else sendJsonResponse(res, 200, service);
+
+            else {
+                service.accessories = service.accessories.map(i => {
+                    i.formatPrice = getPrice(i.price);
+                    return i;
+                });
+
+                service.devices = service.devices.map(i => {
+                    i.formatPrice = getPrice(i.price);
+                    return i;
+                });
+
+                sendJsonResponse(res, 200, service);
+            }
         }, (err) => {
             sendJsonResponse(res, 500, {
                 msg: "Tìm kiếm thất bại",
@@ -245,27 +276,56 @@ const findById = (req, res) => {
         })
 }
 
-const create = (req, res) => {
+const create = async (req, res) => {
     if (!req.body.serviceType || 
         !req.body.customer || req.body.customer.length == 0 ||
         (req.body.devices.length == 0) && (req.body.accessories == 0))  {
             sendJsonResponse(res, 400, {msg: "Input không hợp lệ",detail: "Invalid input"})
             return;
     }
-    let service = new Service();
-    service.staff = req.body.staff._id;
-    service.serviceType = req.body.serviceType
-    service.customer = req.body.customer;
-    service.devices = req.body.devices
-    service.accessories = req.body.accessories
-	service.date = req.body.date
-    service.calculatePrice()
+    try {
+        let service = new Service();
+        service.staff = req.body.staff._id;
+        service.serviceType = req.body.serviceType
+        service.customer = req.body.customer;
+        service.devices = req.body.devices
+        service.accessories = req.body.accessories
+        service.calculatePrice()
 
-    service.save((err, st) => {
-        console.log("hi")
-        if (err) sendJsonResponse(res, 500, err);
-        else sendJsonResponse(res, 201, st);
-    })
+        const result = await service.save();
+
+        const decAmountDevice = req.body.devices.map(item => {
+            return Device.findByIdAndUpdate(item.deviceId, {
+                $inc: {
+                    amount: -1
+                }
+            });
+        });
+
+        const decAmountAccessory = req.body.accessories.map(item => {
+            return Accessory.findByIdAndUpdate(item.accessoryId, {
+                $inc: {
+                    amount: -1
+                }
+            })
+        });
+
+        const decAmount = [
+            ...decAmountAccessory,
+            ...decAmountDevice
+        ];
+
+        await Promise.all(decAmount);
+
+        sendJsonResponse(res, 201, result);
+
+    } catch(err) {
+        if (err) sendJsonResponse(res, 500, {
+            msg: "Tao don hang that bai",
+            detail: err
+        });
+
+    }
 }
 
 const createFix = (req, res) => {
@@ -289,8 +349,28 @@ const createFix = (req, res) => {
     
         service.save((err, st) => {
             console.log("hi")
-            if (err) sendJsonResponse(res, 500, err);
-            else sendJsonResponse(res, 201, st);
+
+            const decAmountAccessory = req.body.accessories.map(item => {
+                return Accessory.findByIdAndUpdate(item.accessoryId, {
+                    $inc: {
+                        amount: -1
+                    }
+                })
+            });
+
+            if (err) sendJsonResponse(res, 500, {
+                msg: "Khong the tao don hang",
+                detail: err,
+            });
+
+            Promise.all(decAmountAccessory).then((r) => {
+                sendJsonResponse(res, 201, st);
+            }).catch(err => {
+                sendJsonResponse(res, 500, {
+                    msg: "Khong the tao don hang",
+                    detail: err,
+                });
+            });        
         })
     })
 }
@@ -315,9 +395,29 @@ const createSell= (req, res) => {
         service.calculatePrice()
     
         service.save((err, st) => {
-            console.log("hi")
-            if (err) sendJsonResponse(res, 500, err);
-            else sendJsonResponse(res, 201, st);
+
+            const decAmountDevice = req.body.devices.map(item => {
+                return Device.findByIdAndUpdate(item.deviceId, {
+                    $inc: {
+                        amount: -1
+                    }
+                });
+            });
+
+            if (err) sendJsonResponse(res, 500, {
+                msg: "Khong the tao don hang",
+                detail: err,
+            });
+
+            Promise.all(decAmountDevice).then((r) => {
+                sendJsonResponse(res, 201, st);
+            }).catch(err => {
+                sendJsonResponse(res, 500, {
+                    msg: "Khong the tao don hang",
+                    detail: err,
+                });
+            });
+
         })
     })
 }

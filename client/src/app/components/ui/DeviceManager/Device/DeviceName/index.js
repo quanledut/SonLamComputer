@@ -88,7 +88,7 @@ class DeviceNameUI extends Component {
                                 <Link
                                     to = {'/devices/device/new'}
                                     className="btn" style={{ backgroundColor: '#17a2b8' }}>
-                                    <i className="fa fa-plus text-white"> Tạo mới thiết bị </i>
+                                    <i className="fa fa-plus text-white"> Nhập thiết bị </i>
                                 </Link>
                                 <hr />
 

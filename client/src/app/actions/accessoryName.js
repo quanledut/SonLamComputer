@@ -12,6 +12,8 @@ const UPDATE_REQUEST = PREFIX + "_UPDATE_REQUEST";
 const UPDATE_REQUEST_SUCCESS = UPDATE_REQUEST + "_SUCCESS"
 
 const FIND_BY_ID_REQUEST = PREFIX + "_FIND_BY_ID_REQUEST";
+const FIND_IMPORT_BY_ID_REQUEST = PREFIX + "_FIND_IMPORT_BY_ID_REQUEST";
+const FIND_EXPORT_BY_ID_REQUEST = PREFIX + "_FIND_EXPORT_BY_ID_REQUEST";
 
 const SEARCH_REQUEST = PREFIX + "_SEARCH_REQUEST_REQUEST";
 
@@ -30,6 +32,9 @@ export const CONSTANTS = {
     UPDATE_REQUEST_SUCCESS,
 
     FIND_BY_ID_REQUEST,
+    FIND_IMPORT_BY_ID_REQUEST,
+    FIND_EXPORT_BY_ID_REQUEST,
+
     SEARCH_REQUEST,
 }
 
@@ -72,6 +77,14 @@ export function updateRequestSuccess(data) {
 //--------------------------------------------------------------
 export function findByIdRequest(id, cb) {
     return {type: CONSTANTS.FIND_BY_ID_REQUEST, id, cb}
+}
+
+export function findImportByIdRequest(id, cb) {
+  return {type: CONSTANTS.FIND_IMPORT_BY_ID_REQUEST, id, cb}
+}
+
+export function findExportByIdRequest(id, cb) {
+  return {type: CONSTANTS.FIND_EXPORT_BY_ID_REQUEST, id, cb}
 }
 
 //---------------------------------------------------------------------

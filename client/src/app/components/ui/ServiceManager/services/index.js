@@ -54,6 +54,8 @@ class ServiceUI extends Component {
         
         var listItem = mapList.map((item, index) => {
             const date = new Date(item.date);
+            const expiredDate = new Date();
+            console.log(date, date.getDate());
             return (
                 <tr key = {index}>
                     <td>{item.staff.fullname}</td>
@@ -64,15 +66,15 @@ class ServiceUI extends Component {
                             array.push(item.computerSeries)
                         }
                         return array
-                    }, []).map(i =>  <a>{i}</a>)}</td>
+                    }, []).join(', ')}</td>
                     <td>{item.accessories.reduce((array, item) => {
                         if (array.indexOf(item.type) == -1) {
                             array.push(item.type)
                         }
                         return array
-                    }, []).map(i =>  <a>{i}</a>)}</td>
-                    <td>{`${date.getDay() + 1}-${date.getMonth() + 1}-${date.getFullYear()}`}</td>
-                    <td>{item.totalPrice}</td>
+                    }, []).join(', ')}</td>
+                    <td>{`${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`}</td>
+                    <td>{item.formatTotalPrice}</td>
 
                     <td>
                         <div className="btn-group">
@@ -80,10 +82,10 @@ class ServiceUI extends Component {
                                 to = {`/services/service/${item._id}/edit`}
                                 className="btn btn-primary"
                             >
-                                <i className="fa fa-edit"> Sửa </i>
+                                <i className="fa fa-edit"> Xem chi tiết </i>
                             </Link>
                             <DeleteFrom 
-                                name={item.customer_name} 
+                                name='đơn hàng này'
                                 id={item._id}
                             />
                         </div>
@@ -113,14 +115,14 @@ class ServiceUI extends Component {
                                 <CustomTable
                                     thead = {
                                         <tr>
-                                            <th>Người bán</th>
+                                            <th style={{ width: '10%' }}>Người bán</th>
                                             <th>Khách hàng</th>
                                             <th>SDT</th>
-                                            <th>Series máy</th>
-                                            <th>Loại linh kiện</th>
-                                            <th>Ngày dịch vụ</th>
+                                            <th>Series May</th>
+                                            <th>Loại</th>
+                                            <th>Ngày DV</th>
                                             <th>Tổng tiền</th>
-                                            <th style={{ width: '20%' }}>Hành động</th>
+                                            <th>Hành động</th>
                                         </tr>
                                     }
 

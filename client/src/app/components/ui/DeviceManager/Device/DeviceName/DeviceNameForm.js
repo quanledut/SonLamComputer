@@ -17,16 +17,18 @@ import {
     Label,
     Row,
 } from 'reactstrap';
+import CustomTable from '../../../utils/Table';
 
 const DEFAULT_FORM = {
     _id: '',
     name: '',
-    deviceType: '',
+    type: '',
     description: '',
     image_url: '',
     amount: 0,
     price: 0,
-    guaranteeDuration: 0
+    guaranteeDuration: 0,
+    inputPrice:0
 }
 
 class DeviceNameFormUI extends Component {
@@ -43,15 +45,18 @@ class DeviceNameFormUI extends Component {
                 title: "",
                 content: ""
             },
+            import: [],
+            export: [],
             deviceTypes: [],
             computerNames: [],
             isDisabled: true,
             isRedirect: false,
-            formErrors: { name: '', deviceType: '', amount: '', price: '', guaranteeDuration: '' },
+            formErrors: { name: '', deviceType: '', amount: '', price: '', guaranteeDuration: '', inputPrice:'' },
             nameValid: false,
             deviceTypeValid: false,
             amountValid: false,
             priceValid: false,
+            inputPriceValid: false,
             guaranteeDurationValid: false,
             formValid: false
         };
@@ -72,6 +77,20 @@ class DeviceNameFormUI extends Component {
                     ...this.state,
                     form: data
                 })
+            });
+
+            this.props.getImportById(id, (data) => {
+              this.setState({
+                ...this.state,
+                import: data
+              })
+            })
+
+            this.props.getExportById(id, (data) => {
+              this.setState({
+                ...this.state,
+                export: data
+              })
             })
         }
         this.props.findAlldeviceType({
@@ -97,10 +116,11 @@ class DeviceNameFormUI extends Component {
             },
             isDisabled: true,
             isRedirect: false,
-            formErrors: { name: '', deviceType: '', amount: '', price: '', guaranteeDuration: '' },
+            formErrors: { name: '', deviceType: '', amount: '', price: '', guaranteeDuration: '', inputPrice:'' },
             nameValid: false,
             deviceTypeValid: false,
             amountValid: false,
+            inputPriceValid: false,
             priceValid: false,
             guaranteeDurationValid: false,
             formValid: false
@@ -207,12 +227,13 @@ class DeviceNameFormUI extends Component {
         let deviceTypeValid = this.state.deviceTypeValid;
         let amountValid = this.state.amountValid;
         let priceValid = this.state.priceValid;
+        let inputPriceValid = this.state.inputPriceValid;
         let guaranteeDurationValid = this.state.guaranteeDurationValid;
 
         const re = /^\$?[0-9]+(\.[0-9][0-9])?$/;
 
         switch (fieldName) {
-            case 'deviceType':
+            case 'type':
                 deviceTypeValid = (value !== null && value !== "");
                 fieldValidationErrors.deviceType = deviceTypeValid ? '' : 'Vui lòng chọn loại thiết bị!';
                 break;
@@ -224,6 +245,10 @@ class DeviceNameFormUI extends Component {
                     amountValid = re.test(value);
                     fieldValidationErrors.amount = amountValid ? '' : 'Định dạng số không đúng!';
                 }
+                break;
+            case 'inputPrice':
+                inputPriceValid = re.test(value);
+                fieldValidationErrors.inputPrice = inputPriceValid ? '' : 'Định dạng số không đúng!';
                 break;
             case 'price':
                 priceValid = value > 0;
@@ -310,8 +335,8 @@ class DeviceNameFormUI extends Component {
                                         <Label htmlFor="select">Loại thiết bị</Label>
                                         <Input
                                             onChange={(event) => (this.isChange(event))}
-                                            value={this.state.form.deviceType}
-                                            type="select" name="deviceType" id="select">
+                                            value={this.state.form.type}
+                                            type="select" name="type" id="select">
                                             <option value="">---Chọn---</option>
                                             {
                                                 this.state.deviceTypes.map((e, id) =>
@@ -327,10 +352,21 @@ class DeviceNameFormUI extends Component {
                                             value={this.state.form.description}
                                             type="username" id="nf-username" name="description" placeholder="Nhập mô tả..." autoComplete="current-password" />
                                     </FormGroup>
+                                    {(this.props.match.params.id) ? ''
+                                    :
+                                        <FormGroup>
+                                            <Label htmlFor="nf-username">Giá nhập</Label>
+                                            <Input onChange = {(event) => (this.isChange(event))}
+                                                value = {this.state.form.inputPrice}
+                                                type="username" id="nf-username" name="inputPrice" placeholder="Nhập giá vôn..." autoComplete="current-password" />
+                                            {this.state.formErrors.inputPrice ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.inputPrice}</span></FormText> : ''}
+                                        </FormGroup>
+                                    }
                                     <FormGroup>
                                         <Label htmlFor="nf-username">Giá bán</Label>
                                         <Input onChange={(event) => (this.isChange(event))}
                                             value={this.state.form.price}
+                                            // disabled = {(this.props.match.params.id) ? true : false}
                                             type="username" id="nf-username" name="price" placeholder="Nhập giá bán..." autoComplete="current-password" />
                                         {this.state.formErrors.price ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.price}</span></FormText> : ''}
                                     </FormGroup>
@@ -338,10 +374,11 @@ class DeviceNameFormUI extends Component {
                                         <Label htmlFor="nf-username">Số lượng</Label>
                                         <Input onChange={(event) => (this.isChange(event))}
                                             value={this.state.form.amount}
+                                            disabled = {(this.props.match.params.id) ? true : false}
                                             type="username" id="nf-username" name="amount" placeholder="Nhập số tiền..." autoComplete="current-password" />
                                         {this.state.formErrors.amount ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.amount}</span></FormText> : ''}
                                     </FormGroup>
-                                    <FormGroup>
+                                    {/* <FormGroup>
                                         <Label htmlFor="nf-username">Link ảnh</Label>
                                         <Input
                                             // value={this.state.form.image_url}
@@ -356,11 +393,11 @@ class DeviceNameFormUI extends Component {
                                                 </Card>
                                             )
                                         }
-                                        {/* <Input onChange = {(event) => (this.isChange(event))} 
+                                        <Input onChange = {(event) => (this.isChange(event))}
                                             value = {this.state.form.image_url}
                                             type="username" id="nf-username" name="image_url" placeholder="Nhập link ảnh..." autoComplete="current-password" />
-                                         {this.state.error.image_url ? <FormText className="help-block"><span style={{color: "red"}}>Vui lòng nhập đúng định dạng!</span></FormText> : ''}  */}
-                                    </FormGroup>
+                                         {this.state.error.image_url ? <FormText className="help-block"><span style={{color: "red"}}>Vui lòng nhập đúng định dạng!</span></FormText> : ''}
+                                    </FormGroup> */}
                                     <FormGroup>
                                         <Label htmlFor="nf-username">Thời gian bảo hành</Label>
                                         <Input onChange={(event) => (this.isChange(event))}
@@ -369,6 +406,73 @@ class DeviceNameFormUI extends Component {
                                         {this.state.formErrors.guaranteeDuration ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.guaranteeDuration}</span></FormText> : ''}
                                     </FormGroup>
                                 </Form>
+                                {
+                                  (this.props.match.params.id) && (
+                                    <div>
+                                      <Label htmlFor="select">Lịch sử nhập kho</Label>
+                                      <CustomTable
+                                        thead = {
+                                            <tr>
+                                                <th>Ngày nhập</th>
+                                                <th>Số lượng</th>
+                                                <th>Giá nhập</th>
+                                            </tr>
+                                        }
+
+                                        tbody = {this.state.import.map((item, key) => {
+                                          return (
+                                            <tr key>
+                                              <td>
+                                                <a>{item.createdAt}</a>
+                                              </td>
+                                              <td>
+                                                <a>{item.amount}</a>
+                                              </td>
+                                              <td>
+                                                <a>{item.price}</a>
+                                              </td>
+                                            </tr>
+                                          )
+                                        })}
+
+                                        hasPagination = {false} />
+                                    </div>
+                                  )
+                                }
+
+                                {
+                                  (this.props.match.params.id) && (
+                                    <div>
+                                      <Label htmlFor="select">Lịch sử xuất kho</Label>
+                                        <CustomTable
+                                          thead = {
+                                              <tr>
+                                                  <th>Ngày nhập</th>
+                                                  <th>Số lượng</th>
+                                                  <th>Giá bán</th>
+                                              </tr>
+                                          }
+
+                                          tbody = {this.state.export.map((item, key) => {
+                                            return (
+                                              <tr key>
+                                                <td>
+                                                  <a>{item.createdAt}</a>
+                                                </td>
+                                                <td>
+                                                  <a>{item.amount}</a>
+                                                </td>
+                                                <td>
+                                                  <a>{item.price}</a>
+                                                </td>
+                                              </tr>
+                                            )
+                                          })}
+
+                                          hasPagination = {false} />
+                                    </div>
+                                  )
+                                }
                             </CardBody>
                             <CardFooter>
                                 {/* <Button type="submit" size="sm" color="primary" disabled={this.state.isDisabled} onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button> */}
@@ -376,6 +480,7 @@ class DeviceNameFormUI extends Component {
                                 <Button type="reset" size="sm" color="danger" onClick={this.onClear}><i className="fa fa-ban"></i> Reset</Button>
                             </CardFooter>
                         </Card>
+
                     </Col>
                 </Row>
             </div>

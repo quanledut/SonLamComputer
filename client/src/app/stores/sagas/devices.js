@@ -58,6 +58,34 @@ export function * findById() {
     }
 }
 
+export function * findImportById() {
+  while (true) {
+      const request = yield take(Actions.CONSTANTS.FIND_IMPORT_BY_ID_REQUEST)
+      const id = request.id
+      try {
+          let result = yield call(Api.historyImportApi, id)
+          request.cb(result, null)
+      } catch(err) {
+          console.log(err.message)
+          request.cb(null, err.message)
+      }
+  }
+}
+
+export function * findExporttById() {
+  while (true) {
+      const request = yield take(Actions.CONSTANTS.FIND_EXPORT_BY_ID_REQUEST)
+      const id = request.id
+      try {
+          let result = yield call(Api.historyExportApi, id)
+          request.cb(result, null)
+      } catch(err) {
+          console.log(err.message)
+          request.cb(null, err.message)
+      }
+  }
+}
+
 export function * updated() {
     while (true) {
         const request = yield take(Actions.CONSTANTS.UPDATE_REQUEST)
@@ -77,5 +105,7 @@ export default function * root () {
     yield fork(add)
     yield fork(deleted)
     yield fork(findById)
+    yield fork(findImportById)
+    yield fork(findExporttById)
     yield fork(updated)
 }

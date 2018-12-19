@@ -22,25 +22,48 @@ const getPrice = (number) => {
         str = remain + "." + str
         temp = Math.floor(temp / 1000)
     }
-    return str
+    return str + 'đ'
 }
 
 let subAccessorySchema = new mongoose.Schema({
+    accessoryId: { type: mongoose.Schema.Types.ObjectId },
     computerSeries: String,
-    type: String,
-    guaranteeDuration: Number, 
-    price: {type: Number, set: setPrice},
-    date: { type: Date, default: Date.now }
-})
-
-let subDeviceSchema = new mongoose.Schema({
+    computerName: String,
     name: String,
     type: String,
-    guaranteeDuration: Number, 
+    guaranteeDuration: {type: Number, default: 0}, 
+    // price: {type: Number, set: setPrice, get: getPrice},
     price: {type: Number, set: setPrice},
     date: { type: Date, default: Date.now }
+}, {
+    toJSON: { virtuals: true },
+    toJSON: { virtuals: true }
 })
 
+subAccessorySchema.virtual('formatPrice').get(function() {
+    return getPrice(this.price)
+});
+
+let subDeviceSchema = new mongoose.Schema({
+    deviceId: { type: mongoose.Schema.Types.ObjectId },
+    name: String,
+    type: String,
+    guaranteeDuration: {type: Number, default: 0}, 
+    // price: {type: Number, set: setPrice, get: getPrice},
+    price: {type: Number, set: setPrice},
+    date: { type: Date, default: Date.now }
+}, {
+    toJSON: { virtuals: true },
+    toJSON: { virtuals: true }
+});
+
+
+subDeviceSchema.virtual('formatPrice').get(function() {
+    return getPrice(this.price)
+});
+
+// subDeviceSchema.set('toObject', {virtuals: true})
+// subDeviceSchema.set('toJson', {virtuals: true})
 
 let serviceSchema = new mongoose.Schema({
     serviceType: { type: mongoose.Schema.Types.ObjectId, ref: 'ServiceType' },
@@ -51,6 +74,9 @@ let serviceSchema = new mongoose.Schema({
     devices: [subDeviceSchema],
     totalPrice: { type: Number, default: 0 },
     status: { type: Number, default: DEFAUT_STATUS.NEW },
+}, {
+    toJSON: { virtuals: true },
+    toJSON: { virtuals: true }
 })
 
 serviceSchema.methods.calculatePrice = function() {
@@ -65,4 +91,12 @@ serviceSchema.methods.calculatePrice = function() {
     this.totalPrice = totalPrice
 }
 
+// serviceSchema.virtual('formatTotalPrice').get(function() {
+//     return getPrice(this.totalPrice)
+// });
+
 mongoose.model('Service', serviceSchema)
+
+module.exports = {
+    getPrice
+}

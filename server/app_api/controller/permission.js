@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const ObjectId = mongoose.Types.ObjectId; 
+const ObjectId = mongoose.Types.ObjectId;
 
 const { CONSTANT } = require("../model/user/policy")
 
@@ -8,7 +8,7 @@ const Policy = mongoose.model('Policy');
 const checkPolicyForPermission = (policies, action) => {
     for (let id in policies) {
         let policy = policies[id];
-        if (policy.permission & action) return true 
+        if (policy.permission & action) return true
         // permissionArray = decimalToBinary(policy.permission);
 
         // switch (action) {
@@ -45,7 +45,11 @@ const checkPermission = async (roles, collectionName, action) => {
 
 }
 
-const checkPermissionForCollection = (collectionName, idField) => (action) => async (req, res, next) => {
+const checkPermissionForCollection = (collectionName, idField) => (action, guessAllowed) => async (req, res, next) => {
+    if (!req.payload && guessAllowed) {
+      next();
+      return;
+    }
 
     const roles = req.payload.roles.map((r) => new ObjectId(r._id));
     let allowed = await checkPermission(roles, collectionName, action);
@@ -59,7 +63,7 @@ const checkPermissionForCollection = (collectionName, idField) => (action) => as
                 next();
                 return
             }
-    
+
         }
         res.status(401);
         res.json("Unauthorized");
