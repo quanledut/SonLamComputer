@@ -255,19 +255,19 @@ const findById = (req, res) => {
                 detail: "Not found"
             });
 
-            else sendJsonResponse(res, 200, service.map(item => {
-                item.accessories = item.accessories.map(i => {
+            else {
+                service.accessories = service.accessories.map(i => {
                     i.formatPrice = getPrice(i.price);
                     return i;
                 });
 
-                item.devices = item.devices.map(i => {
+                service.devices = service.devices.map(i => {
                     i.formatPrice = getPrice(i.price);
                     return i;
                 });
 
-                return item;
-            }));
+                sendJsonResponse(res, 200, service);
+            }
         }, (err) => {
             sendJsonResponse(res, 500, {
                 msg: "Tìm kiếm thất bại",
