@@ -31,7 +31,7 @@ const reducer = (state = initialState, action) => {
         }
 
         case USER_CONSTANTS.DELETE_REQUEST_SUCCESS: {
-            var id = action.data;
+            var id = action.id;
             if(id)
             {
                 var indexx = findIndex(state, id);

@@ -30,6 +30,9 @@ export const DeviceNameForm = connect(
         },
         findAlldeviceType(query, cb){
             dispatch(deviceTypeActions.findAllRequest(query, cb));
+        },
+        findAlldevices(query, cb){
+            dispatch(deviceNameActions.findAllRequest(query, cb));
         }
     })
 )(DeviceNameFormUI);

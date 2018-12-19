@@ -212,22 +212,23 @@ class PopUpCustomerFormUI extends Component {
 
     render() {
         return (
-            <Popup open={this.props.isOpen} closeOnDocumentClick onClose={() => {this.onClose()}} modal>
+            <Popup open={this.props.isOpen} closeOnDocumentClick onClose={() => { this.onClose() }} modal>
                 {close => (
                     <div className="scrollspy" id="spy" data-spy="scroll" style={{ position: 'relative', height: '500px', overflow: 'auto', marginTop: '.5rem' }}>
                         <div className="modal1">
-                            <a className="close" onClick={() => { this.onClose(); close() }}>
-                                &times;
-                        </a>
-                            <div className="header"> Thông tin khách hàng </div>
+                            <div className="header"> Thông tin khách hàng
+                                <a style={{ float: 'right'}} onClick={() => { this.onClose(); close() }}>
+                                    <i class="fas fa-sign-out-alt"></i>
+                                </a>
+                            </div>
                             <div className="content" style={{ textAlign: 'left' }}>
                                 <Modal
                                     isOpened={this.state.modal.isOpened}
                                     isLoading={this.state.modal.isLoading}
                                     title={this.state.modal.title}
                                     content={this.state.modal.content}
-                                    onOkay={this.state.isRedirect ? ()=>{this._closeModal();this.onClear();close();this.onClose()} : ()=>{this._closeModal()}}
-                                    onCancel={this.state.isRedirect ? ()=>{this._closeModal();this.onClear();close();this.onClose()} : ()=>{this._closeModal()}} >
+                                    onOkay={this.state.isRedirect ? () => { this._closeModal(); this.onClear(); close(); this.onClose() } : () => { this._closeModal() }}
+                                    onCancel={this.state.isRedirect ? () => { this._closeModal(); this.onClear(); close(); this.onClose() } : () => { this._closeModal() }} >
                                 </Modal>
                                 <Row>
                                     <Col xs="12">

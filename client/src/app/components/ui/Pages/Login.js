@@ -205,7 +205,7 @@ validateForm() {
                       </InputGroup>
                       <Row>
                         <Col xs="6">
-                          <Button onClick={this._submit} color="primary" className="px-4" disabled={!this.state.formValid}>Login</Button>
+                          <Button type="submit" onClick={this._submit} color="primary" className="px-4" disabled={!this.state.formValid}>Login</Button>
                         </Col>
                         <Col xs="6" className="text-right">
                           {/* <Button color="link" className="px-0">Forgot password?</Button> */}

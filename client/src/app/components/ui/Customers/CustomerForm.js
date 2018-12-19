@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Redirect} from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import Modal from '../utils/Modal'
 import * as notifications from '../../../constants/Notifications'
 import CustomTable from '../utils/Table'
@@ -21,13 +21,13 @@ import {
 
 const DEFAULT_FORM = {
     _id: '',
-    email :'',
+    email: '',
     customer_no: '',
-    gender : '',
-    address :'',
+    gender: '',
+    address: '',
     phone: '',
     fullname: '',
-    date:''
+    date: ''
 }
 
 class CustomerFormUI extends Component {
@@ -35,15 +35,15 @@ class CustomerFormUI extends Component {
         super(props);
 
         this.state = {
-            form: {...DEFAULT_FORM},
+            form: { ...DEFAULT_FORM },
             error: {},
             modal: {
                 isOpened: false,
                 isLoading: false,
                 title: "",
                 content: ""
-            },      
-            formErrors: {email: '', gender:'',fullname:'',phone:'',address:''},
+            },
+            formErrors: { email: '', gender: '', fullname: '', phone: '', address: '' },
             emailValid: false,
             genderValid: false,
             fullnameValid: false,
@@ -57,10 +57,9 @@ class CustomerFormUI extends Component {
         this._closeModal = this._closeModal.bind(this)
     }
 
-    componentWillMount(){
-        var {match} = this.props;
-        if(match.params.id)
-        {
+    componentWillMount() {
+        var { match } = this.props;
+        if (match.params.id) {
             var id = match.params.id;
             this.props.getUserById(id, (data) => {
                 this.setState({
@@ -72,16 +71,16 @@ class CustomerFormUI extends Component {
         }
     }
 
-    onClear = () =>{
+    onClear = () => {
         this.setState({
-            form: {...DEFAULT_FORM},
+            form: { ...DEFAULT_FORM },
             modal: {
                 isOpened: false,
                 isLoading: false,
                 title: "",
                 content: ""
-            },      
-            formErrors: {email: '',address : '', gender:'',fullname:'',phone:''},
+            },
+            formErrors: { email: '', address: '', gender: '', fullname: '', phone: '' },
             emailValid: false,
             genderValid: false,
             fullnameValid: false,
@@ -90,29 +89,28 @@ class CustomerFormUI extends Component {
         });
     }
 
-    _openModal (modal) {
+    _openModal(modal) {
         this.setState({
-          modal: {
-            ...this.state.modal,
-            ...modal,
-            isOpened: true
-          }
-        })  
-    }   
-    
-    _closeModal () {
-        this.setState({
-          modal: {
-            isOpened: false,
-            isLoading: false,
-            title: "",
-            content: ""
-          }
+            modal: {
+                ...this.state.modal,
+                ...modal,
+                isOpened: true
+            }
         })
     }
 
-    onSubmitForm =(event) =>
-    {
+    _closeModal() {
+        this.setState({
+            modal: {
+                isOpened: false,
+                isLoading: false,
+                title: "",
+                content: ""
+            }
+        })
+    }
+
+    onSubmitForm = (event) => {
         event.preventDefault();
         for (let name in this.state.form) {
             this._validate(name, this.state.form[name])
@@ -140,7 +138,7 @@ class CustomerFormUI extends Component {
             title: "Loading"
         })
 
-        let {_id} = this.state.form
+        let { _id } = this.state.form
         if (_id) {
             this.props.updateUser(this.state.form, (res, error) => {
                 this._closeModal()
@@ -152,13 +150,13 @@ class CustomerFormUI extends Component {
                     })
                     this.setState({
                         isRedirect: true
-                    })              
+                    })
                 } else {
                     this._openModal({
                         title: "Error",
                         content: error,
                         isLoading: false,
-                      })              
+                    })
                 }
             })
         } else {
@@ -172,13 +170,13 @@ class CustomerFormUI extends Component {
                     })
                     this.setState({
                         isRedirect: true
-                    })              
-                } else{
+                    })
+                } else {
                     this._openModal({
                         title: "Error",
                         content: error,
                         isLoading: false,
-                      })              
+                    })
                 }
             })
         }
@@ -195,52 +193,47 @@ class CustomerFormUI extends Component {
         const sdt = /^\+?(?:[0-9] ?){8,14}[0-9]$/;
         const email_check = /[a-zA-Z0-9]+[.]?([a-zA-Z0-9]+)?[@][a-z]{3,9}[.][a-z]{2,5}/g;
 
-        switch(fieldName) {
-          case 'email':
-            emailValid = value.length >0;
-            if(!emailValid)
-            {
-                fieldValidationErrors.email = emailValid ? '': ' Vui lòng nhập email!';
-            }else
-            {
-                emailValid = email_check.test(value);
-                fieldValidationErrors.email = emailValid ? '': ' Vui lòng nhập đúng định dạng email!';
-            }
-            break;
-          case 'fullname':
-            fullnameValid = value.length > 0;
-            fieldValidationErrors.fullname = fullnameValid ? '': 'Vui lòng nhập tên người dùng trong khoảng 6-50 ký tự!';
-            break;
-          case 'gender':
-            genderValid = (value !== null && value !== "");
-            fieldValidationErrors.gender = genderValid ? '' : 'Vui lòng chọn giới tính!';
-            break;
-          case 'phone':
-            phoneValid = (value.length > 0);
-            if(!phoneValid)
-            {
-                fieldValidationErrors.phone = phoneValid ? '': 'Vui lòng nhập số điện thoại!';
-            }else
-            {
-                phoneValid = sdt.test(value);
-                fieldValidationErrors.phone = phoneValid ? '': 'Định dạng số điện thoại không đúng!';
-            }
-            break;
+        switch (fieldName) {
+            case 'email':
+                emailValid = value.length > 0;
+                if (!emailValid) {
+                    fieldValidationErrors.email = emailValid ? '' : ' Vui lòng nhập email!';
+                } else {
+                    emailValid = email_check.test(value);
+                    fieldValidationErrors.email = emailValid ? '' : ' Vui lòng nhập đúng định dạng email!';
+                }
+                break;
+            case 'fullname':
+                fullnameValid = value.length > 0;
+                fieldValidationErrors.fullname = fullnameValid ? '' : 'Vui lòng nhập tên người dùng trong khoảng 6-50 ký tự!';
+                break;
+            case 'gender':
+                genderValid = (value !== null && value !== "");
+                fieldValidationErrors.gender = genderValid ? '' : 'Vui lòng chọn giới tính!';
+                break;
+            case 'phone':
+                phoneValid = (value.length > 0);
+                if (!phoneValid) {
+                    fieldValidationErrors.phone = phoneValid ? '' : 'Vui lòng nhập số điện thoại!';
+                } else {
+                    phoneValid = sdt.test(value);
+                    fieldValidationErrors.phone = phoneValid ? '' : 'Định dạng số điện thoại không đúng!';
+                }
+                break;
 
-          default:
-            break;
+            default:
+                break;
         }
-        this.setState({formErrors: fieldValidationErrors});
-      }
+        this.setState({ formErrors: fieldValidationErrors });
+    }
 
-    isChange = (event) =>
-    {
+    isChange = (event) => {
         const name = event.target.name;
         const value = event.target.value;
         this.setState({
             form: {
                 ...this.state.form,
-                [name] : value
+                [name]: value
             }
         });
 
@@ -248,15 +241,14 @@ class CustomerFormUI extends Component {
     }
 
     render() {
-        if(this.state.isRedirect)
-        {
-            return(
-                <Redirect to="/customers"/>
+        if (this.state.isRedirect) {
+            return (
+                <Redirect to="/customers" />
             )
         }
-        
+
         return (
-            
+
             <div className="animated fadeIn">
                 <Modal
                     isOpened={this.state.modal.isOpened}
@@ -269,83 +261,80 @@ class CustomerFormUI extends Component {
 
                 <Row>
                     <Col xs="12" md="9">
-                            <Card>
-                                <CardHeader>
-                                    <strong>Thông tin khách hàng</strong>
-                                </CardHeader>
-                                <CardBody>
-                                    <Form onSubmit={this.onSubmitForm}>
+                        <Card>
+                            <CardHeader>
+                                <strong>Thông tin khách hàng</strong>
+                            </CardHeader>
+                            <CardBody>
+                                <Form onSubmit={this.onSubmitForm}>
+                                    <FormGroup>
                                         <FormGroup>
-                                            <FormGroup>
-                                                <Label htmlFor="nf-customer_no">Mã khách hàng</Label>
-                                                <Input 
-                                                    onChange = {(event) => (this.isChange(event))} 
-                                                    value = {this.state.form.customer_no}
-                                                    type="text" id="nf-customer_no" name="customer_no" placeholder="Mã mặc định" 
-                                                    disabled/>
-                                            </FormGroup>
+                                            <Label htmlFor="nf-customer_no">Mã khách hàng</Label>
+                                            <Input
+                                                onChange={(event) => (this.isChange(event))}
+                                                value={this.state.form.customer_no}
+                                                type="text" id="nf-customer_no" name="customer_no" placeholder="Mã mặc định"
+                                                disabled />
                                         </FormGroup>
-                                        <FormGroup>
-                                            <Label htmlFor="nf-fullname">Tên khách hàng</Label>
-                                            <Input onChange = {(event) => (this.isChange(event))} 
-                                                value = {this.state.form.fullname}
-                                                type="text" id="nf-fullname" name="fullname" placeholder="Enter FullName.." autoComplete="current-customer_no" />
-                                            {this.state.formErrors.fullname ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.fullname}</span></FormText> : ''} 
-                                        </FormGroup>
-                                        <FormGroup>
-                                            <Label htmlFor="nf-phone">Số điện thoại</Label>
-                                            <Input onChange = {(event) => (this.isChange(event))} 
-                                                value = {this.state.form.phone}
-                                                type="text" id="nf-phone" name="phone" placeholder="Enter Phone.." autoComplete="current-customer_no" />
-                                            {this.state.formErrors.phone ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.phone}</span></FormText> : ''} 
-                                        </FormGroup>
-                                        <FormGroup>
-                                            <Label htmlFor="nf-username">Địa chỉ</Label>
-                                            <Input onChange = {(event) => (this.isChange(event))} 
-                                                value = {this.state.form.address}
-                                                type="text" id="nf-username" name="address"/>
-                                        </FormGroup>
-                                        <FormGroup>
-                                            <Label htmlFor="nf-email">Email</Label>
-                                            <Input 
-                                                onChange = {(event) => (this.isChange(event))} 
-                                                value = {this.state.form.email}
-                                                type="email" id="nf-email" name="email"/>
-                                            {this.state.formErrors.email ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.email}</span></FormText> : ''} 
-                                        </FormGroup>
-                                        <FormGroup>
-                                            <Label>Giới tính</Label>
-                                            {this.state.formErrors.gender ? <FormText className="help-block"><span style={{color: "red"}}>{this.state.formErrors.gender}</span></FormText> : ''} 
-                                            &nbsp;
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <Label htmlFor="nf-fullname">Tên khách hàng</Label>
+                                        <Input onChange={(event) => (this.isChange(event))}
+                                            value={this.state.form.fullname}
+                                            type="text" id="nf-fullname" name="fullname" placeholder="Enter FullName.." autoComplete="current-customer_no" />
+                                        {this.state.formErrors.fullname ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.fullname}</span></FormText> : ''}
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <Label htmlFor="nf-phone">Số điện thoại</Label>
+                                        <Input onChange={(event) => (this.isChange(event))}
+                                            value={this.state.form.phone}
+                                            type="text" id="nf-phone" name="phone" placeholder="Enter Phone.." autoComplete="current-customer_no" />
+                                        {this.state.formErrors.phone ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.phone}</span></FormText> : ''}
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <Label htmlFor="nf-username">Địa chỉ</Label>
+                                        <Input onChange={(event) => (this.isChange(event))}
+                                            value={this.state.form.address}
+                                            type="text" id="nf-username" name="address" />
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <Label htmlFor="nf-email">Email</Label>
+                                        <Input
+                                            onChange={(event) => (this.isChange(event))}
+                                            value={this.state.form.email}
+                                            type="email" id="nf-email" name="email" />
+                                        {this.state.formErrors.email ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.email}</span></FormText> : ''}
+                                    </FormGroup>
+                                    <FormGroup>
+                                        <Label>Giới tính</Label>
+                                        {this.state.formErrors.gender ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.gender}</span></FormText> : ''}
+                                        &nbsp;
                                             <FormGroup check inline>
-                                                <Input 
-                                                    className="form-check-input" 
-                                                    type="radio" id="inline-radio1" 
-                                                    name="gender" value="nam" 
-                                                    onChange = {(event) => (this.isChange(event))} 
-                                                    checked={this.state.form.gender === "nam"}/>
-                                                <Label className="form-check-label" check htmlFor="inline-radio2">Nam</Label>
-                                            </FormGroup>
-                                            <FormGroup check inline>
-                                                <Input 
-                                                    className="form-check-input" 
-                                                    type="radio" 
-                                                    id="inline-radio2" 
-                                                    name="gender" 
-                                                    value="nu" 
-                                                    onChange = {(event) => (this.isChange(event))} 
-                                                    checked={this.state.form.gender === "nu"}/>
-                                                <Label className="form-check-label" check htmlFor="inline-radio2">Nữ</Label>
-                                            </FormGroup>
+                                            <Input
+                                                className="form-check-input"
+                                                type="radio" id="inline-radio1"
+                                                name="gender" value="nam"
+                                                onChange={(event) => (this.isChange(event))}
+                                                checked={this.state.form.gender === "nam"} />
+                                            <Label className="form-check-label" check htmlFor="inline-radio2">Nam</Label>
                                         </FormGroup>
-                                        
-                                    </Form>
-                                </CardBody>
-                                <CardFooter>
-                                    <Button size="sm" color="primary" onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button>
-                                    <Button size="sm" color="danger" onClick = {this.onClear}><i className="fa fa-ban"></i> Reset</Button>
-                                </CardFooter>
-                            </Card>
+                                        <FormGroup check inline>
+                                            <Input
+                                                className="form-check-input"
+                                                type="radio"
+                                                id="inline-radio2"
+                                                name="gender"
+                                                value="nu"
+                                                onChange={(event) => (this.isChange(event))}
+                                                checked={this.state.form.gender === "nu"} />
+                                            <Label className="form-check-label" check htmlFor="inline-radio2">Nữ</Label>
+                                        </FormGroup>
+                                    </FormGroup>
+                                    <Button type="submit" size="sm" color="primary" onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button>
+                                    <Button size="sm" color="danger" onClick={this.onClear}><i className="fa fa-ban"></i> Reset</Button>
+                                </Form>
+                            </CardBody>
+                        </Card>
                     </Col>
                 </Row>
             </div>

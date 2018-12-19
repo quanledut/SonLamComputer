@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Modal from '../../../utils/Modal'
 import { Redirect } from 'react-router-dom';
 import CustomTable from '../../../utils/Table';
+import Creatable from 'react-select/lib/Creatable';
 
 import {
     Button,
@@ -48,6 +49,8 @@ class AccessoryNameFormUI extends Component {
             types: [],
             import: [],
             export: [],
+            accessories: [],
+            custom_name: null,
             isDisabled: true,
             isRedirect: false,
             formErrors: { type: '', amount: '', price: '', guaranteeDuration: '', inputPrice: '' },
@@ -73,7 +76,11 @@ class AccessoryNameFormUI extends Component {
             this.props.getById(id, (data) => {
                 this.setState({
                     ...this.state,
-                    form: data
+                    form: data,
+                    custom_name: {
+                        value: data._id,
+                        label: data.name
+                    }
                 })
             })
         }
@@ -87,18 +94,27 @@ class AccessoryNameFormUI extends Component {
             })
         });
 
+        this.props.findAll({
+            all: true
+        }, (types, err) => {
+            if (!err) this.setState({
+                ...this.state,
+                accessories: types.docs
+            })
+        });
+
         this.props.getImportById(id, (data) => {
-          this.setState({
-            ...this.state,
-            import: data
-          })
+            this.setState({
+                ...this.state,
+                import: data
+            })
         })
 
         this.props.getExportById(id, (data) => {
-          this.setState({
-            ...this.state,
-            export: data
-          })
+            this.setState({
+                ...this.state,
+                export: data
+            })
         })
 
     }
@@ -299,12 +315,39 @@ class AccessoryNameFormUI extends Component {
         this._validate(name, value);
     }
 
+    handleChange = (selectedOption) => {
+        let label = '';
+        if (selectedOption) {
+            label = selectedOption.label;
+        }
+        this.setState({
+            form: {
+                ...this.state.form, name: label
+            },
+            custom_name: selectedOption
+        });
+    };
+
+
     render() {
         if (this.state.isRedirect) {
             return (
                 <Redirect to="/devices/accessory" />
             )
         }
+
+        const options = [];
+        this.state.accessories.map((e, key) => {
+            var name = '';
+            if(e.name)
+            {
+                name = e.name;
+            }
+            var id = e._id;
+            options.push({ value: id, label: name })
+        }
+        );
+
         return (
             <div className="animated fadeIn">
                 <Modal
@@ -324,13 +367,24 @@ class AccessoryNameFormUI extends Component {
                             </CardHeader>
                             <CardBody>
                                 <Form action="" method="post">
-                                <FormGroup>
+                                    <FormGroup>
+                                        <Label htmlFor="select">Tên linh kiện</Label>
+                                        <Creatable
+                                            isClearable
+                                            value={this.state.custom_name}
+                                            onChange={this.handleChange}
+                                            options={options}
+                                            name="name"
+                                        />
+                                        {this.state.formErrors.name ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.name}</span></FormText> : ''}
+                                    </FormGroup>
+                                    {/* <FormGroup>
                                         <Label htmlFor="select">Tên linh kiện</Label>
                                         <Input onChange={(event) => (this.isChange(event))}
                                             value={this.state.form.name}
                                             type="username" id="nf-username" name="name" placeholder="Nhập tên linh kiện..." autoComplete="current-password" />
                                         {this.state.formErrors.name ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.name}</span></FormText> : ''}
-                                    </FormGroup>
+                                    </FormGroup> */}
                                     <FormGroup>
                                         <Label htmlFor="select">Loại linh kiện</Label>
                                         <Input
@@ -407,78 +461,76 @@ class AccessoryNameFormUI extends Component {
                                         {this.state.formErrors.guaranteeDuration ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.guaranteeDuration}</span></FormText> : ''}
                                     </FormGroup>
                                     {
-                                  (this.props.match.params.id) && (
-                                    <div>
-                                      <Label htmlFor="select">Lịch sử nhập kho</Label>
-                                      <CustomTable
-                                        thead = {
-                                            <tr>
-                                                <th>Ngày nhập</th>
-                                                <th>Số lượng</th>
-                                                <th>Giá nhập</th>
-                                            </tr>
-                                        }
+                                        (this.props.match.params.id) && (
+                                            <div>
+                                                <Label htmlFor="select">Lịch sử nhập kho</Label>
+                                                <CustomTable
+                                                    thead={
+                                                        <tr>
+                                                            <th>Ngày nhập</th>
+                                                            <th>Số lượng</th>
+                                                            <th>Giá nhập</th>
+                                                        </tr>
+                                                    }
 
-                                        tbody = {this.state.import.map((item, key) => {
-                                          return (
-                                            <tr key>
-                                              <td>
-                                                <a>{item.createdAt}</a>
-                                              </td>
-                                              <td>
-                                                <a>{item.amount}</a>
-                                              </td>
-                                              <td>
-                                                <a>{item.price}</a>
-                                              </td>
-                                            </tr>
-                                          )
-                                        })}
+                                                    tbody={this.state.import.map((item, key) => {
+                                                        return (
+                                                            <tr key>
+                                                                <td>
+                                                                    <a>{item.createdAt}</a>
+                                                                </td>
+                                                                <td>
+                                                                    <a>{item.amount}</a>
+                                                                </td>
+                                                                <td>
+                                                                    <a>{item.price}</a>
+                                                                </td>
+                                                            </tr>
+                                                        )
+                                                    })}
 
-                                        hasPagination = {false} />
-                                    </div>
-                                  )
-                                }
+                                                    hasPagination={false} />
+                                            </div>
+                                        )
+                                    }
 
-                                {
-                                  (this.props.match.params.id) && (
-                                    <div>
-                                      <Label htmlFor="select">Lịch sử xuất kho</Label>
-                                        <CustomTable
-                                          thead = {
-                                              <tr>
-                                                  <th>Ngày nhập</th>
-                                                  <th>Số lượng</th>
-                                                  <th>Giá bán</th>
-                                              </tr>
-                                          }
+                                    {
+                                        (this.props.match.params.id) && (
+                                            <div>
+                                                <Label htmlFor="select">Lịch sử xuất kho</Label>
+                                                <CustomTable
+                                                    thead={
+                                                        <tr>
+                                                            <th>Ngày nhập</th>
+                                                            <th>Số lượng</th>
+                                                            <th>Giá bán</th>
+                                                        </tr>
+                                                    }
 
-                                          tbody = {this.state.export.map((item, key) => {
-                                            return (
-                                              <tr key>
-                                                <td>
-                                                  <a>{item.createdAt}</a>
-                                                </td>
-                                                <td>
-                                                  <a>{item.amount}</a>
-                                                </td>
-                                                <td>
-                                                  <a>{item.price}</a>
-                                                </td>
-                                              </tr>
-                                            )
-                                          })}
+                                                    tbody={this.state.export.map((item, key) => {
+                                                        return (
+                                                            <tr key>
+                                                                <td>
+                                                                    <a>{item.createdAt}</a>
+                                                                </td>
+                                                                <td>
+                                                                    <a>{item.amount}</a>
+                                                                </td>
+                                                                <td>
+                                                                    <a>{item.price}</a>
+                                                                </td>
+                                                            </tr>
+                                                        )
+                                                    })}
 
-                                          hasPagination = {false} />
-                                    </div>
-                                  )
-                                }
+                                                    hasPagination={false} />
+                                            </div>
+                                        )
+                                    }
+                                    <Button type="submit" size="sm" color="primary" onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button>
+                                    <Button type="reset" size="sm" color="danger" onClick={this.onClear}><i className="fa fa-ban"></i> Reset</Button>
                                 </Form>
                             </CardBody>
-                            <CardFooter>
-                                <Button type="submit" size="sm" color="primary" onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button>
-                                <Button type="reset" size="sm" color="danger" onClick={this.onClear}><i className="fa fa-ban"></i> Reset</Button>
-                            </CardFooter>
                         </Card>
                     </Col>
                 </Row>

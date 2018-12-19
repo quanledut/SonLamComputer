@@ -30,6 +30,9 @@ export const AccessoryNameForm = connect(
         },
         findAllaccessoryType(query, cb){
             dispatch(accessoryTypeActions.findAllRequest(query, cb));
+        },
+        findAll(query, cb) {
+            dispatch(accessoryNameActions.findAllRequest(query, cb));
         }
     })
 )(AccessoryNameFormUI);
