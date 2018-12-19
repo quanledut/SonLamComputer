@@ -27,9 +27,9 @@ export function * registerFlow() {
         //Looking for register request
         const request = yield take(AUTH_CONSTANTS.REGISTER_REQUEST)
         console.log(request)
-        const {username, email, password} = request.data
+        const {username, fullname,  email, password} = request.data
         try {
-            let result = yield call(registerApi, username, email, password)
+            let result = yield call(registerApi, username, fullname, email, password)
             request.cb(result, null)
             yield put(registerRequestSuccess(result))
         } catch(err) {

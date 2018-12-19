@@ -12,9 +12,9 @@ const loginApi = (username, password) =>
           })
         })
 
-const registerApi = (username, email, password) =>
+const registerApi = (username, fullname, email, password) => 
     request()
-        .post("/users/register", {username, email, password})
+        .post("/users/register", {username, fullname, email, password})
         .then((response) => response.data)
         .catch((err) => {
                       handleUnauthorized(err, () => {
