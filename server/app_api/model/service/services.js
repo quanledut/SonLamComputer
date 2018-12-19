@@ -54,9 +54,9 @@ let subDeviceSchema = new mongoose.Schema({
 });
 
 
-subDeviceSchema.virtual('formatPrice').get(function() {
-    return getPrice(this.price)
-});
+// subDeviceSchema.virtual('formatPrice').get(function() {
+//     return getPrice(this.price)
+// });
 
 subDeviceSchema.set('toObject', {virtuals: true})
 subDeviceSchema.set('toJson', {virtuals: true})
@@ -87,9 +87,9 @@ serviceSchema.methods.calculatePrice = function() {
     this.totalPrice = totalPrice
 }
 
-serviceSchema.virtual('formatTotalPrice').get(function() {
-    return getPrice(this.totalPrice)
-});
+// serviceSchema.virtual('formatTotalPrice').get(function() {
+//     return getPrice(this.totalPrice)
+// });
 
 mongoose.model('Service', serviceSchema)
 
