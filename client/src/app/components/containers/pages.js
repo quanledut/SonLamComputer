@@ -14,9 +14,10 @@ export const Login = connect(
 export const Register = connect(
     null,
     dispatch => ({
-        submit(username, email, password, cb) {
+        submit(username, fullname, email, password, cb) {
             dispatch(registerRequest({
                 username,
+                fullname,
                 email,
                 password,
             }, cb))
