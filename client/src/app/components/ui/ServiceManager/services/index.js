@@ -54,6 +54,8 @@ class ServiceUI extends Component {
         
         var listItem = mapList.map((item, index) => {
             const date = new Date(item.date);
+            const expiredDate = new Date();
+            console.log(date, date.getDate());
             return (
                 <tr key = {index}>
                     <td>{item.staff.fullname}</td>
@@ -71,8 +73,8 @@ class ServiceUI extends Component {
                         }
                         return array
                     }, []).map(i =>  <a>{i}</a>)}</td>
-                    <td>{`${date.getDay() + 1}-${date.getMonth() + 1}-${date.getFullYear()}`}</td>
-                    <td>{item.totalPrice}</td>
+                    <td>{`${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`}</td>
+                    <td>{item.formatTotalPrice}</td>
 
                     <td>
                         <div className="btn-group">
@@ -116,9 +118,9 @@ class ServiceUI extends Component {
                                             <th>Người bán</th>
                                             <th>Khách hàng</th>
                                             <th>SDT</th>
-                                            <th>Series máy</th>
-                                            <th>Loại linh kiện</th>
-                                            <th>Ngày dịch vụ</th>
+                                            <th>Series May</th>
+                                            <th>Loại</th>
+                                            <th>Ngày DV</th>
                                             <th>Tổng tiền</th>
                                             <th style={{ width: '20%' }}>Hành động</th>
                                         </tr>

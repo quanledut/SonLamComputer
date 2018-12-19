@@ -543,6 +543,8 @@ class SaleOrderFormUI extends Component {
                                 </FormGroup>
                                 <CustomTable
                                     thead={
+                                        (!this.props.match.params.id) ?
+                                                    (
                                                     <tr>
                                                         <th>Loại thiết bị</th>
                                                         <th>Tên thiết bị</th>
@@ -555,6 +557,19 @@ class SaleOrderFormUI extends Component {
                                                             }
                                                         </th>
                                                     </tr>
+                                                    ) :
+                                                        (
+                                                            <tr>
+                                                                <th>Loại thiết bị</th>
+                                                                <th>Tên thiết bị</th>
+                                                                <th>Giá tiền</th>
+                                                                <th style={{ width: '20%' }}>Thời gian bảo hành</th>
+                                                                <th style={{ width: '15%' }}>
+                                                                    Ngày hết hạn BH
+                                                                </th>
+                                                            </tr>
+    
+                                                        )
                                     }
 
                                     tbody={
@@ -571,7 +586,7 @@ class SaleOrderFormUI extends Component {
                                                     <td>
                                                         {
                                                             (!item.type || item.type == "None") &&
-                                                            <p>Xin hãy chọn loại thiết</p>
+                                                            <p>Xin hãy chọn loại thiết bị</p>
 
                                                         }
 
@@ -616,6 +631,8 @@ class SaleOrderFormUI extends Component {
                                                 </tr>)
                                             })
                                             : this.state.form.devices.map((item, key) => {
+                                                    const expiredDate = new Date(this.state.form.date);
+                                                    expiredDate.setMonth(expiredDate.getMonth() + item.guaranteeDuration);
                                                 return (<tr key={key}>
                                                     <td>
                                                         {item.type}
@@ -624,12 +641,14 @@ class SaleOrderFormUI extends Component {
                                                         {item.name}
                                                     </td>
                                                     <td>
-                                                        {item.price}
+                                                        {item.formatPrice}
                                                     </td>
                                                     <td>
                                                         {item.guaranteeDuration}
                                                     </td>
-                                                    <td></td>
+                                                    <td>
+                                                        {`${expiredDate.getDate()}-${expiredDate.getMonth() + 1}-${expiredDate.getFullYear()}`}
+                                                    </td>
 
                                                 </tr>)
                                             })

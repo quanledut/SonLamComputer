@@ -33,7 +33,8 @@ const DEFAULT_FORM = {
     devices: [],
     //serviceType: '',
     totalPrice: 0,
-    status: false
+    status: false,
+    date: null,
 }
 
 class ServiceFormUI extends Component {
@@ -436,6 +437,7 @@ class ServiceFormUI extends Component {
         }, false) || this.state.form.devices.length === 0
             && (this.state.form.accessories.reduce((isNone2, item2) => {
                 if (isNone2) return isNone2;
+                if (!item2.computerName) return true;
                 if (!item2.computerSeries) return true;
                 if (item2.type === "None") return true
             }, false) || this.state.form.accessories.length === 0);
@@ -680,20 +682,33 @@ class ServiceFormUI extends Component {
                                     </Col>
                                 </FormGroup>
                                 <CustomTable
-                                    thead={
-                                            <tr>
-                                                <th>Số series máy</th>
-                                                <th>Loại linh kiện</th>
-                                                <th>Giá tiền</th>
-                                                <th style={{ width: '20%' }}>Thời gian bảo hành</th>
-                                                <th style={{ width: '15%' }}>
-                                                    {
-                                                        (!this.props.match.params.id) &&
-                                                        <Button onClick={this._addAccessory}><i className="fa fa-plus"></i></Button>
+                                    thead=
+                                        {
+                                            (!this.props.match.params.id) ?
+                                                (<tr>
+                                                    <th>Tên máy</th>
+                                                    <th>Số series máy</th>
+                                                    <th>Loại linh kiện</th>
+                                                    <th>Giá tiền</th>
+                                                    <th style={{ width: '20%' }}>Thời gian bảo hành</th>
+                                                    <th style={{ width: '15%' }}>
+                                                        {
+                                                            (!this.props.match.params.id) &&
+                                                            <Button onClick={this._addAccessory}><i className="fa fa-plus"></i></Button>
 
-                                                    }
-                                                </th>
-                                            </tr>
+                                                        }
+                                                    </th>
+                                                </tr>)
+                                                : (<tr>
+                                                    <th>Tên máy</th>
+                                                    <th>Số series máy</th>
+                                                    <th>Loại linh kiện</th>
+                                                    <th>Giá tiền</th>
+                                                    <th style={{ width: '20%' }}>Thời gian bảo hành</th>
+                                                    <th>
+                                                        Hạn bảo hành
+                                                    </th>
+                                                </tr>)
                                     }
 
                                     tbody={
@@ -701,6 +716,9 @@ class ServiceFormUI extends Component {
                                                 ? this.state.form.accessories.map((item, key) => {
                                                     return (
                                                         <tr key={key}>
+                                                            <td>
+                                                                <Input value={item.computerName} onChange={(e) => this._handleAccessories(e, key)} type="text" name="computerName" id="exampleSelect" />
+                                                            </td>
                                                             <td>
                                                                 <Input value={item.computerSeries} onChange={(e) => this._handleAccessories(e, key)} type="text" name="computerSeries" id="exampleSelect" />
                                                             </td>
@@ -744,7 +762,12 @@ class ServiceFormUI extends Component {
 
 
                                                 : this.state.form.accessories.map((item, key) => {
+                                                    const expiredDate = new Date(this.state.form.date);
+                                                    expiredDate.setMonth(expiredDate.getMonth() + item.guaranteeDuration);
                                                     return (<tr key={key}>
+                                                        <td>
+                                                            {item.computerName}
+                                                        </td>
                                                         <td>
                                                             {item.computerSeries}
                                                         </td>
@@ -752,12 +775,16 @@ class ServiceFormUI extends Component {
                                                             {item.type}
                                                         </td>
                                                         <td>
-                                                            {item.price}
+                                                            {item.formatPrice}
                                                         </td>
                                                         <td>
-                                                            {item.guaranteeDuration}
+                                                            {`${item.guaranteeDuration}`}
                                                         </td>
-                                                        <td></td>
+                                                        <td>
+                                                        <td>
+                                                            {`${expiredDate.getDate()}-${expiredDate.getMonth() + 1}-${expiredDate.getFullYear()}`}</td>
+
+                                                        </td>
 
                                                     </tr>)
                                                 })

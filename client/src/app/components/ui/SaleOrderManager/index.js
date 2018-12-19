@@ -58,8 +58,8 @@ class SaleOrderUI extends Component {
                     <td>{item.staff.fullname}</td>
                     <td>{item.customer.fullname}</td>
                     <td>{item.customer.phone}</td>
-                    <td>{`${date.getDay() + 1}-${date.getMonth() + 1}-${date.getFullYear()}`}</td>
-                    <td>{item.totalPrice}</td>
+                    <td>{`${date.getDate()}-${date.getMonth() + 1}-${date.getFullYear()}`}</td>
+                    <td>{item.formatTotalPrice}</td>
 
                     <td>
                         <div className="btn-group">

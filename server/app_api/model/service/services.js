@@ -22,29 +22,45 @@ const getPrice = (number) => {
         str = remain + "." + str
         temp = Math.floor(temp / 1000)
     }
-    return str
+    return str + 'đ'
 }
 
 let subAccessorySchema = new mongoose.Schema({
     accessoryId: { type: mongoose.Schema.Types.ObjectId },
     computerSeries: String,
+    computerName: String,
     type: String,
-    guaranteeDuration: Number, 
+    guaranteeDuration: {type: Number, default: 0}, 
     // price: {type: Number, set: setPrice, get: getPrice},
     price: {type: Number, set: setPrice},
     date: { type: Date, default: Date.now }
 })
+
+subAccessorySchema.virtual('formatPrice').get(function() {
+    return getPrice(this.price)
+});
+
+subAccessorySchema.set('toObject', {virtuals: true})
+subAccessorySchema.set('toJson', {virtuals: true})
+
 
 let subDeviceSchema = new mongoose.Schema({
     deviceId: { type: mongoose.Schema.Types.ObjectId },
     name: String,
     type: String,
-    guaranteeDuration: Number, 
+    guaranteeDuration: {type: Number, default: 0}, 
     // price: {type: Number, set: setPrice, get: getPrice},
     price: {type: Number, set: setPrice},
     date: { type: Date, default: Date.now }
-})
+});
 
+
+subDeviceSchema.virtual('formatPrice').get(function() {
+    return getPrice(this.price)
+});
+
+subDeviceSchema.set('toObject', {virtuals: true})
+subDeviceSchema.set('toJson', {virtuals: true})
 
 let serviceSchema = new mongoose.Schema({
     serviceType: { type: mongoose.Schema.Types.ObjectId, ref: 'ServiceType' },
@@ -69,4 +85,16 @@ serviceSchema.methods.calculatePrice = function() {
     this.totalPrice = totalPrice
 }
 
+serviceSchema.virtual('formatTotalPrice').get(function() {
+    return getPrice(this.totalPrice)
+});
+
+serviceSchema.set('toObject', {virtuals: true})
+serviceSchema.set('toJson', {virtuals: true})
+
+
 mongoose.model('Service', serviceSchema)
+
+module.exports = {
+    getPrice
+}

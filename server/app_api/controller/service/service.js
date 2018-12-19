@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const { sendJsonResponse } = require ('../utils');
+const { getPrice } = require('../../model/service/services');
 
 const Service = mongoose.model('Service');
 const ServiceType = mongoose.model('ServiceType');
@@ -50,6 +51,11 @@ const createAggregateForServiceType = (serviceTypeId) => (stringQuery) => {
                         $regex: stringQuery, $options:"$i"
                     }
                 },
+                {
+                    'accessories.computerSeries': {
+                        $regex: stringQuery, $options:"$i"
+                    }
+                }
             ]
         })
     }
@@ -100,7 +106,7 @@ const find = async (req,res) => {
         const {page, pages, limit, skip, total} = await createPaginationQueryByAggregate(createAggregate(req.query.string), req.query)
     
         
-        const docs = await createAggregate(req.query.string)
+        let docs = await createAggregate(req.query.string)
             .skip(skip)
             .limit(limit)
 
@@ -155,9 +161,14 @@ const findFix = async (req,res) => {
         const {page, pages, limit, skip, total} = await createPaginationQueryByAggregate(createAggregate(req.query.string,sellType._id), req.query)
     
         
-        const docs = await createAggregate(req.query.string)
+        let docs = await createAggregate(req.query.string)
             .skip(skip)
             .limit(limit)
+
+            docs = docs.map(item => {
+                item.formatTotalPrice = getPrice(item.totalPrice);
+                return item;
+            });    
 
         sendJsonResponse(res,200,{
             docs,
@@ -209,9 +220,14 @@ const findSell = async (req,res) => {
         const {page, pages, limit, skip, total} = await createPaginationQueryByAggregate(createAggregate(req.query.string), req.query)
     
         
-        const docs = await createAggregate(req.query.string)
+        let docs = await createAggregate(req.query.string)
             .skip(skip)
             .limit(limit)
+
+            docs = docs.map(item => {
+                item.formatTotalPrice = getPrice(item.totalPrice);
+                return item;
+            });    
 
         sendJsonResponse(res,200,{
             docs,
