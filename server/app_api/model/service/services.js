@@ -34,15 +34,14 @@ let subAccessorySchema = new mongoose.Schema({
     // price: {type: Number, set: setPrice, get: getPrice},
     price: {type: Number, set: setPrice},
     date: { type: Date, default: Date.now }
+}, {
+    toJSON: { virtuals: true },
+    toJSON: { virtuals: true }
 })
 
 subAccessorySchema.virtual('formatPrice').get(function() {
     return getPrice(this.price)
 });
-
-subAccessorySchema.set('toObject', {virtuals: true})
-subAccessorySchema.set('toJson', {virtuals: true})
-
 
 let subDeviceSchema = new mongoose.Schema({
     deviceId: { type: mongoose.Schema.Types.ObjectId },
@@ -71,6 +70,9 @@ let serviceSchema = new mongoose.Schema({
     devices: [subDeviceSchema],
     totalPrice: { type: Number, default: 0 },
     status: { type: Number, default: DEFAUT_STATUS.NEW },
+}, {
+    toJSON: { virtuals: true },
+    toJSON: { virtuals: true }
 })
 
 serviceSchema.methods.calculatePrice = function() {
@@ -88,10 +90,6 @@ serviceSchema.methods.calculatePrice = function() {
 serviceSchema.virtual('formatTotalPrice').get(function() {
     return getPrice(this.totalPrice)
 });
-
-serviceSchema.set('toObject', {virtuals: true})
-serviceSchema.set('toJson', {virtuals: true})
-
 
 mongoose.model('Service', serviceSchema)
 
