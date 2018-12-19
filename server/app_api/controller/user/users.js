@@ -271,6 +271,28 @@ const updateById = (req, res) => {
 
 }
 
+const deleteById = async (req, res) => {
+	try {
+		const userInfo = await UserInfo.findById(req.params.userId).exec();
+		if (userInfo.loginInfo) {
+			await LoginInfo.remove({
+				_id: userInfo.loginInfo
+			}).exec();
+		}
+	
+		await UserInfo.remove({
+			_id: req.params.userId
+		}).exec();
+		sendJsonResponse(res, 200, 'Success');
+	} catch(err) {
+		sendJsonResponse(res, 400, {
+			msg: "Không thể xóa",
+			err: err
+		});
+	}
+
+}
+
 const createClient = async (req, res) => {
 	let user = new UserInfo();
 
@@ -371,6 +393,6 @@ module.exports = {
 	updateById,
 	createClient,
 	findClient,
-	getCurrentInfo
-
+	getCurrentInfo,
+	deleteById,
 }
