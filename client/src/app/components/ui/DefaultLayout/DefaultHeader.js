@@ -47,7 +47,7 @@ class DefaultHeader extends Component {
               <DropdownItem header tag="div" className="text-center"><strong>Cài đặt</strong></DropdownItem>
               <DropdownItem >
                 <Link 
-                  to = {`/usermanager/${this.props.user._id}/edit`}
+                  to = {`/usermanager/${this.props.user._id}/edit/0`}
                 >
                   <i className="fa fa-user"></i> Thông tin
                 </Link>
