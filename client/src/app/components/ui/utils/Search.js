@@ -14,13 +14,14 @@ class Search extends Component {
         })
     }
 
-    onSearch = () =>{
+    onSearch = (event) =>{
+        event.preventDefault();
         this.props.onSearch(this.state.keyword);
     }
     
     render() {
         return (
-            <div className="input-group col-xs-6 col-sm-6 col-md-6 col-lg-6" style={{ paddingLeft: 0 }}>
+            <form onSubmit={this.onSearch} className="input-group col-xs-6 col-sm-6 col-md-6 col-lg-6" style={{ paddingLeft: 0 }}>
                 <input 
                     value = {this.state.keyword}
                     type="text" 
@@ -31,11 +32,11 @@ class Search extends Component {
                     onChange = {this.onChange}
                 />
                 <span className="input-group-btn">
-                    <button type="button" className="btn" style={{ backgroundColor: '#17a2b8' }} onClick = {this.onSearch}>
+                    <button type="submit" className="btn" style={{ backgroundColor: '#17a2b8' }} onClick = {this.onSearch}>
                         <i className="fa fa-search text-white"> Tìm kiếm</i>
                     </button>
                 </span>
-            </div>
+            </form>
         );
     }
 }
