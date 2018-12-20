@@ -624,7 +624,7 @@ class UserFormUI extends Component {
                                                     checked={this.state.form.gender === "nu"} />
                                                 <Label className="form-check-label" check htmlFor="inline-radio2">Nữ</Label>
                                             </FormGroup>
-                                            <FormGroup check inline>
+                                            {/* <FormGroup check inline>
                                                 <Input
                                                     className="form-check-input"
                                                     type="radio"
@@ -634,7 +634,7 @@ class UserFormUI extends Component {
                                                     onChange={(event) => (this.isChange(event))}
                                                     checked={this.state.gender === "khac"} />
                                                 <Label className="form-check-label" check htmlFor="inline-radio3">Khác</Label>
-                                            </FormGroup>
+                                            </FormGroup> */}
                                         </FormGroup>
                                         <FormGroup>
                                             <Label htmlFor="nf-phone">Số điện thoại</Label>

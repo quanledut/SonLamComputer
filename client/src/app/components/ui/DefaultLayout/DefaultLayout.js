@@ -57,13 +57,11 @@ class DefaultLayout extends Component {
     var navigationLinks = navigationClient;
     isUser = this.state.user.roles.reduce((isUser, item) =>
       {if(isUser) return true; if(item.name === 'user') return true},false);
-    console.log('isuser', isUser)
     if(!isUser)
     {
       routerLink = routes;
       navigationLinks = navigation;
     }
-    console.log('userLink', routerLink)
     return (
       <div className="app">
         <AppHeader fixed>

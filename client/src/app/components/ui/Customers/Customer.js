@@ -134,8 +134,8 @@ class Customers extends Component {
                                 </Link>
                                 <hr />
 
-                                <SearchFrom />
-                                <hr />
+                                {/* <SearchFrom />
+                                <hr /> */}
 
                                 <ReactTable
                                     data={this.state.customers}
@@ -146,8 +146,6 @@ class Customers extends Component {
                                     filterable
                                     //showPagination={false}
                                     SubComponent={row => {
-                                        console.log(row)
-                                        console.log('aaaa',row.original.services)
                                         return (
                                             <div style={{ padding: "20px" }}>
                                                 <Nav tabs>

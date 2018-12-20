@@ -18,9 +18,9 @@ class UserManager extends Component {
     render() {
         var {keyword} = this.props;
         var userList = this.props.todos;
-        // userList = userList.filter((user) => {
-        //     return keyword? user.loginInfo.username.toLowerCase().indexOf(keyword.toLowerCase()) !== -1;
-        // });
+        userList = userList.filter((user) => {
+            return (user.fullname.toLowerCase().indexOf(keyword.toLowerCase()) !== -1);
+        });
         var userItem = userList.map((user, index) => {
             return (
                 <tr key = {index}>
