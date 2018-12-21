@@ -9,7 +9,11 @@ function navigate(routerName,params){
     _navigator.navigate(routerName,params)
 }
 
+function showNavigator(){
+    console.log("Navigator: "+_navigator)
+}
 export default {
     setTopLevelNavigator,
-    navigate
+    navigate,
+    showNavigator
 }

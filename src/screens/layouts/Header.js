@@ -8,15 +8,16 @@ const Size = Dimensions.get('window')
 
 export default class Header extends Component{
     render(){
+        console.log('Back button: '+this.props.showBackButton)
         return(
             // <MenuProvider>
                 <View style = {styles.container}>
-                    <MaterialIcons
+                    {this.props.showBackButton? <MaterialIcons
                     name = 'navigate-before'
                     color = '#0d24a5'
                     size = {25}
                     onPress = {()=>NavigationService.navigate('HomeScreen')}
-                    />
+                    />:<View/>}
                     <Text>{this.props.title}</Text>
                     <Menu>
                         <MenuTrigger style = {styles.avatar}>

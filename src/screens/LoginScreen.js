@@ -1,6 +1,6 @@
 import React,{Component} from 'react'
 import {Icon} from 'react-native-elements' 
-import {View,TextInput,StyleSheet,Image,Text,ImageBackground,Dimensions,TouchableWithoutFeedback,Keyboard,Button} from 'react-native'
+import {View,TextInput,AsyncStorage,StyleSheet,Image,Text,ImageBackground,Dimensions,TouchableWithoutFeedback,Keyboard,Button} from 'react-native'
 import {connect} from 'react-redux'
 import NavigationService from '../navigations/NavigationService'
 import * as LoginAction from '../redux/actions/LoginAction'
@@ -19,18 +19,24 @@ class LoginComponent extends Component{
         }
     }
 
+    componentWillMount(){
+        NavigationService.setTopLevelNavigator(this.props.navigation)
+        AsyncStorage.getItem('token').then((result) => {
+            console.log('Login Screen token: '+result)
+        })
+    }
+
     render(){
         return(
             <View style={styles.container}>
                 <TouchableWithoutFeedback onPress = {() => Keyboard.dismiss()}>
                     <ImageBackground 
                     style = {styles.backgroundImage}
-                    source = {require('../utils/images/LoginBackground.jpg')}
+                    source = {require('../utils/images/LoginBackground5.jpg')}
                     >
                         <View>
                         <Text style = {styles.header}>SƠN LÂM COMPUTER</Text>
                         </View>
-
                         <Input
                             placeholder='Username'
                             leftIcon={

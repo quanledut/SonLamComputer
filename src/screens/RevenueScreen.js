@@ -452,38 +452,7 @@ const TabNavigator = createMaterialTopTabNavigator({
     Year:{
         screen: Year,
     }
-// },
-// {
-//     tabBarPosition:'top'
 });
-// const TabNavigator = createMaterialTopTabNavigator({
-//     Quarter_Year: {
-//         screen: Quarter_Year,
-//         navigationOptions: () => ({
-//           tabBarIcon: () => (
-//               <MaterialIcons
-//                   name='account-balance'
-//                   // type='ionicon'
-//                   color='#517fa4'
-//                   size = {22}
-//               />
-//           )
-//         })
-//     },
-//     Month: {
-//       screen: Month,
-//       navigationOptions: () => ({
-//         tabBarIcon: () => (
-//             <MaterialIcons
-//                 name='trending-up'
-//                 // type='ionicon'
-//                 color='#517fa4'
-//                 size = {22}
-//             />
-//         )
-//       })
-//   },
-//   });
 
 const HomeContainer = createAppContainer(TabNavigator);
 export default class RevenueScreen extends Component{

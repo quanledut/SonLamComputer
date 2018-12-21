@@ -6,7 +6,6 @@ function* getDeviceType(action){
     try{
         const response = yield API.getDeviceType(action.token)
         if(response.status == '200'){
-            //yield console.log('get device type saga success: '+ response._bodyInit)
             yield put(
                 {
                     type: DeviceTypeActionType.GET_DEVICE_TYPE_SUCCESS, 
@@ -16,7 +15,6 @@ function* getDeviceType(action){
         else yield put ({type: DeviceTypeActionType.GET_DEVICE_TYPE_FAILED})
     }
     catch(err){
-
     }
     
 }

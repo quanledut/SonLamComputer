@@ -2,187 +2,112 @@ import React,{Component} from 'react';
 import { Text, View, Picker, AsyncStorage, FlatList, Dimensions,StyleSheet,Image,TouchableOpacity} from 'react-native';
 import {connect} from 'react-redux'
 import * as base_64 from 'base-64'
-import {getAllDevices} from '../redux/actions/DeviceAction'
+import * as ServiceAction from '../redux/actions/ServiceAction'
+import * as DeviceAction from '../redux/actions/DeviceAction'
+import * as UserAction from '../redux/actions/UserAction'
 import Header from './layouts/Header'
 import {MenuProvider} from 'react-native-popup-menu'
 import NavigationService from '../navigations/NavigationService';
+import { createMaterialTopTabNavigator, createAppContainer } from 'react-navigation';
 const Size = Dimensions.get('window')
 const base_image_url = 'http://18.216.184.198:3000/'
-class OrderComponent extends Component{
+
+class SellComponent extends Component{
     constructor(props){
         super(props)
         this.state = {
-            data:[
+            docs:[{
+                _id: "5c1a0d31fbdc806d4607c6b7",
+                totalPrice: 2290000,
+                date: "2018-12-19T13:34:03.484Z",
+                devices: [
                     {
-                    "id": 1,
-                    "name": "Bryce Thurlby",
-                    "product": "Aspic - Light",
-                    "email": "bthurlby0@usda.gov",
-                    "price": "1787452.24",
-                    "warranty": 12
-                    }, {
-                    "id": 2,
-                    "name": "Kalle Sauvain",
-                    "product": "Lamb Tenderloin Nz Fr",
-                    "email": "ksauvain1@answers.com",
-                    "price": "257127.93",
-                    "warranty": 12
-                    }, {
-                    "id": 3,
-                    "name": "Demetrius Mence",
-                    "product": "Nut - Almond, Blanched, Ground",
-                    "email": "dmence2@behance.net",
-                    "price": "207585.92",
-                    "warranty": 12
-                    }, {
-                    "id": 4,
-                    "name": "Corny Rennix",
-                    "product": "Pears - Fiorelle",
-                    "email": "crennix3@admin.ch",
-                    "price": "2039410.34",
-                    "warranty": 12
-                    }, {
-                    "id": 5,
-                    "name": "Christiane Lawson",
-                    "product": "Basil - Pesto Sauce",
-                    "email": "clawson4@barnesandnoble.com",
-                    "price": "3574050.03",
-                    "warranty": 12
-                    }, {
-                    "id": 6,
-                    "name": "Salomone Wilkison",
-                    "product": "Bread - Hamburger Buns",
-                    "email": "swilkison5@arstechnica.com",
-                    "price": "1988106.64",
-                    "warranty": 12
-                    }, {
-                    "id": 7,
-                    "name": "Shannan Sibley",
-                    "product": "Sausage - Breakfast",
-                    "email": "ssibley6@deviantart.com",
-                    "price": "2053415.52",
-                    "warranty": 12
-                    }, {
-                    "id": 8,
-                    "name": "Karola Andretti",
-                    "product": "Mushrooms - Honey",
-                    "email": "kandretti7@xrea.com",
-                    "price": "2306544.84",
-                    "warranty": 12
-                    }, {
-                    "id": 9,
-                    "name": "Neddie Glede",
-                    "product": "Cabbage - Green",
-                    "email": "nglede8@blogspot.com",
-                    "price": "1835889.87",
-                    "warranty": 12
-                    }, {
-                    "id": 10,
-                    "name": "Martino Margarson",
-                    "product": "Remy Red Berry Infusion",
-                    "email": "mmargarson9@nifty.com",
-                    "price": "1118864.78",
-                    "warranty": 12
-                    }, {
-                    "id": 11,
-                    "name": "Charisse Ferschke",
-                    "product": "Beef - Top Sirloin - Aaa",
-                    "email": "cferschkea@paginegialle.it",
-                    "price": "1148957.27",
-                    "warranty": 12
-                    }, {
-                    "id": 12,
-                    "name": "Hollis Garton",
-                    "product": "Wasabi Powder",
-                    "email": "hgartonb@linkedin.com",
-                    "price": "3074225.50",
-                    "warranty": 12
-                    }, {
-                    "id": 13,
-                    "name": "Kendall Dorsey",
-                    "product": "Syrup - Pancake",
-                    "email": "kdorseyc@europa.eu",
-                    "price": "4987800.42",
-                    "warranty": 12
-                    }, {
-                    "id": 14,
-                    "name": "Thorvald Peto",
-                    "product": "Wine - Peller Estates Late",
-                    "email": "tpetod@wired.com",
-                    "price": "3008153.84",
-                    "warranty": 12
-                    }, {
-                    "id": 15,
-                    "name": "Rawley Stocken",
-                    "product": "Pastry - Butterscotch Baked",
-                    "email": "rstockene@webnode.com",
-                    "price": "4503627.99",
-                    "warranty": 12
-                    }]
-            }
+                        name: "Bàn phím cơ Razer Blackwidow Ultimate 2016 (RZ03-01700100-R3M1)",
+                        type: "Bàn Phím",
+                        price: 2290000,
+                    }
+                ],
+                serviceType: "5c1707f559889a5015f9506f",
+                customer: {
+                    _id: "5c1a0d31fbdc806d4607c6b7",
+                    gender: "nam",
+                    fullname: "Lê A",
+                },
+            }]
         }
+    }
 
     componentWillMount = async () => {
+        console.log('Service Sell Props: '+JSON.stringify(this.props.serviceSell))
         token = await AsyncStorage.getItem('token')
         if(token) user = await JSON.parse(base_64.decode(token.split('.')[1]))
         if(user) this.setState({
             username: user.username,
             role: user.username
         })
-        await this.props._getDevices(token);
+        await this.props.getServiceSell(token);
     }
 
     componentDidMount(){
+        console.log('Service Sell Props: '+this.props.serviceSell)
     }
+
     render(){
         return(
-            <MenuProvider>
-                 <View style = {styles.container}>
-                    <Header 
-                        title = 'Products'
-                        username = {this.state.username}
-                    />
+                // <View style = {styles.container}>
                     <View style = {styles.productList}>
                         <FlatList 
-                            ListHeaderComponent = {this._headerComponent}
-                            data = {this.state.data}
+                            ListHeaderComponent = {this._headerService}
+                            data = {this.props.serviceSell}
+                            //data = {this.state.docs}
                             key = {(item) => item.id}
                             onRefresh = {this._onRefresh}
                             refreshing = {false}
                             numColumns = {1}
-                            renderItem = {this._renderItem}
+                            renderItem = {this._renderServiceSell}
                             keyExtractor = {(item) => item.id}
-                            
+                            onEndReached = {this._loadMoreServiceSell}
                         />
                     </View>
-                </View>
-            </MenuProvider>
+                // </View>
         )
     }
 
-    _headerComponent = () => {
+    _headerService = () => {
         return(
-
-            <View style = {[{width:Size.width, height: 50, flexDirection: 'row'}]}>
-                <Text style = {{flex:1}}>Name</Text>
-                    <Text style = {{flex:2}}>Product</Text>
-                    <Text style = {{flex:0.7}}>Price</Text>
-                    <Text style = {{flex:0.5}}>Warranty</Text>
+            <View style = {{flexDirection:'row', justifyContent:'center',alignItem:'center',flex:1, width: Size.width,backgroundColor:'#53d6b5', borderBottomWidth:1,borderBottomColor:'##46454c', padding:2}}>
+                <Text style = {{fontWeight:'bold',textAlign: 'center', flex:0.5, borderRightWidth:1, borderRightColor: '#767882' }}>Id</Text>
+                <Text style = {{fontWeight:'bold',textAlign: 'center', flex:1.8, borderRightWidth:1, borderRightColor: '#767882'}}>Customer</Text>
+                <Text style = {{fontWeight:'bold',textAlign: 'center', flex:4, borderRightWidth:1, borderRightColor: '#767882'}}>Device</Text>
+                <Text style = {{fontWeight:'bold',textAlign: 'center', flex:1.2}}>Price</Text>
             </View>
         )
     }
-    _renderItem = ({item,index}) => {
+
+    _renderServiceSell = ({item,index}) => {
         return(
-            <TouchableOpacity style = {[{width:Size.width, height: 50},index%2==0?{backgroundColor:'#bfc2cc'}:{}]}
-            //onPress = {()=>{NavigationService.navigate('ProductDetailScreen',{item:item})}}
-            >
-                <View style = {{flex:4, flexDirection:'row',justifyContent:'center'}}>
-                    <Text style = {{flex:1}}>{item.name}</Text>
-                    <Text style = {{flex:2}}>{item.product}</Text>
-                    <Text style = {{flex:0.7}}>{item.price}</Text>
-                    <Text style = {{flex:0.5}}>{item.warranty}</Text>
+            <View style = {{flex:1,flexDirection:'row', justifyContent:"center",alignItem:'center',borderBottomWidth:1,borderBottomColor:'##46454c'}}>
+                <View style = {{flex:0.5, justifyContent:'center', alignItem:'center'}}>
+                    <TouchableOpacity>
+                        <Text style = {{textAlign: 'center', flex:0.5 ,marginVertical: 5, marginHorizontal:2}}>{index}</Text>
+                    </TouchableOpacity>
                 </View>
-            </TouchableOpacity>
+                <View style  = {{flex:1.8,alignItem:'center', justifyContent:'center'}}>
+                    <TouchableOpacity onPress = {() => this.props.getUserById(item)}>
+                        <Text style = {{color:'green',textAlign: 'left', flex:1.8, textDecorationLine:'underline',marginLeft: 5}}>{item.customer.fullname}</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style  = {{flex:4,justifyContent:'center', alignItems:'center'}}>
+                    <TouchableOpacity onPress = {() => this.props.getDeviceById(item)}>
+                        <Text style = {{color:'green',textAlign: 'left', flex:4, textDecorationLine:'underline',marginLeft:5}}>{(item.devices[0] && item.devices[0].name) || 'No name'}</Text>
+                    </TouchableOpacity>
+                </View>
+                <View style = {{flex:1.2, justifyContent:'center', alignItem:'center'}}>
+                    <TouchableOpacity>
+                        <Text style = {{fontWeight:'bold',textAlign: 'left', flex:1.2, margin: 5}}>{item.totalPrice}</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
         )
     }
 }
@@ -200,19 +125,139 @@ const styles = StyleSheet.create({
     }
 })
 
-mapStateToProps = (state,action) => {
+mapStateToPropsSell = (state,action) => {
     return{
-        // devices: state.DeviceReducer.devices
+        serviceSell: state.ServiceSellReducer.serviceSell.docs,
+        devices: state.DeviceReducer.devices,
     }
 }
 
-mapDispatchToProps = (dispatch,action) => {
+mapDispatchToPropsSell = (dispatch,action) => {
     return{
-    //    _getDevices:(token) => {
-    //        dispatch(getAllDevices(token))
-    //    }
+        getServiceSell: (token) => {
+            dispatch(ServiceAction.getServiceSell(token))
+        },
+        getDeviceById: (item) => {
+            dispatch(DeviceAction.getDeviceById(item.devices[0] && item.devices[0].deviceId))
+        },
+        getUserById: (item) => {
+            dispatch(UserAction.getUserById((item.customer && item.customer._id) || '0'))
+        }
     }
 }
 
-export default OrderScreen = connect(mapStateToProps,mapDispatchToProps)(OrderComponent)
+const Sell = connect(mapStateToPropsSell,mapDispatchToPropsSell)(SellComponent)
 
+
+class FixComponent extends Component{
+    async componentWillMount(){
+        token = await AsyncStorage.getItem('token');
+        this.props.getServiceFix(token)
+        console.log('Service Fix token: '+token)
+    }
+        render(){
+            return(
+                    // <View style = {styles.container}>
+                        <View style = {styles.productList}>
+                            <FlatList 
+                                ListHeaderComponent = {this._headerService}
+                                data = {this.props.serviceFix}
+                                key = {(item) => item.id}
+                                onRefresh = {this._onRefresh}
+                                refreshing = {false}
+                                numColumns = {1}
+                                renderItem = {this._renderServiceSell}
+                                keyExtractor = {(item) => item.id}
+                                onEndReached = {this._loadMoreServiceSell}
+                            />
+                        </View>
+                    // </View>
+            )
+        }
+    
+        _headerService = () => {
+            return(
+                <View style = {{flexDirection:'row', justifyContent:'center',alignItem:'center',flex:1, width: Size.width,backgroundColor:'#53d6b5', borderBottomWidth:1,borderBottomColor:'##46454c', padding:2}}>
+                    <Text style = {{fontWeight:'bold',textAlign: 'center', flex:0.5, borderRightWidth:1, borderRightColor: '#767882' }}>Id</Text>
+                    <Text style = {{fontWeight:'bold',textAlign: 'center', flex:1.8, borderRightWidth:1, borderRightColor: '#767882'}}>Customer</Text>
+                    <Text style = {{fontWeight:'bold',textAlign: 'center', flex:4, borderRightWidth:1, borderRightColor: '#767882'}}>Accessory</Text>
+                    <Text style = {{fontWeight:'bold',textAlign: 'center', flex:1.2}}>Price</Text>
+                </View>
+            )
+        }
+    
+        _renderServiceSell = ({item,index}) => {
+            return(
+                <View style = {{flex:1,flexDirection:'row', justifyContent:"center",alignItem:'center',borderBottomWidth:1,borderBottomColor:'##46454c'}}>
+                    <View style = {{flex:0.5, justifyContent:'center', alignItem:'center'}}>
+                        <TouchableOpacity>
+                            <Text style = {{textAlign: 'center', flex:0.5 ,marginVertical: 5, marginHorizontal:2}}>{index}</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style  = {{flex:1.8,alignItem:'center', justifyContent:'center'}}>
+                        <TouchableOpacity onPress = {() => this.props.getUserById(item)}>
+                            <Text style = {{color:'green',textAlign: 'left', flex:1.8, textDecorationLine:'underline',marginLeft: 5}}>{item.customer.fullname}</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style  = {{flex:4,justifyContent:'center', }}>
+                        <TouchableOpacity>
+                            <Text style = {{color:'green',textAlign: 'left', flex:4, textDecorationLine:'underline',marginLeft:5}}>{(item.accessories[0] && item.accessories[0].name) || 'No name'}</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style = {{flex:1.2, justifyContent:'center', alignItem:'center'}}>
+                        <TouchableOpacity>
+                            <Text style = {{fontWeight:'bold',textAlign: 'left', flex:1.2, margin: 5}}>{item.totalPrice}</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            )
+        }
+}
+
+mapStateToPropsFix = (state,action) => {
+    return{
+        serviceFix: state.ServiceFixReducer.serviceFix.docs,
+        devices: state.DeviceReducer.devices,
+    }
+}
+
+mapDispatchToPropsFix = (dispatch,action) => {
+    return{
+        getServiceFix: (token) => {
+            dispatch(ServiceAction.getServiceFix(token))
+        },
+        getUserById: (item) => {
+            dispatch(UserAction.getUserById((item.customer && item.customer._id) || '0'))
+        }  
+    }
+}
+
+const Fix = connect(mapStateToPropsFix,mapDispatchToPropsFix)(FixComponent)
+
+const TabNavigator = createMaterialTopTabNavigator({
+    Sell:{
+        screen: Sell
+    },
+    Fix:{
+        screen: Fix
+    }
+})
+
+const OrderContainer = createAppContainer(TabNavigator)
+
+export default class OrderScreen extends Component{
+    render(){
+        return (
+            <View style = {{flex:1}}>
+                <MenuProvider>
+                    <Header
+                    title = 'Orders'
+                    />
+                    <View style = {{flex:4}}>
+                        <OrderContainer/>
+                    </View>
+                </MenuProvider>
+            </View>
+        )
+    }
+}

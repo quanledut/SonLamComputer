@@ -7,6 +7,7 @@ class SplassComponent extends Component{
     componentDidMount(){
        setTimeout(()=>{
          AsyncStorage.getItem('token').then((token,err) => {
+            console.log('Splash screen token: ' + token)
             if(token) { 
             NavigationService.navigate('HomeScreen', {token:token})}
             else NavigationService.navigate('LoginScreen')
@@ -15,7 +16,7 @@ class SplassComponent extends Component{
     }
 
     componentWillMount(){
-        //AsyncStorage.removeItem('token')
+        AsyncStorage.removeItem('token')
         NavigationService.setTopLevelNavigator(this.props.navigation)
     }
 

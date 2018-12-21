@@ -1,14 +1,20 @@
 import {fork,all,takeLatest,call} from 'redux-saga/effects'
 import {watchRequestLogin} from './LoginSaga'
-import {watchGetDevice} from './DeviceSaga'
+import {watchGetDevice, watchGetMoreDevice, watchGetDeviceByID} from './DeviceSaga'
 import {watchGetDeviceType} from './DeviceTypeSaga'
-import * as DeviceActionType from '../actions/DeviceActionType'
+import {watchGetServiceSell,watchGetServiceFix} from './ServiceSaga'
+import {watchGetUserById} from './UserSaga'
+
 
 export default function* RootSagas(){
     yield all([
         fork(watchRequestLogin),
         fork(watchGetDevice), 
         fork(watchGetDeviceType),
-    // yield call(watchGetDevice)
+        fork(watchGetServiceSell),
+        fork(watchGetServiceFix),
+        fork(watchGetMoreDevice),
+        fork(watchGetDeviceByID),
+        fork(watchGetUserById)
     ])
 }

@@ -2,16 +2,16 @@ import React,{Component} from 'react';
 import { Text, View, Picker, AsyncStorage,Image,Dimensions} from 'react-native';
 import Header from './layouts/Header'
 import {MenuProvider} from 'react-native-popup-menu'
-const base_image_url = 'http://18.216.184.198:3000/'
+const base_image_url = 'http://18.216.184.198/'
 const Size = Dimensions.get('window')
+import {SearchBar} from 'react-native-elements'
 
 export default class ProductDetail extends Component{
     render(){
         const item = this.props.navigation.state.params && this.props.navigation.state.params.item || {}
-        //console.log('Item:' + JSON.stringify(item))
         return(
             <MenuProvider>
-                <Header title = 'Product Details' username = 'thanhson'/>
+                <Header title = 'Product Details' username = 'thanhson' showBackButton = {true}/>
                 <View style = {{flex:5}}>
                     <View style = {{flexDirection: 'column'}}>
                         <Image source = {{uri:base_image_url+item.image_url}}
@@ -28,12 +28,13 @@ export default class ProductDetail extends Component{
                             <Text> - {item.description[5]}</Text>
                             <Text style ={{color: 'red', fontWeight:'bold', fontSize:15}}>Price: {item.price} VND</Text>
                             <Text style ={{color: 'green', fontWeight:'bold', fontSize:15}}>Amount: {item.amount}</Text>
-                        </View>
-                        
+                        </View>  
                     </View>
-
                 </View>
             </MenuProvider>
         ) 
+    }
+    someMethod = () => {
+        
     }
 }

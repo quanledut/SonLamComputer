@@ -11,6 +11,7 @@ import LoginScreen from './src/screens/LoginScreen'
 import ChartScreen from './src/screens/ChartScreen'
 import HomeScreen from './src/screens/HomeScreen'
 import ProductDetail from './src/screens/ProductDetails'
+import UserDetailScreen from './src/screens/UserDetailScreen'
 import RootSagas from './src/redux/sagas/RootSagas'
 import NavigationService from './src/navigations/NavigationService'
 import RootReducer from './src/redux/reducers/index'
@@ -39,6 +40,12 @@ const TopLevelNavigator = createStackNavigator(
     screen: ProductDetail,
     navigationOptions:{
         header:null
+    }
+  },
+  UserDetailScreen: {
+    screen: UserDetailScreen,
+    navigationOptions:{
+      header:null
     }
   },
   HomeScreen: {

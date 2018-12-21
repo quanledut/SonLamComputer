@@ -14,6 +14,7 @@ function* postLogin(action) {
                 type: LoginActionType.LOGIN_SUCCESS,
                 token: response.token
             })
+            yield NavigationService.showNavigator()
             yield NavigationService.navigate('HomeScreen',token)
         }
         else {
