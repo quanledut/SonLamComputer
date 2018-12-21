@@ -28,6 +28,11 @@ const createAggregate = (stringQuery) => {
                         $regex: stringQuery, $options:"$i"
                     }
                 },
+                {
+                  'name': {
+                    $regex: stringQuery, $options:"$i"
+                  }
+                }
             ]
         })
     }
