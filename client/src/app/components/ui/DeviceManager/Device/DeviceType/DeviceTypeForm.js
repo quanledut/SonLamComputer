@@ -64,8 +64,12 @@ class DeviceTypeFormUI extends Component {
     }
 
     onClear = () => {
+        let id_edit = '';
+        if (this.props.match.params.id) {
+            id_edit = this.props.match.params.id;
+        }
         this.setState({
-            form: { ...DEFAULT_FORM },
+            form: { ...DEFAULT_FORM, _id: id_edit },
             modal: {
                 isOpened: false,
                 isLoading: false,

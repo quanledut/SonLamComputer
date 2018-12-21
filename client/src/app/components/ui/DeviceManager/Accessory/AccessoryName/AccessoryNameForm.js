@@ -120,8 +120,14 @@ class AccessoryNameFormUI extends Component {
     }
 
     onClear = () => {
+        let id_edit = '';
+        let quantity = 0;
+        if (this.props.match.params.id) {
+            id_edit = this.props.match.params.id;
+            quantity = this.state.form.amount;
+        }
         this.setState({
-            form: { ...DEFAULT_FORM },
+            form: { ...DEFAULT_FORM, _id: id_edit, amount: quantity },
             error: {},
             modal: {
                 isOpened: false,
@@ -339,8 +345,7 @@ class AccessoryNameFormUI extends Component {
         const options = [];
         this.state.accessories.map((e, key) => {
             var name = '';
-            if(e.name)
-            {
+            if (e.name) {
                 name = e.name;
             }
             var id = e._id;

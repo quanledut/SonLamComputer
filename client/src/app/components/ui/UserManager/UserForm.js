@@ -128,9 +128,27 @@ class UserFormUI extends Component {
     }
 
     onClear = () => {
+        let username_login = '';
+        let username_edit = '';
+        let id = '';
+        let id_login = '';
+        if (this.props.match.params.id) {
+            (this.state.form.loginInfo.username.length) ?
+                username_login = this.state.form.loginInfo.username :
+                username_edit = this.state.form.username;
+            id = this.props.match.params.id;
+            id_login = this.state.form.loginInfo._id;
+        }
         this.setState({
-            form: { ...DEFAULT_FORM },
-            passwordForm: { ...DEFAULT_PASSWORD_FORM },
+            form: {
+                ...DEFAULT_FORM,
+                _id: id,
+                loginInfo: {
+                    username: username_login,
+                    _id: id_login
+                },
+                username: username_edit
+            },
             error: {},
             modal: {
                 isOpened: false,
@@ -149,6 +167,34 @@ class UserFormUI extends Component {
             phoneValid: false,
             newPasswordValid: false,
             retype_passwordValid: false,
+            usernameValid: false,
+            formValid: true
+        });
+    }
+
+    onClearChangePass = () => {
+        this.setState({
+            passwordForm: { ...DEFAULT_PASSWORD_FORM, _id: this.props.match.params.id },
+            error: {},
+            modal: {
+                isOpened: false,
+                isLoading: false,
+                title: "",
+                content: ""
+            },
+            isDisabled: true,
+            isRedirect: false,
+            isEdit: false,
+            isChangePassword: true,
+            formErrors: { username: '', email: '', password: '', gender: '', select: '', fullname: '', phone: '', retype_password: '', newPassword: '' },
+            emailValid: true,
+            passwordValid: true,
+            genderValid: true,
+            selectValid: true,
+            fullnameValid: true,
+            phoneValid: true,
+            newPasswordValid: true,
+            retype_passwordValid: true,
             usernameValid: false,
             formValid: true
         });
@@ -222,6 +268,9 @@ class UserFormUI extends Component {
 
         for (let name in this.state.form) {
             if (name === "_id" || name === "address") continue;
+            if (this.props.match.params.id) {
+                if (name === "username") continue;
+            }
             if (name === "retype_password") {
                 if (this.state.isEdit) continue;
                 if (this.state.form[name] !== this.state.form.password) {
@@ -273,6 +322,7 @@ class UserFormUI extends Component {
         })
 
         let { _id } = this.state.form
+        console.log('form', this.state.form)
         if (_id && !this.state.isChangePassword) {
             this.props.updateUser(this.state.form, (res, error) => {
                 this._closeModal()
@@ -418,22 +468,6 @@ class UserFormUI extends Component {
         }
         this.setState({
             formErrors: fieldValidationErrors,
-            selectValid: selectValid,
-            phoneValid: phoneValid,
-            genderValid: genderValid,
-            fullnameValid: fullnameValid,
-            passwordValid: passwordValid,
-            emailValid: emailValid,
-            retype_passwordValid: retype_passwordValid,
-            usernameValid: usernameValid
-        }, this.validateForm);
-    }
-
-    validateForm() {
-        this.setState({
-            formValid: this.state.phoneValid &&
-                this.state.genderValid && this.state.fullnameValid &&
-                this.state.passwordValid && this.state.emailValid && this.state.retype_passwordValid
         });
     }
 
@@ -642,7 +676,8 @@ class UserFormUI extends Component {
                                         </FormGroup>
                                         <FormGroup>
                                             <Label htmlFor="nf-phone">Số điện thoại</Label>
-                                            <Input onChange={(event) => (this.isChange(event))}
+                                            <Input 
+                                                onChange={(event) => (this.isChange(event))}
                                                 value={this.state.form.phone}
                                                 type="text" id="nf-phone" name="phone" placeholder="Enter Phone.." autoComplete="current-password" />
                                             {this.state.formErrors.phone ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.phone}</span></FormText> : ''}
@@ -723,7 +758,7 @@ class UserFormUI extends Component {
                                             </FormGroup>
                                         </FormGroup>
                                         <Button type="submit" size="sm" color="primary" onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button>
-                                        <Button size="sm" color="danger" onClick={this.onClear}><i className="fa fa-ban"></i> Reset</Button>
+                                        <Button size="sm" color="danger" onClick={this.onClearChangePass}><i className="fa fa-ban"></i> Reset</Button>
                                     </Form>
                                 </CardBody>
                             </Card>)
