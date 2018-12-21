@@ -23,12 +23,6 @@ const route_device = (router) => {
         ctrDeviceType.findById
     );
 
-    router.get(
-        '/deviceTypes/:name',
-        checkPermissionForDeviceType(permission.type.READ, true),
-        ctrDeviceType.findByName
-    );
-
     router.post(
         '/deviceTypes',
         auth,
