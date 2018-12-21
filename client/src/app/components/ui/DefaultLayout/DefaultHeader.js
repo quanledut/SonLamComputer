@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import {DropdownItem, DropdownMenu, DropdownToggle, Nav} from 'reactstrap';
 import PropTypes from 'prop-types';
 
-import {AppHeaderDropdown, AppNavbarBrand, AppSidebarToggler } from '@coreui/react';
-import logo from '../../../assets/img/brand/logo2.png'
-import sygnet from '../../../assets/img/brand/sygnet.svg'
+import {AppHeaderDropdown, AppSidebarToggler } from '@coreui/react';
+// import logo from '../../../assets/img/brand/logo2.png'
+// import sygnet from '../../../assets/img/brand/sygnet.svg'
 import {Link} from 'react-router-dom';
 
 const propTypes = {
@@ -28,10 +28,10 @@ class DefaultHeader extends Component {
     return (
       <React.Fragment>
         <AppSidebarToggler className="d-lg-none" display="md" mobile />
-        <AppNavbarBrand
+        {/* <AppNavbarBrand
           full={{ src: logo, width: 89, height: 25, alt: 'SonLamComputer' }}
           minimized={{ src: sygnet, width: 30, height: 30, alt: 'SonLamComputer' }}
-        />
+        /> */}
         <AppSidebarToggler className="d-md-down-none" display="lg" />
 
         <Nav className="ml-auto" navbar>

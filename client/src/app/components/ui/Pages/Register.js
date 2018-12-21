@@ -3,28 +3,28 @@ import { Button, Card, CardBody, CardFooter, Col, Container, Form, Input, InputG
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 import Modal from '../utils/Modal'
-import {FormErrors} from '../utils/FormErrors'
+import { FormErrors } from '../utils/FormErrors'
 
 class Register extends Component {
   constructor(props) {
     super(props)
 
     this.state = {
-      form: {        
-        username: "",
-        email: "",
-        password: "",
-        repeatPassword: "",
-        fullname: "",
-      },   
+      form: {
+        username: '',
+        email: '',
+        password: '',
+        repeatPassword: '',
+        fullname: '',
+      },
       modal: {
         isOpened: false,
         isLoading: false,
-        title: "",
-        content: ""
+        title: '',
+        content: ''
       },
       redirect: false,
-      formErrors: {username: '', fullname: '', email: '', password: '',repeatPassword: ''},
+      formErrors: { username: '', fullname: '', email: '', password: '', repeatPassword: '' },
       usernameValid: false,
       fullnameValid: false,
       emailValid: false,
@@ -34,7 +34,7 @@ class Register extends Component {
     }
 
     this._onInputChange = this._onInputChange.bind(this)
-    this._submit = this._submit.bind(this)    
+    this._submit = this._submit.bind(this)
     this._reset = this._reset.bind(this)
     this._openModal = this._openModal.bind(this)
     this._closeModal = this._closeModal.bind(this)
@@ -47,29 +47,29 @@ class Register extends Component {
     this.setState(
       {
         //     [e.target.name]: e.target.value
-        form : {
+        form: {
           ...this.state.form,
           [name]: value
         }
       },
-      () => { this.validateField(name, value)}
+      () => { this.validateField(name, value) }
     )
   }
-  
+
   _reset(e) {
     e.preventDefault()
     this.setState({
-        form: {
-            username: "",
-            fullname: "",
-            email: "",
-            password: "",
-            repeatPassword: "",
-        }
+      form: {
+        username: "",
+        fullname: "",
+        email: "",
+        password: "",
+        repeatPassword: "",
+      }
     })
   }
 
-  _openModal (modal) {
+  _openModal(modal) {
     this.setState({
       modal: {
         ...this.state.modal,
@@ -79,7 +79,7 @@ class Register extends Component {
     })
   }
 
-  _closeModal () {
+  _closeModal() {
     this.setState({
       modal: {
         isOpened: false,
@@ -90,9 +90,9 @@ class Register extends Component {
     })
   }
 
-  _submit (e) {
+  _submit(e) {
     e.preventDefault()
-    const { username, fullname, email, password} = this.state.form
+    const { username, fullname, email, password } = this.state.form
 
     this._openModal({
       isLoading: true,
@@ -100,17 +100,36 @@ class Register extends Component {
       title: "Loading"
     })
 
-    this. props.submit(username, fullname, email, password, (res, err) => {
-      this._closeModal()
+    for (let name in this.state.form) {
+      this.validateField(name, this.state.form[name])
+    }
 
-      if(err) {
-        console.log('register error!', err)
-        this._openModal({
-          title: "Error",
-          content: err,
-          isLoading: false,
-        })
-      } else if (res) {
+    var check = true;
+    for (let name in this.state.formErrors) {
+      if (this.state.formErrors[name] !== '') {
+        check = false;
+      }
+    }
+
+    if (!check) {
+      this._openModal({
+        title: "Error",
+        content: "Dữ liệu không hợp lệ. Vui lòng kiểm tra lại!",
+        isLoading: false,
+      })
+    }
+    else {
+      this.props.submit(username, fullname, email, password, (res, err) => {
+        this._closeModal()
+
+        if (err) {
+          console.log('register error!', err)
+          this._openModal({
+            title: "Error",
+            content: err,
+            isLoading: false,
+          })
+        } else if (res) {
           console.log('register success!')
           this._openModal({
             title: "Success",
@@ -118,8 +137,9 @@ class Register extends Component {
             isLoading: false
           })
           this.props.history.push("/login")
-      }
-    })
+        }
+      })
+    }
   }
 
   validateField(fieldName, value) {
@@ -129,45 +149,43 @@ class Register extends Component {
     let usernameValid = this.state.usernameValid;
     let fullnameValid = this.state.fullnameValid;
     let repeatPasswordValid = this.state.repeatPasswordValid;
-  
-    switch(fieldName) {
+
+    switch (fieldName) {
       case 'email':
         emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
         fieldValidationErrors.email = emailValid ? '' : 'Vui lòng nhập đúng định dạng email!';
         break;
       case 'password':
         passwordValid = value.length >= 6 && value.length <= 50;
-        fieldValidationErrors.password = passwordValid ? '': 'Vui lòng nhập password trong khoảng 6-50 ký tự!';
+        fieldValidationErrors.password = passwordValid ? '' : 'Vui lòng nhập password trong khoảng 6-50 ký tự!';
+        if (this.state.form.repeatPassword) {
+          value === this.state.form.repeatPassword ? repeatPasswordValid = true : repeatPasswordValid = false;
+          fieldValidationErrors.repeatPassword = repeatPasswordValid ? '' : 'Vui lòng nhập chính xác mật khẩu!';
+        }
         break;
       case 'username':
         usernameValid = value.length >= 6 && value.length <= 50;
-        fieldValidationErrors.username = usernameValid ? '': ' Vui lòng nhập username trong khoảng 6-50 ký tự!';
+        fieldValidationErrors.username = usernameValid ? '' : ' Vui lòng nhập username trong khoảng 6-50 ký tự!';
         break;
       case 'fullname':
         fullnameValid = value.length >= 6 && value.length <= 50;
-        fieldValidationErrors.fullname = fullnameValid ? '': ' Vui lòng nhập fullname trong khoảng 6-50 ký tự!';
+        fieldValidationErrors.fullname = fullnameValid ? '' : ' Vui lòng nhập fullname trong khoảng 6-50 ký tự!';
         break;
       case 'repeatPassword':
-        this.state.repeatPassword === this.state.password ? repeatPasswordValid = true: repeatPasswordValid = false;
-        fieldValidationErrors.repeatPassword = repeatPasswordValid ? '': 'Vui lòng nhập chính xác mật khẩu!';
+        value === this.state.form.password ? repeatPasswordValid = true : repeatPasswordValid = false;
+        fieldValidationErrors.repeatPassword = repeatPasswordValid ? '' : 'Vui lòng nhập chính xác mật khẩu!';
         break;
       default:
         break;
     }
-    this.setState({formErrors: fieldValidationErrors,
-                    emailValid: emailValid,
-                    passwordValid: passwordValid,
-                    usernameValid: usernameValid,
-                    fullnameValid: fullnameValid,
-                    repeatPasswordValid: repeatPasswordValid
-                  }, this.validateForm);
+    this.setState({
+      formErrors: fieldValidationErrors,
+    });
   }
 
-  validateForm() {
-    console.log(this.state.emailValid, this.state.passwordValid , 
-      this.state.usernameValid , this.state.fullnameValid, this.state.repeatPasswordValid)
-    this.setState({formValid: this.state.emailValid && this.state.passwordValid && this.state.fullnameValid 
-                  && this.state.usernameValid && this.state.repeatPasswordValid});
+  _login(e) {
+    e.preventDefault();
+    window.location.href = '#/login';
   }
 
   render() {
@@ -180,7 +198,7 @@ class Register extends Component {
           content={this.state.modal.content}
           onOkay={this._closeModal}
           onCancel={this._closeModal}
-          >
+        >
         </Modal>
         <Container>
           <Row className="justify-content-center">
@@ -196,12 +214,12 @@ class Register extends Component {
                           <i className="icon-user"></i>
                         </InputGroupText>
                       </InputGroupAddon>
-                      <Input 
-                        type="text" 
-                        placeholder="Username" 
-                        autoComplete="username" 
-                        name="username" 
-                        onChange={this._onInputChange} 
+                      <Input
+                        type="text"
+                        placeholder="Username"
+                        autoComplete="username"
+                        name="username"
+                        onChange={this._onInputChange}
                         value={this.state.form.username} />
                     </InputGroup>
 
@@ -211,12 +229,12 @@ class Register extends Component {
                           <i className="icon-user"></i>
                         </InputGroupText>
                       </InputGroupAddon>
-                      <Input 
-                        type="text" 
-                        placeholder="fullname" 
-                        autoComplete="fullname" 
-                        name="fullname" 
-                        onChange={this._onInputChange} 
+                      <Input
+                        type="text"
+                        placeholder="Fullname"
+                        autoComplete="fullname"
+                        name="fullname"
+                        onChange={this._onInputChange}
                         value={this.state.form.fullname} />
                     </InputGroup>
 
@@ -224,28 +242,28 @@ class Register extends Component {
                       <InputGroupAddon addonType="prepend">
                         <InputGroupText>@</InputGroupText>
                       </InputGroupAddon>
-                      <Input 
-                        type="text" 
-                        placeholder="Email" 
-                        autoComplete="email" 
-                        name="email" 
-                        onChange={this._onInputChange} 
+                      <Input
+                        type="text"
+                        placeholder="Email"
+                        autoComplete="email"
+                        name="email"
+                        onChange={this._onInputChange}
                         value={this.state.form.email} />
                     </InputGroup>
-                    
+
                     <InputGroup className="mb-3">
                       <InputGroupAddon addonType="prepend">
                         <InputGroupText>
                           <i className="icon-lock"></i>
                         </InputGroupText>
                       </InputGroupAddon>
-                      <Input 
-                        type="password" 
-                        placeholder="Password" 
-                        autoComplete="new-password" 
-                        name="password" 
-                        onChange={this._onInputChange} 
-                        value={this.state.form.password} 
+                      <Input
+                        type="password"
+                        placeholder="Password"
+                        autoComplete="new-password"
+                        name="password"
+                        onChange={this._onInputChange}
+                        value={this.state.form.password}
                       />
                     </InputGroup>
                     <InputGroup className="mb-4">
@@ -254,30 +272,27 @@ class Register extends Component {
                           <i className="icon-lock"></i>
                         </InputGroupText>
                       </InputGroupAddon>
-                      <Input 
-                        type="password" 
-                        placeholder="Repeat password" 
-                        autoComplete="new-password" 
-                        name="repeatPassword" 
-                        onChange={this._onInputChange} 
+                      <Input
+                        type="password"
+                        placeholder="Repeat password"
+                        autoComplete="new-password"
+                        name="repeatPassword"
+                        onChange={this._onInputChange}
                         value={this.state.form.repeatPassword} />
                     </InputGroup>
                     <InputGroup className="mb-4">
                       <FormErrors formErrors={this.state.formErrors} />
                     </InputGroup>
-                    <Button type="submit" onClick={this._submit} color="success" block disabled={!this.state.formValid}>Create Account</Button>
+                    <Row>
+                      <Col xs="12" sm="6">
+                        <Button type="submit" onClick={this._submit} color="success" block active>Create Account</Button>
+                      </Col>
+                      <Col xs="12" sm="6">
+                        <Button onClick={this._login} color="primary" block>Login</Button>
+                      </Col>
+                    </Row>
                   </Form>
                 </CardBody>
-                {/* <CardFooter className="p-4">
-                  <Row>
-                    <Col xs="12" sm="6">
-                      <Button className="btn-facebook" block><span>facebook</span></Button>
-                    </Col>
-                    <Col xs="12" sm="6">
-                      <Button className="btn-twitter" block><span>twitter</span></Button>
-                    </Col>
-                  </Row>
-                </CardFooter> */}
               </Card>
             </Col>
           </Row>
