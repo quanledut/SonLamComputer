@@ -32,7 +32,6 @@ class RoleFormUI extends Component {
 
         this.state = {
             form: { ...DEFAULT_FORM },
-            error: {},
             modal: {
                 isOpened: false,
                 isLoading: false,
@@ -44,7 +43,11 @@ class RoleFormUI extends Component {
             isRedirect: false,
             collections: [],
             permissions: [],
-            tbody: []
+            tbody: [],
+            error: {
+                name: '',
+            },
+            nameValid: false,
         };
 
         this.onClear = this.onClear.bind(this)
@@ -88,7 +91,11 @@ class RoleFormUI extends Component {
                 content: ""
             },
             isDisabled: true,
-            isRedirect: false
+            isRedirect: false,
+            error: {
+                name: '',
+            },
+            nameValid: false,
         });
     }
 
@@ -128,73 +135,99 @@ class RoleFormUI extends Component {
     onSubmitForm = (event) => {
         event.preventDefault();
 
-        if (!this._isPoliciesValid()) {
-            this._openModal({
-                isLoading: false,
-                isOpened: true,
-                title: "Error",
-                content: "Vui lòng phân quyền cho các bảng!"
-            })
-            return;
-        }
-
         this._openModal({
             isLoading: true,
             isOpened: true,
             title: "Loading"
         })
+        for (let name in this.state.form) {
+            this._validate(name, this.state.form[name])
+        }
 
-        var { match } = this.props;
-        if (match.params.id) {
-            console.log(this.state.form)
-            this.props.update(this.state.form, (res, error) => {
-                this._closeModal()
-                if (res) {
-                    this._openModal({
-                        title: "Success",
-                        content: "Update success",
-                        isLoading: false
-                    })
-                    this.setState({
-                        isRedirect: true
-                    })
-                } else {
-                    this._openModal({
-                        title: "Error",
-                        content: error,
-                        isLoading: false,
-                    })
-                }
+        var check = true;
+        for (let name in this.state.error) {
+            if (this.state.error[name] !== "") {
+                check = false;
+            }
+        }
+
+        if (!check) {
+            this._openModal({
+                title: "Error",
+                content: "Dữ liệu không hợp lệ. Vui lòng kiểm tra lại!",
+                isLoading: false,
             })
-        } else {
-            this.props.create(this.state.form, (res, error) => {
-                this._closeModal()
-                if (res) {
-                    this._openModal({
-                        title: "Success",
-                        content: "Create success",
-                        isLoading: false
-                    })
-                    this.setState({
-                        isRedirect: true
-                    })
-                } else {
-                    this._openModal({
-                        title: "Error",
-                        content: error,
-                        isLoading: false,
-                    })
-                }
-            })
+        }
+        else {
+            if (!this._isPoliciesValid()) {
+                this._openModal({
+                    isLoading: false,
+                    isOpened: true,
+                    title: "Error",
+                    content: "Vui lòng phân quyền cho các bảng!"
+                })
+                return;
+            }
+            var { match } = this.props;
+            if (match.params.id) {
+                console.log(this.state.form)
+                this.props.update(this.state.form, (res, error) => {
+                    this._closeModal()
+                    if (res) {
+                        this._openModal({
+                            title: "Success",
+                            content: "Update success",
+                            isLoading: false
+                        })
+                        this.setState({
+                            isRedirect: true
+                        })
+                    } else {
+                        this._openModal({
+                            title: "Error",
+                            content: error,
+                            isLoading: false,
+                        })
+                    }
+                })
+            } else {
+                this.props.create(this.state.form, (res, error) => {
+                    this._closeModal()
+                    if (res) {
+                        this._openModal({
+                            title: "Success",
+                            content: "Create success",
+                            isLoading: false
+                        })
+                        this.setState({
+                            isRedirect: true
+                        })
+                    } else {
+                        this._openModal({
+                            title: "Error",
+                            content: error,
+                            isLoading: false,
+                        })
+                    }
+                })
+            }
         }
     }
 
-    _validate(name, value) {
-        if (name === 'name') {
-            return value.length > 50 || value.length < 1
-        } else {
-            return value === "" || value === null
+    _validate(fieldName, value) {
+        let fieldValidationErrors = this.state.error;
+        let nameValid = this.state.nameValid;
+
+        switch (fieldName) {
+            case 'name':
+                nameValid = value.length > 0 && value.length < 101;
+                fieldValidationErrors.name = nameValid ? '' : 'Vui lòng nhập tên quyền!';
+                break;
+
+            default:
+                break;
         }
+        this.setState({ error: fieldValidationErrors });
     }
 
     _deletePolicy = (event, i) => {
@@ -297,19 +330,6 @@ class RoleFormUI extends Component {
             })
 
         }
-
-        if (name === 'name') {
-            if (value.length > 50 || value.length < 1) {
-                this.setState({
-                    isDisabled: true
-                })
-            }
-            else {
-                this.setState({
-                    isDisabled: false
-                })
-            }
-        }
     }
 
 
@@ -343,7 +363,7 @@ class RoleFormUI extends Component {
                                         <Input onChange={(event) => (this.isChange(event))}
                                             value={this.state.form.name}
                                             type="username" id="nf-username" name="name" placeholder="Nhập tên quyền..." autoComplete="current-password" />
-                                        {this.state.error.name ? <FormText className="help-block"><span style={{ color: "red" }}>Vui lòng nhập tên quyền hợp lệ!</span></FormText> : ''}
+                                        {this.state.error.name ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.error.name}</span></FormText> : ''}
                                     </FormGroup>
                                     <CustomTable
                                         thead={
@@ -387,7 +407,7 @@ class RoleFormUI extends Component {
                                         })}
                                         hasPagination={false}
                                     />
-                                    <Button type="submit" size="sm" color="primary" disabled={this.state.isDisabled} onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button>
+                                    <Button type="submit" size="sm" color="primary" onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button>
                                     <Button type="reset" size="sm" color="danger" onClick={this.onClear}><i className="fa fa-ban"></i> Reset</Button>
                                 </Form>
                             </CardBody>

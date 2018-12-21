@@ -63,7 +63,7 @@ class UserFormUI extends Component {
             isRedirect: false,
             isEdit: false,
             isChangePassword: false,
-            formErrors: { email: '', password: '', gender: '', select: '', fullname: '', phone: '', retype_password: '', newPassword: '' },
+            formErrors: { username: '', email: '', password: '', gender: '', select: '', fullname: '', phone: '', retype_password: '', newPassword: '' },
             emailValid: true,
             passwordValid: true,
             genderValid: true,
@@ -72,6 +72,7 @@ class UserFormUI extends Component {
             phoneValid: true,
             newPasswordValid: true,
             retype_passwordValid: true,
+            usernameValid: false,
             formValid: true
         };
 
@@ -139,7 +140,7 @@ class UserFormUI extends Component {
             },
             isDisabled: true,
             isRedirect: false,
-            formErrors: { email: '', password: '', gender: '', select: '', fullname: '', phone: '', retype_password: '', newPassword: '' },
+            formErrors: { username: '', email: '', password: '', gender: '', select: '', fullname: '', phone: '', retype_password: '', newPassword: '' },
             emailValid: false,
             passwordValid: false,
             genderValid: false,
@@ -148,6 +149,7 @@ class UserFormUI extends Component {
             phoneValid: false,
             newPasswordValid: false,
             retype_passwordValid: false,
+            usernameValid: false,
             formValid: true
         });
     }
@@ -219,7 +221,7 @@ class UserFormUI extends Component {
         }
 
         for (let name in this.state.form) {
-            if (name === "_id" || name === "phone" || name === "address") continue;
+            if (name === "_id" || name === "address") continue;
             if (name === "retype_password") {
                 if (this.state.isEdit) continue;
                 if (this.state.form[name] !== this.state.form.password) {
@@ -344,9 +346,11 @@ class UserFormUI extends Component {
         let phoneValid = this.state.phoneValid;
         let retype_passwordValid = this.state.retype_passwordValid;
         let newPasswordValid = this.state.newPasswordValid;
+        let usernameValid = this.state.usernameValid;
 
         const sdt = /^\+?(?:[0-9] ?){8,14}[0-9]$/;
         const email_check = /[a-zA-Z0-9]+[.]?([a-zA-Z0-9]+)?[@][a-z]{3,9}[.][a-z]{2,5}/g;
+        const nameRegex = /^[a-zA-Z0-9]+$/;
 
         switch (fieldName) {
             case 'email':
@@ -399,6 +403,16 @@ class UserFormUI extends Component {
                 fieldValidationErrors.newPassword = newPasswordValid ? '' : ' Vui lòng nhập mật khẩu trong khoảng 6-50 ký tự!';
                 break;
 
+            case 'username':
+                usernameValid = value.length > 0;
+                if (!usernameValid) {
+                    fieldValidationErrors.username = usernameValid ? '' : ' Vui lòng nhập username!';
+                } else {
+                    usernameValid = value.match(nameRegex);
+                    fieldValidationErrors.username = usernameValid ? '' : ' Sai định dạng (A-Z, a-z, 0-9 and -)!';
+                }
+                break;
+
             default:
                 break;
         }
@@ -410,7 +424,8 @@ class UserFormUI extends Component {
             fullnameValid: fullnameValid,
             passwordValid: passwordValid,
             emailValid: emailValid,
-            retype_passwordValid: retype_passwordValid
+            retype_passwordValid: retype_passwordValid,
+            usernameValid: usernameValid
         }, this.validateForm);
     }
 
@@ -581,13 +596,13 @@ class UserFormUI extends Component {
                                                     )
                                                 }
 
-
                                                 <FormGroup>
                                                     <Label htmlFor="nf-username">Username</Label>
                                                     <Input onChange={(event) => (this.isChange(event))}
                                                         value={(this.state.form.loginInfo.username.length) ? this.state.form.loginInfo.username : this.state.form.username}
                                                         {...((id) ? { disabled: true } : {})}
                                                         type="text" id="nf-username" name="username" placeholder="Enter UserName.." autoComplete="current-password" />
+                                                    {this.state.formErrors.username ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.username}</span></FormText> : ''}
                                                 </FormGroup>
                                             </FormGroup>
                                         }
@@ -602,7 +617,6 @@ class UserFormUI extends Component {
                                         </FormGroup>
                                         <FormGroup>
                                             <Label>Giới tính</Label>
-                                            {this.state.formErrors.gender ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.gender}</span></FormText> : ''}
                                             &nbsp;
                                             <FormGroup check inline>
                                                 <Input
@@ -624,17 +638,7 @@ class UserFormUI extends Component {
                                                     checked={this.state.form.gender === "nu"} />
                                                 <Label className="form-check-label" check htmlFor="inline-radio2">Nữ</Label>
                                             </FormGroup>
-                                            {/* <FormGroup check inline>
-                                                <Input
-                                                    className="form-check-input"
-                                                    type="radio"
-                                                    id="inline-radio3"
-                                                    name="gender"
-                                                    value="khac"
-                                                    onChange={(event) => (this.isChange(event))}
-                                                    checked={this.state.gender === "khac"} />
-                                                <Label className="form-check-label" check htmlFor="inline-radio3">Khác</Label>
-                                            </FormGroup> */}
+                                            {this.state.formErrors.gender ? <FormText className="help-block"><span style={{ color: "red" }}>{this.state.formErrors.gender}</span></FormText> : ''}
                                         </FormGroup>
                                         <FormGroup>
                                             <Label htmlFor="nf-phone">Số điện thoại</Label>
@@ -672,7 +676,7 @@ class UserFormUI extends Component {
                                                 />
                                             </FormGroup>
                                         }
-                                        <Button size="sm" color="primary" type="submit" disabled={!this.state.formValid} onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button>
+                                        <Button size="sm" color="primary" type="submit" onClick={this.onSubmitForm}><i className="fa fa-dot-circle-o"></i> Submit</Button>
                                         <Button size="sm" color="danger" onClick={this.onClear}><i className="fa fa-ban"></i> Reset</Button>
                                     </Form>
                                 </CardBody>
