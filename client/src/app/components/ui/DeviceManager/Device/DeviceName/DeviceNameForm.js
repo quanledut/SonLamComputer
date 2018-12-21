@@ -122,8 +122,14 @@ class DeviceNameFormUI extends Component {
     }
 
     onClear = () => {
+        let id_edit = '';
+        let quantity = 0;
+        if (this.props.match.params.id) {
+            id_edit = this.props.match.params.id;
+            quantity = this.state.form.amount;
+        }
         this.setState({
-            form: { ...DEFAULT_FORM },
+            form: { ...DEFAULT_FORM, _id: id_edit, amount: quantity },
             error: {},
             modal: {
                 isOpened: false,
