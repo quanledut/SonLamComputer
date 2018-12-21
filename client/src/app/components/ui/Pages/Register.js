@@ -152,8 +152,13 @@ class Register extends Component {
 
     switch (fieldName) {
       case 'email':
-        emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
-        fieldValidationErrors.email = emailValid ? '' : 'Vui lòng nhập đúng định dạng email!';
+        emailValid = value.length > 0;
+        if (!emailValid) {
+          fieldValidationErrors.email = emailValid ? '' : ' Vui lòng nhập email!';
+        } else {
+          emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
+          fieldValidationErrors.email = emailValid ? '' : 'Vui lòng nhập đúng định dạng email!';
+        }
         break;
       case 'password':
         passwordValid = value.length >= 6 && value.length <= 50;
@@ -169,7 +174,7 @@ class Register extends Component {
         break;
       case 'fullname':
         fullnameValid = value.length >= 6 && value.length <= 50;
-        fieldValidationErrors.fullname = fullnameValid ? '' : ' Vui lòng nhập fullname trong khoảng 6-50 ký tự!';
+        fieldValidationErrors.fullname = fullnameValid ? '' : ' Vui lòng nhập fullname!';
         break;
       case 'repeatPassword':
         value === this.state.form.password ? repeatPasswordValid = true : repeatPasswordValid = false;
